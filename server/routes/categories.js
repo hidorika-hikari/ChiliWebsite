@@ -94,4 +94,39 @@ router.delete('/:id', async (req, res) => {
     });
 });
 
+router.put('/:id', async (req, res) =>{
+
+    const limit = pLimit(2);
+
+    const imagesToUpload = req.body.images.map((image) => {
+        return limit(async () => {
+            const result = await cloudinary.uploader.upload(image);
+            return result;
+        });
+    });
+
+    const uploadStatus = await Promise.all(imagesToUpload);
+    const imgurl = uploadStatus.map((item) =>{
+        return item.secure_url
+    });
+
+    const category = await Category.findByIdAndUpdate(
+        req.params.id,
+        {
+            name: req.body.name,
+            images: imgurl,
+            color: req.body.color
+        },
+        {new:true}
+    )
+
+    if(!category){
+        return res.status(500).json({
+            message:'Category cant be updated',
+            success:false
+        })
+    }
+    res.send(category);
+})
+
 module.exports = router;
