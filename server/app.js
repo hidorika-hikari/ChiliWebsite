@@ -8,9 +8,12 @@ require('dotenv').config();
 app.use(express.json());
 console.log('JSON middleware loaded');
 
+// Routes
 const categoryRoutes = require('./routes/categories');
+const productRoutes = require('./routes/products')
 
-app.use(`/api/category`, categoryRoutes);
+app.use('/api/category', categoryRoutes);
+app.use('/api/products', productRoutes);
 
 // Basic test route to see if Express works at all
 app.get('/', (req, res) => {
