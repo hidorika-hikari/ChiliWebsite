@@ -105,6 +105,7 @@ router.put('/:id', async (req, res) =>{
         });
     });
 
+
     const uploadStatus = await Promise.all(imagesToUpload);
     const imgurl = uploadStatus.map((item) =>{
         return item.secure_url

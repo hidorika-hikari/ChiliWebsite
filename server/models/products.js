@@ -9,7 +9,13 @@ const productSchema = mongoose.Schema({
         type: String,
         required: true
     },
-    brands:{
+    images: [
+        {
+            type: String,
+            default: ''
+        }
+    ],
+    brand:{
         type: String,
         default: ''
     },
