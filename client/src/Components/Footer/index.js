@@ -11,7 +11,7 @@ const Footer = () => {
     return (
         <footer>
             <div className="container">
-                <div className="topInfo row">
+                <div className="topInfo row justify-content-center">
                     <div className="col d-flex align-items-center">
                         <span><GiSkirt/></span>
                         <span>Everyday fresh products</span>
@@ -96,13 +96,13 @@ const Footer = () => {
                     <p className="mb-0">copyright 2025. All rights reserved</p>
                     <ul className="list list-inline ms-auto mb-0">
                         <li className="list-inline-item">
-                            <Link to ="#"><FaFacebookF /></Link>
+                            <Link to="#" className="social-icon"><FaFacebookF /></Link>
                         </li>
                         <li className="list-inline-item">
-                            <Link to ="#"><FaTwitter /></Link>
+                            <Link to="#" className="social-icon"><FaTwitter /></Link>
                         </li>
                         <li className="list-inline-item">
-                            <Link to ="#"><FaInstagram /></Link>
+                            <Link to="#" className="social-icon"><FaInstagram /></Link>
                         </li>
                     </ul>
                 </div>

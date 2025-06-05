@@ -1,13 +1,13 @@
 import {  Rating } from "@mui/material";
-import ProductZoom from "../../Components/ProductZoom";
-import QuantityBox from "../../Components/QuantityDrop";
-import Button from '@mui/material/Button';
 import { FaRegHeart } from "react-icons/fa";
 import { BsCartFill } from "react-icons/bs";
 import { useState } from "react";
 import { MdOutlineCompareArrows } from "react-icons/md";
 import Tooltip from "@mui/material/Tooltip";
 import RelatedProducts from "../../Pages/ProductDetails/RelatedProducts";
+import ProductZoom from "../../Components/ProductZoom";
+import QuantityBox from "../../Components/QuantityDrop";
+import Button from '@mui/material/Button';
 
 const ProductDetails = () => {
 
@@ -30,7 +30,7 @@ const ProductDetails = () => {
 
                         <div className="col-md-7 ps-5 pe-5">
                             <h2 className="hd text-capitalize">
-                            All Natural Italian-Style Chicken Meatballs</h2>
+                            Carolina Reaper Chile Peppers</h2>
                             <ul className="list list-inline d-flex align-items-center">
                                 <li className="list-inline-item">
                                     <div className="d-flex align-items-center">
@@ -52,25 +52,30 @@ const ProductDetails = () => {
                                 <span className="newPrice text-danger ms-2">14.00</span>
                             </div>
                             <span className="badge badge-success">IN STOCK</span>
-                            <p className="mt-2">test</p>
+                            <p className="mt-2">The Carolina Reaper chile pepper is typically oblong 
+                                with a signature pointed "scorpion’s tail." It measures 2–5 cm in diameter and 5–7 cm in length, 
+                                featuring deeply wrinkled, twisted red skin. Its flesh is crisp and juicy, with a few flat, cream-colored seeds. 
+                                The flavor is sweet and fruity, with notes of cinnamon and chocolate, followed by an extremely intense, lingering heat. 
+                                Appearance and heat can vary based on soil and climate.
+                            </p>
 
                             <div className="productSize d-flex align-items-center">
                                 <span>Size / Weight:</span>
                                 <ul className="list list-inline mb-0 ps-4">
                                     <li className="list-inline-item">
-                                    <a className={`tag ${activeSize == 0 ? 'active' : ''}`} onClick={() => isActive(0)}>50g</a>
+                                    <a className={`tag ${activeSize === 0 ? 'active' : ''}`} onClick={() => isActive(0)}>50g</a>
                                     </li>
                                     <li className="list-inline-item">
-                                    <a className={`tag ${activeSize == 1 ? 'active' : ''}`} onClick={() => isActive(1)}>100g</a>
+                                    <a className={`tag ${activeSize === 1 ? 'active' : ''}`} onClick={() => isActive(1)}>100g</a>
                                     </li>
                                     <li className="list-inline-item">
-                                    <a className={`tag ${activeSize == 2 ? 'active' : ''}`} onClick={() => isActive(2)}>200g</a>
+                                    <a className={`tag ${activeSize === 2 ? 'active' : ''}`} onClick={() => isActive(2)}>200g</a>
                                     </li>
                                     <li className="list-inline-item">
-                                    <a className={`tag ${activeSize == 3 ? 'active' : ''}`} onClick={() => isActive(3)}>300g</a>
+                                    <a className={`tag ${activeSize === 3 ? 'active' : ''}`} onClick={() => isActive(3)}>300g</a>
                                     </li>
                                     <li className="list-inline-item">
-                                    <a className={`tag ${activeSize == 4 ? 'active' : ''}`} onClick={() => isActive(4)}>500g</a>
+                                    <a className={`tag ${activeSize === 4 ? 'active' : ''}`} onClick={() => isActive(4)}>500g</a>
                                     </li>
                                 </ul>
                             </div>
@@ -97,19 +102,19 @@ const ProductDetails = () => {
                         <div className="customTabs">
                             <ul className="list list-inline">
                                 <li className="list-inline-item">
-                                    <Button className={`tag ${activeTabs == 0 && 'active'}`}
+                                    <Button className={`tag ${activeTabs === 0 && 'active'}`}
                                     onClick={() => {
                                         setActiveTabs(0)
                                     }}>Description</Button>
                                 </li>
                                 <li className="list-inline-item">
-                                    <Button className={`tag ${activeTabs == 1 && 'active'}`}
+                                    <Button className={`tag ${activeTabs === 1 && 'active'}`}
                                     onClick={() => {
                                         setActiveTabs(1)
                                     }}>Additional Info</Button>
                                 </li>
                                 <li className="list-inline-item">
-                                    <Button className={`tag ${activeTabs == 2 && 'active'}`}
+                                    <Button className={`tag ${activeTabs === 2 && 'active'}`}
                                     onClick={() => {
                                         setActiveTabs(2)
                                     }}>Review(3)</Button>
@@ -119,14 +124,18 @@ const ProductDetails = () => {
                             <br/>
 
                             {
-                                activeTabs == 0 &&
+                                activeTabs === 0 &&
                                 <div className="tabContent">
-                                    <p>currentProduct description</p>
+                                    <p>The Carolina Reaper chile pepper is typically oblong 
+                                with a signature pointed "scorpion’s tail." It measures 2–5 cm in diameter and 5–7 cm in length, 
+                                featuring deeply wrinkled, twisted red skin. Its flesh is crisp and juicy, with a few flat, cream-colored seeds. 
+                                The flavor is sweet and fruity, with notes of cinnamon and chocolate, followed by an extremely intense, lingering heat. 
+                                Appearance and heat can vary based on soil and climate.</p>
                                 </div>
                             }
 
                             {
-                                activeTabs == 1 &&
+                                activeTabs === 1 &&
                                 <div className="tabContent">
                                     <table className="table table-bordered">
                                         <tbody>
@@ -215,26 +224,25 @@ const ProductDetails = () => {
                             }
 
                             {
-                                activeTabs == 2 &&
+                                activeTabs === 2 &&
                                 <div className="tabContents">
                                     <div className="row">
                                         <div className="col-md-8">
                                             <h3>Customer Question & Answers</h3>
                                             <br/>
-
                                             <div className="card p-4 reviewsCard flex-row">
-                                                <div className="image">
+                                                <div className="reviewCard">
                                                     <div className="rounded-circle">
-                                                        <img src=""/>
+                                                        <img src="https://i.scdn.co/image/ab67616d00001e026f157409ae8578b9695be2b3" alt="" />
                                                     </div>
                                                     <span className="text-g d-block text-center fw-bold">
                                                     Rinku Verma</span>
                                                 </div>
 
                                                 <div className="info ps-5">
-                                                    <div className="d-flex align-items-center w-100">
+                                                    <div className="d-flex align-items-center w-100 gap-3">
                                                         <h5 className="text-light">01/03/1993</h5>
-                                                        <div className="ms-auto">
+                                                        <div className="ms-auto mb-1">
                                                             <Rating name="half-rating-read" value={4.5} precision={0.5} readOnly size="small"/>
                                                         </div>
                                                     </div>
@@ -262,7 +270,7 @@ const ProductDetails = () => {
                                                         </div>
                                                     
 
-                                                        <div className="col-md-6">
+                                                        <div className="col-md-6 mt-2">
                                                             <div className="form-group">
                                                                 <Rating name="rating" value={4.5} precision={0.5} readOnly/>
                                                             </div>

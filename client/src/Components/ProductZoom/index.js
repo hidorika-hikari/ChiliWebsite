@@ -65,22 +65,22 @@ const ProductZoom = () => {
             </div>
             <Slider {...setting} className='zoomSlider' ref={zoomSlider}>
                 <div className='item'>
-                    <img src='https://klbtheme.com/bacola/wp-content/uploads/2021/04/product-image-55-768x691.jpg' 
+                    <img src='https://klbtheme.com/bacola/wp-content/uploads/2021/04/product-image-55-768x691.jpg' alt=''
                     className='w-100' onClick={() => goto(0)}/>
                 </div>
 
                 <div className='item'>
-                    <img src='https://klbtheme.com/bacola/wp-content/uploads/2021/04/product-image-55-768x691.jpg' 
+                    <img src='https://klbtheme.com/bacola/wp-content/uploads/2021/04/product-image-55-768x691.jpg' alt=''
                     className='w-100' onClick={() => goto(1)}/>
                 </div>
 
                 <div className='item'>
-                    <img src='https://klbtheme.com/bacola/wp-content/uploads/2021/04/product-image-55-768x691.jpg' 
+                    <img src='https://klbtheme.com/bacola/wp-content/uploads/2021/04/product-image-55-768x691.jpg' alt=''
                     className='w-100' onClick={() => goto(2)}/>
                 </div>
 
                 <div className='item'>
-                    <img src='https://klbtheme.com/bacola/wp-content/uploads/2021/04/product-image-55-768x691.jpg' 
+                    <img src='https://klbtheme.com/bacola/wp-content/uploads/2021/04/product-image-55-768x691.jpg' alt=''
                     className='w-100' onClick={() => goto(3)}/>
                 </div>
             </Slider>

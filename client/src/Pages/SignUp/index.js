@@ -1,12 +1,12 @@
 import { useContext, useEffect } from "react";
 import { MyContext } from "../../App";
-import Logo from '../../assets/logo.png'
-import TextField from "@mui/material/TextField";
-import Button from "@mui/material/Button";
 import { Link } from "react-router-dom";
 import { FaFacebookF } from "react-icons/fa";
 import { FaTwitter } from "react-icons/fa";
 import { FaInstagram } from "react-icons/fa";
+import Logo from '../../assets/logo.png'
+import TextField from "@mui/material/TextField";
+import Button from "@mui/material/Button";
 
 const SignUp = () => {
 
@@ -15,6 +15,7 @@ const SignUp = () => {
     useEffect(()=>{
         context.setIsHeaderFooterShow(false);
     },[]);
+    
     return (
             <section className="section signInPage signUpPage">
             <div className="shape-bottom"><svg fill="#fff" id="Layer_1" x="0px" y="0px" viewBox="0 0 1921 819.8"> 
@@ -24,12 +25,11 @@ const SignUp = () => {
                 <div className="container">
                     <div className="box card p-3 shadow border-0">
                         <div className="text-center">
-                            <img src={Logo} width={100}/>
+                            <img src={Logo} width={100} alt=""/>
                         </div>
 
                         <form className="mt-2">
                             <h2 className="mb-3">Sign Up</h2>
-
                             <div className="row">
                                 <div className="col-md-6">
                                     <div className="form-group">
@@ -67,20 +67,18 @@ const SignUp = () => {
                                     </div>
                                 </div>
                             </div>
-
-                            <p className="txt">Not Registered?<Link to="/signIn" className="border-effect"> Sign Ip</Link></p>
-
+                            <p className="txt">Not Registered?<Link to="/signIn" className="border-effect"> Sign In</Link></p>
                             <h6 className="mt-3 text-center fw-bold">Or continue with social account</h6>
                             
                             <ul className="list list-inline mt-3 mb-1 text-center socials">
                                 <li className="list-inline-item">
-                                    <Link to ="#"><FaFacebookF /></Link>
+                                    <Link to="#" className="social-icon"><FaFacebookF /></Link>
                                 </li>
                                 <li className="list-inline-item">
-                                    <Link to ="#"><FaTwitter /></Link>
+                                    <Link to="#" className="social-icon"><FaTwitter /></Link>
                                 </li>
                                 <li className="list-inline-item">
-                                    <Link to ="#"><FaInstagram /></Link>
+                                    <Link to="#" className="social-icon"><FaInstagram /></Link>
                                 </li>
                             </ul>
                         </form>

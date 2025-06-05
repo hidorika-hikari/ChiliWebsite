@@ -1,12 +1,12 @@
 import "bootstrap/dist/css/bootstrap.min.css"
 import './App.css';
+import { createContext, useEffect, useState } from "react";
 import { BrowserRouter, Route , Routes} from "react-router-dom";
 import Home from "./Pages/Home";
 import Listing from "./Pages/Listing";
 import ProductDetails from "./Pages/ProductDetails";
 import Header from "./Components/Header";
 import Footer from "./Components/Footer";
-import { createContext, useEffect, useState } from "react";
 import axios from 'axios';
 import ProductModel from "./Components/ProductModel";
 import Cart from "./Pages/Cart";
@@ -27,6 +27,7 @@ function App() {
     getCountry("https://countriesnow.space/api/v0.1/countries/");
   },[]);
 
+  
   const getCountry = async (url) => {
     const responsive = await axios.get(url).then((res)=>{
       setCountryList(res.data.data)
@@ -45,11 +46,11 @@ function App() {
     isLogin,
     setIsLogin
   }
-  return (  
+  return (
     <BrowserRouter>
     <MyContext.Provider value={values}>
       {
-        isHeaderFooterShow == true && <Header/>
+        isHeaderFooterShow === true && <Header/>
       }
       <Routes>
         <Route path="/" exact={true} element={<Home/>}/>
@@ -60,7 +61,7 @@ function App() {
         <Route path="/signUp" exact={true} element={<SignUp/>}/>
       </Routes>
       {
-        isHeaderFooterShow == true && <Footer/>
+        isHeaderFooterShow === true && <Footer/>
       }
       
       {

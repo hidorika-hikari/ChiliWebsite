@@ -1,11 +1,9 @@
-import FormGroup from "@mui/material/FormGroup";
 import FormControlLabel from "@mui/material/FormControlLabel";
 import Checkbox from "@mui/material/Checkbox";
-import { Link } from "react-router-dom";
 import 'range-slider-input/dist/style.css';
-import { useState } from "react";
 import Slider from '@mui/material/Slider';
-
+import { useState } from "react";
+import { Link } from "react-router-dom";
 
 const Sidebar = () => {
     const [value, setValue] = useState([100, 60000]);
@@ -56,14 +54,13 @@ const Sidebar = () => {
 
                 <div className="filterBox">
                     <h6>FILTER BY PRICE</h6>
-
                     <Slider
-                    value={value}
-                    onChange={(e, newValue) => setValue(newValue)}
-                    valueLabelDisplay="auto"
-                    min={100}
-                    max={60000}
-                    step={5}
+                        value={value}
+                        onChange={(e, newValue) => setValue(newValue)}
+                        valueLabelDisplay="auto"
+                        min={100}
+                        max={60000}
+                        step={5}
                     />
 
                     <div className="d-flex justify-content-between mt-2">
@@ -117,7 +114,7 @@ const Sidebar = () => {
                 </div>
 
                 <br/>
-                <Link to="#"><img src="https://klbtheme.com/bacola/wp-content/uploads/2021/05/sidebar-banner.gif" className="w-100"/></Link>
+                <Link to="#"><img src="https://muybuenoblog.com/wp-content/uploads/2020/09/chiles-740x920.jpg" className="w-100" alt=""/></Link>
             </div>
         </>
     );

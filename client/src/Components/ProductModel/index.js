@@ -5,10 +5,10 @@ import { IoIosHeartEmpty } from "react-icons/io";
 import { useContext } from 'react';
 import { MdClose } from "react-icons/md";
 import { MdCompareArrows } from "react-icons/md";
-import QuantityBox from '../QuantityDrop';
 import { MyContext } from '../../App';
-import ProductZoom from '../ProductZoom';
 import { IoCartSharp } from 'react-icons/io5';
+import ProductZoom from '../ProductZoom';
+import QuantityBox from '../QuantityDrop';
 
 const ProductModel = (props) => {
 
@@ -19,7 +19,7 @@ const ProductModel = (props) => {
             
             <Dialog open={true} className="productModel" onClose={()=> context.setIsOpenProductModel(false)}>
                 <Button className='close_' onClick={()=> context.setIsOpenProductModel(false)}><MdClose/></Button>
-                <h4 className='mb-1 fw-bold'>All Natural Italian-Style Chicken Meatballs</h4>
+                <h4 className='mb-1 fw-bold'>Carolina Reaper Chile Peppers</h4>
                 <div className='d-flex align-items-center'>
                     <div className='d-flex align-items-center me-4'>
                         <span>Brands</span>
@@ -43,9 +43,13 @@ const ProductModel = (props) => {
                         
                         <span className='badge bg-success'>IN STOCK</span>
 
-                        <p className='mt-2'>We live simply with grace and dignity.
-                            There is no stress in continuous improvement.
-                            A quiet partnership moves steadily toward the goal.</p>
+                        <p className='mt-2'>The Carolina Reaper chile pepper is typically oblong with a signature pointed "scorpion’s tail." 
+                            It measures 2–5 cm in diameter and 5–7 cm in length, featuring deeply wrinkled, twisted red skin. 
+                            Its flesh is crisp and juicy, with a few flat, cream-colored seeds. The flavor is sweet and fruity, 
+                            with notes of cinnamon and chocolate, followed by an extremely intense, lingering heat. 
+                            Appearance and heat can vary based on soil and climate.
+
+                        </p>
                         <div className='d-flex align-items-center'>
                             <QuantityBox/>
                             <Button className='btn-blue btn-lg btn-big bth-round me-3'>

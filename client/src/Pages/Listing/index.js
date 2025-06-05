@@ -31,22 +31,22 @@ const Listing = () => {
                         <Sidebar/>
 
                         <div className='content_right'>
-                            <img src="https://klbtheme.com/bacola/wp-content/uploads/2021/08/bacola-banner-18.jpg" 
+                            <img src="https://www.tastingtable.com/img/gallery/best-spicy-chile-peppers-hottest-pepper-how-to-cook-with-chiles/l-intro-1670518347.jpg" alt=""
                             className='w-100' style={{borderRadius:'8px'}}/>
 
                             <div className='showBy mt-3 mb-3 d-flex align-items-center'>
                                 <div className='d-flex align-items-center btnWrapper'>
                                     <Button onClick={() => setProductView('one')}
-                                    className={`view-toggle ${productView == 'one' && 'act'}`}
+                                    className={`view-toggle ${productView === 'one' && 'act'}`}
                                     ><IoIosMenu /></Button>
                                     <Button onClick={()=>setProductView('two')}
-                                    className={`view-toggle ${productView == 'two' && 'act' }`}
+                                    className={`view-toggle ${productView === 'two' && 'act' }`}
                                     ><HiViewGrid/></Button>
                                     <Button onClick={()=>setProductView('three')}
-                                    className={`view-toggle ${productView == 'three'&& 'act' }`}
+                                    className={`view-toggle ${productView === 'three'&& 'act' }`}
                                     ><CgMenuGridR/></Button>
                                     <Button onClick={()=>setProductView('four')}
-                                    className={`view-toggle ${productView == 'four' && 'act'}`}
+                                    className={`view-toggle ${productView === 'four' && 'act'}`}
                                     ><TfiLayoutGrid4Alt/></Button>
                                 </div>
 

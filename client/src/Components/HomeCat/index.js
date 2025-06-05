@@ -1,5 +1,6 @@
 import 'swiper/css';
 import 'swiper/css/navigation';
+import Chili from '../../assets/peper.png'
 import React, { useState } from "react";
 import { Swiper, SwiperSlide } from 'swiper/react';
 import { Navigation } from 'swiper/modules';
@@ -31,8 +32,8 @@ const HomeCat = () => {
                             return (
                                 <SwiperSlide>
                                     <div className="item text-center cursor" style={{background:item}}>
-                                        <img src="https://wp.alithemes.com/html/nest/demo/assets/imgs/shop/cat-9.png"/>
-                                        <h6>Red Apple</h6>
+                                        <img src={Chili} alt=''/>
+                                        <h6>Red Chili</h6>
                                     </div>
                                 </SwiperSlide>
                             )

@@ -24,7 +24,7 @@ const CountryDropdown =() => {
     const selectCountry = (index, country) => {
         setSelectTab(index);
         setIsOpenModel(false);
-        context.setselectedCountry(country)
+        context.setSelectedCountry(country)
     }
 
     useEffect(()=>{
@@ -49,8 +49,7 @@ const CountryDropdown =() => {
         <Button className='countryDrop' onClick={ () => setIsOpenModel(true)}>
             <div className='info d-flex flex-column'>
                 <span className='label'>Your Location</span>
-                <span className='name'>{context.selectedCountry !== "" ? context.
-                selectedCountry.length > 10 ? context.selectedCountry?.substr(0,10) + '...' :
+                <span className='name'>{context.selectedCountry !== "" ? context.selectedCountry.length > 10 ? context.selectedCountry?.substr(0,10) + '...' :
                 context.selectedCountry : 'Select Location'}</span>
             </div>
             <span className='ms-auto'><FaAngleDown/></span>

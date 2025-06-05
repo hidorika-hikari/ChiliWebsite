@@ -21,8 +21,8 @@ const ProductItem = (props) => {
         <>
             <div className={`productItem ${props.itemView}`}>
                 <div className="imgWrapper">
-                    <img src="https://klbtheme.com/bacola/wp-content/uploads/2021/04/product-image-3-346x310.jpg"
-                    className="w-100"/>
+                    <img src="https://specialtyproduce.com/sppics/12497.png" alt=""
+                    className="w-100" style={{ objectFit: "cover" }}/>
 
                     <span className="badge badge-primary">28%</span>
                     
@@ -33,7 +33,7 @@ const ProductItem = (props) => {
                 </div>
                     
                     <div className="info">
-                        <h4> Weather's Original Caramel Hard Candies</h4>
+                        <h4>Carolina Reaper Chile Peppers</h4>
                         <span className="text-success d-block">In Stock</span>
                         <Rating className="mt-2 mb-2" name="read-only" value={5} readOnly size="small" precision={0.5}/>
 

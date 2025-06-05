@@ -2,13 +2,13 @@ import 'swiper/css';
 import 'swiper/css/navigation';
 import HomeBanner from "../../Components/HomeBanner/index";
 import Button from '@mui/material/Button'
+import ProductItem from "../../Components/ProductItem";
+import HomeCat from "../../Components/HomeCat";
+import newsLetterImg from '../../assets/coupons.png'
 import { IoIosArrowRoundForward } from "react-icons/io";
 import { IoMailOutline } from "react-icons/io5";
 import { Swiper, SwiperSlide } from 'swiper/react';
 import { Navigation } from 'swiper/modules';
-import ProductItem from "../../Components/ProductItem";
-import HomeCat from "../../Components/HomeCat";
-import newsLetterImg from '../../assets/coupons.png'
 
 const Home =() => {
 
@@ -23,12 +23,12 @@ const Home =() => {
                         <div className="col-md-3">
                             <div className="sticky">
                                 <div className="banner">
-                                    <img src="https://klbtheme.com/bacola/wp-content/uploads/2021/04/banner-box.jpg" className="cursor"></img>
+                                    <img src="https://klbtheme.com/bacola/wp-content/uploads/2021/04/banner-box.jpg" className="cursor" alt=''></img>
                                     {/* <img src={} className="cursor"></img> */}
                                 </div>
 
                                 <div className="banner mt-3">
-                                    <img src="https://klbtheme.com/bacola/wp-content/uploads/2021/04/banner-box.jpg" className="cursor"></img>
+                                    <img src="https://klbtheme.com/bacola/wp-content/uploads/2021/04/banner-box.jpg" className="cursor" alt=''></img>
                                     {/* <img src={} className="cursor"></img> */}
                                 </div>
                             </div>
@@ -104,13 +104,13 @@ const Home =() => {
 
                             <div className="d-flex mt-4 mb-5 bannerSec">
                                 <div className="banner mt-4">
-                                    <img src="https://vos.line-scdn.net/strapi-cluster-instance-bucket-83/My_Shop_c_14_02_5cf1bae7bd.jpeg"
-                                    className="cursor w-100"/>
+                                    <img src="https://cloudfront-eu-central-1.images.arcpublishing.com/williamreed/CA522QC2BZKZVIBSVPBDMNLML4.jpg"
+                                    className="cursor w-100" alt=''/>
                                 </div>
 
                                 <div className="banner mt-4">
-                                    <img src="https://vos.line-scdn.net/strapi-cluster-instance-bucket-83/My_Shop_c_14_02_5cf1bae7bd.jpeg"
-                                    className="cursor w-100"/>
+                                    <img src="https://www.thespruceeats.com/thmb/rljsggiCQFN3WvoCebr7XHwo9a8=/1500x0/filters:no_upscale():max_bytes(150000):strip_icc()/GettyImages-930279012-e1d17f3f2e14473db877437ce57b8f5f.jpg"
+                                    className="cursor w-100" alt=''/>
                                 </div>
                             </div>
                         </div>

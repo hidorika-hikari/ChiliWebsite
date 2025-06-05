@@ -1,5 +1,4 @@
 import Logo from '../../assets/logo.png'
-import { Link } from 'react-router-dom';
 import CountryDropdown from '../CountryDropdown';
 import SearchBox from './SearchBox';
 import Navigation from './Navigation';
@@ -8,6 +7,7 @@ import { FiUser } from 'react-icons/fi';
 import { IoBagOutline } from 'react-icons/io5';
 import { useContext } from 'react';
 import { MyContext } from '../../App';
+import { Link } from 'react-router-dom';
 
 
 const Header =() => {
@@ -27,7 +27,7 @@ const Header =() => {
             <div className="container">
                 <div className="row">
                     <div className="logoWrapper d-flex align-items-center col-sm-2">
-                        <Link to={'/'}><img src={Logo} alt='Logo'/></Link>
+                        <img src={Logo} alt="Logo"/>
                     </div>
 
                     <div className='col-sm-10 d-flex align-items-center part2'>
