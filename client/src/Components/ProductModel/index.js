@@ -48,7 +48,6 @@ const ProductModel = (props) => {
                             Its flesh is crisp and juicy, with a few flat, cream-colored seeds. The flavor is sweet and fruity, 
                             with notes of cinnamon and chocolate, followed by an extremely intense, lingering heat. 
                             Appearance and heat can vary based on soil and climate.
-
                         </p>
                         <div className='d-flex align-items-center'>
                             <QuantityBox/>

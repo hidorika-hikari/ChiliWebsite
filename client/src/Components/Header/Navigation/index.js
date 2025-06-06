@@ -19,7 +19,7 @@ const Navigation =() => {
                                 <span className='text'>ALL CATEGORIES</span>
                                 <span className='icon2 ms-2'><FaAngleDown/></span>
                             </Button>
-                            <div className= {`sidebarNav ${isOpenSidebarVal == true ? 'open' : ''}`}>
+                            <div className= {`sidebarNav ${isOpenSidebarVal === true ? 'open' : ''}`}>
                                 <ul>
                                     <li><Link to="/"><Button>Men<FaAngleRight className='ms-auto'/></Button></Link>
                                         <div className='submenu shadow'>
@@ -35,12 +35,6 @@ const Navigation =() => {
                                             <Link to="/"><Button>Watches</Button></Link>
                                         </div>
                                     </li>
-                                    <li><Link to="/"><Button>Beauty</Button></Link></li>
-                                    <li><Link to="/"><Button>Watches</Button></Link></li>
-                                    <li><Link to="/"><Button>Kids</Button></Link></li>
-                                    <li><Link to="/"><Button>Gift</Button></Link></li>
-                                    <li><Link to="/"><Button>Men</Button></Link></li>
-                                    <li><Link to="/"><Button>Women</Button></Link></li>
                                     <li><Link to="/"><Button>Beauty</Button></Link></li>
                                     <li><Link to="/"><Button>Watches</Button></Link></li>
                                     <li><Link to="/"><Button>Kids</Button></Link></li>
@@ -84,10 +78,6 @@ const Navigation =() => {
                             <Button>Kids</Button></Link></li>
                             <li className='list-inline-item'><Link to="/">
                             <Button>Gift</Button></Link></li>
-                            <li className='list-inline-item'><Link to="/">
-                            <Button>Blog</Button></Link></li>
-                            <li className='list-inline-item'><Link to="/">
-                            <Button>Contact Us</Button></Link></li>
                         </ul>
                     </div>
                 </div>

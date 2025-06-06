@@ -38,13 +38,17 @@ const Header =() => {
                         <div className='part3 d-flex align-items-center ms-auto'>
                             {
                                 context.isLogin !== true ?
-                                <Link to="/signIn"><Button className='btn-blue btn-round ms-3'>Sign In</Button></Link> :
-                                <Button className='circle me-3'><FiUser/></Button>
+                                <Link to="/signIn"><Button className='btn-blue btn-round'>Sign In</Button></Link> :
+                                <Button className='circle'><FiUser/></Button>
                             }
                             <div className='ms-2 cartTab d-flex align-items-center'>
                                 <span className='price'>3.29$</span>
-                                <div className='position-relative ms-2'>
-                                    <Button className='circle'><IoBagOutline/></Button>
+                                <div className='position-relative ms-2 res-hide'>
+                                <Link to="/cart">
+                                    <Button className="circle">
+                                        <IoBagOutline />
+                                    </Button>
+                                </Link>
                                     <span className='count d-flex align-items-center justify-content-center'>1</span>
                                 </div>
                             </div>
