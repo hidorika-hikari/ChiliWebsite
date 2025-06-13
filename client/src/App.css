@@ -967,15 +967,10 @@ footer .linkWrap ul li a{
   outline: none !important;
 }
 
-.zoomSlider .item{
-  border: 2px solid transparent !important;
+.zoomSliderBig .item, .zoomSlider .item{
+  border: 2px dashed #ccc !important;
+  border-radius: 7px;
   overflow: hidden;
-  border-radius: 15px;
-  cursor: pointer;
-}
-
-.zoomSlider .slick-current .item{
-  border: 2px solid #3bb77e !important;
 }
 
 .zoomSlider .slick-arrow{

@@ -25,9 +25,8 @@ const ProductZoom = () => {
         dots: false,
         infinite: false,
         speed: 500,
-        slidesToShow: 5,
+        slidesToShow: 3,
         slidesToScroll: 1,
-        fade: false,
         arrows: true,
     };
 
