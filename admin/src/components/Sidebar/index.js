@@ -66,6 +66,7 @@ const Sidebar = () => {
                             </Button>
                         </Link>
                     </li>
+                    {/*
                     <li>
                         <Link to="/">
                         <Button className={`w-100 ${activeTab === 4 ? 'active' : ''}`} onClick={() => isOpenSubmenu(4)}>
@@ -75,6 +76,7 @@ const Sidebar = () => {
                             </Button>
                         </Link>
                     </li>
+                    */}
                     <li>
                         <Link to="/">
                         <Button className={`w-100 ${activeTab === 5 ? 'active' : ''}`} onClick={() => isOpenSubmenu(5)}>
