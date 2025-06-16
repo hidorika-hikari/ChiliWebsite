@@ -3,7 +3,7 @@ import { MdDelete } from 'react-icons/md';
 import { useEffect, useState } from 'react';
 import { Breadcrumbs, Chip, emphasize, styled } from '@mui/material';
 import { FaHome } from 'react-icons/fa';
-import { fetchDataFromApi } from '../../ultils/api';
+import { editData, fetchDataFromApi } from '../../ultils/api';
 import Button from '@mui/material/Button';
 import TextField from '@mui/material/TextField';
 import Dialog from '@mui/material/Dialog';
@@ -39,7 +39,8 @@ const Category = () => {
     const [catData, setCatData] = useState([]);
     const [open, setOpen] = useState(false);
 
-    const [editFields, setEditFields] = useState({})
+    const [editFields, setEditFields] = useState({});
+    const [editId, setEditId] = useState(null);
 
     useEffect(() => {
         window.scrollTo(0, 0);
@@ -55,10 +56,51 @@ const Category = () => {
 
     const editCategory = (id) =>{
         setOpen(true);
+        setEditId(id);
         fetchDataFromApi(`/api/category/${id}`).then((res) => {
-            setEditFields(res);
+            setFromFields({
+                name:res.name,
+                images:res.images,
+                color:res.color
+            });
             console.log(res);
         })
+    }
+
+    const categoryEditFunc = (e) =>  {
+        e.preventDefault();
+        editData(`/api/category/&{editId}`).then((res) =>{
+            fetchDataFromApi('/api/category').then((res) => {
+                setCatData(res);
+                console.log(res);
+            })
+        })
+    }
+
+    const [formFields, setFromFields] = useState({
+        name: '',
+        images: [],
+        color: ''
+    });
+
+    const changeInput = (e) => {
+        setFromFields(()=>(
+            {
+                ...formFields,
+                [e.target.name]:e.target.value
+            }
+        ))
+    }
+
+    const addImgUrl = (e) => {
+        const arr = [];
+        arr.push(e.target.value);
+        setFromFields(()=>(
+            {
+                ...formFields,
+                [e.target.name]:arr
+            }
+        ))
     }
 
     return (
@@ -163,45 +205,51 @@ const Category = () => {
                 className='editModel'
             >
                 <DialogTitle>Edit Category</DialogTitle>
-                <DialogContent>
-                    <TextField
-                        autoFocus
-                        required
-                        margin="dense"
-                        id="name"
-                        name="name"
-                        label="Category Name"
-                        type="text"
-                        fullWidth
-                        value={editFields.name}
-                    />
-                    <TextField
-                        autoFocus
-                        required
-                        margin="dense"
-                        id="images"
-                        name="images"
-                        label="Category Image"
-                        type="text"
-                        fullWidth
-                        value={editFields.images}
-                    />
-                    <TextField
-                        autoFocus
-                        required
-                        margin="dense"
-                        id="color"
-                        name="color"
-                        label="Category Color"
-                        type="text"
-                        fullWidth
-                        value={editFields.color}
-                    />
-                </DialogContent>
-                <DialogActions>
-                    <Button onClick={handleClose} variant='outlined'>Cancel</Button>
-                    <Button type="submit" variant='contained'>Submit</Button>
-                </DialogActions>
+                <form onSubmit={categoryEditFunc}>
+                    <DialogContent>
+                        <TextField
+                            autoFocus
+                            required
+                            margin="dense"
+                            id="name"
+                            name="name"
+                            label="Category Name"
+                            type="text"
+                            fullWidth
+                            value={formFields.name}
+                            onChange={changeInput}
+                        />
+                        <TextField
+                            autoFocus
+                            required
+                            margin="dense"
+                            id="images"
+                            name="images"
+                            label="Category Image"
+                            type="text"
+                            fullWidth
+                            value={formFields.images}
+                            onChange={addImgUrl}
+                        />
+                        <TextField
+                            autoFocus
+                            required
+                            margin="dense"
+                            id="color"
+                            name="color"
+                            label="Category Color"
+                            type="text"
+                            fullWidth
+                            value={formFields.color}
+                            onChange={changeInput}
+                        />
+                    </DialogContent>
+                    <DialogActions>
+                        <Button onClick={handleClose} variant='outlined'>Cancel</Button>
+                        <Button type="submit" variant='contained'>Submit</Button>
+                    </DialogActions>
+                </form>
+                <br/>
             </Dialog>
         </>
     );

@@ -55,7 +55,6 @@ const ProductUpload = () => {
 
     const addCategory = (e) => {
         e.preventDefault();
-        
         postData('api/category/create',formFields);
     }
 
