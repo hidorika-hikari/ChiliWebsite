@@ -1,12 +1,10 @@
 import Button from "@mui/material/Button";
-import { FaCartArrowDown, FaProductHunt } from "react-icons/fa";
+import { FaProductHunt } from "react-icons/fa";
 import { FaAngleRight } from "react-icons/fa6";
-import { IoIosSettings, IoMdLogOut } from "react-icons/io";
-import { MdMessage } from "react-icons/md";
+import {  IoMdLogOut } from "react-icons/io";
 import { RxDashboard } from "react-icons/rx";
 import { Link } from "react-router-dom";
 import { useContext, useState } from "react";
-import { FaBell } from "react-icons/fa6";
 import { MyContext } from "../../App";
 
 const Sidebar = () => {
@@ -49,13 +47,17 @@ const Sidebar = () => {
                         </div>
                     </li>
                     <li>
-                        <Link to="/">
-                            <Button className={`w-100 ${activeTab === 2 ? 'active' : ''}`} onClick={() => isOpenSubmenu(2)}>
-                                <span className="icon"><FaCartArrowDown/></span>
-                                    Orders
-                                <span className="arrow"><FaAngleRight/></span>
-                            </Button>
-                        </Link>
+                        <Button className={`w-100 ${activeTab === 2 && isToggleSubmenu === true ? 'active' : ''}`} onClick={() => isOpenSubmenu(2)}>
+                            <span className="icon"><FaProductHunt/></span>
+                                Category
+                            <span className="arrow"><FaAngleRight/></span>
+                        </Button>
+                        <div className={`submenuWrapper ${activeTab === 2 && isToggleSubmenu === true ? 'colapse' : 'colapsed'}`}>
+                            <ul className="submenu">
+                                <li><Link to={'/category'}>Category List</Link></li>
+                                <li><Link to={'/category/add'}>Add Category</Link></li>
+                            </ul>
+                        </div>
                     </li>
                     {/*
                     <li>

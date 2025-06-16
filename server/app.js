@@ -1,8 +1,16 @@
 const express = require('express');
 const mongoose = require('mongoose');
 const app = express();
+const cors = require('cors');
 
 require('dotenv').config();
+
+
+app.use(cors({
+    origin: 'http://localhost:3000',
+    credentials: true // Only if you're using cookies or auth headers
+}));
+console.log('CORS middleware loaded');
 
 // Basic middleware first
 app.use(express.json());

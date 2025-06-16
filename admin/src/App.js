@@ -10,6 +10,8 @@ import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import ProductDetails from './pages/ProductDetails';
 import Product from './pages/Product'
 import ProductUpload from './pages/ProductUpload';
+import CategoryAdd from './pages/CategoryAdd'
+import Category from './pages/Category';
 
 const MyContext = createContext();
 
@@ -93,6 +95,16 @@ function App() {
                                 path="/product/upload"
                                 exact={true}
                                 element={<ProductUpload />}
+                            />
+                            <Route
+                                path="/category/add"
+                                exact={true}
+                                element={<CategoryAdd />}
+                            />
+                            <Route
+                                path="/category"
+                                exact={true}
+                                element={<Category />}
                             />
                         </Routes>
                     </div>
