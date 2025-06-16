@@ -1033,6 +1033,11 @@ body.dark .imgUploadBox .uploadBox * {
   color: #ffffffb3 !important;
 }
 
+body.dark .css-16wblaj-MuiInputBase-input-MuiOutlinedInput-input,
+body.dark .css-113d811-MuiFormLabel-root-MuiInputLabel-root{
+  color: #fffc !important;
+}
+
 .loginSection {
   background: #fff;
   height: 100vh;
@@ -1463,4 +1468,8 @@ body.dark .imgUploadBox .uploadBox * {
   font-size: 15px;
   opacity: 0.5;
   text-align: center;
+}
+
+.editModel .css-10d30g3-MuiPaper-root-MuiDialog-paper{
+  width: 600px !important;
 }

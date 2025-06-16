@@ -1,12 +1,17 @@
-import { FaEye, FaPencilAlt } from 'react-icons/fa';
+import { FaPencilAlt } from 'react-icons/fa';
 import { MdDelete } from 'react-icons/md';
 import { useEffect, useState } from 'react';
-import Button from '@mui/material/Button';
-import Pagination from '@mui/material/Pagination';
-import { Breadcrumbs, Chip, emphasize, ListItem, styled } from '@mui/material';
+import { Breadcrumbs, Chip, emphasize, styled } from '@mui/material';
 import { FaHome } from 'react-icons/fa';
-import { Link } from 'react-router-dom';
 import { fetchDataFromApi } from '../../ultils/api';
+import Button from '@mui/material/Button';
+import TextField from '@mui/material/TextField';
+import Dialog from '@mui/material/Dialog';
+import DialogActions from '@mui/material/DialogActions';
+import DialogContent from '@mui/material/DialogContent';
+import DialogTitle from '@mui/material/DialogTitle';
+import Pagination from '@mui/material/Pagination';
+
 
 
 const StyleBreadcrumb = styled(Chip)(({ theme }) => {
@@ -29,8 +34,12 @@ const StyleBreadcrumb = styled(Chip)(({ theme }) => {
     };
 });
 
+
 const Category = () => {
     const [catData, setCatData] = useState([]);
+    const [open, setOpen] = useState(false);
+
+    const [editFields, setEditFields] = useState({})
 
     useEffect(() => {
         window.scrollTo(0, 0);
@@ -39,6 +48,18 @@ const Category = () => {
             console.log(res);
         })
     }, []);
+
+    const handleClose = () => {
+        setOpen(false);
+    };
+
+    const editCategory = (id) =>{
+        setOpen(true);
+        fetchDataFromApi(`/api/category/${id}`).then((res) => {
+            setEditFields(res);
+            console.log(res);
+        })
+    }
 
     return (
         <>
@@ -65,7 +86,6 @@ const Category = () => {
                 </div>
 
                 <div className="card shadow border-0 p-3 mt-4">
-
                     <div className="table-responsive mt-3">
                         <table className="table table-bordered table-striped v-align">
                             <thead className="table-dark">
@@ -82,39 +102,40 @@ const Category = () => {
                                     catData.length !== 0 && catData?.map((item, index) => {
                                         return (
                                             <tr>
-                                            <td><span>#{index+1}</span></td>
-                                            <td>
-                                                <div className="d-flex align-items-center productBox">
-                                                    <div className="imgWrapper">
-                                                        <div className="img card shadow m-0" style={{ width: '50px' }}>
-                                                            <img
-                                                                src={item.images[0]}
-                                                                alt=""
-                                                                className="w-100"
-                                                            />
+                                                <td><span>#{index + 1}</span></td>
+                                                <td>
+                                                    <div className="d-flex align-items-center productBox">
+                                                        <div className="imgWrapper">
+                                                            <div className="img card shadow m-0" style={{ width: '50px' }}>
+                                                                <img
+                                                                    src={item.images[0]}
+                                                                    alt=""
+                                                                    className="w-100"
+                                                                />
+                                                            </div>
                                                         </div>
                                                     </div>
-                                                </div>
-                                            </td>
-                                            <td>{item.name}</td>
-                                            <td>{item.color}n</td>
-                                            <td>
-                                                <div className="actions d-flex align-items-center">
-                                                    <Button
-                                                        className="success"
-                                                        color="success"
-                                                    >
-                                                        <FaPencilAlt />
-                                                    </Button>
-                                                    <Button
-                                                        className="error"
-                                                        color="error"
-                                                    >
-                                                        <MdDelete />
-                                                    </Button>
-                                                </div>
-                                            </td>
-                                        </tr>
+                                                </td>
+                                                <td>{item.name}</td>
+                                                <td>{item.color}n</td>
+                                                <td>
+                                                    <div className="actions d-flex align-items-center">
+                                                        <Button
+                                                            className="success"
+                                                            color="success"
+                                                            onClick={()=>editCategory(item.id)}
+                                                        >
+                                                            <FaPencilAlt />
+                                                        </Button>
+                                                        <Button
+                                                            className="error"
+                                                            color="error"
+                                                        >
+                                                            <MdDelete />
+                                                        </Button>
+                                                    </div>
+                                                </td>
+                                            </tr>
                                         )
                                     })
                                 }
@@ -136,6 +157,52 @@ const Category = () => {
                     </div>
                 </div>
             </div>
+            <Dialog
+                open={open}
+                onClose={handleClose}
+                className='editModel'
+            >
+                <DialogTitle>Edit Category</DialogTitle>
+                <DialogContent>
+                    <TextField
+                        autoFocus
+                        required
+                        margin="dense"
+                        id="name"
+                        name="name"
+                        label="Category Name"
+                        type="text"
+                        fullWidth
+                        value={editFields.name}
+                    />
+                    <TextField
+                        autoFocus
+                        required
+                        margin="dense"
+                        id="images"
+                        name="images"
+                        label="Category Image"
+                        type="text"
+                        fullWidth
+                        value={editFields.images}
+                    />
+                    <TextField
+                        autoFocus
+                        required
+                        margin="dense"
+                        id="color"
+                        name="color"
+                        label="Category Color"
+                        type="text"
+                        fullWidth
+                        value={editFields.color}
+                    />
+                </DialogContent>
+                <DialogActions>
+                    <Button onClick={handleClose} variant='outlined'>Cancel</Button>
+                    <Button type="submit" variant='contained'>Submit</Button>
+                </DialogActions>
+            </Dialog>
         </>
     );
 };
