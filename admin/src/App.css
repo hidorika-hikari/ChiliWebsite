@@ -1473,3 +1473,8 @@ body.dark .css-113d811-MuiFormLabel-root-MuiInputLabel-root{
 .editModel .css-10d30g3-MuiPaper-root-MuiDialog-paper{
   width: 600px !important;
 }
+
+button .loader{
+  width: 25px !important;
+  height: 25px !important;
+}

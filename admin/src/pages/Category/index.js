@@ -1,7 +1,7 @@
 import { FaPencilAlt } from 'react-icons/fa';
 import { MdDelete } from 'react-icons/md';
 import { useEffect, useState } from 'react';
-import { Breadcrumbs, Chip, emphasize, styled } from '@mui/material';
+import { Breadcrumbs, Chip, CircularProgress, emphasize, styled } from '@mui/material';
 import { FaHome } from 'react-icons/fa';
 import { editData, fetchDataFromApi } from '../../ultils/api';
 import Button from '@mui/material/Button';
@@ -55,6 +55,11 @@ const Category = () => {
     };
 
     const editCategory = (id) =>{
+        setFromFields({
+            name:'',
+            images:'',
+            color:''
+        });
         setOpen(true);
         setEditId(id);
         fetchDataFromApi(`/api/category/${id}`).then((res) => {
@@ -69,10 +74,10 @@ const Category = () => {
 
     const categoryEditFunc = (e) =>  {
         e.preventDefault();
-        editData(`/api/category/&{editId}`).then((res) =>{
+        editData(`/api/category/${editId}`,formFields).then((res) =>{
             fetchDataFromApi('/api/category').then((res) => {
                 setCatData(res);
-                console.log(res);
+                setOpen(false);
             })
         })
     }
@@ -159,7 +164,7 @@ const Category = () => {
                                                     </div>
                                                 </td>
                                                 <td>{item.name}</td>
-                                                <td>{item.color}n</td>
+                                                <td>{item.color}</td>
                                                 <td>
                                                     <div className="actions d-flex align-items-center">
                                                         <Button
@@ -205,7 +210,7 @@ const Category = () => {
                 className='editModel'
             >
                 <DialogTitle>Edit Category</DialogTitle>
-                <form onSubmit={categoryEditFunc}>
+                <form>
                     <DialogContent>
                         <TextField
                             autoFocus
@@ -246,7 +251,8 @@ const Category = () => {
                     </DialogContent>
                     <DialogActions>
                         <Button onClick={handleClose} variant='outlined'>Cancel</Button>
-                        <Button type="submit" variant='contained'>Submit</Button>
+                        <Button type="button" onClick={categoryEditFunc}
+                        variant='contained'>Submit <CircularProgress color='inherit' className='ms-3 loader'/></Button>
                     </DialogActions>
                 </form>
                 <br/>
