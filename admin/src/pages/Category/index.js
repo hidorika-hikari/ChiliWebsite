@@ -3,7 +3,7 @@ import { MdDelete } from 'react-icons/md';
 import { useEffect, useState } from 'react';
 import { Breadcrumbs, Chip, CircularProgress, emphasize, styled } from '@mui/material';
 import { FaHome } from 'react-icons/fa';
-import { editData, fetchDataFromApi } from '../../ultils/api';
+import { deleteData, editData, fetchDataFromApi } from '../../ultils/api';
 import Button from '@mui/material/Button';
 import TextField from '@mui/material/TextField';
 import Dialog from '@mui/material/Dialog';
@@ -38,9 +38,11 @@ const StyleBreadcrumb = styled(Chip)(({ theme }) => {
 const Category = () => {
     const [catData, setCatData] = useState([]);
     const [open, setOpen] = useState(false);
+    const [page, setPage] = useState(1);
 
     const [editFields, setEditFields] = useState({});
     const [editId, setEditId] = useState(null);
+    const [isLoading, setIsLoading] = useState(false);
 
     useEffect(() => {
         window.scrollTo(0, 0);
@@ -74,10 +76,12 @@ const Category = () => {
 
     const categoryEditFunc = (e) =>  {
         e.preventDefault();
+        setIsLoading(true);
         editData(`/api/category/${editId}`,formFields).then((res) =>{
             fetchDataFromApi('/api/category').then((res) => {
                 setCatData(res);
                 setOpen(false);
+                setIsLoading(false);
             })
         })
     }
@@ -106,6 +110,14 @@ const Category = () => {
                 [e.target.name]:arr
             }
         ))
+    }
+
+    const deleteCat = (id) => {
+        deleteData(`/api/category/${id}`).then(res => {
+            fetchDataFromApi(`/api/category`).then((res) => {
+                setCatData(res);
+            })
+        })
     }
 
     return (
@@ -153,11 +165,11 @@ const Category = () => {
                                                 <td>
                                                     <div className="d-flex align-items-center productBox">
                                                         <div className="imgWrapper">
-                                                            <div className="img card shadow m-0" style={{ width: '50px' }}>
+                                                            <div className="img card shadow m-0" style={{ width: '50px', height:'50px', objectFit: 'cover' }}>
                                                                 <img
                                                                     src={item.images[0]}
                                                                     alt=""
-                                                                    className="w-100"
+                                                                    className="w-full h-full"
                                                                 />
                                                             </div>
                                                         </div>
@@ -177,6 +189,7 @@ const Category = () => {
                                                         <Button
                                                             className="error"
                                                             color="error"
+                                                            onClick={()=>deleteCat(item.id)}
                                                         >
                                                             <MdDelete />
                                                         </Button>
@@ -191,10 +204,10 @@ const Category = () => {
 
                         <div className="d-flex tableFooter">
                             <p>
-                                Showing <b>12</b> of <b>60</b> results
+                                Showing <b>{page}</b> of <b>{catData?.length}</b> results
                             </p>
                             <Pagination
-                                count={10}
+                                count={page}
                                 color="primary"
                                 className="pagination"
                                 showFirstButton
@@ -252,7 +265,10 @@ const Category = () => {
                     <DialogActions>
                         <Button onClick={handleClose} variant='outlined'>Cancel</Button>
                         <Button type="button" onClick={categoryEditFunc}
-                        variant='contained'>Submit <CircularProgress color='inherit' className='ms-3 loader'/></Button>
+                        variant='contained'>
+                        {isLoading === true ? <CircularProgress color='inherit'
+                        className='ms-3 loader'/> : 'Submit'}
+                        </Button>
                     </DialogActions>
                 </form>
                 <br/>

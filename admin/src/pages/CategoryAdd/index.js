@@ -1,8 +1,10 @@
-import { Breadcrumbs, Chip, emphasize, styled } from '@mui/material';
+import { Breadcrumbs, Chip, CircularProgress, emphasize, styled } from '@mui/material';
 import { FaCloudUploadAlt, FaHome } from 'react-icons/fa';
+import { postData } from '../../ultils/api';
+import { useNavigate } from 'react-router-dom';
 import React, { useState } from 'react';
 import Button from '@mui/material/Button';
-import { postData } from '../../ultils/api';
+
 
 const StyleBreadcrumb = styled(Chip)(({ theme }) => {
     const backgroundColor =
@@ -26,7 +28,8 @@ const StyleBreadcrumb = styled(Chip)(({ theme }) => {
 
 const ProductUpload = () => {
 
-
+    const history = useNavigate();
+    const [isLoading, setIsLoading] = useState(false);
     const [formFields, setFromFields] = useState({
         name: '',
         images: [],
@@ -55,7 +58,11 @@ const ProductUpload = () => {
 
     const addCategory = (e) => {
         e.preventDefault();
-        postData('api/category/create',formFields);
+        setIsLoading(true);
+        postData('api/category/create',formFields).then(res =>{
+            setIsLoading(false);
+            history('/category');
+        })
     }
 
     return (
@@ -102,7 +109,8 @@ const ProductUpload = () => {
 
                                 <br/>
                                 <Button type="submit" onClick={addCategory} className='btn-blue btn-lg btn-big w-100'>
-                                    <FaCloudUploadAlt/> &nbsp; PUBLISH AND VIEW
+                                    <FaCloudUploadAlt/> &nbsp; {isLoading === true ? <CircularProgress color='inherit' 
+                        className='ms-3 loader'/> : 'PUBLISH AND VIEW'}
                                 </Button>
                             </div>
                         </div>
