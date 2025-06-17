@@ -15,6 +15,15 @@ h1, h2, h3, h4, h5, h6, p{
   color: #403e57;
 }
 
+.topLoadingBar{
+  height: 4px !important;
+  background: #1866ee !important;
+}
+
+body.dark .topLoadingBar {
+  background: #ff4964 !important;
+}
+
 h4{
   line-height: 32px;
 }
@@ -663,7 +672,7 @@ main .sidebarWrapper .sidebar ul li button{
 }
 
 .right-content {
-  padding: 90px 30px 10px;
+  padding: 78px 30px 10px;
 }
 
 .dashboardBoxWrapper{
@@ -1036,6 +1045,10 @@ body.dark .imgUploadBox .uploadBox * {
 body.dark .css-16wblaj-MuiInputBase-input-MuiOutlinedInput-input,
 body.dark .css-113d811-MuiFormLabel-root-MuiInputLabel-root{
   color: #fffc !important;
+}
+
+body.dark .css-1bfq2hg-MuiPaper-root-MuiAlert-root{
+  background: #dc3545 !important;
 }
 
 .loginSection {

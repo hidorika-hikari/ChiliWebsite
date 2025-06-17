@@ -1,11 +1,12 @@
 import Button from "@mui/material/Button";
 import { FaProductHunt } from "react-icons/fa";
 import { FaAngleRight } from "react-icons/fa6";
-import {  IoMdLogOut } from "react-icons/io";
-import { RxDashboard } from "react-icons/rx";
+import { IoMdLogOut } from "react-icons/io";
 import { Link } from "react-router-dom";
 import { useContext, useState } from "react";
 import { MyContext } from "../../App";
+import { MdDashboard } from "react-icons/md";
+import { TbCategoryFilled } from "react-icons/tb";
 
 const Sidebar = () => {
 
@@ -26,7 +27,7 @@ const Sidebar = () => {
                     <li>
                         <Link to="/">
                             <Button className={`w-100 ${activeTab === 0 ? 'active' : ''}`} onClick={() => isOpenSubmenu(0)}>
-                                <span className="icon"><RxDashboard/></span>
+                                <span className="icon"><MdDashboard /></span>
                                     Dashboard
                                 <span className="arrow"><FaAngleRight/></span>
                             </Button>
@@ -48,7 +49,7 @@ const Sidebar = () => {
                     </li>
                     <li>
                         <Button className={`w-100 ${activeTab === 2 && isToggleSubmenu === true ? 'active' : ''}`} onClick={() => isOpenSubmenu(2)}>
-                            <span className="icon"><FaProductHunt/></span>
+                            <span className="icon"><TbCategoryFilled/></span>
                                 Category
                             <span className="arrow"><FaAngleRight/></span>
                         </Button>

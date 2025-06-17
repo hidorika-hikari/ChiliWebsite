@@ -2,9 +2,9 @@ import { Breadcrumbs, Chip, CircularProgress, emphasize, styled } from '@mui/mat
 import { FaCloudUploadAlt, FaHome } from 'react-icons/fa';
 import { postData } from '../../ultils/api';
 import { useNavigate } from 'react-router-dom';
-import React, { useState } from 'react';
+import React, { useContext, useState } from 'react';
 import Button from '@mui/material/Button';
-
+import { MyContext } from '../../App';
 
 const StyleBreadcrumb = styled(Chip)(({ theme }) => {
     const backgroundColor =
@@ -28,6 +28,7 @@ const StyleBreadcrumb = styled(Chip)(({ theme }) => {
 
 const ProductUpload = () => {
 
+    const context = useContext(MyContext);
     const history = useNavigate();
     const [isLoading, setIsLoading] = useState(false);
     const [formFields, setFromFields] = useState({
@@ -58,11 +59,22 @@ const ProductUpload = () => {
 
     const addCategory = (e) => {
         e.preventDefault();
-        setIsLoading(true);
-        postData('api/category/create', formFields).then(res => {
-            setIsLoading(false);
-            history('/category');
-        })
+
+        if (formFields.name !== "" && formFields.images.length !== 0 && formFields.color !== "") {
+            setIsLoading(true);
+            postData('api/category/create', formFields).then(res => {
+                setIsLoading(false);
+                history('/category');
+            })
+        }
+        else {
+            context.setAlertBox({
+                open:true,
+                error:true,
+                msg:'Please fill all the details'
+            });
+            return false;
+        }
     }
 
     return (
@@ -93,7 +105,7 @@ const ProductUpload = () => {
                     <div className="row">
                         <div className="col-md-12">
                             <div className="card p-4 mt-0">
-
+                                
                                 <div className="form-group">
                                     <h6>CATEGORY</h6>
                                     <input type="text" name='name' onChange={changeInput} />
@@ -109,7 +121,8 @@ const ProductUpload = () => {
 
                                 <br />
                                 <Button type="submit" onClick={addCategory} className='btn-blue btn-lg btn-big w-100'>
-                                    <FaCloudUploadAlt /> &nbsp; {isLoading === true ? <CircularProgress color='inherit'
+                                    <FaCloudUploadAlt /> &nbsp; {isLoading === true ?
+                                    <CircularProgress color='inherit'
                                         className='ms-3 loader' /> : 'PUBLISH AND VIEW'}
                                 </Button>
                             </div>
