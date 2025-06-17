@@ -120,6 +120,12 @@ const Category = () => {
         })
     }
 
+    const handleChange = (event, value) => {
+        fetchDataFromApi(`/api/category?page=${value}`).then((res) => {
+            setCatData(res);
+        })
+    };
+
     return (
         <>
             <div className="right-content w-100">
@@ -158,7 +164,7 @@ const Category = () => {
                             </thead>
                             <tbody>
                                 {
-                                    catData.length !== 0 && catData?.map((item, index) => {
+                                    catData?.categoryList?.length > 0 && catData.categoryList.map((item, index) => {
                                         return (
                                             <tr>
                                                 <td><span>#{index + 1}</span></td>
@@ -203,15 +209,13 @@ const Category = () => {
                         </table>
 
                         <div className="d-flex tableFooter">
-                            <p>
-                                Showing <b>{page}</b> of <b>{catData?.length}</b> results
-                            </p>
                             <Pagination
-                                count={page}
+                                count={catData?.totalPages}
                                 color="primary"
                                 className="pagination"
                                 showFirstButton
                                 showLastButton
+                                onChange={handleChange}
                             />
                         </div>
                     </div>

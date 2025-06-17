@@ -37,10 +37,10 @@ const ProductUpload = () => {
     });
 
     const changeInput = (e) => {
-        setFromFields(()=>(
+        setFromFields(() => (
             {
                 ...formFields,
-                [e.target.name]:e.target.value
+                [e.target.name]: e.target.value
             }
         ))
     }
@@ -48,10 +48,10 @@ const ProductUpload = () => {
     const addImgUrl = (e) => {
         const arr = [];
         arr.push(e.target.value);
-        setFromFields(()=>(
+        setFromFields(() => (
             {
                 ...formFields,
-                [e.target.name]:arr
+                [e.target.name]: arr
             }
         ))
     }
@@ -59,7 +59,7 @@ const ProductUpload = () => {
     const addCategory = (e) => {
         e.preventDefault();
         setIsLoading(true);
-        postData('api/category/create',formFields).then(res =>{
+        postData('api/category/create', formFields).then(res => {
             setIsLoading(false);
             history('/category');
         })
@@ -93,24 +93,24 @@ const ProductUpload = () => {
                     <div className="row">
                         <div className="col-md-12">
                             <div className="card p-4 mt-0">
-                                
+
                                 <div className="form-group">
                                     <h6>CATEGORY</h6>
-                                    <input type="text" name='name' onChange={changeInput}/>
+                                    <input type="text" name='name' onChange={changeInput} />
                                 </div>
                                 <div className="form-group">
                                     <h6>IMAGE URL</h6>
-                                    <input type="text" name='images' onChange={addImgUrl}/>
+                                    <input type="text" name='images' onChange={addImgUrl} />
                                 </div>
                                 <div className="form-group">
                                     <h6>COLOR</h6>
-                                    <input type="text" name='color' onChange={changeInput}/>
+                                    <input type="text" name='color' onChange={changeInput} />
                                 </div>
 
-                                <br/>
+                                <br />
                                 <Button type="submit" onClick={addCategory} className='btn-blue btn-lg btn-big w-100'>
-                                    <FaCloudUploadAlt/> &nbsp; {isLoading === true ? <CircularProgress color='inherit' 
-                        className='ms-3 loader'/> : 'PUBLISH AND VIEW'}
+                                    <FaCloudUploadAlt /> &nbsp; {isLoading === true ? <CircularProgress color='inherit'
+                                        className='ms-3 loader' /> : 'PUBLISH AND VIEW'}
                                 </Button>
                             </div>
                         </div>
