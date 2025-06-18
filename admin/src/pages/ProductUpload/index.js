@@ -1,6 +1,6 @@
 import { Breadcrumbs, Chip, emphasize, styled } from '@mui/material';
 import { FaCloudUploadAlt, FaHome } from 'react-icons/fa';
-import React, { useState } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import { IoCloseSharp } from "react-icons/io5";
 import { LazyLoadImage } from 'react-lazy-load-image-component';
 import { FaImages } from "react-icons/fa";
@@ -8,6 +8,8 @@ import MenuItem from '@mui/material/MenuItem';
 import Select from '@mui/material/Select';
 import Rating from '@mui/material/Rating';
 import Button from '@mui/material/Button';
+import { fetchDataFromApi } from '../../ultils/api';
+import { MyContext } from '../../App';
 
 const StyleBreadcrumb = styled(Chip)(({ theme }) => {
     const backgroundColor =
@@ -48,6 +50,35 @@ const ProductUpload = () => {
     const [productRams, setProductRams] = useState([]);
     const [ratingValue, setRatingValue] = useState(null);
 
+    const [catData, setCatData] = useState([]);
+    const context = useContext(MyContext);
+
+    const [formFields, setFormFields] = useState({
+        name:'',
+        description:'',
+        images:[],
+        brand:'',
+        price:0,
+        oldPrice:0,
+        category:'',
+        countInStock:0,
+        rating:0,
+        isFeatured:false,
+    })
+
+    useEffect(() => {
+        window.scrollTo(0, 0);
+        context.setProgress(20)
+        const arr = [];
+        fetchDataFromApi('/api/category').then((res) => {
+            // setCatData(res);
+            arr.push(res)
+            console.log(res)
+            context.setProgress(100);
+        })
+        setCatData(arr);
+    }, []);
+
 
     const handleChangeCategory = (event) => {
         setCategoryVal(event.target.value);
@@ -67,6 +98,10 @@ const ProductUpload = () => {
         } = event;
         setProductRams(typeof value === 'string' ? value.split(',') : value);
     };
+
+    const addProduct = () =>{
+
+    }
 
     return (
         <>
@@ -92,7 +127,7 @@ const ProductUpload = () => {
                     </Breadcrumbs>
                 </div>
 
-                <form className="form">
+                <form className="form" onClick={addProduct}>
                     <div className="row">
                         <div className="col-md-12">
                             <div className="card p-4 mt-0">
@@ -119,15 +154,15 @@ const ProductUpload = () => {
                                                 <MenuItem value="">
                                                     <em>None</em>
                                                 </MenuItem>
-                                                <MenuItem value="men">
-                                                    Men
-                                                </MenuItem>
-                                                <MenuItem value="woman">
-                                                    Woman
-                                                </MenuItem>
-                                                <MenuItem value="kids">
-                                                    Kids
-                                                </MenuItem>
+                                                {
+                                                    catData?.length !== 0 && catData?.map((cat,index) =>{
+                                                        return (
+                                                            <MenuItem value={cat.name} key={index}>
+                                                            {cat.name}
+                                                            </MenuItem>
+                                                        )
+                                                    })
+                                                }
                                             </Select>
                                         </div>
                                     </div>
@@ -314,8 +349,8 @@ const ProductUpload = () => {
                             </div>
                         </div>
                         <br />
-                        <Button className='btn-blue btn-lg btn-big w-100'>
-                            <FaCloudUploadAlt /> &nbsp; PUBLISH AND VIEW
+                        <Button type='submit' className='btn-blue btn-lg btn-big w-100'>
+                        <FaCloudUploadAlt /> &nbsp; PUBLISH AND VIEW
                         </Button>
                     </div>
                 </form>
