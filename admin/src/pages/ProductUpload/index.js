@@ -4,12 +4,12 @@ import React, { useContext, useEffect, useState } from 'react';
 import { IoCloseSharp } from "react-icons/io5";
 import { LazyLoadImage } from 'react-lazy-load-image-component';
 import { FaImages } from "react-icons/fa";
+import { fetchDataFromApi, postData } from '../../ultils/api';
+import { MyContext } from '../../App';
 import MenuItem from '@mui/material/MenuItem';
 import Select from '@mui/material/Select';
 import Rating from '@mui/material/Rating';
 import Button from '@mui/material/Button';
-import { fetchDataFromApi } from '../../ultils/api';
-import { MyContext } from '../../App';
 
 const StyleBreadcrumb = styled(Chip)(({ theme }) => {
     const backgroundColor =
@@ -34,14 +34,23 @@ const StyleBreadcrumb = styled(Chip)(({ theme }) => {
 const ProductUpload = () => {
 
     const [imagePreviews, setImagePreviews] = useState([]);
+
     const handleImageChange = (event) => {
         const files = Array.from(event.target.files);
         const newImageUrls = files.map(file => URL.createObjectURL(file));
         setImagePreviews(prev => [...prev, ...newImageUrls]);
+        setFormFields(prev => ({
+            ...prev,
+            images: [...prev.images, ...files]
+        }));
     };
 
     const handleRemoveImage = (index) => {
         setImagePreviews(prev => prev.filter((_, i) => i !== index));
+        setFormFields(prev => ({
+            ...prev,
+            images: prev.images.filter((_, i) => i !== index)
+        }));
     };
 
     const [categoryVal, setCategoryVal] = useState('');
@@ -109,9 +118,17 @@ const ProductUpload = () => {
             [e.target.name]:e.target.value
         }))
     }
+
     const addProduct = (e) =>{
         e.preventDefault();
         console.log(formFields)
+        postData('api/products/create',formFields).then((res) => {
+            context.setAlertBox({
+                open:true,
+                msg:'The Product is created!',
+                error:false
+            })
+        })
     }
 
     return (
@@ -317,9 +334,13 @@ const ProductUpload = () => {
                                             <h6>RATINGS</h6>
                                             <Rating
                                                 name="simple-controlled"
-                                                value={null}
+                                                value={ratingValue}
                                                 onChange={(event, newValue) => {
                                                     setRatingValue(newValue);
+                                                    setFormFields(() =>({
+                                                        ...formFields,
+                                                        rating:newValue
+                                                    }))
                                                 }} />
                                         </div>
                                     </div>

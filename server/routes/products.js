@@ -55,7 +55,7 @@ router.post('/create', async (req, res) => {
         category: req.body.category,
         countInStock: req.body.countInStock,
         rating: req.body.rating,
-        numReviews: req.body.numReviews,
+        //numReviews: req.body.numReviews,
         isFeatured: req.body.isFeatured
     });
 
@@ -63,7 +63,6 @@ router.post('/create', async (req, res) => {
     if (!product) {
         return res.status(500).json({ error: "Product creation failed", success: false });
     }
-
     res.status(201).json(product);
 });
 
@@ -117,7 +116,6 @@ router.put('/:id', async (req, res) => {
             images: imgurl,
             brands: req.body.brands,
             price: req.body.price,
-            oldPrice: req.body.oldPrice,
             category: req.body.category,
             countInStock: req.body.countInStock,
             rating: req.body.rating,
