@@ -69,19 +69,19 @@ const ProductUpload = () => {
     useEffect(() => {
         window.scrollTo(0, 0);
         context.setProgress(20)
-        const arr = [];
         fetchDataFromApi('/api/category').then((res) => {
-            // setCatData(res);
-            arr.push(res)
-            console.log(res)
+            setCatData(res);
             context.setProgress(100);
         })
-        setCatData(arr);
     }, []);
 
 
     const handleChangeCategory = (event) => {
         setCategoryVal(event.target.value);
+        setFormFields(() =>({
+            ...formFields,
+            category:event.target.value
+        }))
     };
 
     const handleChangeSubCategory = (event) => {
@@ -90,6 +90,10 @@ const ProductUpload = () => {
 
     const handleChangeIsFeatured = (event) => {
         setIsFeaturedVal(event.target.value);
+        setFormFields(() =>({
+            ...formFields,
+            isFeatured:event.target.value
+        }))
     };
 
     const handleChangeProductRam = (event) => {
@@ -99,8 +103,15 @@ const ProductUpload = () => {
         setProductRams(typeof value === 'string' ? value.split(',') : value);
     };
 
-    const addProduct = () =>{
-
+    const inputChange = (e) => {
+        setFormFields(() =>({
+            ...formFields,
+            [e.target.name]:e.target.value
+        }))
+    }
+    const addProduct = (e) =>{
+        e.preventDefault();
+        console.log(formFields)
     }
 
     return (
@@ -127,20 +138,19 @@ const ProductUpload = () => {
                     </Breadcrumbs>
                 </div>
 
-                <form className="form" onClick={addProduct}>
+                <form className="form">
                     <div className="row">
                         <div className="col-md-12">
                             <div className="card p-4 mt-0">
                                 <h5 className="mb-4">Basic Information</h5>
                                 <div className="form-group">
                                     <h6>PRODUCT NAME</h6>
-                                    <input type="text" name="name"></input>
+                                    <input type="text" name="name" onChange={inputChange}/>
                                 </div>
                                 <div className="form-group">
                                     <h6>DESCRIPTION</h6>
-                                    <textarea rows="5" cols="10"></textarea>
+                                    <textarea rows="5" cols="10" name='description' onChange={inputChange}/>
                                 </div>
-
                                 <div className="row">
                                     <div className="col">
                                         <div className="form-group">
@@ -155,9 +165,9 @@ const ProductUpload = () => {
                                                     <em>None</em>
                                                 </MenuItem>
                                                 {
-                                                    catData?.length !== 0 && catData?.map((cat,index) =>{
+                                                    catData?.categoryList?.length > 0 && catData.categoryList.map((cat,index) =>{
                                                         return (
-                                                            <MenuItem value={cat.name} key={index}>
+                                                            <MenuItem className="text-capitalize" value={cat.id} key={index}>
                                                             {cat.name}
                                                             </MenuItem>
                                                         )
@@ -195,6 +205,7 @@ const ProductUpload = () => {
                                             <input
                                                 type="text"
                                                 name="price"
+                                                onChange={inputChange}
                                             ></input>
                                         </div>
                                     </div>
@@ -206,6 +217,7 @@ const ProductUpload = () => {
                                             <input
                                                 type="text"
                                                 name="oldPrice"
+                                                onChange={inputChange}
                                             ></input>
                                         </div>
                                     </div>
@@ -240,7 +252,8 @@ const ProductUpload = () => {
                                                 <h6>PRODUCT STOCK</h6>
                                                 <input
                                                     type="text"
-                                                    name="product stock"
+                                                    name="countInStock"
+                                                    onChange={inputChange}
                                                 />
                                             </div>
                                         </div>
@@ -253,6 +266,7 @@ const ProductUpload = () => {
                                             <input
                                                 type="text"
                                                 name="brand"
+                                                onChange={inputChange}
                                             ></input>
                                         </div>
                                     </div>
@@ -328,6 +342,8 @@ const ProductUpload = () => {
                                                 effect="blur"
                                                 className="w-100"
                                                 src={src}
+                                                name="images"
+                                                onChange={inputChange}
                                             />
                                         </div>
                                     </div>
@@ -349,7 +365,7 @@ const ProductUpload = () => {
                             </div>
                         </div>
                         <br />
-                        <Button type='submit' className='btn-blue btn-lg btn-big w-100'>
+                        <Button type='submit' onClick={addProduct} className='btn-blue btn-lg btn-big w-100'>
                         <FaCloudUploadAlt /> &nbsp; PUBLISH AND VIEW
                         </Button>
                     </div>
