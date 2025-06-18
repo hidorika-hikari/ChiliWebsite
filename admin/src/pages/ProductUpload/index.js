@@ -34,7 +34,8 @@ const StyleBreadcrumb = styled(Chip)(({ theme }) => {
 const ProductUpload = () => {
 
     const [imagePreviews, setImagePreviews] = useState([]);
-
+    const [newImageUrl, setNewImageUrl] = useState('');
+    
     const handleImageChange = (event) => {
         const files = Array.from(event.target.files);
         const newImageUrls = files.map(file => URL.createObjectURL(file));
@@ -43,6 +44,19 @@ const ProductUpload = () => {
             ...prev,
             images: [...prev.images, ...files]
         }));
+        event.target.value = null;
+    };
+
+    const handleAddImageUrl = () => {
+        const url = newImageUrl.trim();
+        if (url && !imagePreviews.includes(url)) {
+            setImagePreviews(prev => [...prev, url]);
+            setFormFields(prev => ({
+                ...prev,
+                images: [...prev.images, url] 
+            }));
+            setNewImageUrl(''); 
+        }
     };
 
     const handleRemoveImage = (index) => {
@@ -58,21 +72,20 @@ const ProductUpload = () => {
     const [isFeaturedVal, setIsFeaturedVal] = useState('');
     const [productRams, setProductRams] = useState([]);
     const [ratingValue, setRatingValue] = useState(null);
-
     const [catData, setCatData] = useState([]);
     const context = useContext(MyContext);
 
     const [formFields, setFormFields] = useState({
-        name:'',
-        description:'',
-        images:[],
-        brand:'',
-        price:0,
-        oldPrice:0,
-        category:'',
-        countInStock:0,
-        rating:0,
-        isFeatured:false,
+        name: '',
+        description: '',
+        images: [],
+        brand: '',
+        price: 0,
+        oldPrice: 0,
+        category: '',
+        countInStock: 0,
+        rating: 0,
+        isFeatured: false,
     })
 
     useEffect(() => {
@@ -84,12 +97,11 @@ const ProductUpload = () => {
         })
     }, []);
 
-
     const handleChangeCategory = (event) => {
         setCategoryVal(event.target.value);
-        setFormFields(() =>({
+        setFormFields(() => ({
             ...formFields,
-            category:event.target.value
+            category: event.target.value
         }))
     };
 
@@ -99,9 +111,9 @@ const ProductUpload = () => {
 
     const handleChangeIsFeatured = (event) => {
         setIsFeaturedVal(event.target.value);
-        setFormFields(() =>({
+        setFormFields(() => ({
             ...formFields,
-            isFeatured:event.target.value
+            isFeatured: event.target.value
         }))
     };
 
@@ -113,20 +125,20 @@ const ProductUpload = () => {
     };
 
     const inputChange = (e) => {
-        setFormFields(() =>({
+        setFormFields(() => ({
             ...formFields,
-            [e.target.name]:e.target.value
+            [e.target.name]: e.target.value
         }))
     }
 
-    const addProduct = (e) =>{
+    const addProduct = (e) => {
         e.preventDefault();
         console.log(formFields)
-        postData('api/products/create',formFields).then((res) => {
+        postData('api/products/create', formFields).then((res) => {
             context.setAlertBox({
-                open:true,
-                msg:'The Product is created!',
-                error:false
+                open: true,
+                msg: 'The Product is created!',
+                error: false
             })
         })
     }
@@ -162,11 +174,11 @@ const ProductUpload = () => {
                                 <h5 className="mb-4">Basic Information</h5>
                                 <div className="form-group">
                                     <h6>PRODUCT NAME</h6>
-                                    <input type="text" name="name" onChange={inputChange}/>
+                                    <input type="text" name="name" onChange={inputChange} />
                                 </div>
                                 <div className="form-group">
                                     <h6>DESCRIPTION</h6>
-                                    <textarea rows="5" cols="10" name='description' onChange={inputChange}/>
+                                    <textarea rows="5" cols="10" name='description' onChange={inputChange} />
                                 </div>
                                 <div className="row">
                                     <div className="col">
@@ -182,10 +194,10 @@ const ProductUpload = () => {
                                                     <em>None</em>
                                                 </MenuItem>
                                                 {
-                                                    catData?.categoryList?.length > 0 && catData.categoryList.map((cat,index) =>{
+                                                    catData?.categoryList?.length > 0 && catData.categoryList.map((cat, index) => {
                                                         return (
                                                             <MenuItem className="text-capitalize" value={cat.id} key={index}>
-                                                            {cat.name}
+                                                                {cat.name}
                                                             </MenuItem>
                                                         )
                                                     })
@@ -337,9 +349,9 @@ const ProductUpload = () => {
                                                 value={ratingValue}
                                                 onChange={(event, newValue) => {
                                                     setRatingValue(newValue);
-                                                    setFormFields(() =>({
+                                                    setFormFields(() => ({
                                                         ...formFields,
-                                                        rating:newValue
+                                                        rating: newValue
                                                     }))
                                                 }} />
                                         </div>
@@ -351,6 +363,18 @@ const ProductUpload = () => {
                     <div className="card p-4 mt-0">
                         <div className='imagesUploadSec'>
                             <h5 className="mb-4">Media And Published</h5>
+                            <div className="form-group gap-2 align-items-center">
+                                <h6>IMAGE URL</h6>
+                                <input
+                                    placeholder='image url'
+                                    type="text"
+                                    value={newImageUrl}
+                                    onChange={(e) => setNewImageUrl(e.target.value)}
+                                />
+                                <Button className="btn-blue btn-lg mt-3" onClick={handleAddImageUrl} variant="outlined" size="small">
+                                    Add URL
+                                </Button>
+                            </div>
                             <div className='imgUploadBox d-flex align-items-center flex-wrap gap-3'>
                                 {imagePreviews.map((src, index) => (
                                     <div className='uploadBox' key={index}>
@@ -363,8 +387,6 @@ const ProductUpload = () => {
                                                 effect="blur"
                                                 className="w-100"
                                                 src={src}
-                                                name="images"
-                                                onChange={inputChange}
                                             />
                                         </div>
                                     </div>
@@ -387,7 +409,7 @@ const ProductUpload = () => {
                         </div>
                         <br />
                         <Button type='submit' onClick={addProduct} className='btn-blue btn-lg btn-big w-100'>
-                        <FaCloudUploadAlt /> &nbsp; PUBLISH AND VIEW
+                            <FaCloudUploadAlt /> &nbsp; PUBLISH AND VIEW
                         </Button>
                     </div>
                 </form>
