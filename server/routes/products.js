@@ -117,10 +117,11 @@ router.put('/:id', async (req, res) => {
             images: imgurl,
             brands: req.body.brands,
             price: req.body.price,
+            oldPrice: req.body.oldPrice,
             category: req.body.category,
             countInStock: req.body.countInStock,
             rating: req.body.rating,
-            numReviews: req.body.numReviews,
+            // numReviews: req.body.numReviews,
             isFeatured: req.body.isFeatured
         },
         { new: true }

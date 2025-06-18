@@ -1491,3 +1491,9 @@ button .loader{
   width: 25px !important;
   height: 25px !important;
 }
+
+.imgUploadBox .uploadBox .box img {
+  width: 150px;
+  height: 150px;
+  object-fit: cover;
+}

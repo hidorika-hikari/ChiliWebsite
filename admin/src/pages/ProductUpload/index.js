@@ -30,10 +30,24 @@ const StyleBreadcrumb = styled(Chip)(({ theme }) => {
 });
 
 const ProductUpload = () => {
+
+    const [imagePreviews, setImagePreviews] = useState([]);
+    const handleImageChange = (event) => {
+        const files = Array.from(event.target.files);
+        const newImageUrls = files.map(file => URL.createObjectURL(file));
+        setImagePreviews(prev => [...prev, ...newImageUrls]);
+    };
+
+    const handleRemoveImage = (index) => {
+        setImagePreviews(prev => prev.filter((_, i) => i !== index));
+    };
+
     const [categoryVal, setCategoryVal] = useState('');
     const [subCategoryVal, setSubCategoryVal] = useState('');
     const [isFeaturedVal, setIsFeaturedVal] = useState('');
     const [productRams, setProductRams] = useState([]);
+    const [ratingValue, setRatingValue] = useState(null);
+
 
     const handleChangeCategory = (event) => {
         setCategoryVal(event.target.value);
@@ -185,13 +199,15 @@ const ProductUpload = () => {
                                             </Select>
                                         </div>
                                     </div>
-                                    <div className="col">
-                                        <div className="form-group">
-                                            <h6>PRODUCT STOCK</h6>
-                                            <input
-                                                type="text"
-                                                name="product stock"
-                                            ></input>
+                                    <div className='row'>
+                                        <div className="col">
+                                            <div className="form-group">
+                                                <h6>PRODUCT STOCK</h6>
+                                                <input
+                                                    type="text"
+                                                    name="product stock"
+                                                />
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
@@ -247,10 +263,15 @@ const ProductUpload = () => {
                                     </div>
                                 </div>
                                 <div className='row'>
-                                    <div className='col-md-4'>
+                                    <div className='col'>
                                         <div className='form-group'>
                                             <h6>RATINGS</h6>
-                                            <Rating name="no-value" value={null} />
+                                            <Rating
+                                                name="simple-controlled"
+                                                value={null}
+                                                onChange={(event, newValue) => {
+                                                    setRatingValue(newValue);
+                                                }} />
                                         </div>
                                     </div>
                                 </div>
@@ -260,30 +281,41 @@ const ProductUpload = () => {
                     <div className="card p-4 mt-0">
                         <div className='imagesUploadSec'>
                             <h5 className="mb-4">Media And Published</h5>
-                            <div className='imgUploadBox d-flex align-items-center'>
-                                <div className='uploadBox'>
-                                <span className='remove'><IoCloseSharp /></span>
-                                    <div className='box'>
-                                        <LazyLoadImage
-                                            alt={"image"}
-                                            effect="blur"
-                                            className="w-100"
-                                            src={'https://mironcoder-hotash.netlify.app/images/product/single/01.webp'}
+                            <div className='imgUploadBox d-flex align-items-center flex-wrap gap-3'>
+                                {imagePreviews.map((src, index) => (
+                                    <div className='uploadBox' key={index}>
+                                        <span className='remove' onClick={() => handleRemoveImage(index)}>
+                                            <IoCloseSharp />
+                                        </span>
+                                        <div className='box'>
+                                            <LazyLoadImage
+                                                alt={`image-${index}`}
+                                                effect="blur"
+                                                className="w-100"
+                                                src={src}
                                             />
+                                        </div>
                                     </div>
-                                </div>
+                                ))}
+
                                 <div className='uploadBox'>
-                                    <input type="file" multiple="" name="images"></input>
+                                    <input
+                                        type="file"
+                                        multiple
+                                        name="images"
+                                        accept="image/*"
+                                        onChange={handleImageChange}
+                                    />
                                     <div className='info'>
                                         <FaImages />
                                         <h5>image upload</h5>
                                     </div>
-                                </div> 
+                                </div>
                             </div>
                         </div>
-                        <br/>
+                        <br />
                         <Button className='btn-blue btn-lg btn-big w-100'>
-                            <FaCloudUploadAlt/> &nbsp; PUBLISH AND VIEW
+                            <FaCloudUploadAlt /> &nbsp; PUBLISH AND VIEW
                         </Button>
                     </div>
                 </form>
