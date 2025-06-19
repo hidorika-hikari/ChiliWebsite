@@ -81,10 +81,10 @@ const ProductUpload = () => {
         description: '',
         images: [],
         brand: '',
-        price: 0,
-        oldPrice: 0,
+        price: null,
+        oldPrice: null,
         category: '',
-        countInStock: 0,
+        countInStock: null,
         rating: 0,
         isFeatured: null,
     })
@@ -162,7 +162,7 @@ const ProductUpload = () => {
             return false;
         }
 
-        if(formFields.price ===0 && formFields.price === ""){
+        if(formFields.price === null){
             context.setAlertBox({
                 open:true,
                 msg:'Please Add Product Price',
@@ -171,7 +171,7 @@ const ProductUpload = () => {
             return false;
         }
 
-        if(formFields.oldPrice ===0 && formFields.oldPrice === ""){
+        if(formFields.oldPrice === null){
             context.setAlertBox({
                 open:true,
                 msg:'Please Add Product oldPrice',
@@ -189,7 +189,7 @@ const ProductUpload = () => {
             return false;
         }
 
-        if(formFields.countInStock === 0 && formFields.countInStock === ""){
+        if(formFields.countInStock === null){
             context.setAlertBox({
                 open:true,
                 msg:'Please Add Product Stock',
@@ -367,12 +367,10 @@ const ProductUpload = () => {
                                                 className="w-100"
                                                 value={isFeaturedVal}
                                                 displayEmpty
-                                                onChange={
-                                                    handleChangeIsFeatured
-                                                }
+                                                onChange={handleChangeIsFeatured}
                                             >
                                                 <MenuItem value="">
-                                                    <em>None</em>
+                                                    <em value={null}>None</em>
                                                 </MenuItem>
                                                 <MenuItem value="true">
                                                     True
@@ -426,9 +424,7 @@ const ProductUpload = () => {
                                                 multiple
                                                 value={productRams}
                                                 displayEmpty
-                                                onChange={
-                                                    handleChangeProductRam
-                                                }
+                                                onChange={handleChangeProductRam}
                                                 renderValue={(selected) =>
                                                     selected.length === 0 ? (
                                                         <em>None</em>
