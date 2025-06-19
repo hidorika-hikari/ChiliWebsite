@@ -1,4 +1,4 @@
-import { Breadcrumbs, Chip, emphasize, styled } from '@mui/material';
+import { Breadcrumbs, Chip, CircularProgress, emphasize, styled } from '@mui/material';
 import { FaCloudUploadAlt, FaHome } from 'react-icons/fa';
 import React, { useContext, useEffect, useState } from 'react';
 import { IoCloseSharp } from "react-icons/io5";
@@ -10,6 +10,7 @@ import MenuItem from '@mui/material/MenuItem';
 import Select from '@mui/material/Select';
 import Rating from '@mui/material/Rating';
 import Button from '@mui/material/Button';
+
 
 const StyleBreadcrumb = styled(Chip)(({ theme }) => {
     const backgroundColor =
@@ -32,10 +33,10 @@ const StyleBreadcrumb = styled(Chip)(({ theme }) => {
 });
 
 const ProductUpload = () => {
-
     const [imagePreviews, setImagePreviews] = useState([]);
     const [newImageUrl, setNewImageUrl] = useState('');
-    
+    const [isLoading, setIsLoading] = useState(false);
+
     const handleImageChange = (event) => {
         const files = Array.from(event.target.files);
         const newImageUrls = files.map(file => URL.createObjectURL(file));
@@ -53,9 +54,9 @@ const ProductUpload = () => {
             setImagePreviews(prev => [...prev, url]);
             setFormFields(prev => ({
                 ...prev,
-                images: [...prev.images, url] 
+                images: [...prev.images, url]
             }));
-            setNewImageUrl(''); 
+            setNewImageUrl('');
         }
     };
 
@@ -85,7 +86,7 @@ const ProductUpload = () => {
         category: '',
         countInStock: 0,
         rating: 0,
-        isFeatured: false,
+        isFeatured: null,
     })
 
     useEffect(() => {
@@ -133,12 +134,117 @@ const ProductUpload = () => {
 
     const addProduct = (e) => {
         e.preventDefault();
+
+        if(formFields.name === ""){
+            context.setAlertBox({
+                open:true,
+                msg:'Please Add Product Name',
+                error:true
+            });
+            return false;
+        }
+
+        if(formFields.description === ""){
+            context.setAlertBox({
+                open:true,
+                msg:'Please Add Product Description',
+                error:true
+            });
+            return false;
+        }
+
+        if(formFields.category === ""){
+            context.setAlertBox({
+                open:true,
+                msg:'Please Select a Category',
+                error:true
+            });
+            return false;
+        }
+
+        if(formFields.price ===0 && formFields.price === ""){
+            context.setAlertBox({
+                open:true,
+                msg:'Please Add Product Price',
+                error:true
+            });
+            return false;
+        }
+
+        if(formFields.oldPrice ===0 && formFields.oldPrice === ""){
+            context.setAlertBox({
+                open:true,
+                msg:'Please Add Product oldPrice',
+                error:true
+            });
+            return false;
+        }
+
+        if(formFields.isFeatured === null){
+            context.setAlertBox({
+                open:true,
+                msg:'Please Select the Product Featured',
+                error:true
+            });
+            return false;
+        }
+
+        if(formFields.countInStock === 0 && formFields.countInStock === ""){
+            context.setAlertBox({
+                open:true,
+                msg:'Please Add Product Stock',
+                error:true
+            });
+            return false;
+        }
+
+        if(formFields.brand === ""){
+            context.setAlertBox({
+                open:true,
+                msg:'Please Add Product Brand',
+                error:true
+            });
+            return false;
+        }
+
+        if(formFields.rating === 0){
+            context.setAlertBox({
+                open:true,
+                msg:'Please Add Product Rating',
+                error:true
+            });
+            return false;
+        }
+
+        if(formFields.images.length === 0){
+            context.setAlertBox({
+                open:true,
+                msg:'Please SAdd Product Images',
+                error:true
+            });
+            return false;
+        }
+
         console.log(formFields)
+        setIsLoading(true);
         postData('api/products/create', formFields).then((res) => {
+            setIsLoading(false);
             context.setAlertBox({
                 open: true,
                 msg: 'The Product is created!',
                 error: false
+            });
+            setFormFields({
+                name: '',
+                description: '',
+                images: [],
+                brand: '',
+                price: 0,
+                oldPrice: 0,
+                category: '',
+                countInStock: 0,
+                rating: 0,
+                isFeatured: false,
             })
         })
     }
@@ -174,11 +280,11 @@ const ProductUpload = () => {
                                 <h5 className="mb-4">Basic Information</h5>
                                 <div className="form-group">
                                     <h6>PRODUCT NAME</h6>
-                                    <input type="text" name="name" onChange={inputChange} />
+                                    <input type="text" name="name" value={formFields.name} onChange={inputChange} />
                                 </div>
                                 <div className="form-group">
                                     <h6>DESCRIPTION</h6>
-                                    <textarea rows="5" cols="10" name='description' onChange={inputChange} />
+                                    <textarea rows="5" cols="10" name='description' value={formFields.description} onChange={inputChange} />
                                 </div>
                                 <div className="row">
                                     <div className="col">
@@ -234,6 +340,7 @@ const ProductUpload = () => {
                                             <input
                                                 type="text"
                                                 name="price"
+                                                value={formFields.price}
                                                 onChange={inputChange}
                                             ></input>
                                         </div>
@@ -246,6 +353,7 @@ const ProductUpload = () => {
                                             <input
                                                 type="text"
                                                 name="oldPrice"
+                                                value={formFields.oldPrice}
                                                 onChange={inputChange}
                                             ></input>
                                         </div>
@@ -282,6 +390,7 @@ const ProductUpload = () => {
                                                 <input
                                                     type="text"
                                                     name="countInStock"
+                                                    value={formFields.countInStock}
                                                     onChange={inputChange}
                                                 />
                                             </div>
@@ -295,6 +404,7 @@ const ProductUpload = () => {
                                             <input
                                                 type="text"
                                                 name="brand"
+                                                value={formFields.brand}
                                                 onChange={inputChange}
                                             ></input>
                                         </div>
@@ -409,7 +519,9 @@ const ProductUpload = () => {
                         </div>
                         <br />
                         <Button type='submit' onClick={addProduct} className='btn-blue btn-lg btn-big w-100'>
-                            <FaCloudUploadAlt /> &nbsp; PUBLISH AND VIEW
+                            <FaCloudUploadAlt /> &nbsp; {isLoading === true ?
+                                <CircularProgress color='inherit'
+                                    className='ms-3 loader' /> : 'PUBLISH AND VIEW'}
                         </Button>
                     </div>
                 </form>
