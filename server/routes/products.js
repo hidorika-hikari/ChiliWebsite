@@ -4,6 +4,33 @@ const express = require('express');
 const router = express.Router();
 const cloudinary = require('cloudinary').v2;
 const pLimit = require('p-limit');
+// const multer = require('multer'); DISABLE IT WHEN USE URL UPLOAD
+
+// ---------- DISABLE IT WHEN USE URL UPLOAD ----------------
+/* var imagesArr = [];
+
+const storage = multer.diskStorage({
+    destination: function (req, file, cb) {
+        cb(null, "uploads/");
+    },
+    filename: function (res, file, cb) {
+        cb(null, `${Date.now()}_${file.originalname}`)
+    }
+})
+
+const upload = multer({ storage: storage })
+
+router.post('/upload', upload.array("images"), async (req, res) => {
+    var imagesArr = [];
+    const files = req.files;
+
+    for (let i = 0; i < files.length; i++) {
+        imagesArr.push(files[i].filename);
+    }
+    console.log(imagesArr);
+    res.json(images:imageArr);
+}); */
+//------------ DISABLE IT WHEN USE URL UPLOAD -----------------
 
 router.get('/', async (req, res) => {
     const productList = await Product.find().populate("category");
@@ -26,9 +53,8 @@ router.post('/create', async (req, res) => {
     if (!category) {
         return res.status(404).send("Invalid Category");
     }
-
+    // DISABLE IT WHEN USE LOCAL UPLOAD
     const limit = pLimit(2);
-
     const imagesToUpload = req.body.images.map((image) => {
         return limit(async () => {
             const result = await cloudinary.uploader.upload(image);
@@ -45,11 +71,12 @@ router.post('/create', async (req, res) => {
             status: false
         });
     }
+    // DISABLE IT WHEN USE LOCAL UPLOAD
 
     let product = new Product({
         name: req.body.name,
         description: req.body.description,
-        images: imgurl,
+        images: imgurl, //imageArr,
         brands: req.body.brands,
         price: req.body.price,
         category: req.body.category,
@@ -107,7 +134,7 @@ router.put('/:id', async (req, res) => {
             status: false
         });
     }
-    
+
     const product = await Product.findByIdAndUpdate(
         req.params.id,
         {
@@ -125,7 +152,7 @@ router.put('/:id', async (req, res) => {
         { new: true }
     );
 
-    if(!product) {
+    if (!product) {
         return res.status(404).json({
             success: false,
             message: "Product cant be updated"

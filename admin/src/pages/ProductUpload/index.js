@@ -11,7 +11,6 @@ import Select from '@mui/material/Select';
 import Rating from '@mui/material/Rating';
 import Button from '@mui/material/Button';
 
-
 const StyleBreadcrumb = styled(Chip)(({ theme }) => {
     const backgroundColor =
         theme.palette.mode === 'light'
@@ -36,6 +35,8 @@ const ProductUpload = () => {
     const [imagePreviews, setImagePreviews] = useState([]);
     const [newImageUrl, setNewImageUrl] = useState('');
     const [isLoading, setIsLoading] = useState(false);
+    // const [imgFiles, setImgFiles] = useState(); LOCAL UPLOAD IMG
+    // const [previews, setPreview] = useState(); LOCAL UPLOAD IMG
 
     const handleImageChange = (event) => {
         const files = Array.from(event.target.files);
@@ -75,6 +76,8 @@ const ProductUpload = () => {
     const [ratingValue, setRatingValue] = useState(null);
     const [catData, setCatData] = useState([]);
     const context = useContext(MyContext);
+    // const formdata = new FormData(); LOCAL UPLOAD IMG
+    // const [files, setFiles] = useState([]); LOCAL UPLOAD IMG
 
     const [formFields, setFormFields] = useState({
         name: '',
@@ -97,6 +100,25 @@ const ProductUpload = () => {
             context.setProgress(100);
         })
     }, []);
+
+    /* --------------- LOCAL UPLOAD IMG PREVIEW ------------
+    useEffect(()=>{
+        if(!imgFiles) return;
+        let tmp = [];
+        for(let i=0; i<files.length; i++){
+            tmp.push(URL.createObjectURL(file[i]));
+        }
+
+        const objectUrls = tmp;
+        setPreviews(objectUrls);
+
+        for(let i=0; i<objectUrls.length; i++){
+            return ()=> {
+                url.revokeObjectURL(objectUrls[i])
+            }
+        }
+    },[imgFiles])
+    --------------LOCAL UPLOAD IMG PREVIEW ---------------*/
 
     const handleChangeCategory = (event) => {
         setCategoryVal(event.target.value);
@@ -132,98 +154,134 @@ const ProductUpload = () => {
         }))
     }
 
+    /* ---------------------------- LOCAL UPLOAD IMG ------------------------
+    const onChangeFile = async (e, apiEndPoint) => {
+        try {
+            const imgArr = [];
+            const files = e.target.files;
+            setImgFiles(e.target.files)
+            for (var i = 0; i < files.length; i++) {
+                const file = files[i];
+                imgArr.push(file);
+                formdata.append(`images`, file);
+            }
+            setFiles(imgArr);
+            console.log(imgArr)
+            postData(apiEndPoint, formdata).then((res) =>{
+                
+            });
+        
+        } catch(error){
+            console.log(error)
+        }
+    }
+    -----------------------------LOCAL UPLOAD IMG ---------------------*/
+
     const addProduct = (e) => {
         e.preventDefault();
+        /* ------------------------- LOCAL UPLOAD IMG----------------------
+            formdata.append('name',formFields.name);
+            formdata.append('description',formFields.description);
+            formdata.append('brand',formFields.brand);
+            formdata.append('price',formFields.price);
+            formdata.append('oldPrice',formFields.oldPrice);
+            formdata.append('category',formFields.category);
+            formdata.append('countInStock',formFields.countInStock);
+            formdata.append('rating',formFields.rating);
+            formdata.append('isFeatured',formFields.isFeatured);
+        ------------------------  -LOCAL UPLOAD IMG ------------------------ */
 
-        if(formFields.name === ""){
+        if (formFields.name === "") {
             context.setAlertBox({
-                open:true,
-                msg:'Please Add Product Name',
-                error:true
+                open: true,
+                msg: 'Please Add Product Name',
+                error: true
             });
             return false;
         }
 
-        if(formFields.description === ""){
+        if (formFields.description === "") {
             context.setAlertBox({
-                open:true,
-                msg:'Please Add Product Description',
-                error:true
+                open: true,
+                msg: 'Please Add Product Description',
+                error: true
             });
             return false;
         }
 
-        if(formFields.category === ""){
+        if (formFields.category === "") {
             context.setAlertBox({
-                open:true,
-                msg:'Please Select a Category',
-                error:true
+                open: true,
+                msg: 'Please Select a Category',
+                error: true
             });
             return false;
         }
 
-        if(formFields.price === null){
+        if (formFields.price === null) {
             context.setAlertBox({
-                open:true,
-                msg:'Please Add Product Price',
-                error:true
+                open: true,
+                msg: 'Please Add Product Price',
+                error: true
             });
             return false;
         }
 
-        if(formFields.oldPrice === null){
+        if (formFields.oldPrice === null) {
             context.setAlertBox({
-                open:true,
-                msg:'Please Add Product oldPrice',
-                error:true
+                open: true,
+                msg: 'Please Add Product oldPrice',
+                error: true
             });
             return false;
         }
 
-        if(formFields.isFeatured === null){
+        if (formFields.isFeatured === null) {
             context.setAlertBox({
-                open:true,
-                msg:'Please Select the Product Featured',
-                error:true
+                open: true,
+                msg: 'Please Select the Product Featured',
+                error: true
             });
             return false;
         }
 
-        if(formFields.countInStock === null){
+        if (formFields.countInStock === null) {
             context.setAlertBox({
-                open:true,
-                msg:'Please Add Product Stock',
-                error:true
+                open: true,
+                msg: 'Please Add Product Stock',
+                error: true
             });
             return false;
         }
 
-        if(formFields.brand === ""){
+        if (formFields.brand === "") {
             context.setAlertBox({
-                open:true,
-                msg:'Please Add Product Brand',
-                error:true
+                open: true,
+                msg: 'Please Add Product Brand',
+                error: true
             });
             return false;
         }
 
-        if(formFields.rating === 0){
+        if (formFields.rating === 0) {
             context.setAlertBox({
-                open:true,
-                msg:'Please Add Product Rating',
-                error:true
+                open: true,
+                msg: 'Please Add Product Rating',
+                error: true
             });
             return false;
         }
 
-        if(formFields.images.length === 0){
+        // ------------ LOCAL UPLOAD IMG DISABLE---------------
+        if (formFields.images.length === 0) {
             context.setAlertBox({
-                open:true,
-                msg:'Please SAdd Product Images',
-                error:true
+                open: true,
+                msg: 'Please Add Product Images',
+                error: true
             });
             return false;
         }
+        // ------------- LOCAL UPLOAD IMG DISABLE- -------------
 
         console.log(formFields)
         setIsLoading(true);
@@ -231,7 +289,7 @@ const ProductUpload = () => {
             setIsLoading(false);
             context.setAlertBox({
                 open: true,
-                msg: 'The Product is created!',
+                msg: 'The Product is Created!',
                 error: false
             });
             setFormFields({
@@ -318,9 +376,7 @@ const ProductUpload = () => {
                                                 className="w-100"
                                                 value={subCategoryVal}
                                                 displayEmpty
-                                                onChange={
-                                                    handleChangeSubCategory
-                                                }
+                                                onChange={handleChangeSubCategory}
                                             >
                                                 <MenuItem value="">
                                                     <em>None</em>
@@ -342,7 +398,7 @@ const ProductUpload = () => {
                                                 name="price"
                                                 value={formFields.price}
                                                 onChange={inputChange}
-                                            ></input>
+                                            />
                                         </div>
                                     </div>
                                 </div>
@@ -355,14 +411,12 @@ const ProductUpload = () => {
                                                 name="oldPrice"
                                                 value={formFields.oldPrice}
                                                 onChange={inputChange}
-                                            ></input>
+                                            />
                                         </div>
                                     </div>
                                     <div className="col">
                                         <div className="form-group">
-                                            <h6 className="text-uppercase">
-                                                is Featured
-                                            </h6>
+                                            <h6>IS FEATURED</h6>
                                             <Select
                                                 className="w-100"
                                                 value={isFeaturedVal}
@@ -404,7 +458,7 @@ const ProductUpload = () => {
                                                 name="brand"
                                                 value={formFields.brand}
                                                 onChange={inputChange}
-                                            ></input>
+                                            />
                                         </div>
                                     </div>
                                     <div className="col">
@@ -413,7 +467,7 @@ const ProductUpload = () => {
                                             <input
                                                 type="text"
                                                 name="discount"
-                                            ></input>
+                                            />
                                         </div>
                                     </div>
                                     <div className="col">
@@ -482,6 +536,19 @@ const ProductUpload = () => {
                                 </Button>
                             </div>
                             <div className='imgUploadBox d-flex align-items-center flex-wrap gap-3'>
+
+                                { //--------------------- LOCAL UPLOAD IMG PREVIEW------------------
+                                    /*
+                                    previews?.length !== 0 && previews?.map((img, index) => {
+                                        return (
+                                            <div className='uploadBox' key={index}>
+                                                <img src={img} className='w-100' />
+                                            </div>
+                                        )
+                                    })
+                                    */
+                                }
+
                                 {imagePreviews.map((src, index) => (
                                     <div className='uploadBox' key={index}>
                                         <span className='remove' onClick={() => handleRemoveImage(index)}>
@@ -500,11 +567,12 @@ const ProductUpload = () => {
 
                                 <div className='uploadBox'>
                                     <input
-                                        type="file"
+                                        type=""
                                         multiple
                                         name="images"
-                                        accept="image/*"
+                                        // accept="image/*"
                                         onChange={handleImageChange}
+                                    // onChange={(e) => onChangeFile(e, '/api/products/upload')} LOCAL UPLOAD IMG
                                     />
                                     <div className='info'>
                                         <FaImages />

@@ -38,7 +38,6 @@ const Category = () => {
     const [catData, setCatData] = useState([]);
     const [open, setOpen] = useState(false);
     // const [page, setPage] = useState(1);
-
     // const [editFields, setEditFields] = useState({});
     const [editId, setEditId] = useState(null);
     const [isLoading, setIsLoading] = useState(false);
@@ -161,7 +160,6 @@ const Category = () => {
                                 href="#"
                             />
                         </Breadcrumbs>
-
                         <Link to="/category/add"><Button className='btn-blue ms-3 ps-5 pe-5'>
                             Add Category</Button></Link>
                     </div>

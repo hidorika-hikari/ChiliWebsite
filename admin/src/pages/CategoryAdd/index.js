@@ -71,7 +71,7 @@ const ProductUpload = () => {
             context.setAlertBox({
                 open:true,
                 error:true,
-                msg:'Please fill all the details'
+                msg:'Please Fill All the Details'
             });
             return false;
         }
