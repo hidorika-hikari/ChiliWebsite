@@ -5,6 +5,7 @@ import { IoCloseSharp } from "react-icons/io5";
 import { LazyLoadImage } from 'react-lazy-load-image-component';
 import { FaImages } from "react-icons/fa";
 import { fetchDataFromApi, postData } from '../../ultils/api';
+import { useNavigate } from 'react-router-dom';
 import { MyContext } from '../../App';
 import MenuItem from '@mui/material/MenuItem';
 import Select from '@mui/material/Select';
@@ -37,6 +38,7 @@ const ProductUpload = () => {
     const [isLoading, setIsLoading] = useState(false);
     // const [imgFiles, setImgFiles] = useState(); LOCAL UPLOAD IMG
     // const [previews, setPreview] = useState(); LOCAL UPLOAD IMG
+    const history = useNavigate();
 
     const handleImageChange = (event) => {
         const files = Array.from(event.target.files);
@@ -303,7 +305,8 @@ const ProductUpload = () => {
                 countInStock: 0,
                 rating: 0,
                 isFeatured: false,
-            })
+            });
+            history('/products');
         })
     }
 

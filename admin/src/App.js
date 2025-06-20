@@ -122,7 +122,7 @@ function App() {
                                 element={<SignUp />}
                             />
                             <Route
-                                path="/product"
+                                path="/products"
                                 exact={true}
                                 element={<Product />}
                             />
