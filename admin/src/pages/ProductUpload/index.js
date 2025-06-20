@@ -4,7 +4,7 @@ import React, { useContext, useEffect, useState } from 'react';
 import { IoCloseSharp } from "react-icons/io5";
 import { LazyLoadImage } from 'react-lazy-load-image-component';
 import { FaImages } from "react-icons/fa";
-import { fetchDataFromApi, postData } from '../../ultils/api';
+import { fetchDataFromApi, postData } from '../../utils/api';
 import { useNavigate } from 'react-router-dom';
 import { MyContext } from '../../App';
 import MenuItem from '@mui/material/MenuItem';

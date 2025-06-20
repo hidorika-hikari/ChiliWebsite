@@ -11,7 +11,7 @@ import { MyContext } from '../../App';
 import { Breadcrumbs, Chip, emphasize, styled } from '@mui/material';
 import { FaHome } from 'react-icons/fa';
 import { Link } from 'react-router-dom';
-import { fetchDataFromApi } from '../../ultils/api';
+import { fetchDataFromApi } from '../../utils/api';
 
 const StyleBreadcrumb = styled(Chip)(({ theme }) => {
     const backgroundColor =

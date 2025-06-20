@@ -3,7 +3,7 @@ import { MdDelete } from 'react-icons/md';
 import { useContext, useEffect, useState } from 'react';
 import { Breadcrumbs, Chip, CircularProgress, emphasize, styled } from '@mui/material';
 import { FaHome } from 'react-icons/fa';
-import { deleteData, editData, fetchDataFromApi } from '../../ultils/api';
+import { deleteData, editData, fetchDataFromApi } from '../../utils/api';
 import { Link } from 'react-router-dom';
 import Button from '@mui/material/Button';
 import TextField from '@mui/material/TextField';

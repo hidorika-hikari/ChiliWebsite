@@ -1,6 +1,6 @@
 import { Breadcrumbs, Chip, CircularProgress, emphasize, styled } from '@mui/material';
 import { FaCloudUploadAlt, FaHome } from 'react-icons/fa';
-import { postData } from '../../ultils/api';
+import { postData } from '../../utils/api';
 import { useNavigate } from 'react-router-dom';
 import React, { useContext, useState } from 'react';
 import Button from '@mui/material/Button';
