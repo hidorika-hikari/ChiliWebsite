@@ -59,7 +59,7 @@ const ProductDetails = () => {
                     >
                         <StyleBreadcrumb
                             component="a"
-                            href="#"
+                            href={'/'}
                             label="Dashboard"
                             icon={<FaHome fontSize="small" />}
                         />
@@ -153,8 +153,8 @@ const ProductDetails = () => {
                                                 <td>{item.category.name}</td>
                                                 <td>{item.brand}</td>
                                                 <td>
-                                                    <del className="old">{item.oldPrice}</del>
-                                                    <span className="new text-danger">{item.price}</span>
+                                                    <del className="old">{item.oldPrice} ฿</del>
+                                                    <span className="new text-danger">{item.price} ฿</span>
                                                 </td>
                                                 <td>{item.countInStock}</td>
                                                 <td>

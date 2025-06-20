@@ -69,9 +69,9 @@ const ProductUpload = () => {
         }
         else {
             context.setAlertBox({
-                open:true,
-                error:true,
-                msg:'Please Fill All the Details'
+                open: true,
+                error: true,
+                msg: 'Please Fill All the Details'
             });
             return false;
         }
@@ -88,14 +88,14 @@ const ProductUpload = () => {
                     >
                         <StyleBreadcrumb
                             component="a"
-                            href="#"
+                            href={'/'}
                             label="Dashboard"
                             icon={<FaHome fontSize="small" />}
                         />
                         <StyleBreadcrumb
-                            label="Category"
+                            label="Category List"
                             component="a"
-                            href="#"
+                            href={'/category'}
                         />
                         <StyleBreadcrumb label="Add Category" />
                     </Breadcrumbs>
@@ -105,25 +105,36 @@ const ProductUpload = () => {
                     <div className="row">
                         <div className="col-md-12">
                             <div className="card p-4 mt-0">
-                                
+
                                 <div className="form-group">
                                     <h6>CATEGORY</h6>
                                     <input type="text" name='name' onChange={changeInput} />
                                 </div>
                                 <div className="form-group">
-                                    <h6>IMAGE URL</h6>
-                                    <input type="text" name='images' onChange={addImgUrl} />
-                                </div>
-                                <div className="form-group">
                                     <h6>COLOR</h6>
                                     <input type="text" name='color' onChange={changeInput} />
+                                </div>
+                                <div className="form-group">
+                                    <h6>IMAGE URL</h6>
+                                    <input type="text" name='images' onChange={addImgUrl} />
+
+                                    {formFields.images.length > 0 && formFields.images[0] && (
+                                        <div style={{ marginTop: '10px' }}>
+                                            <img
+                                                src={formFields.images[0]}
+                                                alt="Preview"
+                                                style={{ maxHeight: '150px', borderRadius: '8px', border: '1px solid #ccc', marginTop: '10px' }}
+                                                onError={(e) => e.target.style.display = 'none'}
+                                            />
+                                        </div>
+                                    )}
                                 </div>
 
                                 <br />
                                 <Button type="submit" onClick={addCategory} className='btn-blue btn-lg btn-big w-100'>
                                     <FaCloudUploadAlt /> &nbsp; {isLoading === true ?
-                                    <CircularProgress color='inherit'
-                                        className='ms-3 loader' /> : 'PUBLISH AND VIEW'}
+                                        <CircularProgress color='inherit'
+                                            className='ms-3 loader' /> : 'PUBLISH AND VIEW'}
                                 </Button>
                             </div>
                         </div>

@@ -12,6 +12,18 @@ import Select from '@mui/material/Select';
 import Rating from '@mui/material/Rating';
 import Button from '@mui/material/Button';
 
+const ITEM_HEIGHT = 48;
+const ITEM_PADDING_TOP = 8;
+
+const menuProps = {
+    PaperProps: {
+        style: {
+            maxHeight: ITEM_HEIGHT * 6.5 + ITEM_PADDING_TOP, // Shows ~6 items
+            width: 250,
+        },
+    },
+};
+
 const StyleBreadcrumb = styled(Chip)(({ theme }) => {
     const backgroundColor =
         theme.palette.mode === 'light'
@@ -321,7 +333,7 @@ const ProductUpload = () => {
                     >
                         <StyleBreadcrumb
                             component="a"
-                            href="#"
+                            href={'/'}
                             label="Dashboard"
                             icon={<FaHome fontSize="small" />}
                         />
@@ -355,6 +367,7 @@ const ProductUpload = () => {
                                                 className="w-100"
                                                 value={categoryVal}
                                                 displayEmpty
+                                                MenuProps={menuProps}
                                                 onChange={handleChangeCategory}
                                             >
                                                 <MenuItem value="">

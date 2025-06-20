@@ -150,7 +150,7 @@ const Category = () => {
                         >
                             <StyleBreadcrumb
                                 component="a"
-                                href="#"
+                                href={'/'}
                                 label="Dashboard"
                                 icon={<FaHome fontSize="small" />}
                             />
