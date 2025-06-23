@@ -223,17 +223,19 @@ const Category = () => {
                                 }
                             </tbody>
                         </table>
-
-                        <div className="d-flex tableFooter">
-                            <Pagination
-                                count={catData?.totalPages}
-                                color="primary"
-                                className="pagination"
-                                showFirstButton
-                                showLastButton
-                                onChange={handleChange}
-                            />
-                        </div>
+                        {
+                            catData?.totalPages > 1 &&
+                            <div className="d-flex tableFooter">
+                                <Pagination
+                                    count={catData?.totalPages}
+                                    color="primary"
+                                    className="pagination"
+                                    showFirstButton
+                                    showLastButton
+                                    onChange={handleChange}
+                                />
+                            </div>
+                        }
                     </div>
                 </div>
             </div>

@@ -52,14 +52,14 @@ const ProductDetails = () => {
 
     const deleteProduct = (id) => {
         context.setProgress(40);
-        deleteData(`/api/products/${id}`).then((res)=>{
+        deleteData(`/api/products/${id}`).then((res) => {
             context.setProgress(100);
             context.setAlertBox({
-                open:true,
-                error:true,
-                msg:'Product Deleted!'
+                open: true,
+                error: true,
+                msg: 'Product Deleted!'
             });
-            fetchDataFromApi("/api/products").then((res)=>{
+            fetchDataFromApi("/api/products").then((res) => {
                 setProductList(res);
             })
         })
@@ -95,7 +95,7 @@ const ProductDetails = () => {
                         />
                     </Breadcrumbs>
                     <Link to="/product/upload"><Button className='btn-blue btn-lg ms-3 ps-3 pe-3'>
-                            Add Product</Button></Link>
+                        Add Product</Button></Link>
                 </div>
 
                 <div className="card shadow border-0 p-3 mt-4">
@@ -206,7 +206,7 @@ const ProductDetails = () => {
                                                         <Button
                                                             className="error"
                                                             color="error"
-                                                            onClick={()=>deleteProduct(item.id)}
+                                                            onClick={() => deleteProduct(item.id)}
                                                         >
                                                             <MdDelete />
                                                         </Button>
@@ -218,17 +218,19 @@ const ProductDetails = () => {
                                 }
                             </tbody>
                         </table>
-
-                        <div className="d-flex tableFooter">
-                            <Pagination
-                                count={productList?.totalPages}
-                                color="primary"
-                                className="pagination"
-                                showFirstButton
-                                showLastButton
-                                onChange={handleChange}
-                            />
-                        </div>
+                        {
+                            productList?.totalPages > 1 &&
+                            <div className="d-flex tableFooter">
+                                <Pagination
+                                    count={productList?.totalPages}
+                                    color="primary"
+                                    className="pagination"
+                                    showFirstButton
+                                    showLastButton
+                                    onChange={handleChange}
+                                />
+                            </div>
+                        }
                     </div>
                 </div>
             </div>

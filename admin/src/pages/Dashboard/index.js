@@ -16,6 +16,7 @@ import FormControl from '@mui/material/FormControl';
 import Pagination from "@mui/material/Pagination";
 import Rating from "@mui/material/Rating";
 import { MyContext } from "../../App";
+import { deleteData, fetchDataFromApi } from '../../utils/api';
 
 export const data = [
   ["Year", "Sales", "Expense"],
@@ -31,7 +32,8 @@ export const options = {
 };
 
 const Dashboard = () => {
-
+  
+  const [productList, setProductList] = useState([]);
   const [showBy, setShowBy] = useState('');
   const [showBySetCateBy, setCateBy] = useState('');
   const [anchorEl, setAnchorEl] = useState(null);
@@ -40,9 +42,37 @@ const Dashboard = () => {
   const ITEM_HEIGHT = 48;
 
   useEffect(() => {
+    context.setProgress(40);
     context.setIsHideSidebarAndHeader(false);
+    fetchDataFromApi("/api/products").then((res) => {
+      setProductList(res);
+      context.setProgress(100);
+    })
     window.scrollTo(0, 0);
-  }, [])
+  }, []);
+
+  const deleteProduct = (id) => {
+    context.setProgress(40);
+    deleteData(`/api/products/${id}`).then((res) => {
+      context.setProgress(100);
+      context.setAlertBox({
+        open: true,
+        error: true,
+        msg: 'Product Deleted!'
+      });
+      fetchDataFromApi("/api/products").then((res) => {
+        setProductList(res);
+      })
+    })
+  }
+
+  const handleChange = (event, value) => {
+    context.setProgress(40);
+    fetchDataFromApi(`/api/products?page=${value}`).then((res) => {
+      setProductList(res);
+      context.setProgress(100);
+    })
+  };
 
   const handleClick = (event) => {
     setAnchorEl(event.currentTarget);
@@ -161,64 +191,92 @@ const Dashboard = () => {
           </div>
 
           <div className="table-responsive mt-3">
-            <table className="table table-bordered table-stripe v-align">
+            <table className="table table-bordered table-striped v-align">
               <thead className="table-dark">
                 <tr>
-                  <th>UID</th>
                   <th>PRODUCT</th>
                   <th>CATEGORY</th>
                   <th>BRAND</th>
                   <th style={{ width: '70px' }}>PRICE</th>
                   <th>STOCK</th>
                   <th>RATING</th>
-                  <th>ORDER</th>
-                  <th>SALES</th>
                   <th>ACTION</th>
                 </tr>
               </thead>
               <tbody>
-                <tr>
-                  <td>#1</td>
-                  <td>
-                    <div className="d-flex align-items-center productBox">
-                      <div className="imgWrapper">
-                        <div className="img card shadow m-0">
-                          <img src="https://mironcoder-hotash.netlify.app/images/product/01.webp" alt="" className="w-100" />
-                        </div>
-                      </div>
-                      <div className="info ps-3">
-                        <h6>Tops and Skirt set for Female...</h6>
-                        <p>Women's exclusive summer Tops and skirt set for Female Tops and skirt set</p>
-                      </div>
-                    </div>
-                  </td>
-                  <td>womans</td>
-                  <td>richman</td>
-                  <td>
-                    <del className="old">$21.00</del>
-                    <span className="new text-danger">$19.00</span>
-                  </td>
-                  <td>25</td>
-                  <td><Rating name="size-small" defaultValue={2} size="small" /></td>
-                  <td>380</td>
-                  <td>$38k</td>
-                  <td>
-                    <div className="actions d-flex align-items-center">
-                      <Link to="/product/details">
-                        <Button className="secondary" color="secondary">
-                          <FaEye />
-                        </Button>
-                      </Link>
-                      <Button className="success" color="success"><FaPencilAlt /></Button>
-                      <Button className="error" color="error"><MdDelete /></Button>
-                    </div>
-                  </td>
-                </tr>
+                {
+                  productList?.products?.length !== 0 && productList?.products?.map((item, index) => {
+                    return (
+                      <tr>
+                        <td>
+                          <div className="d-flex align-items-center productBox">
+                            <div className="imgWrapper">
+                              <div className="img card shadow m-0">
+                                <img
+                                  src={item.images[0]}
+                                  alt=""
+                                  className="w-100"
+                                />
+                              </div>
+                            </div>
+                            <div className="info ps-3">
+                              <h6>{item.name}</h6>
+                              <p>{item.description}</p>
+                            </div>
+                          </div>
+                        </td>
+                        <td>{item.category.name}</td>
+                        <td>{item.brand}</td>
+                        <td>
+                          <del className="old">{item.oldPrice} ฿</del>
+                          <span className="new text-danger">{item.price} ฿</span>
+                        </td>
+                        <td>{item.countInStock}</td>
+                        <td>
+                          <Rating
+                            name="size-small"
+                            defaultValue={item.rating}
+                            size="small"
+                          />
+                        </td>
+                        <td>
+                          <div className="actions d-flex align-items-center">
+                            <Link to="/product/details">
+                              <Button className="secondary" color="secondary">
+                                <FaEye />
+                              </Button>
+                            </Link>
+                            <Button
+                              className="success"
+                              color="success"
+                            >
+                              <FaPencilAlt />
+                            </Button>
+                            <Button
+                              className="error"
+                              color="error"
+                              onClick={() => deleteProduct(item.id)}
+                            >
+                              <MdDelete />
+                            </Button>
+                          </div>
+                        </td>
+                      </tr>
+                    )
+                  })
+                }
               </tbody>
             </table>
+
             <div className="d-flex tableFooter">
-              <p>Showing <b>12</b> of <b>60</b> results</p>
-              <Pagination count={10} color="primary" className="pagination" showFirstButton showLastButton />
+              <Pagination
+                count={productList?.totalPages}
+                color="primary"
+                className="pagination"
+                showFirstButton
+                showLastButton
+                onChange={handleChange}
+              />
             </div>
           </div>
         </div>
