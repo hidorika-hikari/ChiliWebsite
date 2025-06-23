@@ -65,6 +65,14 @@ const ProductDetails = () => {
         })
     }
 
+    const handleChange = (event, value) => {
+        context.setProgress(40);
+        fetchDataFromApi(`/api/products?page=${value}`).then((res) => {
+            setProductList(res);
+            context.setProgress(100);
+        })
+    };
+
     return (
         <>
             <div className="right-content w-100">
@@ -148,7 +156,7 @@ const ProductDetails = () => {
                             </thead>
                             <tbody>
                                 {
-                                    productList?.length !== 0 && productList?.map((item, index) => {
+                                    productList?.products?.length !== 0 && productList?.products?.map((item, index) => {
                                         return (
                                             <tr>
                                                 <td>
@@ -212,15 +220,13 @@ const ProductDetails = () => {
                         </table>
 
                         <div className="d-flex tableFooter">
-                            <p>
-                                Showing <b>12</b> of <b>60</b> results
-                            </p>
                             <Pagination
-                                count={10}
+                                count={productList?.totalPages}
                                 color="primary"
                                 className="pagination"
                                 showFirstButton
                                 showLastButton
+                                onChange={handleChange}
                             />
                         </div>
                     </div>

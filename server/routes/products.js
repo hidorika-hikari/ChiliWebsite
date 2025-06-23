@@ -33,12 +33,28 @@ router.post('/upload', upload.array("images"), async (req, res) => {
 //------------ DISABLE IT WHEN USE URL UPLOAD -----------------
 
 router.get('/', async (req, res) => {
-    const productList = await Product.find().populate("category");
+    const page = parseInt(req.query.page) || 1;
+    const perPage = 5;
+    const totalPosts = await Product.countDocuments();
+    const totalPages = Math.ceil(totalPosts/perPage);
+
+    if(page > totalPages) {
+        return res.status(404).json({ message:"Page not found"})
+    }
+
+    const productList = await Product.find().populate("category")
+        .skip((page-1) * perPage)
+        .limit(perPage)
+        .exec();
 
     if (!productList) {
         return res.status(500).json({ success: false });
     }
-    res.send(productList);
+    return res.status(200).json({
+        "products":productList,
+        "totalPages":totalPages,
+        "page":page
+    })
 });
 
 router.post('/create', async (req, res) => {
