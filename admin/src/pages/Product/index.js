@@ -68,7 +68,7 @@ const ProductDetails = () => {
     return (
         <>
             <div className="right-content w-100">
-                <div className="card shadow border-0 w-100 flex-row p-4 res-col">
+                <div className="card shadow border-0 w-100 flex-row p-4 align-items-center">
                     <h5 className="mb-0">Product List</h5>
                     <Breadcrumbs
                         aria-label="breadcrumb"
@@ -85,8 +85,9 @@ const ProductDetails = () => {
                             component="a"
                             href="#"
                         />
-                        <StyleBreadcrumb label="Product List" />
                     </Breadcrumbs>
+                    <Link to="/product/upload"><Button className='btn-blue btn-lg ms-3 ps-3 pe-3'>
+                            Add Product</Button></Link>
                 </div>
 
                 <div className="card shadow border-0 p-3 mt-4">

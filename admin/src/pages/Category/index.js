@@ -141,7 +141,7 @@ const Category = () => {
     return (
         <>
             <div className="right-content w-100">
-                <div className="card shadow border-0 w-100 flex-row p-4 res-col">
+                <div className="card shadow border-0 w-100 flex-row p-4 align-items-center">
                     <h5 className="mb-0">Category List</h5>
                     <div className='ms-auto d-flex align-items-center'>
                         <Breadcrumbs
