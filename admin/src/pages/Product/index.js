@@ -11,7 +11,7 @@ import { MyContext } from '../../App';
 import { Breadcrumbs, Chip, emphasize, styled } from '@mui/material';
 import { FaHome } from 'react-icons/fa';
 import { Link } from 'react-router-dom';
-import { fetchDataFromApi } from '../../utils/api';
+import { deleteData, fetchDataFromApi } from '../../utils/api';
 
 const StyleBreadcrumb = styled(Chip)(({ theme }) => {
     const backgroundColor =
@@ -41,12 +41,29 @@ const ProductDetails = () => {
     const context = useContext(MyContext);
 
     useEffect(() => {
+        context.setProgress(40);
         context.setIsHideSidebarAndHeader(false);
         fetchDataFromApi("/api/products").then((res) => {
-            setProductList(res)
+            setProductList(res);
+            context.setProgress(100);
         })
         window.scrollTo(0, 0);
     }, []);
+
+    const deleteProduct = (id) => {
+        context.setProgress(40);
+        deleteData(`/api/products/${id}`).then((res)=>{
+            context.setProgress(100);
+            context.setAlertBox({
+                open:true,
+                error:true,
+                msg:'Product Deleted!'
+            });
+            fetchDataFromApi("/api/products").then((res)=>{
+                setProductList(res);
+            })
+        })
+    }
 
     return (
         <>
@@ -180,6 +197,7 @@ const ProductDetails = () => {
                                                         <Button
                                                             className="error"
                                                             color="error"
+                                                            onClick={()=>deleteProduct(item.id)}
                                                         >
                                                             <MdDelete />
                                                         </Button>
