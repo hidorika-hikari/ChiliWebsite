@@ -48,8 +48,6 @@ const ProductUpload = () => {
     const [imagePreviews, setImagePreviews] = useState([]);
     const [newImageUrl, setNewImageUrl] = useState('');
     const [isLoading, setIsLoading] = useState(false);
-    // const [imgFiles, setImgFiles] = useState(); LOCAL UPLOAD IMG
-    // const [previews, setPreview] = useState(); LOCAL UPLOAD IMG
     const history = useNavigate();
 
     const handleImageChange = (event) => {
@@ -90,8 +88,6 @@ const ProductUpload = () => {
     const [ratingValue, setRatingValue] = useState(null);
     const [catData, setCatData] = useState([]);
     const context = useContext(MyContext);
-    // const formdata = new FormData(); LOCAL UPLOAD IMG
-    // const [files, setFiles] = useState([]); LOCAL UPLOAD IMG
 
     const [formFields, setFormFields] = useState({
         name: '',
@@ -114,8 +110,6 @@ const ProductUpload = () => {
             context.setProgress(100);
         })
     }, []);
-
-    /* --------------- LOCAL UPLOAD IMG PREVIEW ------------
     useEffect(()=>{
         if(!imgFiles) return;
         let tmp = [];
@@ -132,7 +126,6 @@ const ProductUpload = () => {
             }
         }
     },[imgFiles])
-    --------------LOCAL UPLOAD IMG PREVIEW ---------------*/
 
     const handleChangeCategory = (event) => {
         setCategoryVal(event.target.value);
@@ -167,8 +160,6 @@ const ProductUpload = () => {
             [e.target.name]: e.target.value
         }))
     }
-
-    /* ---------------------------- LOCAL UPLOAD IMG ------------------------
     const onChangeFile = async (e, apiEndPoint) => {
         try {
             const imgArr = [];
@@ -189,21 +180,9 @@ const ProductUpload = () => {
             console.log(error)
         }
     }
-    -----------------------------LOCAL UPLOAD IMG ---------------------*/
 
     const addProduct = (e) => {
         e.preventDefault();
-        /* ------------------------- LOCAL UPLOAD IMG----------------------
-            formdata.append('name',formFields.name);
-            formdata.append('description',formFields.description);
-            formdata.append('brand',formFields.brand);
-            formdata.append('price',formFields.price);
-            formdata.append('oldPrice',formFields.oldPrice);
-            formdata.append('category',formFields.category);
-            formdata.append('countInStock',formFields.countInStock);
-            formdata.append('rating',formFields.rating);
-            formdata.append('isFeatured',formFields.isFeatured);
-        ------------------------  -LOCAL UPLOAD IMG ------------------------ */
 
         if (formFields.name === "") {
             context.setAlertBox({
@@ -286,7 +265,6 @@ const ProductUpload = () => {
             return false;
         }
 
-        // ------------ LOCAL UPLOAD IMG DISABLE---------------
         if (formFields.images.length === 0) {
             context.setAlertBox({
                 open: true,
@@ -295,7 +273,6 @@ const ProductUpload = () => {
             });
             return false;
         }
-        // ------------- LOCAL UPLOAD IMG DISABLE- -------------
 
         console.log(formFields)
         setIsLoading(true);

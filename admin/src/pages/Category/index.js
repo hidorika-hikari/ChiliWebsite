@@ -164,7 +164,6 @@ const Category = () => {
                             Add Category</Button></Link>
                     </div>
                 </div>
-
                 <div className="card shadow border-0 p-3 mt-4">
                     <div className="table-responsive mt-3">
                         <table className="table table-bordered table-striped v-align">
