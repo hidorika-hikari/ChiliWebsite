@@ -4,7 +4,7 @@ import React, { useContext, useEffect, useState } from 'react';
 import { IoCloseSharp } from "react-icons/io5";
 import { LazyLoadImage } from 'react-lazy-load-image-component';
 import { FaImages } from "react-icons/fa";
-import { fetchDataFromApi, postData } from '../../utils/api';
+import { postData } from '../../utils/api';
 import { useNavigate } from 'react-router-dom';
 import { MyContext } from '../../App';
 import MenuItem from '@mui/material/MenuItem';
@@ -82,7 +82,7 @@ const ProductUpload = () => {
     };
 
     const [categoryVal, setCategoryVal] = useState('');
-    const [subCategoryVal, setSubCategoryVal] = useState('');
+    const [subCategoryVal, setSubCategoryVal] = useState("");
     const [isFeaturedVal, setIsFeaturedVal] = useState('');
     const [productRams, setProductRams] = useState([]);
     const [ratingValue, setRatingValue] = useState(null);
@@ -105,11 +105,7 @@ const ProductUpload = () => {
 
     useEffect(() => {
         window.scrollTo(0, 0);
-        context.setProgress(20)
-        fetchDataFromApi('/api/category').then((res) => {
-            setCatData(res);
-            context.setProgress(100);
-        })
+        setCatData(context.catData);
     }, []);
 
     const handleChangeCategory = (event) => {

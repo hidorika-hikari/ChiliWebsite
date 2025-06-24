@@ -16,6 +16,7 @@ import Category from './pages/Category';
 import Snackbar from '@mui/material/Snackbar';
 import Alert from '@mui/material/Alert';
 import EditProduct from './pages/EditProduct';
+import { fetchDataFromApi } from './utils/api';
 
 const MyContext = createContext();
 
@@ -26,6 +27,7 @@ function App() {
     const [themeMode, setThemeMode] = useState(true);
     // const [open, setOpen] = useState(true);
     // const [msg, setMsg] = useState(true);
+    const [catData, setCatData] = useState([]);
     const [progress, setProgress] = useState(0);
     const [alertBox, setAlertBox] = useState({
         msg: '',
@@ -56,6 +58,14 @@ function App() {
         });
     };
 
+    useEffect(() =>{
+        setProgress(20)
+        fetchDataFromApi('/api/category').then((res) => {
+            setCatData(res);
+            setProgress(100);
+        })
+    },[])
+
     const values = {
         isToggleSidebar,
         setIsToggleSidebar,
@@ -67,7 +77,8 @@ function App() {
         setThemeMode,
         alertBox,
         setAlertBox,
-        setProgress
+        setProgress,
+        catData
     };
 
     return (

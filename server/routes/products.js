@@ -65,7 +65,7 @@ router.post('/create', async (req, res) => {
 
     let product = new Product({
         name: req.body.name,
-        subCat: req.body.subCat,
+        subCat: req.body.subCat || null,
         description: req.body.description,
         images: imgurl,
         brand: req.body.brand,
@@ -130,7 +130,7 @@ router.put('/:id', async (req, res) => {
         req.params.id,
         {
             name: req.body.name,
-            subCat: req.body.subCat,
+            subCat: req.body.subCat || null,
             description: req.body.description,
             images: imgurl,
             brand: req.body.brand,

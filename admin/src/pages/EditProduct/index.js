@@ -93,7 +93,7 @@ const ProductEdit = () => {
 
     const [formFields, setFormFields] = useState({
         name: '',
-        subCat: '',
+        subCat: null,
         description: '',
         images: [],
         brand: '',
@@ -106,6 +106,8 @@ const ProductEdit = () => {
     });
 
     useEffect(() => {
+        window.scrollTo(0,0);
+        setCatData(context.catData);
         if (id) {
             if (!/^[0-9a-fA-F]{24}$/.test(id)) {
                 context.setAlertBox({
@@ -122,7 +124,7 @@ const ProductEdit = () => {
                 if (res) {
                     setFormFields({
                         name: res.name,
-                        subCat: res.subCat,
+                        subCat: res.subCat || null,
                         description: res.description,
                         images: res.images,
                         brand: res.brand,
