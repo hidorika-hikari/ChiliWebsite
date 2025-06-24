@@ -61,6 +61,7 @@ const Category = () => {
     const editCategory = (id) => {
         setFromFields({
             name: '',
+            subCat:'',
             images: '',
             color: ''
         });
@@ -69,6 +70,7 @@ const Category = () => {
         fetchDataFromApi(`/api/category/${id}`).then((res) => {
             setFromFields({
                 name: res.name,
+                subCat:res.subCat,
                 images: res.images,
                 color: res.color
             });
@@ -98,6 +100,7 @@ const Category = () => {
 
     const [formFields, setFromFields] = useState({
         name: '',
+        subCat:'',
         images: [],
         color: ''
     });
@@ -172,6 +175,7 @@ const Category = () => {
                                     <th>UID</th>
                                     <th>IMAGE</th>
                                     <th>CATEGORY</th>
+                                    <th>SUB CATEGORY</th>
                                     <th>COLOR</th>
                                     <th>ACTION</th>
                                 </tr>
@@ -197,6 +201,7 @@ const Category = () => {
                                                     </div>
                                                 </td>
                                                 <td>{item.name}</td>
+                                                <td>{item.subCat}</td>
                                                 <td>{item.color}</td>
                                                 <td>
                                                     <div className="actions d-flex align-items-center">

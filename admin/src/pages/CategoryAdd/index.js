@@ -26,13 +26,14 @@ const StyleBreadcrumb = styled(Chip)(({ theme }) => {
     };
 });
 
-const ProductUpload = () => {
+const CategoryAdd = () => {
 
     const context = useContext(MyContext);
     const history = useNavigate();
     const [isLoading, setIsLoading] = useState(false);
     const [formFields, setFromFields] = useState({
         name: '',
+        subCat:'',
         images: [],
         color: ''
     });
@@ -60,7 +61,7 @@ const ProductUpload = () => {
     const addCategory = (e) => {
         e.preventDefault();
 
-        if (formFields.name !== "" && formFields.images.length !== 0 && formFields.color !== "") {
+        if (formFields.name !== "" && formFields.images.length !== 0 && formFields.color !== "" && formFields.subCat !== "") {
             setIsLoading(true);
             postData('api/category/create', formFields).then(res => {
                 setIsLoading(false);
@@ -105,14 +106,17 @@ const ProductUpload = () => {
                     <div className="row">
                         <div className="col-md-12">
                             <div className="card p-4 mt-0">
-
                                 <div className="form-group">
                                     <h6>CATEGORY</h6>
-                                    <input type="text" name='name' onChange={changeInput} />
+                                    <input type="text" name='name' value={formFields.name} onChange={changeInput} />
+                                </div>
+                                <div className="form-group">
+                                    <h6>SUB CATEGORY</h6>
+                                    <input type="text" name='subCat'value={formFields.subCat} onChange={changeInput} />
                                 </div>
                                 <div className="form-group">
                                     <h6>COLOR</h6>
-                                    <input type="text" name='color' onChange={changeInput} />
+                                    <input type="text" name='color' value={formFields.color} onChange={changeInput} />
                                 </div>
                                 <div className="form-group">
                                     <h6>IMAGE URL</h6>
@@ -131,10 +135,14 @@ const ProductUpload = () => {
                                 </div>
 
                                 <br />
-                                <Button type="submit" onClick={addCategory} className='btn-blue btn-lg btn-big w-100'>
+                                <Button
+                                    type="submit"
+                                    onClick={addCategory}
+                                    className='btn-blue btn-lg btn-big w-100'
+                                    disabled={isLoading}
+                                >
                                     <FaCloudUploadAlt /> &nbsp; {isLoading === true ?
-                                        <CircularProgress color='inherit'
-                                            className='ms-3 loader' /> : 'PUBLISH AND VIEW'}
+                                        <CircularProgress color='inherit' className='ms-3 loader' /> : 'PUBLISH AND VIEW'}
                                 </Button>
                             </div>
                         </div>
@@ -145,4 +153,4 @@ const ProductUpload = () => {
     );
 };
 
-export default ProductUpload;
+export default CategoryAdd;

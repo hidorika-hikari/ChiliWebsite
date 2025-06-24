@@ -47,7 +47,7 @@ const Header = () => {
                     <div className="col-sm-2 part1">
                         <Link to={"/"} className="d-flex align-items-center logo">
                             <img src={logo} alt="logo"></img>
-                            <span className="ms-2">HOME</span>
+                            <span className="ms-2">CHILI WEBSITE</span>
                         </Link>
                     </div>
 

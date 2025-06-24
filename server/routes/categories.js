@@ -68,6 +68,7 @@ router.post('/create', async (req, res) => {
 
     let category = new Category({
         name: req.body.name,
+        subCat:req.body.subCat,
         images: imgurl,
         color: req.body.color
     });
