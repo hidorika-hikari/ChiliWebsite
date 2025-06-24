@@ -493,19 +493,6 @@ const ProductUpload = () => {
                                 </Button>
                             </div>
                             <div className='imgUploadBox d-flex align-items-center flex-wrap gap-3'>
-
-                                { //--------------------- LOCAL UPLOAD IMG PREVIEW------------------
-                                    /*
-                                    previews?.length !== 0 && previews?.map((img, index) => {
-                                        return (
-                                            <div className='uploadBox' key={index}>
-                                                <img src={img} className='w-100' />
-                                            </div>
-                                        )
-                                    })
-                                    */
-                                }
-
                                 {imagePreviews.map((src, index) => (
                                     <div className='uploadBox' key={index}>
                                         <span className='remove' onClick={() => handleRemoveImage(index)}>
@@ -527,9 +514,7 @@ const ProductUpload = () => {
                                         type=""
                                         multiple
                                         name="images"
-                                        // accept="image/*"
                                         onChange={handleImageChange}
-                                    // onChange={(e) => onChangeFile(e, '/api/products/upload')} LOCAL UPLOAD IMG
                                     />
                                     <div className='info'>
                                         <FaImages />

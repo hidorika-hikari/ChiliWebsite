@@ -101,7 +101,7 @@ const ProductEdit = () => {
         category: '',
         countInStock: null,
         rating: 0,
-        isFeatured: '',
+        isFeatured: false,
     });
 
     useEffect(() => {
@@ -568,10 +568,8 @@ const ProductEdit = () => {
 
                                 <div className='uploadBox'>
                                     <input
-                                        type="file"
-                                        multiple
+                                        type=""
                                         name="images"
-                                        accept="image/*"
                                         onChange={handleImageChange}
                                     />
                                     <div className='info'>
