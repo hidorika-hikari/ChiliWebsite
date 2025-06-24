@@ -99,7 +99,7 @@ const ProductUpload = () => {
         category: '',
         countInStock: null,
         rating: 0,
-        isFeatured: null,
+        isFeatured: '',
     })
 
     useEffect(() => {
@@ -110,22 +110,6 @@ const ProductUpload = () => {
             context.setProgress(100);
         })
     }, []);
-    useEffect(()=>{
-        if(!imgFiles) return;
-        let tmp = [];
-        for(let i=0; i<files.length; i++){
-            tmp.push(URL.createObjectURL(file[i]));
-        }
-
-        const objectUrls = tmp;
-        setPreviews(objectUrls);
-
-        for(let i=0; i<objectUrls.length; i++){
-            return ()=> {
-                url.revokeObjectURL(objectUrls[i])
-            }
-        }
-    },[imgFiles])
 
     const handleChangeCategory = (event) => {
         setCategoryVal(event.target.value);
@@ -159,26 +143,6 @@ const ProductUpload = () => {
             ...formFields,
             [e.target.name]: e.target.value
         }))
-    }
-    const onChangeFile = async (e, apiEndPoint) => {
-        try {
-            const imgArr = [];
-            const files = e.target.files;
-            setImgFiles(e.target.files)
-            for (var i = 0; i < files.length; i++) {
-                const file = files[i];
-                imgArr.push(file);
-                formdata.append(`images`, file);
-            }
-            setFiles(imgArr);
-            console.log(imgArr)
-            postData(apiEndPoint, formdata).then((res) =>{
-                
-            });
-        
-        } catch(error){
-            console.log(error)
-        }
     }
 
     const addProduct = (e) => {
@@ -428,7 +392,8 @@ const ProductUpload = () => {
                                             </Select>
                                         </div>
                                     </div>
-                                    <div className='row'>
+                                </div>
+                                <div className='row'>
                                         <div className="col">
                                             <div className="form-group">
                                                 <h6>PRODUCT STOCK</h6>
@@ -441,7 +406,6 @@ const ProductUpload = () => {
                                             </div>
                                         </div>
                                     </div>
-                                </div>
                                 <div className="row">
                                     <div className="col">
                                         <div className="form-group">
@@ -454,7 +418,7 @@ const ProductUpload = () => {
                                             />
                                         </div>
                                     </div>
-                                    <div className="col">
+                                    { /* <div className="col">
                                         <div className="form-group">
                                             <h6>DISCOUNT</h6>
                                             <input
@@ -462,7 +426,7 @@ const ProductUpload = () => {
                                                 name="discount"
                                             />
                                         </div>
-                                    </div>
+                                    </div> */}
                                     <div className="col">
                                         <div className="form-group">
                                             <h6>PRODUCT RAM</h6>

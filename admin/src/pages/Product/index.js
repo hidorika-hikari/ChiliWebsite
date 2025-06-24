@@ -1,17 +1,17 @@
 import { FaEye, FaPencilAlt } from 'react-icons/fa';
 import { MdDelete } from 'react-icons/md';
 import { useContext, useEffect, useState } from 'react';
+import { MyContext } from '../../App';
+import { Breadcrumbs, Chip, emphasize, styled } from '@mui/material';
+import { FaHome } from 'react-icons/fa';
+import { Link } from 'react-router-dom';
+import { deleteData, fetchDataFromApi } from '../../utils/api';
 import Button from '@mui/material/Button';
 import MenuItem from '@mui/material/MenuItem';
 import Select from '@mui/material/Select';
 import FormControl from '@mui/material/FormControl';
 import Pagination from '@mui/material/Pagination';
 import Rating from '@mui/material/Rating';
-import { MyContext } from '../../App';
-import { Breadcrumbs, Chip, emphasize, styled } from '@mui/material';
-import { FaHome } from 'react-icons/fa';
-import { Link } from 'react-router-dom';
-import { deleteData, fetchDataFromApi } from '../../utils/api';
 
 const StyleBreadcrumb = styled(Chip)(({ theme }) => {
     const backgroundColor =
@@ -32,7 +32,6 @@ const StyleBreadcrumb = styled(Chip)(({ theme }) => {
         },
     };
 });
-
 
 const ProductDetails = () => {
     const [showBy, setShowBy] = useState('');
@@ -197,18 +196,19 @@ const ProductDetails = () => {
                                                                 <FaEye />
                                                             </Button>
                                                         </Link>
+                                                        <Link to={`/product/edit/${item.id}`}>
                                                         <Button
                                                             className="success"
                                                             color="success"
                                                         >
                                                             <FaPencilAlt />
                                                         </Button>
+                                                        </Link>
                                                         <Button
                                                             className="error"
                                                             color="error"
                                                             onClick={() => deleteProduct(item.id)}
-                                                        >
-                                                            <MdDelete />
+                                                        ><MdDelete />
                                                         </Button>
                                                     </div>
                                                 </td>

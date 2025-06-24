@@ -4,33 +4,6 @@ const express = require('express');
 const router = express.Router();
 const cloudinary = require('cloudinary').v2;
 const pLimit = require('p-limit');
-// const multer = require('multer'); DISABLE IT WHEN USE URL UPLOAD
-
-// ---------- DISABLE IT WHEN USE URL UPLOAD ----------------
-/* var imagesArr = [];
-
-const storage = multer.diskStorage({
-    destination: function (req, file, cb) {
-        cb(null, "uploads/");
-    },
-    filename: function (res, file, cb) {
-        cb(null, `${Date.now()}_${file.originalname}`)
-    }
-})
-
-const upload = multer({ storage: storage })
-
-router.post('/upload', upload.array("images"), async (req, res) => {
-    var imagesArr = [];
-    const files = req.files;
-
-    for (let i = 0; i < files.length; i++) {
-        imagesArr.push(files[i].filename);
-    }
-    console.log(imagesArr);
-    res.json(images:imageArr);
-}); */
-//------------ DISABLE IT WHEN USE URL UPLOAD -----------------
 
 router.get('/', async (req, res) => {
     const page = parseInt(req.query.page) || 1;
@@ -69,7 +42,7 @@ router.post('/create', async (req, res) => {
     if (!category) {
         return res.status(404).send("Invalid Category");
     }
-    // DISABLE IT WHEN USE LOCAL UPLOAD
+
     const limit = pLimit(2);
     const imagesToUpload = req.body.images.map((image) => {
         return limit(async () => {
@@ -87,12 +60,11 @@ router.post('/create', async (req, res) => {
             status: false
         });
     }
-    // DISABLE IT WHEN USE LOCAL UPLOAD
 
     let product = new Product({
         name: req.body.name,
         description: req.body.description,
-        images: imgurl, //imageArr,
+        images: imgurl,
         brand: req.body.brand,
         price: req.body.price,
         oldPrice: req.body.oldPrice,
@@ -109,7 +81,6 @@ router.post('/create', async (req, res) => {
     }
     res.status(201).json(product);
 });
-
 
 router.get('/:id', async (req, res) => {
     const product = await Product.findById(req.params.id);

@@ -15,6 +15,7 @@ import CategoryAdd from './pages/CategoryAdd'
 import Category from './pages/Category';
 import Snackbar from '@mui/material/Snackbar';
 import Alert from '@mui/material/Alert';
+import EditProduct from './pages/EditProduct';
 
 const MyContext = createContext();
 
@@ -145,6 +146,11 @@ function App() {
                                 path="/category"
                                 exact={true}
                                 element={<Category />}
+                            />
+                            <Route
+                                path="/product/edit/:id"
+                                exact={true}
+                                element={<EditProduct />}
                             />
                         </Routes>
                     </div>
