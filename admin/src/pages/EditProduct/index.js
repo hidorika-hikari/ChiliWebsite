@@ -93,6 +93,7 @@ const ProductEdit = () => {
 
     const [formFields, setFormFields] = useState({
         name: '',
+        subCat: '',
         description: '',
         images: [],
         brand: '',
@@ -115,28 +116,30 @@ const ProductEdit = () => {
                 history('/products');
                 return;
             }
-            
+
             setProductLoading(true);
             fetchDataFromApi(`/api/products/${id}`).then((res) => {
                 if (res) {
                     setFormFields({
-                        name: res.name || '',
-                        description: res.description || '',
-                        images: res.images || [],
-                        brand: res.brand || '',
-                        price: res.price || null,
-                        oldPrice: res.oldPrice || null,
-                        category: res.category || '',
-                        countInStock: res.countInStock || null,
-                        rating: res.rating || 0,
-                        isFeatured: res.isFeatured || '',
+                        name: res.name,
+                        subCat: res.subCat,
+                        description: res.description,
+                        images: res.images,
+                        brand: res.brand,
+                        price: res.price,
+                        oldPrice: res.oldPrice,
+                        category: res.category,
+                        countInStock: res.countInStock,
+                        rating: res.rating,
+                        isFeatured: res.isFeatured,
                     });
-                    
-                    setCategoryVal(res.category || '');
-                    setIsFeaturedVal(res.isFeatured?.toString() || '');
-                    setRatingValue(res.rating || 0);
-                    setImagePreviews(res.images || []);
-                    
+
+                    setCategoryVal(res.category);
+                    setSubCategoryVal(res.subCat)
+                    setIsFeaturedVal(res.isFeatured);
+                    setRatingValue(res.rating);
+                    setImagePreviews(res.images);
+
                     if (res.productRams) {
                         setProductRams(res.productRams);
                     }
@@ -173,6 +176,10 @@ const ProductEdit = () => {
 
     const handleChangeSubCategory = (event) => {
         setSubCategoryVal(event.target.value);
+        setFormFields(prev => ({
+            ...prev,
+            subCat: event.target.value
+        }));
     };
 
     const handleChangeIsFeatured = (event) => {
@@ -301,14 +308,14 @@ const ProductEdit = () => {
             });
             history('/products');
         })
-        .catch((error) => {
-            setIsLoading(false);
-            context.setAlertBox({
-                open: true,
-                msg: 'Error Updating Product',
-                error: true
+            .catch((error) => {
+                setIsLoading(false);
+                context.setAlertBox({
+                    open: true,
+                    msg: 'Error Updating Product',
+                    error: true
+                });
             });
-        });
     }
 
     if (productLoading) {
@@ -394,12 +401,15 @@ const ProductEdit = () => {
                                                 <MenuItem value="">
                                                     <em>None</em>
                                                 </MenuItem>
-                                                <MenuItem value='Jeans'>
-                                                    Jeans
-                                                </MenuItem>
-                                                <MenuItem value='Skirts'>
-                                                    Skirts
-                                                </MenuItem>
+                                                {
+                                                    catData?.categoryList
+                                                    ?.filter(cat => cat.subCat && (Array.isArray(cat.subCat) ? cat.subCat.length > 0 : true))
+                                                    .map((cat, index) => (
+                                                        <MenuItem value={cat.id} key={index}>
+                                                            {cat.subCat}
+                                                        </MenuItem>
+                                                    ))
+                                                }
                                             </Select>
                                         </div>
                                     </div>
@@ -450,18 +460,18 @@ const ProductEdit = () => {
                                     </div>
                                 </div>
                                 <div className='row'>
-                                        <div className="col">
-                                            <div className="form-group">
-                                                <h6>PRODUCT STOCK</h6>
-                                                <input
-                                                    type="text"
-                                                    name="countInStock"
-                                                    value={formFields.countInStock}
-                                                    onChange={inputChange}
-                                                />
-                                            </div>
+                                    <div className="col">
+                                        <div className="form-group">
+                                            <h6>PRODUCT STOCK</h6>
+                                            <input
+                                                type="text"
+                                                name="countInStock"
+                                                value={formFields.countInStock}
+                                                onChange={inputChange}
+                                            />
                                         </div>
                                     </div>
+                                </div>
                                 <div className="row">
                                     <div className="col">
                                         <div className="form-group">

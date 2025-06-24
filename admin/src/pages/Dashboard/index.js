@@ -194,8 +194,9 @@ const Dashboard = () => {
             <table className="table table-bordered table-striped v-align">
               <thead className="table-dark">
                 <tr>
-                  <th>PRODUCT</th>
+                  <th style={{ width: '100px' }}>PRODUCT</th>
                   <th>CATEGORY</th>
+                  <th>SUB CATEGORY</th>
                   <th>BRAND</th>
                   <th style={{ width: '70px' }}>PRICE</th>
                   <th>STOCK</th>
@@ -226,6 +227,7 @@ const Dashboard = () => {
                           </div>
                         </td>
                         <td>{item.category.name}</td>
+                        <td>{item.subCat?.subCat}</td>
                         <td>{item.brand}</td>
                         <td>
                           <del className="old">{item.oldPrice} ฿</del>

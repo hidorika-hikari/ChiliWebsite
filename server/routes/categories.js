@@ -13,7 +13,7 @@ cloudinary.config({
 
 router.get('/', async (req, res) => {
     const page = parseInt(req.query.page) || 1;
-    const perPage = 10;
+    const perPage = 20;
     const totalPosts = await Category.countDocuments();
     const totalPages = Math.ceil(totalPosts/perPage);
 
@@ -133,6 +133,7 @@ router.put('/:id', async (req, res) =>{
         req.params.id,
         {
             name: req.body.name,
+            subCat: req.body.subCat,
             images: imgurl,
             color: req.body.color
         },

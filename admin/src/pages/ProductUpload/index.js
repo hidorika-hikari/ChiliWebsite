@@ -92,6 +92,7 @@ const ProductUpload = () => {
     const [formFields, setFormFields] = useState({
         name: '',
         description: '',
+        subCat: '',
         images: [],
         brand: '',
         price: null,
@@ -121,6 +122,10 @@ const ProductUpload = () => {
 
     const handleChangeSubCategory = (event) => {
         setSubCategoryVal(event.target.value);
+        setFormFields(() => ({
+            ...formFields,
+            subCat: event.target.value
+        }))
     };
 
     const handleChangeIsFeatured = (event) => {
@@ -250,6 +255,7 @@ const ProductUpload = () => {
             setFormFields({
                 name: '',
                 description: '',
+                subCat: '',
                 images: [],
                 brand: '',
                 price: 0,
@@ -338,12 +344,15 @@ const ProductUpload = () => {
                                                 <MenuItem value="">
                                                     <em>None</em>
                                                 </MenuItem>
-                                                <MenuItem value='Jeans'>
-                                                    Jeans
-                                                </MenuItem>
-                                                <MenuItem value='Skirts'>
-                                                    Skirts
-                                                </MenuItem>
+                                                {
+                                                    catData?.categoryList
+                                                    ?.filter(cat => cat.subCat && (Array.isArray(cat.subCat) ? cat.subCat.length > 0 : true))
+                                                    .map((cat, index) => (
+                                                        <MenuItem value={cat.id} key={index}>
+                                                            {cat.subCat}
+                                                        </MenuItem>
+                                                    ))
+                                                }
                                             </Select>
                                         </div>
                                     </div>
@@ -394,18 +403,18 @@ const ProductUpload = () => {
                                     </div>
                                 </div>
                                 <div className='row'>
-                                        <div className="col">
-                                            <div className="form-group">
-                                                <h6>PRODUCT STOCK</h6>
-                                                <input
-                                                    type="text"
-                                                    name="countInStock"
-                                                    value={formFields.countInStock}
-                                                    onChange={inputChange}
-                                                />
-                                            </div>
+                                    <div className="col">
+                                        <div className="form-group">
+                                            <h6>PRODUCT STOCK</h6>
+                                            <input
+                                                type="text"
+                                                name="countInStock"
+                                                value={formFields.countInStock}
+                                                onChange={inputChange}
+                                            />
                                         </div>
                                     </div>
+                                </div>
                                 <div className="row">
                                     <div className="col">
                                         <div className="form-group">

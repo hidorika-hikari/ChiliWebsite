@@ -270,6 +270,20 @@ const Category = () => {
                                 autoFocus
                                 required
                                 margin="dense"
+                                id="subCat"
+                                name="subCat"
+                                label="Sub Category"
+                                type="text"
+                                fullWidth
+                                value={formFields.subCat}
+                                onChange={changeInput}
+                            />
+                        </div>
+                        <div className='form-group mb-3'>
+                            <TextField
+                                autoFocus
+                                required
+                                margin="dense"
                                 id="images"
                                 name="images"
                                 label="Category Image"

@@ -15,10 +15,12 @@ router.get('/', async (req, res) => {
         return res.status(404).json({ message:"Page not found"})
     }
 
-    const productList = await Product.find().populate("category")
-        .skip((page-1) * perPage)
-        .limit(perPage)
-        .exec();
+    const productList = await Product.find()
+    .populate('category', 'name')
+    .populate('subCat', 'subCat name')
+    .skip((page - 1) * perPage)
+    .limit(perPage)
+    .exec();
 
     if (!productList) {
         return res.status(500).json({ success: false });
@@ -63,6 +65,7 @@ router.post('/create', async (req, res) => {
 
     let product = new Product({
         name: req.body.name,
+        subCat: req.body.subCat,
         description: req.body.description,
         images: imgurl,
         brand: req.body.brand,
@@ -127,6 +130,7 @@ router.put('/:id', async (req, res) => {
         req.params.id,
         {
             name: req.body.name,
+            subCat: req.body.subCat,
             description: req.body.description,
             images: imgurl,
             brand: req.body.brand,
