@@ -10,13 +10,14 @@ import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import LoadingBar from "react-top-loading-bar";
 import ProductDetails from './pages/ProductDetails';
 import Product from './pages/Product'
-import ProductUpload from './pages/ProductUpload';
+import ProductUpload from './pages/ProductAdd';
 import CategoryAdd from './pages/CategoryAdd'
 import Category from './pages/Category';
 import Snackbar from '@mui/material/Snackbar';
 import Alert from '@mui/material/Alert';
 import EditProduct from './pages/EditProduct';
 import { fetchDataFromApi } from './utils/api';
+import AddSubCat from './pages/SubCategoryAdd';
 
 const MyContext = createContext();
 
@@ -167,6 +168,11 @@ function App() {
                                 path="/product/edit/:id"
                                 exact={true}
                                 element={<EditProduct />}
+                            />
+                            <Route
+                                path="/subCategory/add"
+                                exact={true}
+                                element={<AddSubCat />}
                             />
                         </Routes>
                     </div>
