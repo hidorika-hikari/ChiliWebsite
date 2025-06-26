@@ -66,7 +66,8 @@ const CategoryAdd = () => {
             postData('api/category/create', formFields).then(res => {
                 setIsLoading(false);
                 history('/category');
-            })
+            });
+            context.fetchCategory();
         }
         else {
             context.setAlertBox({

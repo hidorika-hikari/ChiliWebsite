@@ -32,7 +32,7 @@ export const options = {
 };
 
 const Dashboard = () => {
-  
+
   const [productList, setProductList] = useState([]);
   const [showBy, setShowBy] = useState('');
   const [showBySetCateBy, setCateBy] = useState('');
@@ -180,11 +180,17 @@ const Dashboard = () => {
                   className="w-100"
                 >
                   <MenuItem value="">
-                    <em>None</em>
+                    <em value={null}>None</em>
                   </MenuItem>
-                  <MenuItem value={10}>Ten</MenuItem>
-                  <MenuItem value={20}>Twenty</MenuItem>
-                  <MenuItem value={30}>Thirty</MenuItem>
+                  {
+                    context.catData?.categoryList?.length > 0 && context.catData.categoryList.map((cat, index) => {
+                      return (
+                        <MenuItem className="text-capitalize" value={cat.id} key={index}>
+                          {cat.name}
+                        </MenuItem>
+                      )
+                    })
+                  }
                 </Select>
               </FormControl>
             </div>

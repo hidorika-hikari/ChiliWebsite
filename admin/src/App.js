@@ -58,13 +58,17 @@ function App() {
         });
     };
 
-    useEffect(() =>{
+    useEffect(() => {
         setProgress(20)
+        fetchCategory();
+    },[])
+
+    const fetchCategory = () => {
         fetchDataFromApi('/api/category').then((res) => {
             setCatData(res);
             setProgress(100);
         })
-    },[])
+    }
 
     const values = {
         isToggleSidebar,
@@ -78,7 +82,8 @@ function App() {
         alertBox,
         setAlertBox,
         setProgress,
-        catData
+        catData,
+        fetchCategory
     };
 
     return (
