@@ -5,6 +5,7 @@ import React, { useContext, useState } from 'react';
 import MenuItem from '@mui/material/MenuItem';
 import Select from '@mui/material/Select';
 import Button from '@mui/material/Button';
+import { useNavigate } from 'react-router-dom';
 import { postData } from '../../utils/api';
 
 const ITEM_HEIGHT = 48;
@@ -40,7 +41,8 @@ const StyleBreadcrumb = styled(Chip)(({ theme }) => {
 });
 
 const AddSubCat = () => {
-
+    
+    const history = useNavigate();
     const [isLoading, setIsLoading] = useState(false);
     const [categoryVal, setCategoryVal] = useState('');
     const [formFields, setFormFields] = useState({

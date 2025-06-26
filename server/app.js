@@ -18,8 +18,10 @@ console.log('JSON middleware loaded');
 
 // Routes
 const categoryRoutes = require('./routes/categories');
-const productRoutes = require('./routes/products')
+const productRoutes = require('./routes/products');
+const subCatSchema = require('./routes/subCat')
 
+app.use('/api/subCat', subCatSchema);
 app.use('/api/category', categoryRoutes);
 app.use('/api/products', productRoutes);
 
