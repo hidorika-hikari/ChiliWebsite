@@ -77,7 +77,7 @@ const AddSubCat = () => {
                 error: true
             });
         }
-        postData(`/api/category/create`, formFields).then(res => {
+        postData(`/api/subCat/create`, formFields).then(res => {
             setIsLoading(false);
             history('/category')
         });
@@ -119,6 +119,7 @@ const AddSubCat = () => {
                                         displayEmpty
                                         MenuProps={menuProps}
                                         onChange={handleChangeCategory}
+                                        name='category'
                                     >
                                         <MenuItem value="">
                                             <em>None</em>

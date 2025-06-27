@@ -4,7 +4,7 @@ const router = express.Router();
 
 router.get('/', async (req, res) => {
     try {
-        const subCat = await SubCategory.find();
+        const subCat = await SubCategory.find().populate("category");
         return res.status(200).json(subCat);
     } catch (error) {
         console.error('Error fetching sub categories:', error);
@@ -13,7 +13,7 @@ router.get('/', async (req, res) => {
 });
 
 router.get('/:id', async (req, res) => {
-    const subCat = await SubCategory.findById(req.params.id);
+    const subCat = await SubCategory.findById(req.params.id).populate("category");
 
     if (!subCat) {
         return res.status(500).json({
@@ -56,5 +56,25 @@ router.delete('/:id', async (req, res) => {
         message: 'Sub Category Deleted!'
     });
 });
+
+router.put('/:id', async (req, res) =>{
+
+    const subCat = await SubCategory.findByIdAndUpdate(
+        req.params.id,
+        {
+            category: req.body.category,
+            subCat: req.body.subCat,
+        },
+        {new:true}
+    )
+
+    if(!subCat){
+        return res.status(500).json({
+            message:'Sub Category cant be updated',
+            success: false
+        })
+    }
+    res.send(subCat);
+})
 
 module.exports = router;
