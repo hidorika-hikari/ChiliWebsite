@@ -63,7 +63,7 @@ const SubCategory = () => {
         setEditId(id);
         fetchDataFromApi(`/api/subCat/${id}`).then((res) => {
             setFromFields({
-                subCat:res.subCat,
+                subCat:res.subCat
             });
             console.log(res);
         })
@@ -136,13 +136,13 @@ const SubCategory = () => {
                                 icon={<FaHome fontSize="small" />}
                             />
                             <StyleBreadcrumb
-                                label="Category"
+                                label="Subcategory"
                                 component="a"
                                 href="#"
                             />
                         </Breadcrumbs>
-                        <Link to="/category/add"><Button className='btn-blue ms-3 ps-5 pe-5'>
-                            Add Category</Button></Link>
+                        <Link to="/subCategory/add"><Button className='btn-blue ms-3 ps-5 pe-5'>
+                            Add Subcategory</Button></Link>
                     </div>
                 </div>
                 <div className="card shadow border-0 p-3 mt-4">

@@ -79,7 +79,7 @@ const AddSubCat = () => {
         }
         postData(`/api/subCat/create`, formFields).then(res => {
             setIsLoading(false);
-            history('/category')
+            history('/subCategory')
         });
     }
 
@@ -98,11 +98,11 @@ const AddSubCat = () => {
                         icon={<FaHome fontSize="small" />}
                     />
                     <StyleBreadcrumb
-                        label="Category List"
+                        label="Subcategory List"
                         component="a"
-                        href={'/category'}
+                        href={'/subCategory'}
                     />
-                    <StyleBreadcrumb label="Add Category" />
+                    <StyleBreadcrumb label="Add Subcategory" />
                 </Breadcrumbs>
             </div>
 

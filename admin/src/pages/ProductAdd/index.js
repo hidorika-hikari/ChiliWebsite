@@ -87,6 +87,7 @@ const ProductUpload = () => {
     const [productRams, setProductRams] = useState([]);
     const [ratingValue, setRatingValue] = useState(null);
     const [catData, setCatData] = useState([]);
+    const [subCatData, setSubCatData] = useState([]);
     const context = useContext(MyContext);
 
     const [formFields, setFormFields] = useState({
@@ -106,6 +107,7 @@ const ProductUpload = () => {
     useEffect(() => {
         window.scrollTo(0, 0);
         setCatData(context.catData);
+        setSubCatData(context.subCatData);
     }, []);
 
     const handleChangeCategory = (event) => {
@@ -307,13 +309,15 @@ const ProductUpload = () => {
                                                     <em>None</em>
                                                 </MenuItem>
                                                 {
-                                                    catData?.categoryList?.length > 0 && catData.categoryList.map((cat, index) => {
-                                                        return (
-                                                            <MenuItem className="text-capitalize" value={cat.id} key={index}>
-                                                                {cat.name}
-                                                            </MenuItem>
-                                                        )
-                                                    })
+                                                    context.catData?.categoryList?.length !==
+                                                    0 && context.catData?.categoryList?.map
+                                                        ((cat, index) => {
+                                                            return (
+                                                                <MenuItem className='text-capitalize'
+                                                                    value={cat.id} key={index}>{cat.name}
+                                                                </MenuItem>
+                                                            )
+                                                        })
                                                 }
                                             </Select>
                                         </div>
@@ -331,13 +335,15 @@ const ProductUpload = () => {
                                                     <em>None</em>
                                                 </MenuItem>
                                                 {
-                                                    catData?.categoryList
-                                                    ?.filter(cat => cat.subCat && (Array.isArray(cat.subCat) ? cat.subCat.length > 0 : true))
-                                                    .map((cat, index) => (
-                                                        <MenuItem value={cat.id} key={index}>
-                                                            {cat.subCat}
-                                                        </MenuItem>
-                                                    ))
+                                                    context.subCatData?.subCategoryList?.length !==
+                                                    0 && context.subCatData?.subCategoryList?.map
+                                                        ((subCat, index) => {
+                                                            return (
+                                                                <MenuItem className='text-capitalize'
+                                                                    value={subCat.id} key={index}>{subCat.subCat}
+                                                                </MenuItem>
+                                                            )
+                                                        })
                                                 }
                                             </Select>
                                         </div>

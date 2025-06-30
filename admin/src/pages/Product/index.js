@@ -182,7 +182,7 @@ const Products = () => {
                                                         </div>
                                                     </div>
                                                 </td>
-                                                <td>{item.category.name}</td>
+                                                <td>{item.category?.name}</td>
                                                 <td>{item.subCat?.subCat}</td>
                                                 <td>{item.brand}</td>
                                                 <td>

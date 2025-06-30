@@ -124,13 +124,13 @@ const ProductEdit = () => {
                 if (res) {
                     setFormFields({
                         name: res.name,
-                        subCat: res.subCat || null,
                         description: res.description,
                         images: res.images,
                         brand: res.brand,
                         price: res.price,
                         oldPrice: res.oldPrice,
                         category: res.category,
+                        subCat: res.subCat || null,
                         countInStock: res.countInStock,
                         rating: res.rating,
                         isFeatured: res.isFeatured,
@@ -404,13 +404,15 @@ const ProductEdit = () => {
                                                     <em>None</em>
                                                 </MenuItem>
                                                 {
-                                                    catData?.categoryList
-                                                    ?.filter(cat => cat.subCat && (Array.isArray(cat.subCat) ? cat.subCat.length > 0 : true))
-                                                    .map((cat, index) => (
-                                                        <MenuItem value={cat.id} key={index}>
-                                                            {cat.subCat}
-                                                        </MenuItem>
-                                                    ))
+                                                    context.subCatData?.subCategoryList?.length !==
+                                                    0 && context.subCatData?.subCategoryList?.map
+                                                        ((subCat, index) => {
+                                                            return (
+                                                                <MenuItem className='text-capitalize'
+                                                                    value={subCat.id} key={index}>{subCat.subCat}
+                                                                </MenuItem>
+                                                            )
+                                                        })
                                                 }
                                             </Select>
                                         </div>

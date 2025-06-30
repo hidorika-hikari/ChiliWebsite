@@ -12,7 +12,6 @@ import ProductDetails from './pages/ProductDetails';
 import Product from './pages/Product'
 import ProductUpload from './pages/ProductAdd';
 import CategoryAdd from './pages/CategoryAdd'
-import Category from './pages/CategoryList';
 import Snackbar from '@mui/material/Snackbar';
 import Alert from '@mui/material/Alert';
 import EditProduct from './pages/EditProduct';
@@ -31,6 +30,7 @@ function App() {
     // const [open, setOpen] = useState(true);
     // const [msg, setMsg] = useState(true);
     const [catData, setCatData] = useState([]);
+    const [subCatData, setSubCatData] = useState([]);
     const [progress, setProgress] = useState(0);
     const [alertBox, setAlertBox] = useState({
         msg: '',
@@ -64,11 +64,19 @@ function App() {
     useEffect(() => {
         setProgress(20)
         fetchCategory();
+        fetchSubCategory();
     },[])
 
     const fetchCategory = () => {
         fetchDataFromApi('/api/category').then((res) => {
             setCatData(res);
+            setProgress(100);
+        })
+    }
+
+    const fetchSubCategory = () => {
+        fetchDataFromApi('/api/subCat').then((res) => {
+            setSubCatData(res);
             setProgress(100);
         })
     }
@@ -86,7 +94,9 @@ function App() {
         setAlertBox,
         setProgress,
         catData,
-        fetchCategory
+        fetchCategory,
+        subCatData,
+        fetchSubCategory
     };
 
     return (
