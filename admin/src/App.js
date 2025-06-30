@@ -12,12 +12,14 @@ import ProductDetails from './pages/ProductDetails';
 import Product from './pages/Product'
 import ProductUpload from './pages/ProductAdd';
 import CategoryAdd from './pages/CategoryAdd'
-import Category from './pages/Category';
+import Category from './pages/CategoryList';
 import Snackbar from '@mui/material/Snackbar';
 import Alert from '@mui/material/Alert';
 import EditProduct from './pages/EditProduct';
 import { fetchDataFromApi } from './utils/api';
 import AddSubCat from './pages/SubCategoryAdd';
+import CategoryList from './pages/CategoryList';
+import SubCategory from './pages/subCategoryList';
 
 const MyContext = createContext();
 
@@ -162,7 +164,12 @@ function App() {
                             <Route
                                 path="/category"
                                 exact={true}
-                                element={<Category />}
+                                element={<CategoryList />}
+                            />
+                            <Route
+                                path="/subCategory"
+                                exact={true}
+                                element={<SubCategory />}
                             />
                             <Route
                                 path="/product/edit/:id"

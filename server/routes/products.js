@@ -87,28 +87,22 @@ router.post('/create', async (req, res) => {
 
 router.get('/:id', async (req, res) => {
     const product = await Product.findById(req.params.id);
-
     if (!product) {
         return res.status(404).json({ success: false, message: "Product not found" });
     }
-
     res.status(200).json(product);
 });
 
 router.delete('/:id', async (req, res) => {
     const deleteProduct = await Product.findByIdAndDelete(req.params.id);
-
     if (!deleteProduct) {
         return res.status(404).json({ success: false, message: "Product not found" });
     }
-
     res.status(200).json({ success: true, message: "Product deleted successfully" });
 });
 
 router.put('/:id', async (req, res) => {
-
     const limit = pLimit(2);
-
     const imagesToUpload = req.body.images.map((image) => {
         return limit(async () => {
             const result = await cloudinary.uploader.upload(image);
@@ -151,7 +145,6 @@ router.put('/:id', async (req, res) => {
             message: "Product cant be updated"
         });
     }
-
     res.status(200).json({
         message: "Product updated successfully",
         success: true,

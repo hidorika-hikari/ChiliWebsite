@@ -1,7 +1,6 @@
 const { Category } = require('../models/category')
 const express = require('express');
 const router = express.Router();
-
 const cloudinary = require('cloudinary').v2;
 const pLimit = require('p-limit');
 
@@ -46,7 +45,6 @@ router.post('/create', async (req, res) => {
     }
 
     const limit = pLimit(2);
-
     const imagesToUpload = req.body.images.map((image) => {
         return limit(async () => {
             const result = await cloudinary.uploader.upload(image);
@@ -68,7 +66,6 @@ router.post('/create', async (req, res) => {
 
     let category = new Category({
         name: req.body.name,
-        subCat:req.body.subCat,
         images: imgurl,
         color: req.body.color
     });
@@ -79,15 +76,12 @@ router.post('/create', async (req, res) => {
             success: false
         })
     }
-
     category = await category.save();
-
     res.status(201).json(category);
 });
 
 router.get('/:id', async (req, res) => {
     const category = await Category.findById(req.params.id);
-
     if (!category) {
         return res.status(500).json({
             message: 'The category with the given ID was not found.'
@@ -98,14 +92,12 @@ router.get('/:id', async (req, res) => {
 
 router.delete('/:id', async (req, res) => {
     const deleteUser = await Category.findByIdAndDelete(req.params.id);
-
     if (!deleteUser) {
         return res.status(404).json({
             message: 'Category not found.',
             success: false
         });
     }
-
     res.status(200).json({
         success: true,
         message: 'Category Deleted!'
@@ -113,16 +105,13 @@ router.delete('/:id', async (req, res) => {
 });
 
 router.put('/:id', async (req, res) =>{
-
     const limit = pLimit(2);
-
     const imagesToUpload = req.body.images.map((image) => {
         return limit(async () => {
             const result = await cloudinary.uploader.upload(image);
             return result;
         });
     });
-
 
     const uploadStatus = await Promise.all(imagesToUpload);
     const imgurl = uploadStatus.map((item) =>{
@@ -133,7 +122,6 @@ router.put('/:id', async (req, res) =>{
         req.params.id,
         {
             name: req.body.name,
-            subCat: req.body.subCat,
             images: imgurl,
             color: req.body.color
         },

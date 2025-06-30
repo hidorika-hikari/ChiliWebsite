@@ -33,7 +33,6 @@ const CategoryAdd = () => {
     const [isLoading, setIsLoading] = useState(false);
     const [formFields, setFromFields] = useState({
         name: '',
-        subCat:'',
         images: [],
         color: ''
     });
@@ -60,8 +59,7 @@ const CategoryAdd = () => {
 
     const addCategory = (e) => {
         e.preventDefault();
-
-        if (formFields.name !== "" && formFields.images.length !== 0 && formFields.color !== "" && formFields.subCat !== "") {
+        if (formFields.name !== "" && formFields.images.length !== 0 && formFields.color !== "") {
             setIsLoading(true);
             postData('api/category/create', formFields).then(res => {
                 setIsLoading(false);
@@ -102,7 +100,6 @@ const CategoryAdd = () => {
                         <StyleBreadcrumb label="Add Category" />
                     </Breadcrumbs>
                 </div>
-
                 <form className="form">
                     <div className="row">
                         <div className="col-md-12">
@@ -112,17 +109,12 @@ const CategoryAdd = () => {
                                     <input type="text" name='name' value={formFields.name} onChange={changeInput} />
                                 </div>
                                 <div className="form-group">
-                                    <h6>SUB CATEGORY</h6>
-                                    <input type="text" name='subCat'value={formFields.subCat} onChange={changeInput} />
-                                </div>
-                                <div className="form-group">
                                     <h6>COLOR</h6>
                                     <input type="text" name='color' value={formFields.color} onChange={changeInput} />
                                 </div>
                                 <div className="form-group">
                                     <h6>IMAGE URL</h6>
                                     <input type="text" name='images' onChange={addImgUrl} />
-
                                     {formFields.images.length > 0 && formFields.images[0] && (
                                         <div style={{ marginTop: '10px' }}>
                                             <img
@@ -134,7 +126,6 @@ const CategoryAdd = () => {
                                         </div>
                                     )}
                                 </div>
-
                                 <br />
                                 <Button
                                     type="submit"

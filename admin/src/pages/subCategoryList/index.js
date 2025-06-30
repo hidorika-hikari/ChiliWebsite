@@ -34,21 +34,18 @@ const StyleBreadcrumb = styled(Chip)(({ theme }) => {
     };
 });
 
-const Category = () => {
-    const [catData, setCatData] = useState([]);
+const SubCategory = () => {
+    const [subCatData, setSubCatData] = useState([]);
     const [open, setOpen] = useState(false);
-    // const [page, setPage] = useState(1);
-    // const [editFields, setEditFields] = useState({});
     const [editId, setEditId] = useState(null);
     const [isLoading, setIsLoading] = useState(false);
-
     const context = useContext(MyContext);
 
     useEffect(() => {
         window.scrollTo(0, 0);
         context.setProgress(20)
-        fetchDataFromApi('/api/category').then((res) => {
-            setCatData(res);
+        fetchDataFromApi('/api/subCat').then((res) => {
+            setSubCatData(res);
             console.log(res);
             context.setProgress(100);
         })
@@ -58,21 +55,15 @@ const Category = () => {
         setOpen(false);
     };
 
-    const editCategory = (id) => {
+    const editSubCategory = (id) => {
         setFromFields({
-            name: '',
             subCat:'',
-            images: '',
-            color: ''
         });
         setOpen(true);
         setEditId(id);
-        fetchDataFromApi(`/api/category/${id}`).then((res) => {
+        fetchDataFromApi(`/api/subCat/${id}`).then((res) => {
             setFromFields({
-                name: res.name,
                 subCat:res.subCat,
-                images: res.images,
-                color: res.color
             });
             console.log(res);
         })
@@ -82,9 +73,9 @@ const Category = () => {
         e.preventDefault();
         setIsLoading(true);
         context.setProgress(40);
-        editData(`/api/category/${editId}`, formFields).then((res) => {
-            fetchDataFromApi('/api/category').then((res) => {
-                setCatData(res);
+        editData(`/api/subCat/${editId}`, formFields).then((res) => {
+            fetchDataFromApi('/api/subCat').then((res) => {
+                setSubCatData(res);
                 setOpen(false);
                 setIsLoading(false);
             });
@@ -99,10 +90,7 @@ const Category = () => {
     }
 
     const [formFields, setFromFields] = useState({
-        name: '',
         subCat:'',
-        images: [],
-        color: ''
     });
 
     const changeInput = (e) => {
@@ -114,29 +102,19 @@ const Category = () => {
         ))
     }
 
-    const addImgUrl = (e) => {
-        const arr = [];
-        arr.push(e.target.value);
-        setFromFields(() => (
-            {
-                ...formFields,
-                [e.target.name]: arr
-            }
-        ))
-    }
 
-    const deleteCat = (id) => {
-        deleteData(`/api/category/${id}`).then(res => {
-            fetchDataFromApi(`/api/category`).then((res) => {
-                setCatData(res);
+    const deleteSubCat = (id) => {
+        deleteData(`/api/subCat/${id}`).then(res => {
+            fetchDataFromApi(`/api/subCat`).then((res) => {
+                setSubCatData(res);
             })
         })
     }
 
     const handleChange = (event, value) => {
         context.setProgress(40);
-        fetchDataFromApi(`/api/category?page=${value}`).then((res) => {
-            setCatData(res);
+        fetchDataFromApi(`/api/subCat?page=${value}`).then((res) => {
+            setSubCatData(res);
             context.setProgress(100);
         })
     };
@@ -145,7 +123,7 @@ const Category = () => {
         <>
             <div className="right-content w-100">
                 <div className="card shadow border-0 w-100 flex-row p-4 align-items-center">
-                    <h5 className="mb-0">Category List</h5>
+                    <h5 className="mb-0">Subcategory List</h5>
                     <div className='ms-auto d-flex align-items-center'>
                         <Breadcrumbs
                             aria-label="breadcrumb"
@@ -172,26 +150,23 @@ const Category = () => {
                         <table className="table table-bordered table-striped v-align">
                             <thead className="table-dark">
                                 <tr>
-                                    <th>UID</th>
                                     <th>IMAGE</th>
                                     <th>CATEGORY</th>
                                     <th>SUB CATEGORY</th>
-                                    <th>COLOR</th>
                                     <th>ACTION</th>
                                 </tr>
                             </thead>
                             <tbody>
                                 {
-                                    catData?.categoryList?.length > 0 && catData.categoryList.map((item, index) => {
+                                    subCatData?.subCategoryList?.length > 0 && subCatData.subCategoryList.map((item, index) => {
                                         return (
                                             <tr>
-                                                <td><span>#{index + 1}</span></td>
                                                 <td>
                                                     <div className="d-flex align-items-center productBox">
                                                         <div className="imgWrapper">
                                                             <div className="img card shadow m-0" style={{ width: '100px', height: '100px', overflow: 'auto' }}>
                                                                 <img
-                                                                    src={item.images[0]}
+                                                                    src={item.category.images[0]}
                                                                     alt=""
                                                                     className="w-full h-full"
                                                                     style={{ width: 'auto', height: 'auto', display: 'block', objectFit: 'cover' }}
@@ -200,22 +175,21 @@ const Category = () => {
                                                         </div>
                                                     </div>
                                                 </td>
-                                                <td>{item.name}</td>
+                                                <td>{item.category.name}</td>
                                                 <td>{item.subCat}</td>
-                                                <td>{item.color}</td>
                                                 <td>
                                                     <div className="actions d-flex align-items-center">
                                                         <Button
                                                             className="success"
                                                             color="success"
-                                                            onClick={() => editCategory(item.id)}
+                                                            onClick={() => editSubCategory(item.id)}
                                                         >
                                                             <FaPencilAlt />
                                                         </Button>
                                                         <Button
                                                             className="error"
                                                             color="error"
-                                                            onClick={() => deleteCat(item.id)}
+                                                            onClick={() => deleteSubCat(item.id)}
                                                         >
                                                             <MdDelete />
                                                         </Button>
@@ -228,10 +202,10 @@ const Category = () => {
                             </tbody>
                         </table>
                         {
-                            catData?.totalPages > 1 &&
+                            subCatData?.totalPages > 1 &&
                             <div className="d-flex tableFooter">
                                 <Pagination
-                                    count={catData?.totalPages}
+                                    count={subCatData?.totalPages}
                                     color="primary"
                                     className="pagination"
                                     showFirstButton
@@ -248,23 +222,9 @@ const Category = () => {
                 onClose={handleClose}
                 className='editModel'
             >
-                <DialogTitle>Edit Category</DialogTitle>
+                <DialogTitle>Edit Subcategory</DialogTitle>
                 <form>
                     <DialogContent>
-                        <div className='form-group mb-3'>
-                            <TextField
-                                autoFocus
-                                required
-                                margin="dense"
-                                id="name"
-                                name="name"
-                                label="Category Name"
-                                type="text"
-                                fullWidth
-                                value={formFields.name}
-                                onChange={changeInput}
-                            />
-                        </div>
                         <div className='form-group mb-3'>
                             <TextField
                                 autoFocus
@@ -276,34 +236,6 @@ const Category = () => {
                                 type="text"
                                 fullWidth
                                 value={formFields.subCat}
-                                onChange={changeInput}
-                            />
-                        </div>
-                        <div className='form-group mb-3'>
-                            <TextField
-                                autoFocus
-                                required
-                                margin="dense"
-                                id="images"
-                                name="images"
-                                label="Category Image"
-                                type="text"
-                                fullWidth
-                                value={formFields.images}
-                                onChange={addImgUrl}
-                            />
-                        </div>
-                        <div className='form-group mb-3'>
-                            <TextField
-                                autoFocus
-                                required
-                                margin="dense"
-                                id="color"
-                                name="color"
-                                label="Category Color"
-                                type="text"
-                                fullWidth
-                                value={formFields.color}
                                 onChange={changeInput}
                             />
                         </div>
@@ -323,4 +255,4 @@ const Category = () => {
     );
 };
 
-export default Category;
+export default SubCategory;

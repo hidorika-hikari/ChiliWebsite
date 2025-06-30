@@ -57,6 +57,8 @@ const Sidebar = () => {
                             <ul className="submenu">
                                 <li><Link to={'/category'}>Category List</Link></li>
                                 <li><Link to={'/category/add'}>Add Category</Link></li>
+                                <li><Link to={'/subCategory'}>Subcategory List</Link></li>
+                                <li><Link to={'/subCategory/add'}>Add A Subcategory</Link></li>
                             </ul>
                         </div>
                     </li>
