@@ -83,7 +83,11 @@ router.post('/create', async (req, res) => {
         countInStock: req.body.countInStock,
         rating: req.body.rating,
         //numReviews: req.body.numReviews,
-        isFeatured: req.body.isFeatured
+        isFeatured: req.body.isFeatured,
+        discount: req.body.discount,
+        productRams: req.body.productRams,
+        productSize: req.body.productSize,
+        productWeight: req.body.productWeight
     });
 
     product = await product.save();
@@ -142,7 +146,11 @@ router.put('/:id', async (req, res) => {
             countInStock: req.body.countInStock,
             rating: req.body.rating,
             // numReviews: req.body.numReviews,
-            isFeatured: req.body.isFeatured
+            isFeatured: req.body.isFeatured,
+            discount: req.body.discount,
+            productRams: req.body.productRams,
+            productSize: req.body.productSize,
+            productWeight: req.body.productWeight
         },
         { new: true }
     );

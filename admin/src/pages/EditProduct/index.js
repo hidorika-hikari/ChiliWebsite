@@ -87,9 +87,13 @@ const ProductEdit = () => {
     const [subCategoryVal, setSubCategoryVal] = useState('');
     const [isFeaturedVal, setIsFeaturedVal] = useState('');
     const [productRams, setProductRams] = useState([]);
+    const [productWeight, setProductWeight] = useState([]);
+    const [productSize, setProductSize] = useState([]); // Size -> Spicy(Mild/Medium/Hot/Hell)
     const [ratingValue, setRatingValue] = useState(null);
     const [catData, setCatData] = useState([]);
     const context = useContext(MyContext);
+
+    
 
     const [formFields, setFormFields] = useState({
         name: '',
@@ -103,6 +107,10 @@ const ProductEdit = () => {
         countInStock: null,
         rating: 0,
         isFeatured: false,
+        discount:0,
+        productRams: '',
+        productSize: '',
+        productWeight: ''
     });
 
     useEffect(() => {
@@ -134,17 +142,20 @@ const ProductEdit = () => {
                         countInStock: res.countInStock,
                         rating: res.rating,
                         isFeatured: res.isFeatured,
+                        discount: res.discount,
+                        productRams: res.productRams,
+                        productSize: res.productSize,
+                        productsWeight: res.productsWeight
                     });
-
+                    
                     setCategoryVal(res.category);
                     setSubCategoryVal(res.subCat)
                     setIsFeaturedVal(res.isFeatured);
                     setRatingValue(res.rating);
                     setImagePreviews(res.images);
-
-                    if (res.productRams) {
-                        setProductRams(res.productRams);
-                    }
+                    setProductRams(res.productRams);
+                    setProductWeight(res.productWeight);
+                    setProductSize(res.productSize);
                 }
                 setProductLoading(false);
             }).catch((error) => {
@@ -196,15 +207,45 @@ const ProductEdit = () => {
         const {
             target: { value },
         } = event;
-        setProductRams(typeof value === 'string' ? value.split(',') : value);
+        const selectedRams = typeof value === 'string' ? value.split(',') : value;
+        setProductRams(selectedRams);
+        setFormFields(prev => ({
+            ...prev,
+            productRams: selectedRams
+        }));
     };
 
+    const handleChangeProductWeight = (event) => {
+        const {
+            target: { value },
+        } = event;
+        const selectedWeights = typeof value === 'string' ? value.split(',') : value;
+        setProductWeight(selectedWeights);
+        setFormFields(prev => ({
+            ...prev,
+            productWeight: selectedWeights
+        }));
+    };
+
+    const handleChangeProductSize = (event) => {
+        const {
+            target: { value },
+        } = event;
+        const selectedSizes = typeof value === 'string' ? value.split(',') : value;
+        setProductSize(selectedSizes);
+        setFormFields(prev => ({
+            ...prev,
+            productSize: selectedSizes
+        }));
+    };
+    
     const inputChange = (e) => {
         setFormFields(prev => ({
             ...prev,
             [e.target.name]: e.target.value
         }))
     }
+    
 
     const updateProduct = (e) => {
         e.preventDefault();
@@ -479,7 +520,7 @@ const ProductEdit = () => {
                                 <div className="row">
                                     <div className="col">
                                         <div className="form-group">
-                                            <h6>BRAND</h6>
+                                            <h6>BRAND / TYPE</h6>
                                             <input
                                                 type="text"
                                                 name="brand"
@@ -488,15 +529,17 @@ const ProductEdit = () => {
                                             />
                                         </div>
                                     </div>
-                                    { /*  <div className="col">
+                                    <div className="col">
                                         <div className="form-group">
-                                            <h6>DISCOUNT</h6>
+                                            <h6>DISCOUNT</h6> {/*discount -> Scoville*/}
                                             <input
                                                 type="text"
                                                 name="discount"
+                                                value={formFields.discount}
+                                                onChange={inputChange}
                                             />
                                         </div>
-                                    </div> */ }
+                                    </div>
                                     <div className="col">
                                         <div className="form-group">
                                             <h6>PRODUCT RAM</h6>
@@ -522,6 +565,66 @@ const ProductEdit = () => {
                                                 </MenuItem>
                                                 <MenuItem value="16GB">
                                                     16GB
+                                                </MenuItem>
+                                            </Select>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div className='row'>
+                                    <div className='col'>
+                                        <div className='form-group'>
+                                            <h6>PRODUCT WEIGHT</h6>
+                                            <Select
+                                                className="w-100"
+                                                multiple
+                                                value={productWeight}
+                                                displayEmpty
+                                                onChange={handleChangeProductWeight}
+                                                renderValue={(selected) =>
+                                                    selected.length === 0 ? (
+                                                        <em>None</em>
+                                                    ) : (
+                                                        selected.join(', ')
+                                                    )
+                                                }
+                                            >
+                                                <MenuItem value="10GM">
+                                                    10GM
+                                                </MenuItem>
+                                                <MenuItem value="50GM">
+                                                    50GM
+                                                </MenuItem>
+                                                <MenuItem value="100GM">
+                                                    100GM
+                                                </MenuItem>
+                                            </Select>
+                                        </div>
+                                    </div>
+                                    <div className='col'>
+                                        <div className='form-group'>
+                                            <h6>PRODUCT SIZE</h6>
+                                            <Select
+                                                className="w-100"
+                                                multiple
+                                                value={productSize}
+                                                displayEmpty
+                                                onChange={handleChangeProductSize}
+                                                renderValue={(selected) =>
+                                                    selected.length === 0 ? (
+                                                        <em>None</em>
+                                                    ) : (
+                                                        selected.join(', ')
+                                                    )
+                                                }
+                                            >
+                                                <MenuItem value="S">
+                                                    S
+                                                </MenuItem>
+                                                <MenuItem value="M">
+                                                    M
+                                                </MenuItem>
+                                                <MenuItem value="L">
+                                                    L
                                                 </MenuItem>
                                             </Select>
                                         </div>
@@ -579,7 +682,6 @@ const ProductEdit = () => {
                                         </div>
                                     </div>
                                 ))}
-
                                 <div className='uploadBox'>
                                     <input
                                         type=""

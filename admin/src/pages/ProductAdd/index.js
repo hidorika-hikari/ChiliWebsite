@@ -83,8 +83,10 @@ const ProductUpload = () => {
 
     const [categoryVal, setCategoryVal] = useState('');
     const [subCategoryVal, setSubCategoryVal] = useState("");
-    const [isFeaturedVal, setIsFeaturedVal] = useState('');
-    const [productRams, setProductRams] = useState([]);
+    const [isFeaturedVal, setIsFeaturedVal] = useState(''); // Featured -> Organic/Non-Organic
+    const [productRams, setProductRams] = useState([]); // Maturation period
+    const [productWeight, setProductWeight] = useState([]);
+    const [productSize, setProductSize] = useState([]); // Size -> Spicy(Mild/Medium/Hot/Hell)
     const [ratingValue, setRatingValue] = useState(null);
     const [catData, setCatData] = useState([]);
     const [subCatData, setSubCatData] = useState([]);
@@ -102,6 +104,10 @@ const ProductUpload = () => {
         countInStock: null,
         rating: 0,
         isFeatured: '',
+        discount:0,
+        productRams: '',
+        productSize: '',
+        productWeight: ''
     })
 
     useEffect(() => {
@@ -138,7 +144,36 @@ const ProductUpload = () => {
         const {
             target: { value },
         } = event;
-        setProductRams(typeof value === 'string' ? value.split(',') : value);
+        const selectedRams = typeof value === 'string' ? value.split(',') : value;
+        setProductRams(selectedRams);
+        setFormFields(prev => ({
+            ...prev,
+            productRams: selectedRams
+        }));
+    };
+    
+    const handleChangeProductWeight = (event) => {
+        const {
+            target: { value },
+        } = event;
+        const selectedWeights = typeof value === 'string' ? value.split(',') : value;
+        setProductWeight(selectedWeights);
+        setFormFields(prev => ({
+            ...prev,
+            productWeight: selectedWeights
+        }));
+    };
+    
+    const handleChangeProductSize = (event) => {
+        const {
+            target: { value },
+        } = event;
+        const selectedSizes = typeof value === 'string' ? value.split(',') : value;
+        setProductSize(selectedSizes);
+        setFormFields(prev => ({
+            ...prev,
+            productSize: selectedSizes 
+        }));
     };
 
     const inputChange = (e) => {
@@ -252,6 +287,10 @@ const ProductUpload = () => {
                 countInStock: 0,
                 rating: 0,
                 isFeatured: false,
+                discount:0,
+                productRams: '',
+                productSize: '',
+                productWeight: ''
             });
             history('/products');
         })
@@ -410,7 +449,7 @@ const ProductUpload = () => {
                                 <div className="row">
                                     <div className="col">
                                         <div className="form-group">
-                                            <h6>BRAND</h6>
+                                            <h6>BRAND / TYPE</h6>
                                             <input
                                                 type="text"
                                                 name="brand"
@@ -419,15 +458,17 @@ const ProductUpload = () => {
                                             />
                                         </div>
                                     </div>
-                                    { /* <div className="col">
+                                    <div className="col">
                                         <div className="form-group">
-                                            <h6>DISCOUNT</h6>
+                                            <h6>DISCOUNT</h6> {/*discount -> Scoville*/}
                                             <input
                                                 type="text"
                                                 name="discount"
+                                                value={formFields.discount}
+                                                onChange={inputChange}
                                             />
                                         </div>
-                                    </div> */}
+                                    </div>
                                     <div className="col">
                                         <div className="form-group">
                                             <h6>PRODUCT RAM</h6>
@@ -453,6 +494,66 @@ const ProductUpload = () => {
                                                 </MenuItem>
                                                 <MenuItem value="16GB">
                                                     16GB
+                                                </MenuItem>
+                                            </Select>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div className='row'>
+                                    <div className='col'>
+                                        <div className='form-group'>
+                                            <h6>PRODUCT WEIGHT</h6>
+                                            <Select
+                                                className="w-100"
+                                                multiple
+                                                value={productWeight}
+                                                displayEmpty
+                                                onChange={handleChangeProductWeight}
+                                                renderValue={(selected) =>
+                                                    selected.length === 0 ? (
+                                                        <em>None</em>
+                                                    ) : (
+                                                        selected.join(', ')
+                                                    )
+                                                }
+                                            >
+                                                <MenuItem value="10GM">
+                                                    10GM
+                                                </MenuItem>
+                                                <MenuItem value="50GM">
+                                                    50GM
+                                                </MenuItem>
+                                                <MenuItem value="100GM">
+                                                    100GM
+                                                </MenuItem>
+                                            </Select>
+                                        </div>
+                                    </div>
+                                    <div className='col'>
+                                        <div className='form-group'>
+                                            <h6>PRODUCT SIZE</h6>
+                                            <Select
+                                                className="w-100"
+                                                multiple
+                                                value={productSize}
+                                                displayEmpty
+                                                onChange={handleChangeProductSize}
+                                                renderValue={(selected) =>
+                                                    selected.length === 0 ? (
+                                                        <em>None</em>
+                                                    ) : (
+                                                        selected.join(', ')
+                                                    )
+                                                }
+                                            >
+                                                <MenuItem value="S">
+                                                    S
+                                                </MenuItem>
+                                                <MenuItem value="M">
+                                                    M
+                                                </MenuItem>
+                                                <MenuItem value="L">
+                                                    L
                                                 </MenuItem>
                                             </Select>
                                         </div>

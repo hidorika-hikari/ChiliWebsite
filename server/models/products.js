@@ -54,6 +54,22 @@ const productSchema = mongoose.Schema({
         type: Boolean,
         default: false
     },
+    discount: {
+        type: Number,
+        default: false
+    },
+    productRams:{
+        type: [String],
+        default: []
+    },
+    productSize:{
+        type: [String],
+        default: []
+    },
+    productWeight:{
+        type: [String],
+        default: []
+    },
     dateCreated: {
         type: Date,
         default: Date.now

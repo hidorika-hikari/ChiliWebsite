@@ -137,7 +137,7 @@ const Home = () => {
                             </form>
                         </div>
                         <div className="col-md-6">
-                            <img src={newsLetterImg} />
+                            <img src={newsLetterImg} alt='' />
                         </div>
                     </div>
                 </div>
