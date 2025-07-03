@@ -39,7 +39,6 @@ const Home = () => {
                     <HomeCat catData={catData} />
                 )
             }
-
             <section className="homeProducts">
                 <div className="container">
                     <div className="row">
@@ -95,7 +94,6 @@ const Home = () => {
                                     <h3 className="mb-0 hd">NEW PRODUCTS</h3>
                                     <p className="text-light text-sml mb-0">New products with updated stocks.</p>
                                 </div>
-
                                 <Button className="viewAllBtn ms-auto">View All<IoIosArrowRoundForward /></Button>
                             </div>
 
@@ -114,7 +112,6 @@ const Home = () => {
                                     <img src="https://cloudfront-eu-central-1.images.arcpublishing.com/williamreed/CA522QC2BZKZVIBSVPBDMNLML4.jpg"
                                         className="cursor w-100" alt='' />
                                 </div>
-
                                 <div className="banner mt-4">
                                     <img src="https://www.thespruceeats.com/thmb/rljsggiCQFN3WvoCebr7XHwo9a8=/1500x0/filters:no_upscale():max_bytes(150000):strip_icc()/GettyImages-930279012-e1d17f3f2e14473db877437ce57b8f5f.jpg"
                                         className="cursor w-100" alt='' />

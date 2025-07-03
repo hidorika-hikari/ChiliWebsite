@@ -8,7 +8,6 @@ import { MyContext } from "../../App";
 const ProductItem = (props) => {
 
     const context = useContext(MyContext);
-
     const viewProductDetails = (id) => {
         context.setIsOpenProductModel(true);
     }
@@ -19,9 +18,7 @@ const ProductItem = (props) => {
                 <div className="imgWrapper">
                     <img src={props.item?.images[0]} alt=""
                     className="w-100" style={{ objectFit: "cover" }}/>
-
                     <span className="badge badge-primary">28%</span>
-                    
                     <div className="actions">
                         <Button onClick={ () => viewProductDetails()}><TfiFullscreen/></Button>
                         <Button><CiHeart style={{ fontSize:'20px'}}/></Button>
