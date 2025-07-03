@@ -32,6 +32,14 @@ router.get('/', async (req, res) => {
     })
 });
 
+router.get('/featured', async (req, res) => {
+    const productList = await Product.find({isFeatured:false});
+    if (!productList) {
+        return res.status(500).json({ success: false });
+    }
+    return res.status(200).json(productList);
+});
+
 router.post('/create', async (req, res) => {
     if (!Array.isArray(req.body.images)) {
         return res.status(400).json({

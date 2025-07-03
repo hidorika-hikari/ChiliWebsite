@@ -1,16 +1,17 @@
 import 'swiper/css';
 import 'swiper/css/navigation';
 import Chili from '../../assets/peper.png'
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Swiper, SwiperSlide } from 'swiper/react';
 import { Navigation } from 'swiper/modules';
 
-const HomeCat = () => {
-    const [itemBg, setItemBg] = useState([
-        '#fffceb','#ecffec','#feefea','#fff3eb','#fff3ff','#f2fce4',
-        '#feefea','#fffceb','#feefea','#ecffec','#feefea','#fff3eb',
-        '#fff3ff','#f2fce4','#feefea','#fffceb','#feefea','#ecffec'
-    ]);
+const HomeCat = (props) => {
+
+    const [catData, setCatData] = useState([]);
+
+    useEffect(() => {
+        setCatData(props.catData);
+    },[])
 
     return (
         <section className="homeCat">
@@ -28,12 +29,12 @@ const HomeCat = () => {
                     className="mySwiper"
                 >
                     {
-                        itemBg?.map((item,index) => {
+                        props.catData?.categoryList?.length !== 0 && props.catData?.categoryList?.map((cat,index) => {
                             return (
-                                <SwiperSlide>
-                                    <div className="item text-center cursor" style={{background:item}}>
-                                        <img src={Chili} alt=''/>
-                                        <h6>Red Chili</h6>
+                                <SwiperSlide key={index}>
+                                    <div className="item text-center cursor" style={{background:cat.color}}>
+                                        <img src={cat.images[0]} alt=''className='w-100 h-100'/>
+                                        <h6 className='text-bold'>{cat.name}</h6>
                                     </div>
                                 </SwiperSlide>
                             )

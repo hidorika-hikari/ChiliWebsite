@@ -13,15 +13,11 @@ const ProductItem = (props) => {
         context.setIsOpenProductModel(true);
     }
 
-    const closeProductModel = () => {
-        context.setIsOpenProductModel(false);
-    }
-
     return (
         <>
             <div className={`productItem ${props.itemView}`}>
                 <div className="imgWrapper">
-                    <img src="https://specialtyproduce.com/sppics/12497.png" alt=""
+                    <img src={props.item?.images[0]} alt=""
                     className="w-100" style={{ objectFit: "cover" }}/>
 
                     <span className="badge badge-primary">28%</span>
@@ -33,13 +29,13 @@ const ProductItem = (props) => {
                 </div>
                     
                     <div className="info">
-                        <h4>Carolina Reaper Chile Peppers</h4>
+                        <h4>{props?.item?.name}</h4>
                         <span className="text-success d-block">In Stock</span>
-                        <Rating className="mt-2 mb-2" name="read-only" value={5} readOnly size="small" precision={0.5}/>
+                        <Rating className="mt-2 mb-2" name="read-only" value={props?.item?.rating} readOnly size="small" precision={0.5}/>
 
                         <div className="d-flex">
-                            <span className="oldPrice">20.00</span>
-                            <span className="newPrice text-danger ms-2">14.00</span>
+                            <span className="oldPrice">{props?.item?.oldPrice}฿</span>
+                            <span className="newPrice text-danger ms-2">{props?.item?.price}฿</span>
                         </div>
                     </div>
             </div>
