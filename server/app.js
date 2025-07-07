@@ -6,7 +6,7 @@ require('dotenv').config();
 
 app.use(cors({
     origin: 'http://localhost:3000',
-    credentials: true 
+    credentials: true
 }));
 console.log('CORS middleware loaded');
 
@@ -16,11 +16,17 @@ console.log('JSON middleware loaded');
 // Routes
 const categoryRoutes = require('./routes/categories');
 const productRoutes = require('./routes/products');
-const subCatSchema = require('./routes/subCat')
+const subCatSchema = require('./routes/subCat');
+const productWeightRoutes = require('./routes/productWeight');
+const productRamsRoutes = require('./routes/productRams')
+const productSizeRoutes = require('./routes/productSize')
 
 app.use('/api/subCat', subCatSchema);
 app.use('/api/category', categoryRoutes);
 app.use('/api/products', productRoutes);
+app.use('/api/productWeight',productWeightRoutes);
+app.use('/api/productRams',productRamsRoutes);
+app.use('/api/productSize',productSizeRoutes);
 
 app.get('/', (req, res) => {
     res.json({ message: 'Server is running!' });

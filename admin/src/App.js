@@ -19,6 +19,9 @@ import { fetchDataFromApi } from './utils/api';
 import AddSubCat from './pages/SubCategoryAdd';
 import CategoryList from './pages/CategoryList';
 import SubCategory from './pages/subCategoryList';
+import AddProductRams from './pages/ProductRamsAdd';
+import AddProductWeight from './pages/ProductWeightAdd';
+import AddProductSize from './pages/ProductSizeAdd';
 
 const MyContext = createContext();
 
@@ -190,6 +193,21 @@ function App() {
                                 path="/subCategory/add"
                                 exact={true}
                                 element={<AddSubCat />}
+                            />
+                            <Route
+                                path="/productRams/add"
+                                exact={true}
+                                element={<AddProductRams />}
+                            />
+                            <Route
+                                path="/productWeight/add"
+                                exact={true}
+                                element={<AddProductWeight />}
+                            />
+                            <Route
+                                path="/productSize/add"
+                                exact={true}
+                                element={<AddProductSize />}
                             />
                         </Routes>
                     </div>

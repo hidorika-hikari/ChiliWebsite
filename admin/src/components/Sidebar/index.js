@@ -44,6 +44,9 @@ const Sidebar = () => {
                                 <li><Link to={'/products'}>Product List</Link></li>
                                 <li><Link to={'/product/details'}>Product View</Link></li>
                                 <li><Link to={'/product/upload'}>Product Upload</Link></li>
+                                <li><Link to={'/productRams/add'}>Product Rams</Link></li>
+                                <li><Link to={'/productWeight/add'}>Product Weight</Link></li>
+                                <li><Link to={'/productSize/add'}>Product Size</Link></li>
                             </ul>
                         </div>
                     </li>
