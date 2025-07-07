@@ -18,7 +18,7 @@ router.get('/', async (req, res) => {
 router.get('/:id', async (req, res) => {
     const item = await ProductSize.findById(req.params.id);
     if(!item) {
-        res.status(500).json({ message: 'The ProductRam with the given ID wasnt found'})
+        res.status(500).json({ message: 'The ProductSize with the given ID was not found'})
     }
     return res.status(200).send(item);
 })
