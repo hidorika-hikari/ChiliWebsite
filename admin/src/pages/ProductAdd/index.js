@@ -11,6 +11,8 @@ import MenuItem from '@mui/material/MenuItem';
 import Select from '@mui/material/Select';
 import Rating from '@mui/material/Rating';
 import Button from '@mui/material/Button';
+import Checkbox from '@mui/material/Checkbox';
+import ListItemText from '@mui/material/ListItemText';
 
 const ITEM_HEIGHT = 48;
 const ITEM_PADDING_TOP = 8;
@@ -86,9 +88,9 @@ const ProductUpload = () => {
     const [isFeaturedVal, setIsFeaturedVal] = useState(''); // Featured -> Organic/Non-Organic
     const [ratingValue, setRatingValue] = useState(null);
 
-    const [productRams, setProductRams] = useState(''); // Maturation period
-    const [productWeight, setProductWeight] = useState('');
-    const [productSize, setProductSize] = useState(''); // Size -> Spicy(Mild/Medium/Hot/Hell)
+    const [productRams, setProductRams] = useState([]); // Maturation period
+    const [productWeight, setProductWeight] = useState([]);
+    const [productSize, setProductSize] = useState([]); // Size -> Spicy(Mild/Medium/Hot/Hell)
 
     const [productRamsData, setProductRamsData] = useState([]);
     const [productWeightData, setProductWeightData] = useState([]);
@@ -111,9 +113,9 @@ const ProductUpload = () => {
         rating: 0,
         isFeatured: '',
         discount: 0,
-        productRams: '',
-        productSize: '',
-        productWeight: ''
+        productRams: [],
+        productSize: [],
+        productWeight: []
     })
 
     useEffect(() => {
@@ -156,33 +158,19 @@ const ProductUpload = () => {
         }))
     };
 
-    const handleChangeProductRam = (event) => {
-        const value = event.target.value;
-        setProductRams(value);
+    const handleChangeProductAttribute = (key) => (event) => {
+        const {
+            target: { value },
+        } = event;
+        const newValue = typeof value === 'string' ? value.split(',') : value;
+        if (key === 'productRams') setProductRams(newValue);
+        else if (key === 'productWeight') setProductWeight(newValue);
+        else if (key === 'productSize') setProductSize(newValue);
         setFormFields(prev => ({
             ...prev,
-            productRams: value
+            [key]: newValue
         }));
     };
-
-    const handleChangeProductWeight = (event) => {
-        const value = event.target.value;
-        setProductWeight(value);
-        setFormFields(prev => ({
-            ...prev,
-            productWeight: value
-        }));
-    };
-
-    const handleChangeProductSize = (event) => {
-        const value = event.target.value;
-        setProductSize(value);
-        setFormFields(prev => ({
-            ...prev,
-            productSize: value
-        }));
-    };
-
 
     const inputChange = (e) => {
         setFormFields(() => ({
@@ -481,10 +469,15 @@ const ProductUpload = () => {
                                         <div className="form-group">
                                             <h6>PRODUCT RAM</h6>
                                             <Select
+                                                multiple
                                                 className="w-100"
                                                 value={productRams}
                                                 displayEmpty
-                                                onChange={handleChangeProductRam}
+                                                onChange={handleChangeProductAttribute('productRams')}
+                                                renderValue={(selected) => selected.map(id => {
+                                                    const item = productRamsData.find(i => i._id === id);
+                                                    return item ? item.productRams : id;
+                                                }).join(', ')}
                                             >
                                                 <MenuItem value="">
                                                     <em value={null}>None</em>
@@ -492,8 +485,9 @@ const ProductUpload = () => {
                                                 {
                                                     productRamsData?.map((item, index) => {
                                                         return (
-                                                            <MenuItem value={item. _id}>
-                                                                {item.productRams}</MenuItem>
+                                                            <MenuItem value={item._id}>
+                                                                {item.productRams}
+                                                            </MenuItem>
                                                         )
                                                     })
                                                 }
@@ -506,10 +500,15 @@ const ProductUpload = () => {
                                         <div className='form-group'>
                                             <h6>PRODUCT WEIGHT</h6>
                                             <Select
+                                                multiple
                                                 className="w-100"
                                                 value={productWeight}
                                                 displayEmpty
-                                                onChange={handleChangeProductWeight}
+                                                onChange={handleChangeProductAttribute('productWeight')}
+                                                renderValue={(selected) => selected.map(id => {
+                                                    const item = productWeightData.find(i => i._id === id);
+                                                    return item ? item.productWeight : id;
+                                                }).join(', ')}
                                             >
                                                 <MenuItem value="">
                                                     <em value={null}>None</em>
@@ -530,10 +529,15 @@ const ProductUpload = () => {
                                         <div className='form-group'>
                                             <h6>SPICY LEVEL</h6>
                                             <Select
+                                                multiple
                                                 className="w-100"
                                                 value={productSize}
                                                 displayEmpty
-                                                onChange={handleChangeProductSize}
+                                                onChange={handleChangeProductAttribute('productSize')}
+                                                renderValue={(selected) => selected.map(id => {
+                                                    const item = productSizeData.find(i => i._id === id);
+                                                    return item ? item.productSize : id;
+                                                }).join(', ')}
                                             >
                                                 <MenuItem value="">
                                                     <em value={null}>None</em>

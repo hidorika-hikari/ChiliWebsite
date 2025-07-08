@@ -58,21 +58,21 @@ const productSchema = mongoose.Schema({
         type: Number,
         default: false
     },
-    productRams:{
+    productRams:[{
         type: mongoose.Schema.Types.ObjectId,
         ref: 'ProductRams',
-        default: null
-    },
-    productSize:{
+        default: []
+    }],
+    productSize:[{
         type: mongoose.Schema.Types.ObjectId,
         ref: 'ProductSize',
-        default: null
-    },
-    productWeight:{
+        default: []
+    }],
+    productWeight:[{
         type: mongoose.Schema.Types.ObjectId,
         ref: 'ProductWeight',
-        default: null
-    },
+        default: []
+    }],
     dateCreated: {
         type: Date,
         default: Date.now
