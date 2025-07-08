@@ -11,8 +11,6 @@ import MenuItem from '@mui/material/MenuItem';
 import Select from '@mui/material/Select';
 import Rating from '@mui/material/Rating';
 import Button from '@mui/material/Button';
-import Checkbox from '@mui/material/Checkbox';
-import ListItemText from '@mui/material/ListItemText';
 
 const ITEM_HEIGHT = 48;
 const ITEM_PADDING_TOP = 8;
@@ -46,7 +44,7 @@ const StyleBreadcrumb = styled(Chip)(({ theme }) => {
     };
 });
 
-const ProductUpload = () => {
+const ProductAdd = () => {
     const [imagePreviews, setImagePreviews] = useState([]);
     const [newImageUrl, setNewImageUrl] = useState('');
     const [isLoading, setIsLoading] = useState(false);
@@ -88,7 +86,7 @@ const ProductUpload = () => {
     const [isFeaturedVal, setIsFeaturedVal] = useState(''); // Featured -> Organic/Non-Organic
     const [ratingValue, setRatingValue] = useState(null);
 
-    const [productRams, setProductRams] = useState([]); // Maturation period
+    const [productRams, setProductRams] = useState([]); // Content 1 ชิ้น สำหรับผลิตภัณฑ์ 10 ชิ้น สำหรับ เมล็ด
     const [productWeight, setProductWeight] = useState([]);
     const [productSize, setProductSize] = useState([]); // Size -> Spicy(Mild/Medium/Hot/Hell)
 
@@ -112,7 +110,7 @@ const ProductUpload = () => {
         countInStock: null,
         rating: 0,
         isFeatured: '',
-        discount: 0,
+        discount: '',
         productRams: [],
         productSize: [],
         productWeight: []
@@ -198,44 +196,49 @@ const ProductUpload = () => {
             });
         }
 
-        if (formFields.category === "") {
+        if (!formFields.category) {
             context.setAlertBox({
                 open: true,
                 msg: 'Please Select a Category',
                 error: true
             });
+            return;
         }
-
-        if (formFields.price === null) {
+    
+        if (!formFields.price) {
             context.setAlertBox({
                 open: true,
                 msg: 'Please Add Product Price',
                 error: true
             });
+            return;
         }
 
-        if (formFields.oldPrice === null) {
+        if (!formFields.oldPrice) {
             context.setAlertBox({
                 open: true,
-                msg: 'Please Add Product oldPrice',
+                msg: 'Please Add Product Old Price',
                 error: true
             });
+            return;
         }
-
-        if (formFields.isFeatured === null) {
+    
+        if (formFields.isFeatured === "") {
             context.setAlertBox({
                 open: true,
-                msg: 'Please Select the Product Featured',
+                msg: 'Please Select if Product is Organic or Not',
                 error: true
             });
+            return;
         }
-
-        if (formFields.countInStock === null) {
+    
+        if (!formFields.countInStock) {
             context.setAlertBox({
                 open: true,
                 msg: 'Please Add Product Stock',
                 error: true
             });
+            return;
         }
 
         if (formFields.brand === "") {
@@ -246,12 +249,13 @@ const ProductUpload = () => {
             });
         }
 
-        if (formFields.rating === 0) {
+        if (!formFields.rating || formFields.rating === 0) {
             context.setAlertBox({
                 open: true,
                 msg: 'Please Add Product Rating',
                 error: true
             });
+            return;
         }
 
         if (formFields.images.length === 0) {
@@ -261,7 +265,7 @@ const ProductUpload = () => {
                 error: true
             });
         }
-
+        
         console.log(formFields)
         setIsLoading(true);
         postData('api/products/create', formFields).then((res) => {
@@ -296,7 +300,7 @@ const ProductUpload = () => {
         <>
             <div className="right-content w-100">
                 <div className="card shadow border-0 w-100 flex-row p-4 res-col">
-                    <h5 className="mb-0">Product Upload</h5>
+                    <h5 className="mb-0">Product Add</h5>
                     <Breadcrumbs
                         aria-label="breadcrumb"
                         className="ms-auto breadcrumb_"
@@ -310,9 +314,8 @@ const ProductUpload = () => {
                         <StyleBreadcrumb
                             label="Products"
                             component="a"
-                            href="#"
                         />
-                        <StyleBreadcrumb label="Product Upload" />
+                        <StyleBreadcrumb label="Product Add" />
                     </Breadcrumbs>
                 </div>
 
@@ -322,17 +325,17 @@ const ProductUpload = () => {
                             <div className="card p-4 mt-0">
                                 <h5 className="mb-4">Basic Information</h5>
                                 <div className="form-group">
-                                    <h6>PRODUCT NAME</h6>
+                                    <h6>Product Name</h6>
                                     <input type="text" name="name" value={formFields.name} onChange={inputChange} />
                                 </div>
                                 <div className="form-group">
-                                    <h6>DESCRIPTION</h6>
+                                    <h6>Description</h6>
                                     <textarea rows="5" cols="10" name='description' value={formFields.description} onChange={inputChange} />
                                 </div>
                                 <div className="row">
                                     <div className="col">
                                         <div className="form-group">
-                                            <h6>CATEGORY</h6>
+                                            <h6>Category</h6>
                                             <Select
                                                 className="w-100"
                                                 value={categoryVal}
@@ -359,12 +362,13 @@ const ProductUpload = () => {
                                     </div>
                                     <div className="col">
                                         <div className="form-group">
-                                            <h6>SUB CATEGORY</h6>
+                                            <h6>Subcategory</h6>
                                             <Select
                                                 className="w-100"
                                                 value={subCategoryVal}
                                                 displayEmpty
                                                 onChange={handleChangeSubCategory}
+                                                MenuProps={menuProps}
                                             >
                                                 <MenuItem value="">
                                                     <em>None</em>
@@ -385,7 +389,7 @@ const ProductUpload = () => {
                                     </div>
                                     <div className="col">
                                         <div className="form-group">
-                                            <h6>PRICE</h6>
+                                            <h6>Price</h6>
                                             <input
                                                 type="text"
                                                 name="price"
@@ -398,7 +402,7 @@ const ProductUpload = () => {
                                 <div className="row">
                                     <div className="col">
                                         <div className="form-group">
-                                            <h6>OLD PRICE</h6>
+                                            <h6>Old Price</h6>
                                             <input
                                                 type="text"
                                                 name="oldPrice"
@@ -409,7 +413,7 @@ const ProductUpload = () => {
                                     </div>
                                     <div className="col">
                                         <div className="form-group">
-                                            <h6>IS ORGANIC</h6>
+                                            <h6>Is Organic</h6>
                                             <Select
                                                 className="w-100"
                                                 value={isFeaturedVal}
@@ -420,10 +424,10 @@ const ProductUpload = () => {
                                                     <em value={null}>None</em>
                                                 </MenuItem>
                                                 <MenuItem value="true">
-                                                    True
+                                                    Organic
                                                 </MenuItem>
                                                 <MenuItem value="false">
-                                                    False
+                                                    Non-Organic
                                                 </MenuItem>
                                             </Select>
                                         </div>
@@ -432,7 +436,7 @@ const ProductUpload = () => {
                                 <div className='row'>
                                     <div className="col">
                                         <div className="form-group">
-                                            <h6>PRODUCT STOCK</h6>
+                                            <h6>Product Stock</h6>
                                             <input
                                                 type="text"
                                                 name="countInStock"
@@ -445,7 +449,7 @@ const ProductUpload = () => {
                                 <div className="row">
                                     <div className="col">
                                         <div className="form-group">
-                                            <h6>BRAND / TYPE</h6>
+                                            <h6>Brand / Type</h6>
                                             <input
                                                 type="text"
                                                 name="brand"
@@ -456,7 +460,7 @@ const ProductUpload = () => {
                                     </div>
                                     <div className="col">
                                         <div className="form-group">
-                                            <h6>SCOVILLE</h6>
+                                            <h6>Scoville</h6>
                                             <input
                                                 type="text"
                                                 name="discount"
@@ -467,12 +471,13 @@ const ProductUpload = () => {
                                     </div>
                                     <div className="col">
                                         <div className="form-group">
-                                            <h6>PRODUCT RAM</h6>
+                                            <h6>Product Content</h6>
                                             <Select
                                                 multiple
                                                 className="w-100"
                                                 value={productRams}
                                                 displayEmpty
+                                                MenuProps={menuProps}
                                                 onChange={handleChangeProductAttribute('productRams')}
                                                 renderValue={(selected) => selected.map(id => {
                                                     const item = productRamsData.find(i => i._id === id);
@@ -498,12 +503,13 @@ const ProductUpload = () => {
                                 <div className='row'>
                                     <div className='col'>
                                         <div className='form-group'>
-                                            <h6>PRODUCT WEIGHT</h6>
+                                            <h6>Product Weight</h6>
                                             <Select
                                                 multiple
                                                 className="w-100"
                                                 value={productWeight}
                                                 displayEmpty
+                                                MenuProps={menuProps}
                                                 onChange={handleChangeProductAttribute('productWeight')}
                                                 renderValue={(selected) => selected.map(id => {
                                                     const item = productWeightData.find(i => i._id === id);
@@ -527,12 +533,13 @@ const ProductUpload = () => {
                                     </div>
                                     <div className='col'>
                                         <div className='form-group'>
-                                            <h6>SPICY LEVEL</h6>
+                                            <h6>Spicy Level</h6>
                                             <Select
                                                 multiple
                                                 className="w-100"
                                                 value={productSize}
                                                 displayEmpty
+                                                MenuProps={menuProps}
                                                 onChange={handleChangeProductAttribute('productSize')}
                                                 renderValue={(selected) => selected.map(id => {
                                                     const item = productSizeData.find(i => i._id === id);
@@ -557,7 +564,7 @@ const ProductUpload = () => {
                                 <div className='row'>
                                     <div className='col'>
                                         <div className='form-group'>
-                                            <h6>RATINGS</h6>
+                                            <h6>Ratting</h6>
                                             <Rating
                                                 name="simple-controlled"
                                                 value={ratingValue}
@@ -576,9 +583,9 @@ const ProductUpload = () => {
                     </div>
                     <div className="card p-4 mt-0">
                         <div className='imagesUploadSec'>
-                            <h5 className="mb-4">Media And Published</h5>
+                            <h5 className="mb-4">Media & Published</h5>
                             <div className="form-group gap-2 align-items-center">
-                                <h6>IMAGE URL</h6>
+                                <h6>Image URL</h6>
                                 <input
                                     placeholder='image url'
                                     type="text"
@@ -605,7 +612,6 @@ const ProductUpload = () => {
                                         </div>
                                     </div>
                                 ))}
-
                                 <div className='uploadBox'>
                                     <input
                                         type=""
@@ -632,4 +638,4 @@ const ProductUpload = () => {
     );
 };
 
-export default ProductUpload;
+export default ProductAdd;

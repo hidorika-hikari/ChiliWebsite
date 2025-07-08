@@ -34,7 +34,7 @@ const StyleBreadcrumb = styled(Chip)(({ theme }) => {
     };
 });
 
-const SubCategory = () => {
+const SubCategoryList = () => {
     const [subCatData, setSubCatData] = useState([]);
     const [open, setOpen] = useState(false);
     const [editId, setEditId] = useState(null);
@@ -255,4 +255,4 @@ const SubCategory = () => {
     );
 };
 
-export default SubCategory;
+export default SubCategoryList;

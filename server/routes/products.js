@@ -18,7 +18,9 @@ router.get('/', async (req, res) => {
     const productList = await Product.find()
     .populate('category', 'name')
     .populate('subCat')
+    .populate('productSize')
     .populate('productWeight')
+    .populate('productRams')
     .skip((page - 1) * perPage)
     .limit(perPage)
     .exec();

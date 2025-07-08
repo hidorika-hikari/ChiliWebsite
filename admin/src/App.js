@@ -1,3 +1,6 @@
+import React, { useState, createContext, useEffect } from 'react';
+import { BrowserRouter, Routes, Route } from 'react-router-dom';
+import { fetchDataFromApi } from './utils/api';
 import './App.css';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import Dashboard from './pages/Dashboard';
@@ -5,23 +8,20 @@ import Header from './components/Header';
 import Sidebar from './components/Sidebar';
 import Login from './pages/Login';
 import SignUp from './pages/SignUp';
-import React, { useState, createContext, useEffect } from 'react';
-import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import LoadingBar from "react-top-loading-bar";
 import ProductDetails from './pages/ProductDetails';
 import Product from './pages/Product'
-import ProductUpload from './pages/ProductAdd';
 import CategoryAdd from './pages/CategoryAdd'
 import Snackbar from '@mui/material/Snackbar';
 import Alert from '@mui/material/Alert';
 import EditProduct from './pages/EditProduct';
-import { fetchDataFromApi } from './utils/api';
 import AddSubCat from './pages/SubCategoryAdd';
 import CategoryList from './pages/CategoryList';
-import SubCategory from './pages/subCategoryList';
-import AddProductRams from './pages/ProductRamsAdd';
 import AddProductWeight from './pages/ProductWeightAdd';
-import AddProductSize from './pages/ProductSizeAdd';
+import AddProductSpicy from './pages/ProductSizeAdd';
+import AddProductContent from './pages/ProductRamsAdd';
+import ProductAdd from './pages/ProductAdd';
+import SubCategoryList from './pages/subCategoryList';
 
 const MyContext = createContext();
 
@@ -30,8 +30,6 @@ function App() {
     const [isLogin, setIsLogin] = useState(false);
     const [isHideSidebarAndHeader, setIsHideSidebarAndHeader] = useState(false);
     const [themeMode, setThemeMode] = useState(true);
-    // const [open, setOpen] = useState(true);
-    // const [msg, setMsg] = useState(true);
     const [catData, setCatData] = useState([]);
     const [subCatData, setSubCatData] = useState([]);
     const [progress, setProgress] = useState(0);
@@ -165,9 +163,9 @@ function App() {
                                 element={<ProductDetails />}
                             />
                             <Route
-                                path="/product/upload"
+                                path="/product/add"
                                 exact={true}
-                                element={<ProductUpload />}
+                                element={<ProductAdd />}
                             />
                             <Route
                                 path="/category/add"
@@ -182,7 +180,7 @@ function App() {
                             <Route
                                 path="/subCategory"
                                 exact={true}
-                                element={<SubCategory />}
+                                element={<SubCategoryList />}
                             />
                             <Route
                                 path="/product/edit/:id"
@@ -195,9 +193,9 @@ function App() {
                                 element={<AddSubCat />}
                             />
                             <Route
-                                path="/productRams/add"
+                                path="/productContent/add"
                                 exact={true}
-                                element={<AddProductRams />}
+                                element={<AddProductContent />}
                             />
                             <Route
                                 path="/productWeight/add"
@@ -205,9 +203,9 @@ function App() {
                                 element={<AddProductWeight />}
                             />
                             <Route
-                                path="/productSize/add"
+                                path="/productSpicy/add"
                                 exact={true}
-                                element={<AddProductSize />}
+                                element={<AddProductSpicy />}
                             />
                         </Routes>
                     </div>

@@ -1,12 +1,12 @@
 import { Breadcrumbs, Chip, CircularProgress, emphasize, styled } from '@mui/material';
 import { FaCloudUploadAlt, FaHome } from 'react-icons/fa';
 import { MyContext } from '../../App';
+import { useNavigate } from 'react-router-dom';
+import { postData } from '../../utils/api';
 import React, { useContext, useState } from 'react';
 import MenuItem from '@mui/material/MenuItem';
 import Select from '@mui/material/Select';
 import Button from '@mui/material/Button';
-import { useNavigate } from 'react-router-dom';
-import { postData } from '../../utils/api';
 
 const ITEM_HEIGHT = 48;
 const ITEM_PADDING_TOP = 8;
@@ -86,7 +86,7 @@ const AddSubCat = () => {
     return (
         <div className="right-content w-100">
             <div className="card shadow border-0 w-100 flex-row p-4 res-col">
-                <h5 className="mb-0">Add Sub Category</h5>
+                <h5 className="mb-0">Add Subcategory</h5>
                 <Breadcrumbs
                     aria-label="breadcrumb"
                     className="ms-auto breadcrumb_"
@@ -105,14 +105,13 @@ const AddSubCat = () => {
                     <StyleBreadcrumb label="Add Subcategory" />
                 </Breadcrumbs>
             </div>
-
             <form className='form'>
                 <div className='row'>
                     <div className='col-sm-9'>
                         <div className='card p-4 mt-0'>
                             <div className="col">
                                 <div className="form-group">
-                                    <h6>CATEGORY</h6>
+                                    <h6>Category</h6>
                                     <Select
                                         className="w-100"
                                         value={categoryVal}
@@ -138,7 +137,7 @@ const AddSubCat = () => {
                             </div>
                             <div className="col">
                                 <div className="form-group">
-                                    <h6>Sub Category</h6>
+                                    <h6>Subcategory</h6>
                                     <input
                                         type="text"
                                         name="subCat"

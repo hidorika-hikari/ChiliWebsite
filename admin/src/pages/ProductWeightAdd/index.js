@@ -1,11 +1,11 @@
 import { Breadcrumbs, Chip, CircularProgress, emphasize, styled } from '@mui/material';
 import { FaCloudUploadAlt, FaHome } from 'react-icons/fa';
 import { MyContext } from '../../App';
-import React, { useContext, useEffect, useState } from 'react';
-import Button from '@mui/material/Button';
 import { fetchDataFromApi, postData, deleteData, editData } from '../../utils/api';
 import { FaPencilAlt } from 'react-icons/fa';
 import { MdDelete } from 'react-icons/md';
+import React, { useContext, useEffect, useState } from 'react';
+import Button from '@mui/material/Button';
 
 const StyleBreadcrumb = styled(Chip)(({ theme }) => {
     const backgroundColor =
@@ -60,7 +60,7 @@ const AddProductWeight = () => {
                 msg: 'Please Add Product Weight',
                 error: true
             });
-            return;
+            return false;
         }
 
         setIsLoading(true);
@@ -109,9 +109,7 @@ const AddProductWeight = () => {
                     <StyleBreadcrumb
                         label="Product Weight"
                         component="a"
-                        href={'/subCategory'}
                     />
-                    <StyleBreadcrumb label="Add Product Weight" />
                 </Breadcrumbs>
             </div>
             <form className='form'>
@@ -158,47 +156,49 @@ const AddProductWeight = () => {
                 </div>
                 {
                     productWeightData.length !== 0 &&
-                    <div className='col-sm-9'>
-                        <div className='card p-4 mt-0'>
-                            <div className="table-responsive mt-3">
-                                <table className="table table-bordered table-striped v-align">
-                                    <thead className="table-dark">
-                                        <tr>
-                                            <th>PRODUCT WEIGHT</th>
-                                            <th>ACTION</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        {
-                                            productWeightData?.map((item, index) => {
-                                                return (
-                                                    <tr>
-                                                        <td>
-                                                            {item.productWeight}
-                                                        </td>
-                                                        <td>
-                                                            <div className="actions d-flex align-items-center">
-                                                                <Button
-                                                                    className="success"
-                                                                    color="success"
-                                                                    onClick={() => updataData(item.id)}
-                                                                >
-                                                                    <FaPencilAlt />
-                                                                </Button>
-                                                                <Button
-                                                                    className="error"
-                                                                    color="error"
-                                                                    onClick={() => deleteItem(item.id)}
-                                                                ><MdDelete />
-                                                                </Button>
-                                                            </div>
-                                                        </td>
-                                                    </tr>
-                                                )
-                                            })
-                                        }
-                                    </tbody>
-                                </table>
+                    <div className='row'>
+                        <div className='col-sm-9'>
+                            <div className='card p-4 mt-0'>
+                                <div className="table-responsive mt-3">
+                                    <table className="table table-bordered table-striped v-align">
+                                        <thead className="table-dark">
+                                            <tr>
+                                                <th>PRODUCT WEIGHT</th>
+                                                <th>ACTION</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            {
+                                                productWeightData?.map((item, index) => {
+                                                    return (
+                                                        <tr>
+                                                            <td>
+                                                                {item.productWeight}
+                                                            </td>
+                                                            <td>
+                                                                <div className="actions d-flex align-items-center">
+                                                                    <Button
+                                                                        className="success"
+                                                                        color="success"
+                                                                        onClick={() => updataData(item.id)}
+                                                                    >
+                                                                        <FaPencilAlt />
+                                                                    </Button>
+                                                                    <Button
+                                                                        className="error"
+                                                                        color="error"
+                                                                        onClick={() => deleteItem(item.id)}
+                                                                    ><MdDelete />
+                                                                    </Button>
+                                                                </div>
+                                                            </td>
+                                                        </tr>
+                                                    )
+                                                })
+                                            }
+                                        </tbody>
+                                    </table>
+                                </div>
                             </div>
                         </div>
                     </div>

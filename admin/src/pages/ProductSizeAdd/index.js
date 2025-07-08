@@ -1,11 +1,11 @@
 import { Breadcrumbs, Chip, CircularProgress, emphasize, styled } from '@mui/material';
 import { FaCloudUploadAlt, FaHome } from 'react-icons/fa';
-import { MyContext } from '../../App';
-import React, { useContext, useEffect, useState } from 'react';
-import Button from '@mui/material/Button';
 import { fetchDataFromApi, postData, deleteData, editData } from '../../utils/api';
 import { FaPencilAlt } from 'react-icons/fa';
 import { MdDelete } from 'react-icons/md';
+import { MyContext } from '../../App';
+import React, { useContext, useEffect, useState } from 'react';
+import Button from '@mui/material/Button';
 
 const StyleBreadcrumb = styled(Chip)(({ theme }) => {
     const backgroundColor =
@@ -27,7 +27,7 @@ const StyleBreadcrumb = styled(Chip)(({ theme }) => {
     };
 });
 
-const AddProductSize = () => {
+const AddProductSpicy = () => {
 
     const [editId, setEditId] = useState(null);
     const [isLoading, setIsLoading] = useState(false);
@@ -57,10 +57,10 @@ const AddProductSize = () => {
         if (formFields.productSize === "") {
             context.setAlertBox({
                 open: true,
-                msg: 'Please Add Product Size',
+                msg: 'Please Add Product Spicy Level',
                 error: true
             });
-            return;
+            return false;
         }
 
         setIsLoading(true);
@@ -95,7 +95,7 @@ const AddProductSize = () => {
     return (
         <div className="right-content w-100">
             <div className="card shadow border-0 w-100 flex-row p-4 res-col">
-                <h5 className="mb-0">Add Product Size</h5>
+                <h5 className="mb-0">Add Product Spicy Level</h5>
                 <Breadcrumbs
                     aria-label="breadcrumb"
                     className="ms-auto breadcrumb_"
@@ -107,11 +107,9 @@ const AddProductSize = () => {
                         icon={<FaHome fontSize="small" />}
                     />
                     <StyleBreadcrumb
-                        label="Product Size"
+                        label="Product Spicy Level"
                         component="a"
-                        href={'/subCategory'}
                     />
-                    <StyleBreadcrumb label="Add Product Size" />
                 </Breadcrumbs>
             </div>
             <form className='form'>
@@ -120,7 +118,7 @@ const AddProductSize = () => {
                         <div className='card p-4 mt-0'>
                             <div className="col">
                                 <div className="form-group">
-                                    <h6>Product Size {editId ? '(Editing)' : ''}</h6>
+                                    <h6>Product Spicy Level {editId ? '(Editing)' : ''}</h6>
                                     <input
                                         type="text"
                                         name="productSize"
@@ -158,47 +156,49 @@ const AddProductSize = () => {
                 </div>
                 {
                     productSizeData.length !== 0 &&
-                    <div className='col-sm-9'>
-                        <div className='card p-4 mt-0'>
-                            <div className="table-responsive mt-3">
-                                <table className="table table-bordered table-striped v-align">
-                                    <thead className="table-dark">
-                                        <tr>
-                                            <th>PRODUCT WEIGHT</th>
-                                            <th>ACTION</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        {
-                                            productSizeData?.map((item, index) => {
-                                                return (
-                                                    <tr>
-                                                        <td>
-                                                            {item.productSize}
-                                                        </td>
-                                                        <td>
-                                                            <div className="actions d-flex align-items-center">
-                                                                <Button
-                                                                    className="success"
-                                                                    color="success"
-                                                                    onClick={() => updataData(item.id)}
-                                                                >
-                                                                    <FaPencilAlt />
-                                                                </Button>
-                                                                <Button
-                                                                    className="error"
-                                                                    color="error"
-                                                                    onClick={() => deleteItem(item.id)}
-                                                                ><MdDelete />
-                                                                </Button>
-                                                            </div>
-                                                        </td>
-                                                    </tr>
-                                                )
-                                            })
-                                        }
-                                    </tbody>
-                                </table>
+                    <div className='row'>
+                        <div className='col-sm-9'>
+                            <div className='card p-4 mt-0'>
+                                <div className="table-responsive mt-3">
+                                    <table className="table table-bordered table-striped v-align">
+                                        <thead className="table-dark">
+                                            <tr>
+                                                <th>SPICY LEVEL</th>
+                                                <th>ACTION</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            {
+                                                productSizeData?.map((item, index) => {
+                                                    return (
+                                                        <tr>
+                                                            <td>
+                                                                {item.productSize}
+                                                            </td>
+                                                            <td>
+                                                                <div className="actions d-flex align-items-center">
+                                                                    <Button
+                                                                        className="success"
+                                                                        color="success"
+                                                                        onClick={() => updataData(item.id)}
+                                                                    >
+                                                                        <FaPencilAlt />
+                                                                    </Button>
+                                                                    <Button
+                                                                        className="error"
+                                                                        color="error"
+                                                                        onClick={() => deleteItem(item.id)}
+                                                                    ><MdDelete />
+                                                                    </Button>
+                                                                </div>
+                                                            </td>
+                                                        </tr>
+                                                    )
+                                                })
+                                            }
+                                        </tbody>
+                                    </table>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -208,4 +208,4 @@ const AddProductSize = () => {
     )
 }
 
-export default AddProductSize;
+export default AddProductSpicy;

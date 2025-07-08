@@ -43,10 +43,10 @@ const Sidebar = () => {
                             <ul className="submenu">
                                 <li><Link to={'/products'}>Product List</Link></li>
                                 <li><Link to={'/product/details'}>Product View</Link></li>
-                                <li><Link to={'/product/upload'}>Product Upload</Link></li>
-                                <li><Link to={'/productRams/add'}>Product Rams</Link></li>
+                                <li><Link to={'/product/add'}>Product Add</Link></li>
+                                <li><Link to={'/productContent/add'}>Product Content</Link></li>
                                 <li><Link to={'/productWeight/add'}>Product Weight</Link></li>
-                                <li><Link to={'/productSize/add'}>Product Size</Link></li>
+                                <li><Link to={'/productSpicy/add'}>Product Spicy Level</Link></li>
                             </ul>
                         </div>
                     </li>

@@ -105,15 +105,15 @@ const CategoryAdd = () => {
                         <div className="col-md-12">
                             <div className="card p-4 mt-0">
                                 <div className="form-group">
-                                    <h6>CATEGORY</h6>
+                                    <h6>Category</h6>
                                     <input type="text" name='name' value={formFields.name} onChange={changeInput} />
                                 </div>
                                 <div className="form-group">
-                                    <h6>COLOR</h6>
+                                    <h6>Color</h6>
                                     <input type="text" name='color' value={formFields.color} onChange={changeInput} />
                                 </div>
                                 <div className="form-group">
-                                    <h6>IMAGE URL</h6>
+                                    <h6>Image URL</h6>
                                     <input type="text" name='images' onChange={addImgUrl} />
                                     {formFields.images.length > 0 && formFields.images[0] && (
                                         <div style={{ marginTop: '10px' }}>

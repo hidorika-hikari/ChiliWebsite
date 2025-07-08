@@ -90,10 +90,9 @@ const Products = () => {
                         <StyleBreadcrumb
                             label="Products"
                             component="a"
-                            href="#"
                         />
                     </Breadcrumbs>
-                    <Link to="/product/upload"><Button className='btn-blue btn-lg ms-3 ps-3 pe-3'>
+                    <Link to="/product/add"><Button className='btn-blue btn-lg ms-3 ps-3 pe-3'>
                         Add Product</Button></Link>
                 </div>
 
@@ -101,7 +100,7 @@ const Products = () => {
                     <h3 className="hd">Best Selling Products</h3>
                     <div className="row cardFilters mt-3">
                         <div className="col-md-3">
-                            <h4>SHOW BY</h4>
+                            <h4>Show By</h4>
                             <FormControl size="small" className="w-100">
                                 <Select
                                     value={showBy}
@@ -120,7 +119,7 @@ const Products = () => {
                             </FormControl>
                         </div>
                         <div className="col-md-3">
-                            <h4>CATEGORY BY</h4>
+                            <h4>Category By</h4>
                             <FormControl size="small" className="w-100">
                                 <Select
                                     value={showBySetCateBy}
@@ -145,7 +144,6 @@ const Products = () => {
                             </FormControl>
                         </div>
                     </div>
-
                     <div className="table-responsive mt-3">
                         <table className="table table-bordered table-striped v-align">
                             <thead className="table-dark">

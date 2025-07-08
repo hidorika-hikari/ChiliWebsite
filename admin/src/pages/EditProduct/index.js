@@ -86,14 +86,18 @@ const ProductEdit = () => {
     const [categoryVal, setCategoryVal] = useState('');
     const [subCategoryVal, setSubCategoryVal] = useState('');
     const [isFeaturedVal, setIsFeaturedVal] = useState('');
+    const [ratingValue, setRatingValue] = useState(null);
+
     const [productRams, setProductRams] = useState([]);
     const [productWeight, setProductWeight] = useState([]);
     const [productSize, setProductSize] = useState([]); // Size -> Spicy(Mild/Medium/Hot/Hell)
-    const [ratingValue, setRatingValue] = useState(null);
+
+    const [productRamsData, setProductRamsData] = useState([]);
+    const [productWeightData, setProductWeightData] = useState([]);
+    const [productSizeData, setProductSizeData] = useState([]);
+
     const [catData, setCatData] = useState([]);
     const context = useContext(MyContext);
-
-    
 
     const [formFields, setFormFields] = useState({
         name: '',
@@ -107,14 +111,14 @@ const ProductEdit = () => {
         countInStock: null,
         rating: 0,
         isFeatured: false,
-        discount:0,
-        productRams: '',
-        productSize: '',
-        productWeight: ''
+        discount: 0,
+        productRams: [],
+        productSize: [],
+        productWeight: []
     });
 
     useEffect(() => {
-        window.scrollTo(0,0);
+        window.scrollTo(0, 0);
         setCatData(context.catData);
         if (id) {
             if (!/^[0-9a-fA-F]{24}$/.test(id)) {
@@ -147,7 +151,7 @@ const ProductEdit = () => {
                         productSize: res.productSize,
                         productsWeight: res.productsWeight
                     });
-                    
+
                     setCategoryVal(res.category);
                     setSubCategoryVal(res.subCat)
                     setIsFeaturedVal(res.isFeatured);
@@ -158,15 +162,16 @@ const ProductEdit = () => {
                     setProductSize(res.productSize);
                 }
                 setProductLoading(false);
-            }).catch((error) => {
-                console.error('Error Fetching Product:', error);
-                context.setAlertBox({
-                    open: true,
-                    msg: 'Error Loading Product Data',
-                    error: true
-                });
-                setProductLoading(false);
             });
+            fetchDataFromApi("/api/productWeight").then((res) => {
+                setProductWeightData(res);
+            })
+            fetchDataFromApi("/api/productRams").then((res) => {
+                setProductRamsData(res);
+            })
+            fetchDataFromApi("/api/productSize").then((res) => {
+                setProductSizeData(res);
+            })
         }
     }, [id]);
 
@@ -203,49 +208,27 @@ const ProductEdit = () => {
         }))
     };
 
-    const handleChangeProductRam = (event) => {
+    const handleChangeProductAttribute = (key) => (event) => {
         const {
             target: { value },
         } = event;
-        const selectedRams = typeof value === 'string' ? value.split(',') : value;
-        setProductRams(selectedRams);
+        const newValue = typeof value === 'string' ? value.split(',') : value;
+        if (key === 'productRams') setProductRams(newValue);
+        else if (key === 'productWeight') setProductWeight(newValue);
+        else if (key === 'productSize') setProductSize(newValue);
         setFormFields(prev => ({
             ...prev,
-            productRams: selectedRams
+            [key]: newValue
         }));
     };
 
-    const handleChangeProductWeight = (event) => {
-        const {
-            target: { value },
-        } = event;
-        const selectedWeights = typeof value === 'string' ? value.split(',') : value;
-        setProductWeight(selectedWeights);
-        setFormFields(prev => ({
-            ...prev,
-            productWeight: selectedWeights
-        }));
-    };
-
-    const handleChangeProductSize = (event) => {
-        const {
-            target: { value },
-        } = event;
-        const selectedSizes = typeof value === 'string' ? value.split(',') : value;
-        setProductSize(selectedSizes);
-        setFormFields(prev => ({
-            ...prev,
-            productSize: selectedSizes
-        }));
-    };
-    
     const inputChange = (e) => {
         setFormFields(prev => ({
             ...prev,
             [e.target.name]: e.target.value
         }))
     }
-    
+
 
     const updateProduct = (e) => {
         e.preventDefault();
@@ -256,7 +239,6 @@ const ProductEdit = () => {
                 msg: 'Please Add Product Name',
                 error: true
             });
-            return false;
         }
 
         if (formFields.description === "") {
@@ -265,52 +247,51 @@ const ProductEdit = () => {
                 msg: 'Please Add Product Description',
                 error: true
             });
-            return false;
         }
 
-        if (formFields.category === "") {
+        if (!formFields.category) {
             context.setAlertBox({
                 open: true,
                 msg: 'Please Select a Category',
                 error: true
             });
-            return false;
+            return;
         }
-
-        if (formFields.price === null) {
+    
+        if (!formFields.price) {
             context.setAlertBox({
                 open: true,
                 msg: 'Please Add Product Price',
                 error: true
             });
-            return false;
+            return;
         }
 
-        if (formFields.oldPrice === null) {
+        if (!formFields.oldPrice) {
             context.setAlertBox({
                 open: true,
-                msg: 'Please Add Product oldPrice',
+                msg: 'Please Add Product Old Price',
                 error: true
             });
-            return false;
+            return;
         }
-        /* ------------------------------------
+    
         if (formFields.isFeatured === "") {
             context.setAlertBox({
                 open: true,
-                msg: 'Please Select the Product Featured',
+                msg: 'Please Select if Product is Organic or Not',
                 error: true
             });
-            return false;
-        } ----------------------------------*/
-
-        if (formFields.countInStock === null) {
+            return;
+        }
+    
+        if (!formFields.countInStock) {
             context.setAlertBox({
                 open: true,
                 msg: 'Please Add Product Stock',
                 error: true
             });
-            return false;
+            return;
         }
 
         if (formFields.brand === "") {
@@ -319,16 +300,15 @@ const ProductEdit = () => {
                 msg: 'Please Add Product Brand',
                 error: true
             });
-            return false;
         }
 
-        if (formFields.rating === 0) {
+        if (!formFields.rating || formFields.rating === 0) {
             context.setAlertBox({
                 open: true,
                 msg: 'Please Add Product Rating',
                 error: true
             });
-            return false;
+            return;
         }
 
         if (formFields.images.length === 0) {
@@ -337,7 +317,6 @@ const ProductEdit = () => {
                 msg: 'Please Add Product Images',
                 error: true
             });
-            return false;
         }
 
         console.log(formFields)
@@ -373,7 +352,7 @@ const ProductEdit = () => {
         <>
             <div className="right-content w-100">
                 <div className="card shadow border-0 w-100 flex-row p-4 res-col">
-                    <h5 className="mb-0">Product Edit</h5>
+                    <h5 className="mb-0">Product Editing</h5>
                     <Breadcrumbs
                         aria-label="breadcrumb"
                         className="ms-auto breadcrumb_"
@@ -389,7 +368,7 @@ const ProductEdit = () => {
                             component="a"
                             href="/products"
                         />
-                        <StyleBreadcrumb label="Product Edit" />
+                        <StyleBreadcrumb label="Product Editing" />
                     </Breadcrumbs>
                 </div>
 
@@ -399,17 +378,17 @@ const ProductEdit = () => {
                             <div className="card p-4 mt-0">
                                 <h5 className="mb-4">Basic Information</h5>
                                 <div className="form-group">
-                                    <h6>PRODUCT NAME</h6>
+                                    <h6>Product Name</h6>
                                     <input type="text" name="name" value={formFields.name} onChange={inputChange} />
                                 </div>
                                 <div className="form-group">
-                                    <h6>DESCRIPTION</h6>
+                                    <h6>Description</h6>
                                     <textarea rows="5" cols="10" name='description' value={formFields.description} onChange={inputChange} />
                                 </div>
                                 <div className="row">
                                     <div className="col">
                                         <div className="form-group">
-                                            <h6>CATEGORY</h6>
+                                            <h6>Category</h6>
                                             <Select
                                                 className="w-100"
                                                 value={categoryVal}
@@ -434,7 +413,7 @@ const ProductEdit = () => {
                                     </div>
                                     <div className="col">
                                         <div className="form-group">
-                                            <h6>SUB CATEGORY</h6>
+                                            <h6>Subcategory</h6>
                                             <Select
                                                 className="w-100"
                                                 value={subCategoryVal}
@@ -460,7 +439,7 @@ const ProductEdit = () => {
                                     </div>
                                     <div className="col">
                                         <div className="form-group">
-                                            <h6>PRICE</h6>
+                                            <h6>Price</h6>
                                             <input
                                                 type="text"
                                                 name="price"
@@ -473,7 +452,7 @@ const ProductEdit = () => {
                                 <div className="row">
                                     <div className="col">
                                         <div className="form-group">
-                                            <h6>OLD PRICE</h6>
+                                            <h6>Old Price</h6>
                                             <input
                                                 type="text"
                                                 name="oldPrice"
@@ -484,7 +463,7 @@ const ProductEdit = () => {
                                     </div>
                                     <div className="col">
                                         <div className="form-group">
-                                            <h6>IS FEATURED</h6>
+                                            <h6>Is Organic</h6>
                                             <Select
                                                 className="w-100"
                                                 value={isFeaturedVal}
@@ -495,10 +474,10 @@ const ProductEdit = () => {
                                                     <em value={null}>None</em>
                                                 </MenuItem>
                                                 <MenuItem value="true">
-                                                    True
+                                                    Organic
                                                 </MenuItem>
                                                 <MenuItem value="false">
-                                                    False
+                                                    Non-Organic
                                                 </MenuItem>
                                             </Select>
                                         </div>
@@ -507,7 +486,7 @@ const ProductEdit = () => {
                                 <div className='row'>
                                     <div className="col">
                                         <div className="form-group">
-                                            <h6>PRODUCT STOCK</h6>
+                                            <h6>Product Stock</h6>
                                             <input
                                                 type="text"
                                                 name="countInStock"
@@ -520,7 +499,7 @@ const ProductEdit = () => {
                                 <div className="row">
                                     <div className="col">
                                         <div className="form-group">
-                                            <h6>BRAND / TYPE</h6>
+                                            <h6>Brand / Type</h6>
                                             <input
                                                 type="text"
                                                 name="brand"
@@ -531,7 +510,7 @@ const ProductEdit = () => {
                                     </div>
                                     <div className="col">
                                         <div className="form-group">
-                                            <h6>DISCOUNT</h6> {/*discount -> Scoville*/}
+                                            <h6>Scoville</h6>
                                             <input
                                                 type="text"
                                                 name="discount"
@@ -542,30 +521,31 @@ const ProductEdit = () => {
                                     </div>
                                     <div className="col">
                                         <div className="form-group">
-                                            <h6>PRODUCT RAM</h6>
+                                            <h6>Product Content</h6>
                                             <Select
-                                                className="w-100"
                                                 multiple
+                                                className="w-100"
                                                 value={productRams}
                                                 displayEmpty
-                                                onChange={handleChangeProductRam}
-                                                renderValue={(selected) =>
-                                                    selected.length === 0 ? (
-                                                        <em>None</em>
-                                                    ) : (
-                                                        selected.join(', ')
-                                                    )
-                                                }
+                                                MenuProps={menuProps}
+                                                onChange={handleChangeProductAttribute('productRams')}
+                                                renderValue={(selected) => selected.map(id => {
+                                                    const item = productRamsData.find(i => i._id === id);
+                                                    return item ? item.productRams : id;
+                                                }).join(', ')}
                                             >
-                                                <MenuItem value="4GB">
-                                                    4GB
+                                                <MenuItem value="">
+                                                    <em value={null}>None</em>
                                                 </MenuItem>
-                                                <MenuItem value="8GB">
-                                                    8GB
-                                                </MenuItem>
-                                                <MenuItem value="16GB">
-                                                    16GB
-                                                </MenuItem>
+                                                {
+                                                    productRamsData?.map((item, index) => {
+                                                        return (
+                                                            <MenuItem value={item._id}>
+                                                                {item.productRams}
+                                                            </MenuItem>
+                                                        )
+                                                    })
+                                                }
                                             </Select>
                                         </div>
                                     </div>
@@ -573,59 +553,60 @@ const ProductEdit = () => {
                                 <div className='row'>
                                     <div className='col'>
                                         <div className='form-group'>
-                                            <h6>PRODUCT WEIGHT</h6>
+                                            <h6>Product Weight</h6>
                                             <Select
-                                                className="w-100"
                                                 multiple
+                                                className="w-100"
                                                 value={productWeight}
                                                 displayEmpty
-                                                onChange={handleChangeProductWeight}
-                                                renderValue={(selected) =>
-                                                    selected.length === 0 ? (
-                                                        <em>None</em>
-                                                    ) : (
-                                                        selected.join(', ')
-                                                    )
-                                                }
+                                                MenuProps={menuProps}
+                                                onChange={handleChangeProductAttribute('productWeight')}
+                                                renderValue={(selected) => selected.map(id => {
+                                                    const item = productWeightData.find(i => i._id === id);
+                                                    return item ? item.productWeight : id;
+                                                }).join(', ')}
                                             >
-                                                <MenuItem value="10GM">
-                                                    10GM
+                                                <MenuItem value="">
+                                                    <em value={null}>None</em>
                                                 </MenuItem>
-                                                <MenuItem value="50GM">
-                                                    50GM
-                                                </MenuItem>
-                                                <MenuItem value="100GM">
-                                                    100GM
-                                                </MenuItem>
+                                                {
+                                                    productWeightData?.map((item, index) => {
+                                                        return (
+                                                            <MenuItem value={item._id}>
+                                                                {item.productWeight}
+                                                            </MenuItem>
+                                                        )
+                                                    })
+                                                }
                                             </Select>
                                         </div>
                                     </div>
                                     <div className='col'>
                                         <div className='form-group'>
-                                            <h6>PRODUCT SIZE</h6>
+                                            <h6>Spicy Level</h6>
                                             <Select
-                                                className="w-100"
                                                 multiple
+                                                className="w-100"
                                                 value={productSize}
                                                 displayEmpty
-                                                onChange={handleChangeProductSize}
-                                                renderValue={(selected) =>
-                                                    selected.length === 0 ? (
-                                                        <em>None</em>
-                                                    ) : (
-                                                        selected.join(', ')
-                                                    )
-                                                }
+                                                MenuProps={menuProps}
+                                                onChange={handleChangeProductAttribute('productSize')}
+                                                renderValue={(selected) => selected.map(id => {
+                                                    const item = productSizeData.find(i => i._id === id);
+                                                    return item ? item.productSize : id;
+                                                }).join(', ')}
                                             >
-                                                <MenuItem value="S">
-                                                    S
+                                                <MenuItem value="">
+                                                    <em value={null}>None</em>
                                                 </MenuItem>
-                                                <MenuItem value="M">
-                                                    M
-                                                </MenuItem>
-                                                <MenuItem value="L">
-                                                    L
-                                                </MenuItem>
+                                                {
+                                                    productSizeData?.map((item, index) => {
+                                                        return (
+                                                            <MenuItem value={item._id}>
+                                                                {item.productSize}</MenuItem>
+                                                        )
+                                                    })
+                                                }
                                             </Select>
                                         </div>
                                     </div>
@@ -633,7 +614,7 @@ const ProductEdit = () => {
                                 <div className='row'>
                                     <div className='col'>
                                         <div className='form-group'>
-                                            <h6>RATINGS</h6>
+                                            <h6>Ratting</h6>
                                             <Rating
                                                 name="simple-controlled"
                                                 value={ratingValue}
@@ -652,9 +633,9 @@ const ProductEdit = () => {
                     </div>
                     <div className="card p-4 mt-0">
                         <div className='imagesUploadSec'>
-                            <h5 className="mb-4">Media And Published</h5>
+                            <h5 className="mb-4">Media & Published</h5>
                             <div className="form-group gap-2 align-items-center">
-                                <h6>IMAGE URL</h6>
+                                <h6>Image URL</h6>
                                 <input
                                     placeholder='image url'
                                     type="text"
@@ -666,7 +647,6 @@ const ProductEdit = () => {
                                 </Button>
                             </div>
                             <div className='imgUploadBox d-flex align-items-center flex-wrap gap-3'>
-
                                 {imagePreviews.map((src, index) => (
                                     <div className='uploadBox' key={index}>
                                         <span className='remove' onClick={() => handleRemoveImage(index)}>
@@ -684,7 +664,6 @@ const ProductEdit = () => {
                                 ))}
                                 <div className='uploadBox'>
                                     <input
-                                        type=""
                                         name="images"
                                         onChange={handleImageChange}
                                     />
