@@ -4,7 +4,7 @@ import React, { useContext, useEffect, useState } from 'react';
 import { IoCloseSharp } from "react-icons/io5";
 import { LazyLoadImage } from 'react-lazy-load-image-component';
 import { FaImages } from "react-icons/fa";
-import { postData } from '../../utils/api';
+import { fetchDataFromApi, postData } from '../../utils/api';
 import { useNavigate } from 'react-router-dom';
 import { MyContext } from '../../App';
 import MenuItem from '@mui/material/MenuItem';
@@ -84,10 +84,16 @@ const ProductUpload = () => {
     const [categoryVal, setCategoryVal] = useState('');
     const [subCategoryVal, setSubCategoryVal] = useState("");
     const [isFeaturedVal, setIsFeaturedVal] = useState(''); // Featured -> Organic/Non-Organic
-    const [productRams, setProductRams] = useState([]); // Maturation period
-    const [productWeight, setProductWeight] = useState([]);
-    const [productSize, setProductSize] = useState([]); // Size -> Spicy(Mild/Medium/Hot/Hell)
     const [ratingValue, setRatingValue] = useState(null);
+
+    const [productRams, setProductRams] = useState(''); // Maturation period
+    const [productWeight, setProductWeight] = useState('');
+    const [productSize, setProductSize] = useState(''); // Size -> Spicy(Mild/Medium/Hot/Hell)
+
+    const [productRamsData, setProductRamsData] = useState([]);
+    const [productWeightData, setProductWeightData] = useState([]);
+    const [productSizeData, setProductSizeData] = useState([]);
+
     const [catData, setCatData] = useState([]);
     const [subCatData, setSubCatData] = useState([]);
     const context = useContext(MyContext);
@@ -104,7 +110,7 @@ const ProductUpload = () => {
         countInStock: null,
         rating: 0,
         isFeatured: '',
-        discount:0,
+        discount: 0,
         productRams: '',
         productSize: '',
         productWeight: ''
@@ -114,6 +120,16 @@ const ProductUpload = () => {
         window.scrollTo(0, 0);
         setCatData(context.catData);
         setSubCatData(context.subCatData);
+
+        fetchDataFromApi("/api/productWeight").then((res) => {
+            setProductWeightData(res);
+        })
+        fetchDataFromApi("/api/productRams").then((res) => {
+            setProductRamsData(res);
+        })
+        fetchDataFromApi("/api/productSize").then((res) => {
+            setProductSizeData(res);
+        })
     }, []);
 
     const handleChangeCategory = (event) => {
@@ -141,40 +157,32 @@ const ProductUpload = () => {
     };
 
     const handleChangeProductRam = (event) => {
-        const {
-            target: { value },
-        } = event;
-        const selectedRams = typeof value === 'string' ? value.split(',') : value;
-        setProductRams(selectedRams);
+        const value = event.target.value;
+        setProductRams(value);
         setFormFields(prev => ({
             ...prev,
-            productRams: selectedRams
+            productRams: value
         }));
     };
-    
+
     const handleChangeProductWeight = (event) => {
-        const {
-            target: { value },
-        } = event;
-        const selectedWeights = typeof value === 'string' ? value.split(',') : value;
-        setProductWeight(selectedWeights);
+        const value = event.target.value;
+        setProductWeight(value);
         setFormFields(prev => ({
             ...prev,
-            productWeight: selectedWeights
+            productWeight: value
         }));
     };
-    
+
     const handleChangeProductSize = (event) => {
-        const {
-            target: { value },
-        } = event;
-        const selectedSizes = typeof value === 'string' ? value.split(',') : value;
-        setProductSize(selectedSizes);
+        const value = event.target.value;
+        setProductSize(value);
         setFormFields(prev => ({
             ...prev,
-            productSize: selectedSizes 
+            productSize: value
         }));
     };
+
 
     const inputChange = (e) => {
         setFormFields(() => ({
@@ -287,7 +295,7 @@ const ProductUpload = () => {
                 countInStock: 0,
                 rating: 0,
                 isFeatured: false,
-                discount:0,
+                discount: 0,
                 productRams: '',
                 productSize: '',
                 productWeight: ''
@@ -413,7 +421,7 @@ const ProductUpload = () => {
                                     </div>
                                     <div className="col">
                                         <div className="form-group">
-                                            <h6>IS FEATURED</h6>
+                                            <h6>IS ORGANIC</h6>
                                             <Select
                                                 className="w-100"
                                                 value={isFeaturedVal}
@@ -460,7 +468,7 @@ const ProductUpload = () => {
                                     </div>
                                     <div className="col">
                                         <div className="form-group">
-                                            <h6>DISCOUNT</h6> {/*discount -> Scoville*/}
+                                            <h6>SCOVILLE</h6>
                                             <input
                                                 type="text"
                                                 name="discount"
@@ -474,27 +482,21 @@ const ProductUpload = () => {
                                             <h6>PRODUCT RAM</h6>
                                             <Select
                                                 className="w-100"
-                                                multiple
                                                 value={productRams}
                                                 displayEmpty
                                                 onChange={handleChangeProductRam}
-                                                renderValue={(selected) =>
-                                                    selected.length === 0 ? (
-                                                        <em>None</em>
-                                                    ) : (
-                                                        selected.join(', ')
-                                                    )
-                                                }
                                             >
-                                                <MenuItem value="4GB">
-                                                    4GB
+                                                <MenuItem value="">
+                                                    <em value={null}>None</em>
                                                 </MenuItem>
-                                                <MenuItem value="8GB">
-                                                    8GB
-                                                </MenuItem>
-                                                <MenuItem value="16GB">
-                                                    16GB
-                                                </MenuItem>
+                                                {
+                                                    productRamsData?.map((item, index) => {
+                                                        return (
+                                                            <MenuItem value={item. _id}>
+                                                                {item.productRams}</MenuItem>
+                                                        )
+                                                    })
+                                                }
                                             </Select>
                                         </div>
                                     </div>
@@ -505,56 +507,45 @@ const ProductUpload = () => {
                                             <h6>PRODUCT WEIGHT</h6>
                                             <Select
                                                 className="w-100"
-                                                multiple
                                                 value={productWeight}
                                                 displayEmpty
                                                 onChange={handleChangeProductWeight}
-                                                renderValue={(selected) =>
-                                                    selected.length === 0 ? (
-                                                        <em>None</em>
-                                                    ) : (
-                                                        selected.join(', ')
-                                                    )
-                                                }
                                             >
-                                                <MenuItem value="10GM">
-                                                    10GM
+                                                <MenuItem value="">
+                                                    <em value={null}>None</em>
                                                 </MenuItem>
-                                                <MenuItem value="50GM">
-                                                    50GM
-                                                </MenuItem>
-                                                <MenuItem value="100GM">
-                                                    100GM
-                                                </MenuItem>
+                                                {
+                                                    productWeightData?.map((item, index) => {
+                                                        return (
+                                                            <MenuItem value={item._id}>
+                                                                {item.productWeight}
+                                                            </MenuItem>
+                                                        )
+                                                    })
+                                                }
                                             </Select>
                                         </div>
                                     </div>
                                     <div className='col'>
                                         <div className='form-group'>
-                                            <h6>PRODUCT SIZE</h6>
+                                            <h6>SPICY LEVEL</h6>
                                             <Select
                                                 className="w-100"
-                                                multiple
                                                 value={productSize}
                                                 displayEmpty
                                                 onChange={handleChangeProductSize}
-                                                renderValue={(selected) =>
-                                                    selected.length === 0 ? (
-                                                        <em>None</em>
-                                                    ) : (
-                                                        selected.join(', ')
-                                                    )
-                                                }
                                             >
-                                                <MenuItem value="S">
-                                                    S
+                                                <MenuItem value="">
+                                                    <em value={null}>None</em>
                                                 </MenuItem>
-                                                <MenuItem value="M">
-                                                    M
-                                                </MenuItem>
-                                                <MenuItem value="L">
-                                                    L
-                                                </MenuItem>
+                                                {
+                                                    productSizeData?.map((item, index) => {
+                                                        return (
+                                                            <MenuItem value={item._id}>
+                                                                {item.productSize}</MenuItem>
+                                                        )
+                                                    })
+                                                }
                                             </Select>
                                         </div>
                                     </div>
@@ -614,7 +605,6 @@ const ProductUpload = () => {
                                 <div className='uploadBox'>
                                     <input
                                         type=""
-                                        multiple
                                         name="images"
                                         onChange={handleImageChange}
                                     />
