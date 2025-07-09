@@ -12,6 +12,7 @@ import ProductModel from "./Components/ProductModel";
 import Cart from "./Pages/Cart";
 import SignIn from "./Pages/SignIn";
 import SignUp from "./Pages/SignUp";
+import { fetchDataFromApi } from "./utils/api";
 
 const MyContext = createContext();
 
@@ -19,14 +20,24 @@ function App() {
 
   const [countryList,setCountryList] = useState([]);
   const [selectedCountry,setSelectedCountry] = useState('');
-  const [isOpenProductModel,setIsOpenProductModel] = useState(false);
+  const [isOpenProductModel,setIsOpenProductModel] = useState({
+    id:'',
+    open:false
+  });
   const [isHeaderFooterShow, setIsHeaderFooterShow] = useState(true);
   const [isLogin, setIsLogin] = useState(false);
+  const [productData, setProductData] = useState();
 
   useEffect(() => {
     getCountry("https://countriesnow.space/api/v0.1/countries/");
   },[]);
 
+  useEffect(() => {
+    isOpenProductModel.open === true &&
+    fetchDataFromApi(`/api/products/${isOpenProductModel.id}`).then((res) => {
+      setProductData(res);
+    })
+  },[isOpenProductModel]);
   
   const getCountry = async (url) => {
     const responsive = await axios.get(url).then((res)=>{
@@ -65,7 +76,7 @@ function App() {
       }
       
       {
-        isOpenProductModel === true && <ProductModel/>
+        isOpenProductModel.open === true && <ProductModel data={productData}/>
       }
       </MyContext.Provider>
     </BrowserRouter>
