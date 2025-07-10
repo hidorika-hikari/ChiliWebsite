@@ -16,7 +16,11 @@ router.get('/', async (req, res) => {
         return res.status(404).json({ message: "Page not found" });
     }
 
-    const productList = await Product.find()
+    let productList = [];
+    if(req.query.catName !== undefined){
+        productList = await Product.find({catName:req.query.catName});
+    } else {
+        productList = await Product.find()
         .populate('category', 'name')
         .populate('subCat')
         .populate('productSize')
@@ -25,7 +29,8 @@ router.get('/', async (req, res) => {
         .skip((page - 1) * perPage)
         .limit(perPage)
         .exec();
-
+    }
+    
     if (!productList) {
         return res.status(500).json({ success: false });
     }
