@@ -13,7 +13,6 @@ import { Link } from 'react-router-dom';
 const Header =() => {
 
     const context = useContext(MyContext);
-
     return (
         <>
         <div className="headerWrapper">
@@ -57,7 +56,9 @@ const Header =() => {
                 </div>
             </div>
         </header>
-        <Navigation/>
+        {
+            context.subCategoryData?.length !== 0 && <Navigation navData={context.subCategoryData}/>
+        }
         </div>
         </>
     )

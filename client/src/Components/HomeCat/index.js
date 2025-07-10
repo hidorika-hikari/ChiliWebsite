@@ -1,17 +1,11 @@
 import 'swiper/css';
 import 'swiper/css/navigation';
-import Chili from '../../assets/peper.png'
-import React, { useEffect, useState } from "react";
+// import Chili from '../../assets/peper.png'
+import React from "react";
 import { Swiper, SwiperSlide } from 'swiper/react';
 import { Navigation } from 'swiper/modules';
 
 const HomeCat = (props) => {
-
-    const [catData, setCatData] = useState([]);
-
-    useEffect(() => {
-        setCatData(props.catData);
-    },[])
 
     return (
         <section className="homeCat">
@@ -29,7 +23,7 @@ const HomeCat = (props) => {
                     className="mySwiper"
                 >
                     {
-                        props.catData?.categoryList?.length !== 0 && props.catData?.categoryList?.map((cat,index) => {
+                        props.catData?.length !== 0 && props.catData?.map((cat,index) => {
                             return (
                                 <SwiperSlide key={index}>
                                     <div className="item text-center cursor" style={{background:cat.color}}>

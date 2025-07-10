@@ -6,10 +6,9 @@ const router = express.Router();
 const cloudinary = require('cloudinary').v2;
 const pLimit = require('p-limit');
 
-// GET all products with pagination
 router.get('/', async (req, res) => {
     const page = parseInt(req.query.page) || 1;
-    const perPage = 5;
+    const perPage = parseInt(req.query.perPage);
     const totalPosts = await Product.countDocuments();
     const totalPages = Math.ceil(totalPosts / perPage);
 
@@ -87,6 +86,7 @@ router.post('/create', async (req, res) => {
         brand: req.body.brand,
         price: req.body.price,
         oldPrice: req.body.oldPrice,
+        catName: req.body.catName,
         category: req.body.category,
         countInStock: req.body.countInStock,
         rating: req.body.rating,

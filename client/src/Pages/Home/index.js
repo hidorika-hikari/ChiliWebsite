@@ -9,25 +9,27 @@ import { IoIosArrowRoundForward } from "react-icons/io";
 import { IoMailOutline } from "react-icons/io5";
 import { Swiper, SwiperSlide } from 'swiper/react';
 import { Navigation } from 'swiper/modules';
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useContext } from 'react';
 import { fetchDataFromApi } from '../../utils/api';
+import { MyContext } from '../../App';
 
 const Home = () => {
 
-    const [catData, setCatData] = useState([]);
     const [featuredProducts, setFeaturedProducts] = useState([]);
     const [productsData, setProductsData] = useState([]);
+    const [chiliSeedData, setChiliSeedData] = useState([]);
+    const context = useContext(MyContext)
 
     useEffect(() => {
-        fetchDataFromApi("/api/category").then((res) => {
-            setCatData(res);
-        })
+        window.scrollTo(0,0);
         fetchDataFromApi(`/api/products/featured`).then((res) => {
             setFeaturedProducts(res);
         })
-        fetchDataFromApi(`/api/products/`).then((res) => {
-            console.log(res);
+        fetchDataFromApi(`/api/products?perPage=8`).then((res) => {
             setProductsData(res);
+        })
+        fetchDataFromApi(`/api/products?perPage=8&catName='Chili Seeds'`).then((res) => {
+            setChiliSeedData(res);
         })
     }, []);
 
@@ -35,9 +37,7 @@ const Home = () => {
         <>
             <HomeBanner />
             {
-                catData.length !== 0 && (
-                    <HomeCat catData={catData} />
-                )
+                context.categoryData?.length !== 0 && <HomeCat catData={context.categoryData}/>
             }
             <section className="homeProducts">
                 <div className="container">
@@ -62,7 +62,6 @@ const Home = () => {
                                     <h3 className="mb-0 hd">FEATURED PRODUCTS</h3>
                                     <p className="text-light text-sml mb-0">Do not miss the current offers until the end of March.</p>
                                 </div>
-
                                 <Button className="viewAllBtn ms-auto">View All<IoIosArrowRoundForward /></Button>
                             </div>
 
@@ -88,7 +87,18 @@ const Home = () => {
                                     }
                                 </Swiper>
                             </div>
-
+                            
+                            <div className='d-flex mt-4 mb-5 bannerSec'>
+                                <div className='banner'>
+                                    <img src="https://api.spicezgold.com/download/file_1734525653108_NewProject(20).jpg" alt='' className='cursor w-100'/>
+                                </div>
+                                <div className='banner'>
+                                    <img src="https://api.spicezgold.com/download/file_1734525634299_NewProject(2).jpg" alt='' className='cursor w-100'/>
+                                </div>
+                                <div className='banner'>
+                                    <img src="https://api.spicezgold.com/download/file_1734525620831_NewProject(3).jpg" alt='' className='cursor w-100'/>
+                                </div>
+                            </div>
                             <div className="d-flex align-items-center mt-4">
                                 <div className="info w-75">
                                     <h3 className="mb-0 hd">NEW PRODUCTS</h3>
@@ -107,6 +117,37 @@ const Home = () => {
                                 }
                             </div>
 
+                            <div className="d-flex align-items-center mt-4">
+                                <div className="info w-75">
+                                    <h3 className="mb-0 hd">Chili Seeds</h3>
+                                    <p className="text-light text-sml mb-0">Do not miss the current offers until the end of March.</p>
+                                </div>
+                                <Button className="viewAllBtn ms-auto">View All<IoIosArrowRoundForward /></Button>
+                            </div>
+
+                            <div className="product_row w-100 mt-2">
+                                <Swiper
+                                    slidesPerView={4}
+                                    spaceBetween={10}
+                                    slidesPerGroup={3}
+                                    navigation={true}
+                                    pagination={{
+                                        clickable: true,
+                                    }}
+                                    modules={[Navigation]}
+                                    className="mySwiper">
+                                    {
+                                        featuredProducts?.length !== 0 && featuredProducts?.map((item, index) => {
+                                            return (
+                                                <SwiperSlide key={index}>
+                                                    <ProductItem item={item}/>
+                                                </SwiperSlide>
+                                            )
+                                        })
+                                    }
+                                </Swiper>
+                            </div>
+                            
                             <div className="d-flex mt-4 mb-5 bannerSec">
                                 <div className="banner mt-4">
                                     <img src="https://cloudfront-eu-central-1.images.arcpublishing.com/williamreed/CA522QC2BZKZVIBSVPBDMNLML4.jpg"

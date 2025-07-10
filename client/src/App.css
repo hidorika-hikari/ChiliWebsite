@@ -696,8 +696,9 @@ nav .navPart2 ul li .submenu a button:hover{
   top: -30px !important;
   width: 30px !important;
   height: 30px !important;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15); /* Soft shadow */
-  border-radius: 10px;
+  box-shadow: 0 1px 3px #0000001f, 0 1px 2px #0000003d !important;
+  border-radius: 100%;
+  font-weight: 700;
   background-color: #fff;
 }
 
@@ -713,16 +714,16 @@ nav .navPart2 ul li .submenu a button:hover{
 
 .product_row .swiper-button-next,
 .product_row .swiper-button-prev {
-  width: 30px !important;
-  height: 30px !important;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
-  border-radius: 10px;
+  width: 40px !important;
+  height: 40px !important;
+  box-shadow: 0 1px 3px #0000001f, 0 1px 2px #0000003d !important;
+  border-radius: 100%;
+  font-weight: 700;
   background-color: #fff;
 }
 
-
 .product_row .swiper-button-prev::after, .product_row .swiper-button-next::after{
-  font-size: 16px !important;
+  font-size: 12px !important;
   font-weight: 900 !important;
 }
 
@@ -896,16 +897,16 @@ footer .linkWrap ul li a{
 
 .homeBannerSection .swiper-button-next,
 .homeBannerSection .swiper-button-prev {
-    width: 30px !important;
-    height: 30px !important;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
-    border-radius: 10px;
-    background-color: #fff;
+  width: 40px !important;
+  height: 40px !important;
+  box-shadow: 0 1px 3px #0000001f,0 1px 2px #0000003d !important;
+  border-radius: 100%;
+  background-color: #fff;
 }
 
 .homeBannerSection .swiper-button-prev::after, .homeBannerSection .swiper-button-next::after {
-    font-size: 16px !important;
-    font-weight: 900 !important;
+  font-size: 16px !important;
+  font-weight: 900 !important;
 }
 
 .productModel .MuiPaper-elevation{

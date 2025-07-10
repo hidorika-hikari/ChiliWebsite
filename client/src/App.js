@@ -28,8 +28,18 @@ function App() {
   const [isLogin, setIsLogin] = useState(false);
   const [productData, setProductData] = useState();
 
+  const [categoryData, setCategoryData] = useState([]);
+  const [subCategoryData, setSubCategoryData] = useState([]);
+
   useEffect(() => {
     getCountry("https://countriesnow.space/api/v0.1/countries/");
+    
+    fetchDataFromApi("/api/category").then((res) => {
+      setCategoryData(res.categoryList);
+    })
+    fetchDataFromApi("/api/subCat").then((res) => {
+      setSubCategoryData(res.subCategoryList);
+    })
   },[]);
 
   useEffect(() => {
@@ -42,7 +52,6 @@ function App() {
   const getCountry = async (url) => {
     const responsive = await axios.get(url).then((res)=>{
       setCountryList(res.data.data)
-      console.log(res.data.data)
     })
   }
 
@@ -55,7 +64,11 @@ function App() {
     setIsHeaderFooterShow,
     isHeaderFooterShow,
     isLogin,
-    setIsLogin
+    setIsLogin,
+    categoryData,
+    setCategoryData,
+    subCategoryData,
+    setSubCategoryData
   }
   return (
     <BrowserRouter>

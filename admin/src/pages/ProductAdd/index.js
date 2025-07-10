@@ -107,6 +107,7 @@ const ProductAdd = () => {
         price: null,
         oldPrice: null,
         category: '',
+        catName: '',
         countInStock: null,
         rating: 0,
         isFeatured: '',
@@ -133,11 +134,14 @@ const ProductAdd = () => {
     }, []);
 
     const handleChangeCategory = (event) => {
-        setCategoryVal(event.target.value);
-        setFormFields(() => ({
-            ...formFields,
-            category: event.target.value
-        }))
+        const catId = event.target.value;
+        setCategoryVal(catId);
+        const selectedCat = context.catData?.categoryList?.find(cat => cat.id === catId);
+        setFormFields(prev => ({
+            ...prev,
+            category: catId,
+            catName: selectedCat ? selectedCat.name : ''
+        }));
     };
 
     const handleChangeSubCategory = (event) => {
@@ -177,6 +181,13 @@ const ProductAdd = () => {
         }))
     }
 
+    const selectCat = (cat) => {
+        setFormFields(prev => ({
+            ...prev,
+            catName: cat
+        }));
+    };
+
     const addProduct = (e) => {
         e.preventDefault();
 
@@ -204,7 +215,7 @@ const ProductAdd = () => {
             });
             return;
         }
-    
+
         if (!formFields.price) {
             context.setAlertBox({
                 open: true,
@@ -222,7 +233,7 @@ const ProductAdd = () => {
             });
             return;
         }
-    
+
         if (formFields.isFeatured === "") {
             context.setAlertBox({
                 open: true,
@@ -231,7 +242,7 @@ const ProductAdd = () => {
             });
             return;
         }
-    
+
         if (!formFields.countInStock) {
             context.setAlertBox({
                 open: true,
@@ -265,7 +276,7 @@ const ProductAdd = () => {
                 error: true
             });
         }
-        
+
         console.log(formFields)
         setIsLoading(true);
         postData('api/products/create', formFields).then((res) => {
@@ -283,6 +294,7 @@ const ProductAdd = () => {
                 brand: '',
                 price: 0,
                 oldPrice: 0,
+                catName: '',
                 category: '',
                 countInStock: 0,
                 rating: 0,
@@ -351,8 +363,8 @@ const ProductAdd = () => {
                                                     0 && context.catData?.categoryList?.map
                                                         ((cat, index) => {
                                                             return (
-                                                                <MenuItem className='text-capitalize'
-                                                                    value={cat.id} key={index}>{cat.name}
+                                                                <MenuItem value={cat.id} key={index} onClick={() => selectCat(cat.name)}>
+                                                                    {cat.name}
                                                                 </MenuItem>
                                                             )
                                                         })

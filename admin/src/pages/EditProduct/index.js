@@ -107,6 +107,7 @@ const ProductEdit = () => {
         brand: '',
         price: null,
         oldPrice: null,
+        catName: '',
         category: '',
         countInStock: null,
         rating: 0,
@@ -141,6 +142,7 @@ const ProductEdit = () => {
                         brand: res.brand,
                         price: res.price,
                         oldPrice: res.oldPrice,
+                        catName: res.catName,
                         category: res.category,
                         subCat: res.subCat || null,
                         countInStock: res.countInStock,
@@ -185,11 +187,14 @@ const ProductEdit = () => {
     }, []);
 
     const handleChangeCategory = (event) => {
-        setCategoryVal(event.target.value);
+        const catId = event.target.value;
+        setCategoryVal(catId);
+        const selectedCat = context.catData?.categoryList?.find(cat => cat.id === catId);
         setFormFields(prev => ({
             ...prev,
-            category: event.target.value
-        }))
+            category: catId,
+            catName: selectedCat ? selectedCat.name : ''
+        }));
     };
 
     const handleChangeSubCategory = (event) => {
@@ -229,6 +234,12 @@ const ProductEdit = () => {
         }))
     }
 
+    const selectCat = (cat) => {
+        setFormFields(prev => ({
+            ...prev,
+            catName: cat
+        }));
+    };
 
     const updateProduct = (e) => {
         e.preventDefault();
@@ -257,7 +268,7 @@ const ProductEdit = () => {
             });
             return;
         }
-    
+
         if (!formFields.price) {
             context.setAlertBox({
                 open: true,
@@ -275,7 +286,7 @@ const ProductEdit = () => {
             });
             return;
         }
-    
+
         if (formFields.isFeatured === "") {
             context.setAlertBox({
                 open: true,
@@ -284,7 +295,7 @@ const ProductEdit = () => {
             });
             return;
         }
-    
+
         if (!formFields.countInStock) {
             context.setAlertBox({
                 open: true,
@@ -402,7 +413,7 @@ const ProductEdit = () => {
                                                 {
                                                     catData?.categoryList?.length > 0 && catData.categoryList.map((cat, index) => {
                                                         return (
-                                                            <MenuItem className="text-capitalize" value={cat.id} key={index}>
+                                                            <MenuItem value={cat.id} key={index} onClick={() => selectCat(cat.name)}>
                                                                 {cat.name}
                                                             </MenuItem>
                                                         )
