@@ -151,7 +151,7 @@ const ProductEdit = () => {
                         discount: res.discount,
                         productRams: res.productRams,
                         productSize: res.productSize,
-                        productsWeight: res.productsWeight
+                        productWeight: res.productWeight
                     });
 
                     setCategoryVal(res.category);
