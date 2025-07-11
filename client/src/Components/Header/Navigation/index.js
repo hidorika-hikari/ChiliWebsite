@@ -54,12 +54,14 @@ const Navigation = (props) => {
                                 props.navData?.length !== 0 && props.navData?.map((item, index) => {
                                     return (
                                         <li className='list-inline-item'>
-                                            <Link to="/cat/1"><Button>{item?.subCat}</Button></Link>
-                                            <div className='submenu shadow'>
-                                                <Link to="/"><Button>Clothing</Button></Link>
-                                                <Link to="/"><Button>Footwear</Button></Link>
-                                                <Link to="/"><Button>Watches</Button></Link>
-                                            </div>
+                                            <Link to={`/subCat/${item?.id}`}><Button>{item?.subCat}</Button></Link>
+                                            {
+                                                // <div className='submenu shadow'>
+                                                    // <Link to="/"><Button>Clothing</Button></Link>
+                                                    // <Link to="/"><Button>Footwear</Button></Link>
+                                                    // <Link to="/"><Button>Watches</Button></Link>
+                                                // </div>
+                                            }
                                         </li>
                                     )
                                 })

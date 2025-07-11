@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import Button from '@mui/material/Button'
 import Sidebar from '../../Components/Sidebar';
 import Menu from '@mui/material/Menu'
@@ -10,11 +10,14 @@ import { HiViewGrid } from "react-icons/hi";
 import { TfiLayoutGrid4Alt } from 'react-icons/tfi';
 import { FaAngleDown } from 'react-icons/fa';
 import Pagination from '@mui/material/Pagination';
+import { fetchDataFromApi } from '../../utils/api';
+import { useParams } from 'react-router-dom';
 
 const Listing = () => {
 
     const [anchorEl, setAnchorEl] = useState(null);
     const [productView, setProductView] = useState('four');
+    const [productData, setProductData] = useState([]);
     const openDropdown = Boolean(anchorEl);
     const handleClick = (event) => {
         setAnchorEl(event.currentTarget);
@@ -22,36 +25,44 @@ const Listing = () => {
     const handleClose = () => {
         setAnchorEl(null);
     };
+    const { id } = useParams();
+
+    useEffect(() => {
+        if (!id) return;
+        fetchDataFromApi(`/api/products?subCat=${id}`).then((res) => {
+            setProductData(res.products);
+        });
+    }, [id]);
 
     return (
         <>
             <section className='product_Listing_Page'>
                 <div className='container'>
                     <div className='productListing d-flex'>
-                        <Sidebar/>
+                        <Sidebar />
 
                         <div className='content_right'>
                             <img src="https://www.tastingtable.com/img/gallery/best-spicy-chile-peppers-hottest-pepper-how-to-cook-with-chiles/l-intro-1670518347.jpg" alt=""
-                            className='w-100' style={{borderRadius:'8px'}}/>
+                                className='w-100' style={{ borderRadius: '8px' }} />
 
                             <div className='showBy mt-3 mb-3 d-flex align-items-center'>
                                 <div className='d-flex align-items-center btnWrapper'>
                                     <Button onClick={() => setProductView('one')}
-                                    className={`view-toggle ${productView === 'one' && 'act'}`}
+                                        className={`view-toggle ${productView === 'one' && 'act'}`}
                                     ><IoIosMenu /></Button>
-                                    <Button onClick={()=>setProductView('two')}
-                                    className={`view-toggle ${productView === 'two' && 'act' }`}
-                                    ><HiViewGrid/></Button>
-                                    <Button onClick={()=>setProductView('three')}
-                                    className={`view-toggle ${productView === 'three'&& 'act' }`}
-                                    ><CgMenuGridR/></Button>
-                                    <Button onClick={()=>setProductView('four')}
-                                    className={`view-toggle ${productView === 'four' && 'act'}`}
-                                    ><TfiLayoutGrid4Alt/></Button>
+                                    <Button onClick={() => setProductView('two')}
+                                        className={`view-toggle ${productView === 'two' && 'act'}`}
+                                    ><HiViewGrid /></Button>
+                                    <Button onClick={() => setProductView('three')}
+                                        className={`view-toggle ${productView === 'three' && 'act'}`}
+                                    ><CgMenuGridR /></Button>
+                                    <Button onClick={() => setProductView('four')}
+                                        className={`view-toggle ${productView === 'four' && 'act'}`}
+                                    ><TfiLayoutGrid4Alt /></Button>
                                 </div>
 
                                 <div className='ms-auto showByFilter'>
-                                    <Button onClick={handleClick}>Show 9 <FaAngleDown/></Button>
+                                    <Button onClick={handleClick}>Show 9 <FaAngleDown /></Button>
                                     <Menu
                                         className='w-100 showPerPageDropdown'
                                         id="basic-menu"
@@ -59,7 +70,7 @@ const Listing = () => {
                                         open={openDropdown}
                                         onClose={handleClose}
                                         MenuListProps={{
-                                        'aria-labelledby': 'basic-button',
+                                            'aria-labelledby': 'basic-button',
                                         }}
                                     >
                                         <MenuItem onClick={handleClose}>10</MenuItem>
@@ -72,28 +83,18 @@ const Listing = () => {
                             </div>
 
                             <div className='productListing'>
-                                <ProductItem itemView={productView}/>
-                                <ProductItem itemView={productView}/>
-                                <ProductItem itemView={productView}/>
-                                <ProductItem itemView={productView}/>
-                                <ProductItem itemView={productView}/>
-                                <ProductItem itemView={productView}/>
-                                <ProductItem itemView={productView}/>
-                                <ProductItem itemView={productView}/>
-                                <ProductItem itemView={productView}/>
-                                <ProductItem itemView={productView}/>
-                                <ProductItem itemView={productView}/>
-                                <ProductItem itemView={productView}/>
-                                <ProductItem itemView={productView}/>
-                                <ProductItem itemView={productView}/>
-                                <ProductItem itemView={productView}/>
-                                <ProductItem itemView={productView}/>
+                                {
+                                    productData?.map((item, index) => {
+                                        return (
+                                            <ProductItem key={index} itemView={productView} item={item} />
+                                        )
+                                    })
+                                }
                             </div>
-                        
-                        <div className='d-flex align-items-center justify-content-center mt-5'>
-                            <Pagination count={10} color="primary" size='large'/>
-                        </div>
 
+                            <div className='d-flex align-items-center justify-content-center mt-5'>
+                                <Pagination count={10} color="primary" size='large' />
+                            </div>
                         </div>
                     </div>
                 </div>

@@ -7,42 +7,50 @@ const cloudinary = require('cloudinary').v2;
 const pLimit = require('p-limit');
 
 router.get('/', async (req, res) => {
-    const page = parseInt(req.query.page) || 1;
-    const perPage = parseInt(req.query.perPage);
-    const totalPosts = await Product.countDocuments();
-    const totalPages = Math.ceil(totalPosts / perPage);
+    try {
+        const page = parseInt(req.query.page) || 1;
+        const perPage = parseInt(req.query.perPage) || 10;
+        const { catName, subCat } = req.query;
+        let filter = {};
+        if (catName) {
+            filter.catName = catName;
+        }
+        if (subCat) {
+            filter.subCat = subCat;
+        }
 
-    if (page > totalPages) {
-        return res.status(404).json({ message: "Page not found" });
-    }
+        const totalPosts = await Product.countDocuments(filter);
+        const totalPages = Math.ceil(totalPosts / perPage);
 
-    let productList = [];
-    if(req.query.catName !== undefined){
-        productList = await Product.find({catName:req.query.catName});
-    } else {
-        productList = await Product.find()
-        .populate('category', 'name')
-        .populate('subCat')
-        .populate('productSize')
-        .populate('productWeight')
-        .populate('productRams')
-        .skip((page - 1) * perPage)
-        .limit(perPage)
-        .exec();
-    }
-    
-    if (!productList) {
-        return res.status(500).json({ success: false });
-    }
+        if (page > totalPages && totalPages > 0) {
+            return res.status(404).json({ message: "Page not found" });
+        }
 
-    return res.status(200).json({
-        products: productList,
-        totalPages,
-        page
-    });
+        const productList = await Product.find(filter)
+            .populate('category', 'name')
+            .populate('subCat')
+            .populate('productSize')
+            .populate('productWeight')
+            .populate('productRams')
+            .skip((page - 1) * perPage)
+            .limit(perPage)
+            .exec();
+
+        if (!productList) {
+            return res.status(500).json({ success: false });
+        }
+
+        return res.status(200).json({
+            products: productList,
+            totalPages,
+            page
+        });
+    } catch (error) {
+        console.error('Error fetching products:', error);
+        return res.status(500).json({ message: "Failed to fetch products" });
+    }
 });
 
-// GET featured products
 router.get('/featured', async (req, res) => {
     const productList = await Product.find({ isFeatured: false });
     if (!productList) {

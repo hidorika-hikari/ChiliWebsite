@@ -21,7 +21,7 @@ const ProductItem = (props) => {
                 <div className="imgWrapper">
                     <img src={props.item?.images[0]} alt=""
                     className="w-100" style={{ objectFit: "cover" }}/>
-                    <span className="badge badge-primary">{props.item.discount}%</span>
+                    <span className="badge badge-primary">{props.item?.discount}%</span>
                     <div className="actions">
                         <Button onClick={ () => viewProductDetails(props.item?.id)}><TfiFullscreen/></Button>
                         <Button><CiHeart style={{ fontSize:'20px'}}/></Button>

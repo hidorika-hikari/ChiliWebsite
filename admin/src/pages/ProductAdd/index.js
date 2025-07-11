@@ -472,7 +472,7 @@ const ProductAdd = () => {
                                     </div>
                                     <div className="col">
                                         <div className="form-group">
-                                            <h6>Scoville</h6>
+                                            <h6>Schärfegrad</h6>
                                             <input
                                                 type="text"
                                                 name="discount"
