@@ -2,12 +2,13 @@ import FormControlLabel from "@mui/material/FormControlLabel";
 import Checkbox from "@mui/material/Checkbox";
 import 'range-slider-input/dist/style.css';
 import Slider from '@mui/material/Slider';
-import { useState } from "react";
+import { useContext, useState } from "react";
 import { Link } from "react-router-dom";
+import { MyContext } from "../../App";
 
 const Sidebar = () => {
     const [value, setValue] = useState([100, 60000]);
-    const [value2, setValue2] = useState(0);
+    const context = useContext(MyContext);
 
     return (
         <>
@@ -16,38 +17,16 @@ const Sidebar = () => {
                     <h6>PRODUCT CATEGORIES</h6>
                     <div className="scroll">
                         <ul style={{ paddingLeft: 0 }}>
-                            <li>
-                                <FormControlLabel className="w-100" control={<Checkbox/>} 
-                                label="Men"/>
-                            </li>
-                            <li>
-                                <FormControlLabel className="w-100" control={<Checkbox/>} 
-                                label="Women"/>
-                            </li>
-                            <li>
-                                <FormControlLabel className="w-100" control={<Checkbox/>} 
-                                label="Beauty"/>
-                            </li>
-                            <li>
-                                <FormControlLabel className="w-100" control={<Checkbox/>} 
-                                label="Kids"/>
-                            </li>
-                            <li>
-                                <FormControlLabel className="w-100" control={<Checkbox/>} 
-                                label="Men"/>
-                            </li>
-                            <li>
-                                <FormControlLabel className="w-100" control={<Checkbox/>} 
-                                label="Women"/>
-                            </li>
-                            <li>
-                                <FormControlLabel className="w-100" control={<Checkbox/>} 
-                                label="Beauty"/>
-                            </li>
-                            <li>
-                                <FormControlLabel className="w-100" control={<Checkbox/>} 
-                                label="Kids"/>
-                            </li>
+                            {
+                                context.subCategoryData?.length !== 0 && context.subCategoryData?.map((item, index) => {
+                                    return (
+                                        <li key={index}>
+                                            <FormControlLabel className="w-100" control={<Checkbox />}
+                                                label={item?.subCat} />
+                                        </li>
+                                    )
+                                })
+                            }
                         </ul>
                     </div>
                 </div>
@@ -74,12 +53,12 @@ const Sidebar = () => {
                     <div className="scroll">
                         <ul style={{ paddingLeft: 0 }}>
                             <li>
-                                <FormControlLabel className="w-100" control={<Checkbox/>} 
-                                label="In Stock"/>
+                                <FormControlLabel className="w-100" control={<Checkbox />}
+                                    label="In Stock" />
                             </li>
                             <li>
-                                <FormControlLabel className="w-100" control={<Checkbox/>} 
-                                label="On Sales"/>
+                                <FormControlLabel className="w-100" control={<Checkbox />}
+                                    label="On Sales" />
                             </li>
                         </ul>
                     </div>
@@ -90,31 +69,31 @@ const Sidebar = () => {
                     <div className="scroll">
                         <ul style={{ paddingLeft: 0 }}>
                             <li>
-                                <FormControlLabel className="w-100" control={<Checkbox/>} 
-                                label="Frito Lay"/>
+                                <FormControlLabel className="w-100" control={<Checkbox />}
+                                    label="Frito Lay" />
                             </li>
                             <li>
-                                <FormControlLabel className="w-100" control={<Checkbox/>} 
-                                label="Nespresso"/>
+                                <FormControlLabel className="w-100" control={<Checkbox />}
+                                    label="Nespresso" />
                             </li>
                             <li>
-                                <FormControlLabel className="w-100" control={<Checkbox/>} 
-                                label="Oreo"/>
+                                <FormControlLabel className="w-100" control={<Checkbox />}
+                                    label="Oreo" />
                             </li>
                             <li>
-                                <FormControlLabel className="w-100" control={<Checkbox/>} 
-                                label="Quaker"/>
+                                <FormControlLabel className="w-100" control={<Checkbox />}
+                                    label="Quaker" />
                             </li>
                             <li>
-                                <FormControlLabel className="w-100" control={<Checkbox/>} 
-                                label="Welch's"/>
+                                <FormControlLabel className="w-100" control={<Checkbox />}
+                                    label="Welch's" />
                             </li>
                         </ul>
                     </div>
                 </div>
 
-                <br/>
-                <Link to="#"><img src="https://muybuenoblog.com/wp-content/uploads/2020/09/chiles-740x920.jpg" className="w-100" alt=""/></Link>
+                <br />
+                <Link to="#"><img src="https://muybuenoblog.com/wp-content/uploads/2020/09/chiles-740x920.jpg" className="w-100" alt="" /></Link>
             </div>
         </>
     );
