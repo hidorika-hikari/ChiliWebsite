@@ -19,7 +19,7 @@ const Home = () => {
 
     const [featuredProducts, setFeaturedProducts] = useState([]);
     const [productsData, setProductsData] = useState([]);
-    const [selectedCat, setSelectedCat] = useState('Hutao');
+    const [selectedCat, setSelectedCat] = useState(null);
     const [value, setValue] = useState(0);
     const [filterData, setFilterData] = useState([]);
     const handleChange = (event, newValue) => {
@@ -27,29 +27,34 @@ const Home = () => {
     };
     const context = useContext(MyContext);
 
-    const selectCat = (cat) => {
-        setSelectedCat(cat);
-    }
-
     useEffect(() => {
         window.scrollTo(0, 0);
-        console.log(context.categoryData[0]?.name)
-        setSelectedCat(context.categoryData[0]?.name)
+        if (context.categoryData?.length > 0) {
+            const hutaoCat = context.categoryData.find(cat => cat.name === 'Hutao');
+            if (hutaoCat) {
+                setSelectedCat(hutaoCat._id);
+            }
+        }
+    
         fetchDataFromApi(`/api/products/featured`).then((res) => {
             setFeaturedProducts(res);
-        })
+        });
+    
         fetchDataFromApi(`/api/products?perPage=8`).then((res) => {
             setProductsData(res);
-        })
-    }, []);
+        });
+    }, [context.categoryData]);
+    
 
+    const selectCat = (catId) => {
+        setSelectedCat(catId);
+    };
+    
     useEffect(() => {
-        console.log(context.activeCat)
-        fetchDataFromApi(`/api/products?catName=${selectedCat}`).then((res) => {
+        fetchDataFromApi(`/api/products?category=${selectedCat}`).then((res) => {
             setFilterData(res.products);
-            console.log(res);
-        })
-    }, [selectedCat])
+        });
+    }, [selectedCat]);
 
     return (
         <>
@@ -73,7 +78,7 @@ const Home = () => {
                                 </div>
                             </div>
                         </div>
-                        
+
                         <div className="col-md-9 productRow">
                             <div className="d-flex align-items-center">
                                 <div className="info w-75">
@@ -110,18 +115,21 @@ const Home = () => {
                                     <p className="text-light text-sml mb-0">Do not miss the current offers until the end of March.</p>
                                 </div>
                                 <Tabs
-                                        value={value}
-                                        onChange={handleChange}
-                                        variant="scrollable"
-                                        scrollButtons="auto"
-                                        aria-label="scrollable tabs"
-                                    >
-                                        {context.categoryData?.map((item, index) => (
-                                            <Tab key={index} className="item"
+                                    value={value}
+                                    onChange={handleChange}
+                                    variant="scrollable"
+                                    scrollButtons="auto"
+                                    aria-label="scrollable tabs"
+                                >
+                                    {context.categoryData?.map((item, index) => (
+                                        <Tab
+                                            key={index}
+                                            className="item"
                                             label={item.name}
-                                            onClick={() => selectCat(item.name)} />
-                                        ))}
-                                    </Tabs>
+                                            onClick={() => selectCat(item._id)}
+                                        />
+                                    ))}
+                                </Tabs>
                             </div>
 
                             <div className="product_row w-100 mt-2">
@@ -136,12 +144,12 @@ const Home = () => {
                                     modules={[Navigation]}
                                     className="mySwiper">
                                     {filterData?.length !== 0 && filterData?.map((item, index) => {
-                                            return (
-                                                <SwiperSlide key={index}>
-                                                    <ProductItem item={item}/>
-                                                </SwiperSlide>
-                                            )
-                                        })}
+                                        return (
+                                            <SwiperSlide key={index}>
+                                                <ProductItem item={item} />
+                                            </SwiperSlide>
+                                        )
+                                    })}
                                 </Swiper>
                             </div>
 

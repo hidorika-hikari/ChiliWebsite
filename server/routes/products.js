@@ -10,10 +10,12 @@ router.get('/', async (req, res) => {
     try {
         const page = parseInt(req.query.page) || 1;
         const perPage = parseInt(req.query.perPage) || 10;
-        const { catName, subCat } = req.query;
+
+        const { category, subCat } = req.query;
+
         let filter = {};
-        if (catName) {
-            filter.catName = catName;
+        if (category) {
+            filter.category = category;
         }
         if (subCat) {
             filter.subCat = subCat;
@@ -99,7 +101,6 @@ router.post('/create', async (req, res) => {
         brand: req.body.brand,
         price: req.body.price,
         oldPrice: req.body.oldPrice,
-        catName: req.body.catName,
         category: req.body.category,
         countInStock: req.body.countInStock,
         rating: req.body.rating,

@@ -107,7 +107,6 @@ const ProductEdit = () => {
         brand: '',
         price: null,
         oldPrice: null,
-        catName: '',
         category: '',
         countInStock: null,
         rating: 0,
@@ -142,7 +141,6 @@ const ProductEdit = () => {
                         brand: res.brand,
                         price: res.price,
                         oldPrice: res.oldPrice,
-                        catName: res.catName,
                         category: res.category,
                         subCat: res.subCat || null,
                         countInStock: res.countInStock,
@@ -187,14 +185,11 @@ const ProductEdit = () => {
     }, []);
 
     const handleChangeCategory = (event) => {
-        const catId = event.target.value;
-        setCategoryVal(catId);
-        const selectedCat = context.catData?.categoryList?.find(cat => cat.id === catId);
-        setFormFields(prev => ({
-            ...prev,
-            category: catId,
-            catName: selectedCat ? selectedCat.name : ''
-        }));
+        setCategoryVal(event.target.value);
+        setFormFields(() => ({
+            ...formFields,
+            category: event.target.value
+        }))
     };
 
     const handleChangeSubCategory = (event) => {
@@ -233,13 +228,6 @@ const ProductEdit = () => {
             [e.target.name]: e.target.value
         }))
     }
-
-    const selectCat = (cat) => {
-        setFormFields(prev => ({
-            ...prev,
-            catName: cat
-        }));
-    };
 
     const updateProduct = (e) => {
         e.preventDefault();
@@ -413,7 +401,7 @@ const ProductEdit = () => {
                                                 {
                                                     catData?.categoryList?.length > 0 && catData.categoryList.map((cat, index) => {
                                                         return (
-                                                            <MenuItem value={cat.id} key={index} onClick={() => selectCat(cat.name)}>
+                                                            <MenuItem value={cat.id} key={index}>
                                                                 {cat.name}
                                                             </MenuItem>
                                                         )

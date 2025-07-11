@@ -107,7 +107,6 @@ const ProductAdd = () => {
         price: null,
         oldPrice: null,
         category: '',
-        catName: '',
         countInStock: null,
         rating: 0,
         isFeatured: '',
@@ -134,14 +133,11 @@ const ProductAdd = () => {
     }, []);
 
     const handleChangeCategory = (event) => {
-        const catId = event.target.value;
-        setCategoryVal(catId);
-        const selectedCat = context.catData?.categoryList?.find(cat => cat.id === catId);
-        setFormFields(prev => ({
-            ...prev,
-            category: catId,
-            catName: selectedCat ? selectedCat.name : ''
-        }));
+        setCategoryVal(event.target.value);
+        setFormFields(() => ({
+            ...formFields,
+            category: event.target.value
+        }))
     };
 
     const handleChangeSubCategory = (event) => {
@@ -180,13 +176,6 @@ const ProductAdd = () => {
             [e.target.name]: e.target.value
         }))
     }
-
-    const selectCat = (cat) => {
-        setFormFields(prev => ({
-            ...prev,
-            catName: cat
-        }));
-    };
 
     const addProduct = (e) => {
         e.preventDefault();
@@ -294,7 +283,6 @@ const ProductAdd = () => {
                 brand: '',
                 price: 0,
                 oldPrice: 0,
-                catName: '',
                 category: '',
                 countInStock: 0,
                 rating: 0,
@@ -363,7 +351,7 @@ const ProductAdd = () => {
                                                     0 && context.catData?.categoryList?.map
                                                         ((cat, index) => {
                                                             return (
-                                                                <MenuItem value={cat.id} key={index} onClick={() => selectCat(cat.name)}>
+                                                                <MenuItem value={cat.id} key={index}>
                                                                     {cat.name}
                                                                 </MenuItem>
                                                             )
