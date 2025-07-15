@@ -2,6 +2,7 @@ import { TfiFullscreen } from "react-icons/tfi";
 import { CiHeart } from "react-icons/ci";
 import Rating from "@mui/material/Rating";
 import Button from '@mui/material/Button'
+import { Link } from "react-router-dom";
 import { useContext } from "react";
 import { MyContext } from "../../App";
 
@@ -18,6 +19,7 @@ const ProductItem = (props) => {
     return (
         <>
             <div className={`productItem ${props.itemView}`}>
+                <Link to={`/product/${props.item?.id}`}>
                 <div className="imgWrapper">
                     <img src={props.item?.images[0]} alt=""
                     className="w-100" style={{ objectFit: "cover" }}/>
@@ -27,6 +29,7 @@ const ProductItem = (props) => {
                         <Button><CiHeart style={{ fontSize:'20px'}}/></Button>
                     </div>
                 </div>
+                </Link>
                     
                     <div className="info">
                         <h4>{props?.item?.name}</h4>

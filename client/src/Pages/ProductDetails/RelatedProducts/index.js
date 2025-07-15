@@ -25,33 +25,15 @@ const RelatedProducts = (props) => {
                     }}
                     modules={[Navigation]}
                     className="mySwiper">
-                    <SwiperSlide>
-                        <ProductItem/>
-                    </SwiperSlide>
-
-                    <SwiperSlide>
-                        <ProductItem/>
-                    </SwiperSlide>
-
-                    <SwiperSlide>
-                        <ProductItem/>
-                    </SwiperSlide>
-
-                    <SwiperSlide>
-                        <ProductItem/>
-                    </SwiperSlide>
-
-                    <SwiperSlide>
-                        <ProductItem/>
-                    </SwiperSlide>
-                    
-                    <SwiperSlide>
-                        <ProductItem/>
-                    </SwiperSlide>
-
-                    <SwiperSlide>
-                        <ProductItem/>
-                    </SwiperSlide>
+                    {
+                        props?.data?.length !== 0 && props?.data?.map((item, index) => {
+                            return (
+                                <SwiperSlide key={index}>
+                                    <ProductItem item={item}/>
+                                </SwiperSlide>
+                            )
+                        })
+                    }
                 </Swiper>
             </div>
         </>

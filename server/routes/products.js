@@ -126,12 +126,25 @@ router.post('/create', async (req, res) => {
 
 // GET product by ID
 router.get('/:id', async (req, res) => {
-    const product = await Product.findById(req.params.id);
-    if (!product) {
-        return res.status(404).json({ success: false, message: "Product not found" });
+    try {
+        const product = await Product.findById(req.params.id)
+            .populate('category', 'name')
+            .populate('subCat')
+            .populate('productSize')     // ✅ สำคัญมาก
+            .populate('productWeight')
+            .populate('productRams');
+
+        if (!product) {
+            return res.status(404).json({ message: "Product not found" });
+        }
+
+        return res.status(200).json(product);
+    } catch (error) {
+        console.error('Error fetching product by ID:', error);
+        return res.status(500).json({ message: "Failed to fetch product" });
     }
-    res.status(200).json(product);
 });
+
 
 // PUT update product by ID
 router.put('/:id', async (req, res) => {

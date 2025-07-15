@@ -1,23 +1,40 @@
-import {  Rating } from "@mui/material";
+import { Rating } from "@mui/material";
 import { FaRegHeart } from "react-icons/fa";
 import { BsCartFill } from "react-icons/bs";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { MdOutlineCompareArrows } from "react-icons/md";
 import Tooltip from "@mui/material/Tooltip";
 import RelatedProducts from "../../Pages/ProductDetails/RelatedProducts";
 import ProductZoom from "../../Components/ProductZoom";
 import QuantityBox from "../../Components/QuantityDrop";
 import Button from '@mui/material/Button';
+import { useParams } from "react-router-dom";
+import { fetchDataFromApi } from "../../utils/api";
 
 const ProductDetails = () => {
 
     const [activeSize, setActiveSize] = useState(null);
-
     const [activeTabs, setActiveTabs] = useState(0);
+    const [productData, setProductData] = useState();
+    const [relatedProductData, setRelatedProductData] = useState([]);
 
     const isActive = (index) => {
         setActiveSize(index);
     }
+
+    const { id } = useParams();
+
+    useEffect(() => {
+        window.scrollTo(0, 0);
+        fetchDataFromApi(`/api/products/${id}`).then((res) => {
+            setProductData(res);
+            fetchDataFromApi(`/api/products?subCatId=${res?.subCatId}`).then((res => {
+                const filteredData = res?.products?.filter(item => item.id !== id);
+                console.log("test",filteredData)
+                setRelatedProductData(filteredData);
+            }))
+        })
+    }, [id])
 
     return (
         <>
@@ -25,112 +42,142 @@ const ProductDetails = () => {
                 <div className="container">
                     <div className="row">
                         <div className="col-md-4 ps-5">
-                            <ProductZoom/>
+                            <ProductZoom images={productData?.images} discount={productData?.discount} />
                         </div>
 
                         <div className="col-md-7 ps-5 pe-5">
                             <h2 className="hd text-capitalize">
-                            Carolina Reaper Chile Peppers</h2>
+                                {productData?.name}</h2>
                             <ul className="list list-inline d-flex align-items-center">
                                 <li className="list-inline-item">
                                     <div className="d-flex align-items-center">
                                         <span className="text-light me-2">Brands : </span>
-                                        <span>Welch's</span>
+                                        <span>{productData?.brand}</span>
                                     </div>
                                 </li>
 
                                 <li className="list-inline-item d-flex align-items-center">
                                     <div className="d-flex align-items-center">
-                                        <Rating name="read-only" value={4.5} precision={0.5} readOnly size="small"/>
-                                    <span className="text-light cursor ms-2">1 Review</span>
+                                        <Rating name="read-only" value={productData?.rating} precision={0.5} readOnly size="small" />
+                                        <span className="text-light cursor ms-2">1 Review</span>
                                     </div>
                                 </li>
                             </ul>
 
                             <div className="d-flex info mb-3">
-                                <span className="oldPrice">20.00</span>
-                                <span className="newPrice text-danger ms-2">14.00</span>
+                                <span className="oldPrice">{productData?.oldPrice}฿</span>
+                                <span className="newPrice text-danger ms-2">{productData?.price}฿</span>
                             </div>
                             <span className="badge badge-success">IN STOCK</span>
-                            <p className="mt-2">The Carolina Reaper chile pepper is typically oblong 
-                                with a signature pointed "scorpion’s tail." It measures 2–5 cm in diameter and 5–7 cm in length, 
-                                featuring deeply wrinkled, twisted red skin. Its flesh is crisp and juicy, with a few flat, cream-colored seeds. 
-                                The flavor is sweet and fruity, with notes of cinnamon and chocolate, followed by an extremely intense, lingering heat. 
-                                Appearance and heat can vary based on soil and climate.
+                            <p className="mt-2">{productData?.description}
                             </p>
-
-                            <div className="productSize d-flex align-items-center">
-                                <span>Size / Weight:</span>
-                                <ul className="list list-inline mb-0 ps-4">
-                                    <li className="list-inline-item">
-                                    <a className={`tag ${activeSize === 0 ? 'active' : ''}`} onClick={() => isActive(0)}>50g</a>
-                                    </li>
-                                    <li className="list-inline-item">
-                                    <a className={`tag ${activeSize === 1 ? 'active' : ''}`} onClick={() => isActive(1)}>100g</a>
-                                    </li>
-                                    <li className="list-inline-item">
-                                    <a className={`tag ${activeSize === 2 ? 'active' : ''}`} onClick={() => isActive(2)}>200g</a>
-                                    </li>
-                                    <li className="list-inline-item">
-                                    <a className={`tag ${activeSize === 3 ? 'active' : ''}`} onClick={() => isActive(3)}>300g</a>
-                                    </li>
-                                    <li className="list-inline-item">
-                                    <a className={`tag ${activeSize === 4 ? 'active' : ''}`} onClick={() => isActive(4)}>500g</a>
-                                    </li>
-                                </ul>
-                            </div>
+                            {
+                                productData?.productSize?.length > 0 &&
+                                <div className="productSize d-flex align-items-center">
+                                    <span>Spicy Level :</span>
+                                    <ul className="list list-inline mb-0 ps-4">
+                                        {
+                                            productData.productSize.map((item, index) => (
+                                                <li key={item._id} className="list-inline-item">
+                                                    <a
+                                                        className={`tag ${activeSize === index ? 'active' : ''}`}
+                                                        onClick={() => isActive(index)}
+                                                    >
+                                                        {item.productSize}
+                                                    </a>
+                                                </li>
+                                            ))
+                                        }
+                                    </ul>
+                                </div>
+                            }
+                            {
+                                productData?.productWeight?.length > 0 &&
+                                <div className="productSize d-flex align-items-center">
+                                    <span>Weight :</span>
+                                    <ul className="list list-inline mb-0 ps-4">
+                                        {
+                                            productData.productWeight.map((item, index) => (
+                                                <li key={item._id} className="list-inline-item">
+                                                    <a
+                                                        className={`tag ${activeSize === index ? 'active' : ''}`}
+                                                        onClick={() => isActive(index)}
+                                                    >
+                                                        {item.productWeight}
+                                                    </a>
+                                                </li>
+                                            ))
+                                        }
+                                    </ul>
+                                </div>
+                            }
+                            {
+                                productData?.productRams?.length > 0 &&
+                                <div className="productSize d-flex align-items-center">
+                                    <span>Content :</span>
+                                    <ul className="list list-inline mb-0 ps-4">
+                                        {
+                                            productData.productRams.map((item, index) => (
+                                                <li key={item._id} className="list-inline-item">
+                                                    <a
+                                                        className={`tag ${activeSize === index ? 'active' : ''}`}
+                                                        onClick={() => isActive(index)}
+                                                    >
+                                                        {item.productRams}
+                                                    </a>
+                                                </li>
+                                            ))
+                                        }
+                                    </ul>
+                                </div>
+                            }
                             <div className="d-flex align-items-center mt-4">
-                                <QuantityBox/>
+                                <QuantityBox />
                                 <Button className="btn-blue btn-lg btn-big btn-round">
-                                <BsCartFill/> &nbsp; Add to Cart</Button>
+                                    <BsCartFill /> &nbsp; Add to Cart</Button>
                                 <Button className="btn-blue btn-lg btn-big btn-circle ms-4">
-                                <BsCartFill/></Button>
+                                    <BsCartFill /></Button>
                                 <Tooltip title="Add to Wishlist" placement="top">
-                                <Button className="btn-blue btn-lg btn-big btn-circle ms-4">
-                                <FaRegHeart/></Button></Tooltip>
-
+                                    <Button className="btn-blue btn-lg btn-big btn-circle ms-4">
+                                        <FaRegHeart /></Button></Tooltip>
                                 <Tooltip title="Add to Compare" placement="top">
-                                <Button className="btn-blue btn-lg btn-big btn-circle ms-4">
-                                <MdOutlineCompareArrows/></Button></Tooltip>
+                                    <Button className="btn-blue btn-lg btn-big btn-circle ms-4">
+                                        <MdOutlineCompareArrows /></Button></Tooltip>
                             </div>
                         </div>
                     </div>
 
-                    <br/>
+                    <br />
 
                     <div className="card mt-5 p-5 detailsPageTabs">
                         <div className="customTabs">
                             <ul className="list list-inline">
                                 <li className="list-inline-item">
                                     <Button className={`tag ${activeTabs === 0 && 'active'}`}
-                                    onClick={() => {
-                                        setActiveTabs(0)
-                                    }}>Description</Button>
+                                        onClick={() => {
+                                            setActiveTabs(0)
+                                        }}>Description</Button>
                                 </li>
                                 <li className="list-inline-item">
                                     <Button className={`tag ${activeTabs === 1 && 'active'}`}
-                                    onClick={() => {
-                                        setActiveTabs(1)
-                                    }}>Additional Info</Button>
+                                        onClick={() => {
+                                            setActiveTabs(1)
+                                        }}>Additional Info</Button>
                                 </li>
                                 <li className="list-inline-item">
                                     <Button className={`tag ${activeTabs === 2 && 'active'}`}
-                                    onClick={() => {
-                                        setActiveTabs(2)
-                                    }}>Review(3)</Button>
+                                        onClick={() => {
+                                            setActiveTabs(2)
+                                        }}>Review(3)</Button>
                                 </li>
                             </ul>
 
-                            <br/>
+                            <br />
 
                             {
                                 activeTabs === 0 &&
                                 <div className="tabContent">
-                                    <p>The Carolina Reaper chile pepper is typically oblong 
-                                with a signature pointed "scorpion’s tail." It measures 2–5 cm in diameter and 5–7 cm in length, 
-                                featuring deeply wrinkled, twisted red skin. Its flesh is crisp and juicy, with a few flat, cream-colored seeds. 
-                                The flavor is sweet and fruity, with notes of cinnamon and chocolate, followed by an extremely intense, lingering heat. 
-                                Appearance and heat can vary based on soil and climate.</p>
+                                    <p>{productData?.description}</p>
                                 </div>
                             }
 
@@ -143,7 +190,7 @@ const ProductDetails = () => {
                                                 <th>Stand up</th>
                                                 <td>
                                                     <p>35"L x 24"W x 37-45"H
-                                                    (front to back wheel)</p>
+                                                        (front to back wheel)</p>
                                                 </td>
                                             </tr>
                                             <tr className="folded-wo-wheels">
@@ -229,60 +276,60 @@ const ProductDetails = () => {
                                     <div className="row">
                                         <div className="col-md-8">
                                             <h3>Customer Question & Answers</h3>
-                                            <br/>
+                                            <br />
                                             <div className="card p-4 reviewsCard flex-row">
                                                 <div className="reviewCard">
                                                     <div className="rounded-circle">
                                                         <img src="https://i.scdn.co/image/ab67616d00001e026f157409ae8578b9695be2b3" alt="" />
                                                     </div>
                                                     <span className="text-g d-block text-center fw-bold">
-                                                    Rinku Verma</span>
+                                                        Rinku Verma</span>
                                                 </div>
 
                                                 <div className="info ps-5">
                                                     <div className="d-flex align-items-center w-100 gap-3">
                                                         <h5 className="text-light">01/03/1993</h5>
                                                         <div className="ms-auto mb-1">
-                                                            <Rating name="half-rating-read" value={4.5} precision={0.5} readOnly size="small"/>
+                                                            <Rating name="half-rating-read" value={4.5} precision={0.5} readOnly size="small" />
                                                         </div>
                                                     </div>
                                                     <p>Review</p>
                                                 </div>
                                             </div>
 
-                                            <br className="res-hide"/>
+                                            <br className="res-hide" />
 
-                                            <br className="res-hide"/>
+                                            <br className="res-hide" />
 
                                             <form className="reviewForm">
-                                                    <h4>Add a review</h4>
-                                                    <div className="form-group">
-                                                        <textarea className="form-control"
+                                                <h4>Add a review</h4>
+                                                <div className="form-group">
+                                                    <textarea className="form-control"
                                                         placeholder="Write a Review" name="review">
-                                                        </textarea>
-                                                    </div>
+                                                    </textarea>
+                                                </div>
 
-                                                    <div className="row">
-                                                        <div className="col-md-6">
-                                                            <div className="form-group">
-                                                                <input type="text" className="form-control" placeholder="Name" name="userName"/>
-                                                            </div>
-                                                        </div>
-                                                    
-
-                                                        <div className="col-md-6 mt-2">
-                                                            <div className="form-group">
-                                                                <Rating name="rating" value={4.5} precision={0.5} readOnly/>
-                                                            </div>
-                                                        </div>
-
-                                                        <br/>
-
+                                                <div className="row">
+                                                    <div className="col-md-6">
                                                         <div className="form-group">
-                                                            <Button type="submit" className="btn-blue btn-lg btn-big btn-round">
-                                                            Submit Review</Button>
+                                                            <input type="text" className="form-control" placeholder="Name" name="userName" />
                                                         </div>
                                                     </div>
+
+
+                                                    <div className="col-md-6 mt-2">
+                                                        <div className="form-group">
+                                                            <Rating name="rating" value={4.5} precision={0.5} readOnly />
+                                                        </div>
+                                                    </div>
+
+                                                    <br />
+
+                                                    <div className="form-group">
+                                                        <Button type="submit" className="btn-blue btn-lg btn-big btn-round">
+                                                            Submit Review</Button>
+                                                    </div>
+                                                </div>
                                             </form>
                                         </div>
                                     </div>
@@ -291,13 +338,16 @@ const ProductDetails = () => {
                         </div>
                     </div>
 
-                    <br/>
+                    <br />
+                    {
+                        relatedProductData?.length !== 0 && <RelatedProducts title="RELATED PRODUCTS" data={relatedProductData} />
+                    }
 
-                    <RelatedProducts title="RELATED PRODUCTS"/>
+                    
 
-                    <RelatedProducts title="RECENTLY VIEWED PRODUCTS"/>
+                    <RelatedProducts title="RECENTLY VIEWED PRODUCTS" />
                 </div>
-            </section>
+            </section >
         </>
     )
 }

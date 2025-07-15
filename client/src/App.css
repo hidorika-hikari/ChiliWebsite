@@ -1290,6 +1290,7 @@ button{
   width: 100%;
   height: auto;
   padding: 25px 0px;
+  margin-top: -16px;
 }
 
 .productSize ul li{
