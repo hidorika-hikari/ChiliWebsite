@@ -26,7 +26,24 @@ const Listing = () => {
         setAnchorEl(null);
     };
     const { id } = useParams();
-
+    const filterData = (id) => {
+        fetchDataFromApi(`/api/products?subCat=${id}`).then((res) => {
+            setProductData(res.products);
+        });
+    }
+    const filterByPrice = (price, subCatId) => {
+        fetchDataFromApi(`/api/products?minPrice=${price[0]}&maxPrice=${price[1]}&subCat=${subCatId}`)
+            .then((res) => {
+                setProductData(res.products);
+            });
+    };
+    const filterByRating = (rating) => {
+        fetchDataFromApi(`/api/products?rating=${rating}${id ? `&subCat=${id}` : ''}`)
+            .then((res) => {
+                setProductData(res.products);
+            });
+    }
+    
     useEffect(() => {
         if (!id) return;
         fetchDataFromApi(`/api/products?subCat=${id}`).then((res) => {
@@ -39,12 +56,9 @@ const Listing = () => {
             <section className='product_Listing_Page'>
                 <div className='container'>
                     <div className='productListing d-flex'>
-                        <Sidebar />
+                        <Sidebar filterByPrice={filterByPrice} filterData={filterData} filterByRating={filterByRating}/>
 
                         <div className='content_right'>
-                            <img src="https://www.tastingtable.com/img/gallery/best-spicy-chile-peppers-hottest-pepper-how-to-cook-with-chiles/l-intro-1670518347.jpg" alt=""
-                                className='w-100' style={{ borderRadius: '8px' }} />
-
                             <div className='showBy mt-3 mb-3 d-flex align-items-center'>
                                 <div className='d-flex align-items-center btnWrapper'>
                                     <Button onClick={() => setProductView('one')}

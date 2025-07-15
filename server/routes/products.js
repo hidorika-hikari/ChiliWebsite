@@ -11,7 +11,7 @@ router.get('/', async (req, res) => {
         const page = parseInt(req.query.page) || 1;
         const perPage = parseInt(req.query.perPage) || 10;
 
-        const { category, subCat } = req.query;
+        const { category, subCat, minPrice, maxPrice, rating } = req.query;
 
         let filter = {};
         if (category) {
@@ -20,7 +20,15 @@ router.get('/', async (req, res) => {
         if (subCat) {
             filter.subCat = subCat;
         }
-
+        if (minPrice || maxPrice) {
+            filter.price = {};
+            if (minPrice) filter.price.$gte = parseInt(minPrice);
+            if (maxPrice) filter.price.$lte = parseInt(maxPrice);
+        }
+        if (rating) {
+            const r = parseInt(rating);
+            filter.rating = { $gte: r, $lt: r + 1 };
+        }
         const totalPosts = await Product.countDocuments(filter);
         const totalPages = Math.ceil(totalPosts / perPage);
 
@@ -38,10 +46,6 @@ router.get('/', async (req, res) => {
             .limit(perPage)
             .exec();
 
-        if (!productList) {
-            return res.status(500).json({ success: false });
-        }
-
         return res.status(200).json({
             products: productList,
             totalPages,
@@ -52,6 +56,7 @@ router.get('/', async (req, res) => {
         return res.status(500).json({ message: "Failed to fetch products" });
     }
 });
+
 
 router.get('/featured', async (req, res) => {
     const productList = await Product.find({ isFeatured: false });

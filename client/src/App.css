@@ -1106,7 +1106,7 @@ button{
 }
 
 .product_Listing_Page .productListing .sidebar .filterBox{
-  margin-bottom: 20px;
+  margin-bottom: 35px;
 }
 
 .product_Listing_Page .productListing .sidebar .filterBox h6{
@@ -1128,8 +1128,16 @@ button{
 
 .product_Listing_Page .productListing .sidebar .scroll ul li{
   list-style: none;
-  margin-bottom: 10px;
+  margin-bottom: 0px;
   width: 100%;
+}
+
+.product_Listing_Page .productListing .sidebar .scroll label{
+  margin-bottom: 0px !important;
+}
+
+.MuiRadio-root{
+  zoom: 85% !important;
 }
 
 .css-imrjgg-MuiButtonBase-root-MuiCheckbox-root{
@@ -1183,6 +1191,7 @@ button{
   width: 76% !important;
   flex: 0 0 76% !important;
   padding-left: 50px !important;
+  margin-top: -18px;
 }
 
 .product_Listing_Page .productListing .content_right .showBy{
