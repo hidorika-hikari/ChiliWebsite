@@ -10,7 +10,6 @@ router.get('/', async (req, res) => {
     try {
         const page = parseInt(req.query.page) || 1;
         const perPage = parseInt(req.query.perPage) || 10;
-
         const { category, subCat, minPrice, maxPrice, rating } = req.query;
 
         let filter = {};
@@ -57,7 +56,6 @@ router.get('/', async (req, res) => {
     }
 });
 
-
 router.get('/featured', async (req, res) => {
     const productList = await Product.find({ isFeatured: false });
     if (!productList) {
@@ -66,11 +64,10 @@ router.get('/featured', async (req, res) => {
     return res.status(200).json(productList);
 });
 
-// POST create a new product
 router.post('/create', async (req, res) => {
     if (!Array.isArray(req.body.images)) {
-        return res.status(400).jsown({
-            error: "'images' must be an array",
+        return res.status(400).json({
+            error: "Images must be an Array",
             status: false
         });
     }
@@ -124,20 +121,18 @@ router.post('/create', async (req, res) => {
     res.status(201).json(product);
 });
 
-// GET product by ID
 router.get('/:id', async (req, res) => {
     try {
         const product = await Product.findById(req.params.id)
             .populate('category', 'name')
             .populate('subCat')
-            .populate('productSize')     // ✅ สำคัญมาก
+            .populate('productSize')
             .populate('productWeight')
             .populate('productRams');
 
         if (!product) {
             return res.status(404).json({ message: "Product not found" });
         }
-
         return res.status(200).json(product);
     } catch (error) {
         console.error('Error fetching product by ID:', error);
@@ -145,8 +140,6 @@ router.get('/:id', async (req, res) => {
     }
 });
 
-
-// PUT update product by ID
 router.put('/:id', async (req, res) => {
     const limit = pLimit(2);
     const imagesToUpload = req.body.images.map((image) => {
@@ -201,7 +194,6 @@ router.put('/:id', async (req, res) => {
     });
 });
 
-// DELETE product by ID
 router.delete('/:id', async (req, res) => {
     const deleteProduct = await Product.findByIdAndDelete(req.params.id);
     if (!deleteProduct) {

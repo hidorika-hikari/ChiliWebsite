@@ -298,7 +298,6 @@ const ProductDetails = () => {
                                             </div>
 
                                             <br className="res-hide" />
-
                                             <br className="res-hide" />
 
                                             <form className="reviewForm">
@@ -315,7 +314,6 @@ const ProductDetails = () => {
                                                             <input type="text" className="form-control" placeholder="Name" name="userName" />
                                                         </div>
                                                     </div>
-
 
                                                     <div className="col-md-6 mt-2">
                                                         <div className="form-group">
@@ -337,14 +335,10 @@ const ProductDetails = () => {
                             }
                         </div>
                     </div>
-
                     <br />
                     {
                         relatedProductData?.length !== 0 && <RelatedProducts title="RELATED PRODUCTS" data={relatedProductData} />
                     }
-
-                    
-
                     <RelatedProducts title="RECENTLY VIEWED PRODUCTS" />
                 </div>
             </section >
