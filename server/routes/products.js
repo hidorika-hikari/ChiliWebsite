@@ -1,5 +1,6 @@
 const { Product } = require('../models/products.js');
 const { Category } = require('../models/category.js');
+const { RecentlyView } = require('../models/recentlyView.js')
 const express = require('express');
 const mongoose = require('mongoose');
 const router = express.Router();
@@ -62,6 +63,81 @@ router.get('/featured', async (req, res) => {
         return res.status(500).json({ success: false });
     }
     return res.status(200).json(productList);
+});
+
+router.get('/recentlyViewed', async (req, res) => {
+    let productList = [];
+    productList = await RecentlyView.find(req.query)
+        .populate('category', 'name')
+        .populate('subCat')
+        .populate('productSize')
+        .populate('productWeight')
+        .populate('productRams')
+        
+    if (!productList) {
+        return res.status(500).json({
+            success: false,
+            message: "Product cant be updated"
+        });
+    }
+    return res.status(200).json(productList);
+});
+
+router.post('/recentlyViewed', async (req, res) => {
+    if (!Array.isArray(req.body.images)) {
+        return res.status(400).json({
+            error: "Images must be an Array",
+            status: false
+        });
+    }
+
+    const category = await Category.findById(req.body.category);
+    if (!category) {
+        return res.status(404).send("Invalid Category");
+    }
+
+    const limit = pLimit(2);
+    const imagesToUpload = req.body.images.map((image) => {
+        return limit(async () => {
+            const result = await cloudinary.uploader.upload(image);
+            return result;
+        });
+    });
+
+    const uploadStatus = await Promise.all(imagesToUpload);
+    const imgurl = uploadStatus.map((item) => item.secure_url);
+
+    if (!uploadStatus) {
+        return res.status(500).json({
+            error: "Images couldn't be uploaded",
+            status: false
+        });
+    }
+
+    let product = new RecentlyView({
+        name: req.body.name,
+        subCat: req.body.subCat || null,
+        description: req.body.description,
+        images: imgurl,
+        brand: req.body.brand,
+        price: req.body.price,
+        oldPrice: req.body.oldPrice,
+        category: req.body.category,
+        countInStock: req.body.countInStock,
+        rating: req.body.rating,
+        //numReviews: req.body.numReviews,
+        isFeatured: req.body.isFeatured,
+        discount: req.body.discount,
+        productRams: req.body.productRams,
+        productSize: req.body.productSize,
+        productWeight: req.body.productWeight
+    });
+
+    product = await product.save();
+    if (!product) {
+        return res.status(500).json({ error: "Product creation failed", success: false });
+    }
+    res.status(201).json(product);
 });
 
 router.post('/create', async (req, res) => {

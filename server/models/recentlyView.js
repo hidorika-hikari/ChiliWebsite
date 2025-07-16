@@ -1,0 +1,90 @@
+const mongoose = require("mongoose");
+
+const recentlyViewSchema = mongoose.Schema({
+    name: {
+        type: String,
+        required: true
+    },
+    description: {
+        type: String,
+        required: true
+    },
+    images: [
+        {
+            type: String,
+            default: ''
+        }
+    ],
+    brand:{
+        type: String,
+        default: ''
+    },
+    price: {
+        type: Number,
+        default: 0
+    },
+    oldPrice: {
+        type: Number,
+        default: 0
+    },
+    category: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'Category',
+        required: true
+    },
+    subCat: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'SubCategory',
+        required: false,
+        default: null
+    },
+    countInStock: {
+        type: Number,
+        required: true
+    },
+    rating: {
+        type: Number,
+        default: 0
+    },
+    numReviews: {
+        type: Number,
+        default: 0
+    },
+    isFeatured: {
+        type: Boolean,
+        default: false
+    },
+    discount: {
+        type: Number,
+        default: false
+    },
+    productRams:[{
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'ProductRams',
+        default: []
+    }],
+    productSize:[{
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'ProductSize',
+        default: []
+    }],
+    productWeight:[{
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'ProductWeight',
+        default: []
+    }],
+    dateCreated: {
+        type: Date,
+        default: Date.now
+    },
+})
+
+recentlyViewSchema.virtual('id').get(function (){
+    return this._id.toHexString();
+});
+
+recentlyViewSchema.set('toJSON', {
+    virtuals: true,
+});
+
+exports.RecentlyView = mongoose.model('RecentlyView', recentlyViewSchema);

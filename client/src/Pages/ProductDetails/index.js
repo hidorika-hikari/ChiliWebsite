@@ -9,7 +9,7 @@ import ProductZoom from "../../Components/ProductZoom";
 import QuantityBox from "../../Components/QuantityDrop";
 import Button from '@mui/material/Button';
 import { useParams } from "react-router-dom";
-import { fetchDataFromApi } from "../../utils/api";
+import { fetchDataFromApi, postData } from "../../utils/api";
 
 const ProductDetails = () => {
 
@@ -17,6 +17,7 @@ const ProductDetails = () => {
     const [activeTabs, setActiveTabs] = useState(0);
     const [productData, setProductData] = useState();
     const [relatedProductData, setRelatedProductData] = useState([]);
+    const [recentlyViewProducts, setRecentlyViewProducts] = useState([]);
 
     const isActive = (index) => {
         setActiveSize(index);
@@ -28,11 +29,17 @@ const ProductDetails = () => {
         window.scrollTo(0, 0);
         fetchDataFromApi(`/api/products/${id}`).then((res) => {
             setProductData(res);
+            postData(`/api/products/recentlyViewed`,res)
             fetchDataFromApi(`/api/products?subCatId=${res?.subCatId}`).then((res => {
                 const filteredData = res?.products?.filter(item => item.id !== id);
                 console.log("test",filteredData)
                 setRelatedProductData(filteredData);
             }))
+            postData(`/api/products/recentlyViewed`,res).then((res) => {
+                fetchDataFromApi(`/api/products/recentlyViewed`).then((response) => {
+                    setRecentlyViewProducts(response);
+                })
+            })
         })
     }, [id])
 
@@ -339,7 +346,9 @@ const ProductDetails = () => {
                     {
                         relatedProductData?.length !== 0 && <RelatedProducts title="RELATED PRODUCTS" data={relatedProductData} />
                     }
-                    <RelatedProducts title="RECENTLY VIEWED PRODUCTS" />
+                    {
+                        recentlyViewProducts?.length !== 0 && <RelatedProducts title="RECENTLY VIEWED PRODUCTS" data={recentlyViewProducts}/>
+                    }
                 </div>
             </section >
         </>
