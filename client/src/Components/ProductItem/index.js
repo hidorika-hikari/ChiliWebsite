@@ -19,7 +19,7 @@ const ProductItem = (props) => {
     return (
         <>
             <div className={`productItem ${props.itemView}`}>
-                <Link to={`/product/${props.item?.id}`}>
+                <Link to={`/product/${props?.itemView === 'recentlyView' ? props.item?.prodId : props.item?.id}`}>
                 <div className="imgWrapper">
                     <img src={props.item?.images[0]} alt=""
                     className="w-100" style={{ objectFit: "cover" }}/>

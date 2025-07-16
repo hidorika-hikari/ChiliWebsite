@@ -32,14 +32,12 @@ const ProductDetails = () => {
             postData(`/api/products/recentlyViewed`,res)
             fetchDataFromApi(`/api/products?subCatId=${res?.subCatId}`).then((res => {
                 const filteredData = res?.products?.filter(item => item.id !== id);
-                console.log("test",filteredData)
                 setRelatedProductData(filteredData);
             }))
-            postData(`/api/products/recentlyViewed`,res).then((res) => {
-                fetchDataFromApi(`/api/products/recentlyViewed`).then((response) => {
-                    setRecentlyViewProducts(response);
-                })
+            fetchDataFromApi(`/api/products/recentlyViewed`).then((response) => {
+                setRecentlyViewProducts(response)
             })
+            postData(`/api/products/recentlyViewed`,res)
         })
     }, [id])
 
@@ -347,7 +345,10 @@ const ProductDetails = () => {
                         relatedProductData?.length !== 0 && <RelatedProducts title="RELATED PRODUCTS" data={relatedProductData} />
                     }
                     {
-                        recentlyViewProducts?.length !== 0 && <RelatedProducts title="RECENTLY VIEWED PRODUCTS" data={recentlyViewProducts}/>
+                        recentlyViewProducts?.length !== 0 && <RelatedProducts
+                        title="RECENTLY VIEWED PRODUCTS"
+                        itemView={"recentlyView"}
+                        data={recentlyViewProducts}/>
                     }
                 </div>
             </section >

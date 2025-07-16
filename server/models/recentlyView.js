@@ -1,6 +1,10 @@
 const mongoose = require("mongoose");
 
 const recentlyViewSchema = mongoose.Schema({
+    prodId:{
+        type: String,
+        default: '',
+    },
     name: {
         type: String,
         required: true

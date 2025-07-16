@@ -14,10 +14,10 @@ router.get('/', async (req, res) => {
         const { category, subCat, minPrice, maxPrice, rating } = req.query;
 
         let filter = {};
-        if (category) {
+        if (category && category !== 'null' && category !== 'undefined') {
             filter.category = category;
         }
-        if (subCat) {
+        if (subCat && subCat !== 'null' && subCat !== 'undefined') {
             filter.subCat = subCat;
         }
         if (minPrice || maxPrice) {
@@ -114,30 +114,35 @@ router.post('/recentlyViewed', async (req, res) => {
         });
     }
 
-    let product = new RecentlyView({
-        name: req.body.name,
-        subCat: req.body.subCat || null,
-        description: req.body.description,
-        images: imgurl,
-        brand: req.body.brand,
-        price: req.body.price,
-        oldPrice: req.body.oldPrice,
-        category: req.body.category,
-        countInStock: req.body.countInStock,
-        rating: req.body.rating,
-        //numReviews: req.body.numReviews,
-        isFeatured: req.body.isFeatured,
-        discount: req.body.discount,
-        productRams: req.body.productRams,
-        productSize: req.body.productSize,
-        productWeight: req.body.productWeight
-    });
-
-    product = await product.save();
-    if (!product) {
-        return res.status(500).json({ error: "Product creation failed", success: false });
+    let findProduct = await RecentlyView.find({ prodId: req.body.id });
+    var product;
+    if(findProduct.length === 0) {
+        product = new RecentlyView({
+            prodId: req.body.id,
+            name: req.body.name,
+            subCat: req.body.subCat || null,
+            description: req.body.description,
+            images: imgurl,
+            brand: req.body.brand,
+            price: req.body.price,
+            oldPrice: req.body.oldPrice,
+            category: req.body.category,
+            countInStock: req.body.countInStock,
+            rating: req.body.rating,
+            //numReviews: req.body.numReviews,
+            isFeatured: req.body.isFeatured,
+            discount: req.body.discount,
+            productRams: req.body.productRams,
+            productSize: req.body.productSize,
+            productWeight: req.body.productWeight
+        });
+    
+        product = await product.save();
+        if (!product) {
+            return res.status(500).json({ error: "Product creation failed", success: false });
+        }
+        res.status(201).json(product);
     }
-    res.status(201).json(product);
 });
 
 router.post('/create', async (req, res) => {
