@@ -4,19 +4,29 @@ import { MdEmail } from 'react-icons/md';
 import { RiLockPasswordFill } from 'react-icons/ri';
 import { IoMdEye, IoMdEyeOff, IoMdHome } from 'react-icons/io';
 import { Button } from '@mui/material';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import Logo from '../../assets/images/logo.png';
 import { FaUserCircle } from 'react-icons/fa';
 import { IoShieldCheckmarkSharp } from 'react-icons/io5';
 import FormControlLabel from '@mui/material/FormControlLabel';
 import Checkbox from '@mui/material/Checkbox';
+import { postData } from '../../utils/api';
+import { FaPhoneAlt } from "react-icons/fa";
 
 const SignUp = () => {
+    const history = useNavigate();
     const [inputIndex, setInputIndex] = useState(null);
     const [isShowPassword, setIsShowPassword] = useState(false);
     const [isShowConfirmPassword, setIsShowConfirmPassword] = useState(false);
     const context = useContext(MyContext);
-
+    const [formFields, setFormFields] = useState({
+        name:'',
+        email:'',
+        phone:'',
+        password:'',
+        confirmPassword:'',
+        isAdmin:true
+    })
     useEffect(() => {
         context.setIsHideSidebarAndHeader(true);
     }, []);
@@ -24,6 +34,68 @@ const SignUp = () => {
     const focusInput = (index) => {
         setInputIndex(index);
     };
+    
+    const onChangeInput = (e) => {
+        setFormFields(() => ({
+            ...formFields,
+            [e.target.name]: e.target.value
+        }))
+    }
+    
+    const signUp = (e) => {
+        e.preventDefault();
+        if(formFields.name === ""){
+            context.setAlertBox({
+                open: true,
+                error: true,
+                msg: "name can not be blank!"
+            })
+            return false;
+        }
+        if(formFields.email === ""){
+            context.setAlertBox({
+                open: true,
+                error: true,
+                msg: "email can not be blank!"
+            })
+            return false;
+        }
+        if(formFields.phone === ""){
+            context.setAlertBox({
+                open: true,
+                error: true,
+                msg: "phone can not be blank!"
+            })
+            return false;
+        }
+        if(formFields.password === ""){
+            context.setAlertBox({
+                open: true,
+                error: true,
+                msg: "password can not be blank!"
+            })
+            return false;
+        }
+        if(formFields.confirmPassword === formFields.password){
+            context.setAlertBox({
+                open: true,
+                error: true,
+                msg: "password not match"
+            })
+            return false;
+        }
+        postData("/api/user/signup",formFields).then((res) => {
+            context.setAlertBox({
+                open: true,
+                error: false,
+                msg: "Register Successfully!"
+            });
+            setTimeout(() => {
+                history('/login');
+            },2000);
+            console.log(res);
+        })
+    }
 
     return (
         <>
@@ -35,7 +107,7 @@ const SignUp = () => {
             <section className="loginSection signUpSection">
                 <div className="row">
                     <div className="col-md-8 d-flex align-items-center flex-column part1 justify-content-center">
-                        <h1>BEST UX/UI FASHION <span class="text-sky">ECOMMERCE DASHBOARD</span> & ADMIN PANEL</h1>
+                        <h1>BEST UX/UI FASHION <span className="text-sky">ECOMMERCE DASHBOARD</span> & ADMIN PANEL</h1>
                         <p>Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries</p>
                     <div className='w-100 mt-4'>
                         <Link to={'/'}><Button className='btn-blue btn-lg btn-big'><IoMdHome/>Go To Home</Button></Link>
@@ -50,7 +122,7 @@ const SignUp = () => {
                             </div>
 
                             <div className="wrapper mt-3 card border">
-                                <form>
+                                <form onClick={signUp}>
                                     <div
                                         className={`form-group position-relative ${inputIndex === 0 && 'focus'}`}
                                     >
@@ -63,6 +135,8 @@ const SignUp = () => {
                                             placeholder="enter your name"
                                             onFocus={() => focusInput(0)}
                                             onBlur={() => setInputIndex(null)}
+                                            name='name'
+                                            onChange={onChangeInput}
                                         />
                                     </div>
 
@@ -78,11 +152,30 @@ const SignUp = () => {
                                             placeholder="enter your email"
                                             onFocus={() => focusInput(1)}
                                             onBlur={() => setInputIndex(null)}
+                                            name='email'
+                                            onChange={onChangeInput}
                                         />
                                     </div>
 
                                     <div
                                         className={`form-group position-relative ${inputIndex === 2 && 'focus'}`}
+                                    >
+                                        <span className="icon">
+                                            <FaPhoneAlt />
+                                        </span>
+                                        <input
+                                            type="text"
+                                            className="form-control"
+                                            placeholder="enter your phone"
+                                            onFocus={() => focusInput(2)}
+                                            onBlur={() => setInputIndex(null)}
+                                            name='phone'
+                                            onChange={onChangeInput}
+                                        />
+                                    </div>
+
+                                    <div
+                                        className={`form-group position-relative ${inputIndex === 3 && 'focus'}`}
                                     >
                                         <span className="icon">
                                             <RiLockPasswordFill />
@@ -91,8 +184,10 @@ const SignUp = () => {
                                             type={`${isShowPassword === true ? 'text' : 'password'}`}
                                             className="form-control"
                                             placeholder="enter your password"
-                                            onFocus={() => focusInput(2)}
+                                            onFocus={() => focusInput(3)}
                                             onBlur={() => setInputIndex(null)}
+                                            name='password'
+                                            onChange={onChangeInput}
                                         />
 
                                         <span
@@ -112,7 +207,7 @@ const SignUp = () => {
                                     </div>
 
                                     <div
-                                        className={`form-group position-relative ${inputIndex === 3 && 'focus'}`}
+                                        className={`form-group position-relative ${inputIndex === 4 && 'focus'}`}
                                     >
                                         <span className="icon">
                                             <IoShieldCheckmarkSharp />
@@ -121,8 +216,10 @@ const SignUp = () => {
                                             type={`${isShowConfirmPassword === true ? 'text' : 'password'}`}
                                             className="form-control"
                                             placeholder="confirm your password"
-                                            onFocus={() => focusInput(3)}
+                                            onFocus={() => focusInput(4)}
                                             onBlur={() => setInputIndex(null)}
+                                            name='confirmPassword'
+                                            onChange={onChangeInput}
                                         />
 
                                         <span
