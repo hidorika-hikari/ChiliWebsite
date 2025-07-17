@@ -24,12 +24,12 @@ const ProductDetails = () => {
     }
 
     const { id } = useParams();
-
+    console.log('Rating:', productData?.rating);
     useEffect(() => {
         window.scrollTo(0, 0);
         fetchDataFromApi(`/api/products/${id}`).then((res) => {
             setProductData(res);
-            postData(`/api/products/recentlyViewed`,res)
+            postData(`/api/products/recentlyViewed`, res)
             fetchDataFromApi(`/api/products?subCatId=${res?.subCatId}`).then((res => {
                 const filteredData = res?.products?.filter(item => item.id !== id);
                 setRelatedProductData(filteredData);
@@ -37,7 +37,7 @@ const ProductDetails = () => {
             fetchDataFromApi(`/api/products/recentlyViewed`).then((response) => {
                 setRecentlyViewProducts(response)
             })
-            postData(`/api/products/recentlyViewed`,res)
+            postData(`/api/products/recentlyViewed`, res)
         })
     }, [id])
 
@@ -49,7 +49,6 @@ const ProductDetails = () => {
                         <div className="col-md-4 ps-5">
                             <ProductZoom images={productData?.images} discount={productData?.discount} />
                         </div>
-
                         <div className="col-md-7 ps-5 pe-5">
                             <h2 className="hd text-capitalize">
                                 {productData?.name}</h2>
@@ -60,15 +59,13 @@ const ProductDetails = () => {
                                         <span>{productData?.brand}</span>
                                     </div>
                                 </li>
-
                                 <li className="list-inline-item d-flex align-items-center">
                                     <div className="d-flex align-items-center">
-                                        <Rating name="read-only" value={productData?.rating} precision={0.5} readOnly size="small" />
+                                        <Rating name="read-only" value={parseInt(productData?.rating)} precision={0.5} readOnly size="small" />
                                         <span className="text-light cursor ms-2">1 Review</span>
                                     </div>
                                 </li>
                             </ul>
-
                             <div className="d-flex info mb-3">
                                 <span className="oldPrice">{productData?.oldPrice}฿</span>
                                 <span className="newPrice text-danger ms-2">{productData?.price}฿</span>
@@ -151,9 +148,7 @@ const ProductDetails = () => {
                             </div>
                         </div>
                     </div>
-
                     <br />
-
                     <div className="card mt-5 p-5 detailsPageTabs">
                         <div className="customTabs">
                             <ul className="list list-inline">
@@ -176,7 +171,6 @@ const ProductDetails = () => {
                                         }}>Review(3)</Button>
                                 </li>
                             </ul>
-
                             <br />
 
                             {
@@ -290,21 +284,18 @@ const ProductDetails = () => {
                                                     <span className="text-g d-block text-center fw-bold">
                                                         Rinku Verma</span>
                                                 </div>
-
                                                 <div className="info ps-5">
                                                     <div className="d-flex align-items-center w-100 gap-3">
                                                         <h5 className="text-light">01/03/1993</h5>
                                                         <div className="ms-auto mb-1">
-                                                            <Rating name="half-rating-read" value={4.5} precision={0.5} readOnly size="small" />
+                                                            { /* <Rating name="half-rating-read" value={4.5} precision={0.5} readOnly size="small" /> */}
                                                         </div>
                                                     </div>
                                                     <p>Review</p>
                                                 </div>
                                             </div>
-
                                             <br className="res-hide" />
                                             <br className="res-hide" />
-
                                             <form className="reviewForm">
                                                 <h4>Add a review</h4>
                                                 <div className="form-group">
@@ -312,22 +303,18 @@ const ProductDetails = () => {
                                                         placeholder="Write a Review" name="review">
                                                     </textarea>
                                                 </div>
-
                                                 <div className="row">
                                                     <div className="col-md-6">
                                                         <div className="form-group">
                                                             <input type="text" className="form-control" placeholder="Name" name="userName" />
                                                         </div>
                                                     </div>
-
                                                     <div className="col-md-6 mt-2">
                                                         <div className="form-group">
-                                                            <Rating name="rating" value={4.5} precision={0.5} readOnly />
+                                                            { /* <Rating name="half-rating-read" value={4.5} precision={0.5} readOnly size="small" /> */}
                                                         </div>
                                                     </div>
-
                                                     <br />
-
                                                     <div className="form-group">
                                                         <Button type="submit" className="btn-blue btn-lg btn-big btn-round">
                                                             Submit Review</Button>
@@ -342,13 +329,15 @@ const ProductDetails = () => {
                     </div>
                     <br />
                     {
-                        relatedProductData?.length !== 0 && <RelatedProducts title="RELATED PRODUCTS" data={relatedProductData} />
+                        relatedProductData?.length !== 0 && <RelatedProducts
+                            title="RELATED PRODUCTS"
+                            data={relatedProductData} />
                     }
                     {
                         recentlyViewProducts?.length !== 0 && <RelatedProducts
-                        title="RECENTLY VIEWED PRODUCTS"
-                        itemView={"recentlyView"}
-                        data={recentlyViewProducts}/>
+                            title="RECENTLY VIEWED PRODUCTS"
+                            itemView={"recentlyView"}
+                            data={recentlyViewProducts} />
                     }
                 </div>
             </section >

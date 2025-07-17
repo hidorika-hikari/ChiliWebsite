@@ -5,10 +5,13 @@ const cors = require('cors');
 require('dotenv').config();
 
 app.use(cors({
-    origin: 'http://localhost:3000',
+    origin: ['http://localhost:3000', 'http://localhost:3001'],
     credentials: true
 }));
 console.log('CORS middleware loaded');
+
+//const authJwt = require('./helper/jwt');
+//app.use(authJwt());
 
 app.use(express.json());
 console.log('JSON middleware loaded');
@@ -20,7 +23,10 @@ const subCatSchema = require('./routes/subCat');
 const productWeightRoutes = require('./routes/productWeight');
 const productRamsRoutes = require('./routes/productRams')
 const productSizeRoutes = require('./routes/productSize')
+const userRoutes = require('./routes/user')
 
+app.use('/api/user', userRoutes);
+app.use('/api/',userRoutes);
 app.use('/api/subCat', subCatSchema);
 app.use('/api/category', categoryRoutes);
 app.use('/api/products', productRoutes);
