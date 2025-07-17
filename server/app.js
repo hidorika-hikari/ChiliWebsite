@@ -12,6 +12,7 @@ console.log('CORS middleware loaded');
 
 //const authJwt = require('./helper/jwt');
 //app.use(authJwt());
+//console.log('authJwt loaded');
 
 app.use(express.json());
 console.log('JSON middleware loaded');
@@ -25,8 +26,8 @@ const productRamsRoutes = require('./routes/productRams')
 const productSizeRoutes = require('./routes/productSize')
 const userRoutes = require('./routes/user')
 
-app.use('/api/user', userRoutes);
-app.use('/api/',userRoutes);
+app.use('/api/users', userRoutes);
+app.use('/api/user',userRoutes); // for /api/user/etc.
 app.use('/api/subCat', subCatSchema);
 app.use('/api/category', categoryRoutes);
 app.use('/api/products', productRoutes);
@@ -42,7 +43,7 @@ console.log('Basic route registered');
 mongoose.connect(process.env.CONNECTION_STRING ,{
     useNewUrlParser: true,
     useUnifiedTopology: true
-})  
+})
 .then(() => {
     console.log('Database connected');
     const PORT = process.env.PORT || 3000;
