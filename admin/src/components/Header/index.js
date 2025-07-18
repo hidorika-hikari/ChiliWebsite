@@ -1,5 +1,5 @@
 import { MdMenuOpen, MdOutlineLightMode, MdOutlineMailOutline, MdOutlineMenu } from "react-icons/md";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { IoCartOutline, IoShieldHalfSharp } from "react-icons/io5";
 import { FaRegBell } from "react-icons/fa";
 import { useContext, useState } from "react";
@@ -22,6 +22,7 @@ const Header = () => {
     const [isOpenNotifications, setIsOpenNotificationsDrop] = useState(false);
     const openNotifications = Boolean(isOpenNotifications);
     const openMyAcc = Boolean(anchorEl);
+    const history = useNavigate();
     const context = useContext(MyContext);
 
     const handleOpenMyAccDrop = (event) => {
@@ -37,6 +38,19 @@ const Header = () => {
 
     const handleCloseNotificationsDrop = () => {
         setIsOpenNotificationsDrop(false);
+    }
+
+    const logout = () => {
+        localStorage.clear();
+        setAnchorEl(null);
+        context.setAlertBox({
+            open: true,
+            error: false,
+            msg: "Logout Successfully"
+        })
+        setTimeout(() => {
+            history('/login');
+        },1500);
     }
 
     return (
@@ -215,13 +229,13 @@ const Header = () => {
                                     <div className="myAcc d-flex align-items-center">
                                         <div className="userImg">
                                             <span className="rounded-circle">
-                                                <img src="https://i.scdn.co/image/ab67616d00001e026f157409ae8578b9695be2b3" alt="user_avatar"/>
+                                                {context.user?.name?.charAt(0)}
                                             </span>
                                         </div>
 
                                         <div className="userInfo">
-                                            <h4>hidorika shine</h4>
-                                            <p className="mb-0">@hidorika</p>
+                                            <h4>{context.user?.name}</h4>
+                                            <p className="mb-0">{context.user?.email}</p>
                                         </div>
                                     </div>
                                 </Button>
@@ -246,7 +260,7 @@ const Header = () => {
                                     </ListItemIcon>
                                     Reset Password
                                     </MenuItem>
-                                    <MenuItem onClick={handleCloseMyAccDrop}>
+                                    <MenuItem onClick={logout}>
                                     <ListItemIcon>
                                         <Logout fontSize="small" />
                                     </ListItemIcon>

@@ -7,9 +7,10 @@ const { User } = require('../models/user');
 router.post('/signup', async (req, res) => {
     const { name, phone, email, password } = req.body;
     try {
-        const existingUser = await User.findOne({ email: email });
-        if(existingUser) {
-            return res.status(400).json({ msg: "User already exist!" });
+        const existingUser = await User.findOne({ email });
+        const existingByPhone = await User.findOne({ phone });
+        if (existingUser || existingByPhone) {
+            return res.status(400).json({ status: false, msg: "User already exists!" });
         }
 
         const hashPassword = await bcrypt.hash(password, 10);
@@ -26,26 +27,27 @@ router.post('/signup', async (req, res) => {
         );
 
         res.status(200).json({
+            status: true,
             user: result,
-            token: token
+            token
         });
     } catch (error) {
         console.error('Signup error:', error);
-        res.status(500).json({ msg: "Something went wrong" });
+        res.status(500).json({ status: false, msg: "Something went wrong" });
     }
 });
 
 router.post('/signin', async (req, res) => {
     const { email, password } = req.body;
     try {
-        const existingUser = await User.findOne({ email: email });
+        const existingUser = await User.findOne({ email });
         if (!existingUser) {
-            return res.status(400).json({ msg: "User not found!" });
+            return res.status(400).json({ status: false, msg: "User not found!" });
         }
 
         const matchPassword = await bcrypt.compare(password, existingUser.password);
         if (!matchPassword) {
-            return res.status(400).json({ msg: "Invalid credentials" });
+            return res.status(400).json({ status: false, msg: "Invalid credentials" });
         }
 
         const token = jwt.sign(
@@ -54,53 +56,47 @@ router.post('/signin', async (req, res) => {
         );
 
         res.status(200).json({
+            status: true,
             user: existingUser,
-            token: token,
+            token,
             msg: "User authenticated"
         });
     } catch (error) {
         console.error('Signin error:', error);
-        res.status(500).json({ msg: "Something went wrong" });
+        res.status(500).json({ status: false, msg: "Something went wrong" });
     }
 });
-
-router.get('/', async (req, res) =>{
-    const userList = await User.find();
-    if (!userList) {
-        res.status(500).json({ success: false })
-    }
-    res.send(userList);
-})
-
-router.get('/:id', async (req, res) =>{
-    const userList = await User.findById(req.params.id);
-    if (!userList) {
-        res.status(500).json({ message: "The user with the given ID was not found" })
-        return;
-    }
-    res.status(200).send(userList);
-})
-
-router.delete('/:id', async (req, res) =>{
-    User.findByIdAndDelete(req.params.id).then(user => {
-        if (user) {
-            return res.status(200).json({ success: true, message: "The user is deleted!" })
-        } else {
-            return res.status(404).json({ success: false, message: "User not found!" })
-        }
-    }).catch(err => {
-        return res.status(500).json({ success: false, error: err })
-    })
-})
 
 router.get('/get/count', async (req, res) => {
     try {
         const userCount = await User.countDocuments({});
-        res.status(200).send({
-            userCount: userCount
-        });
+        res.status(200).json({ userCount });
     } catch (err) {
         res.status(500).json({ success: false, error: err.message });
+    }
+});
+
+router.get('/', async (req, res) => {
+    try {
+        const userList = await User.find();
+        if (!userList) {
+            return res.status(500).json({ success: false });
+        }
+        res.send(userList);
+    } catch (error) {
+        res.status(500).json({ success: false, error: error.message });
+    }
+});
+
+router.get('/:id', async (req, res) => {
+    try {
+        const user = await User.findById(req.params.id);
+        if(!user) {
+            return res.status(404).json({ message: "The user with the given ID was not found" });
+        }
+        res.status(200).send(user);
+    } catch (error) {
+        res.status(500).json({ message: "Invalid user ID", error: error.message });
     }
 });
 
@@ -113,21 +109,11 @@ router.put('/:id', async (req, res) => {
             return res.status(404).json({ msg: "User not found" });
         }
 
-        let newPassword;
-        if (password) {
-            newPassword = await bcrypt.hash(password, 10);
-        } else {
-            newPassword = userExist.password;
-        }
+        const newPassword = password ? await bcrypt.hash(password, 10) : userExist.password;
 
         const updatedUser = await User.findByIdAndUpdate(
             req.params.id,
-            {
-                name,
-                phone,
-                email,
-                password: newPassword
-            },
+            { name, phone, email, password: newPassword },
             { new: true }
         );
 
@@ -138,6 +124,19 @@ router.put('/:id', async (req, res) => {
     } catch (error) {
         console.error("Update user error:", error);
         res.status(500).json({ msg: "Something went wrong", error: error.message });
+    }
+});
+
+router.delete('/:id', async (req, res) => {
+    try {
+        const user = await User.findByIdAndDelete(req.params.id);
+        if (user) {
+            return res.status(200).json({ success: true, message: "The user is deleted!" });
+        } else {
+            return res.status(404).json({ success: false, message: "User not found!" });
+        }
+    } catch (err) {
+        return res.status(500).json({ success: false, error: err.message });
     }
 });
 

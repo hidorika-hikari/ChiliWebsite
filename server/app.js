@@ -26,8 +26,8 @@ const productRamsRoutes = require('./routes/productRams')
 const productSizeRoutes = require('./routes/productSize')
 const userRoutes = require('./routes/user')
 
-app.use('/api/users', userRoutes);
-app.use('/api/user',userRoutes); // for /api/user/etc.
+app.use('/api/user', userRoutes);
+//app.use('/api/user/id',userRoutes); // for /api/user/etc.
 app.use('/api/subCat', subCatSchema);
 app.use('/api/category', categoryRoutes);
 app.use('/api/products', productRoutes);

@@ -4,13 +4,20 @@ import { MdEmail } from 'react-icons/md';
 import { RiLockPasswordFill } from 'react-icons/ri';
 import { IoMdEye, IoMdEyeOff } from 'react-icons/io';
 import { Button } from '@mui/material';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import Logo from '../../assets/images/logo.png';
+import { postData } from '../../utils/api';
 
 const Login = () => {
     const [inputIndex, setInputIndex] = useState(null);
     const [isShowPassword, setIsShowPassword] = useState(false);
     const context = useContext(MyContext);
+    const history = useNavigate();
+    const [formFields, setFormFields] = useState({
+        email: '',
+        password: '',
+        isAdmin: true
+    })
 
     useEffect(() => {
         context.setIsHideSidebarAndHeader(true);
@@ -19,6 +26,60 @@ const Login = () => {
     const focusInput = (index) => {
         setInputIndex(index);
     };
+
+    const onChangeInput = (e) => {
+        setFormFields(() => ({
+            ...formFields,
+            [e.target.name]: e.target.value
+        }))
+    }
+
+    const signIn = (e) => {
+        e.preventDefault();
+        if (formFields.email === "") {
+            context.setAlertBox({
+                open: true,
+                error: true,
+                msg: "email can not be blank!"
+            })
+            return false;
+        }
+        if (formFields.password === "") {
+            context.setAlertBox({
+                open: true,
+                error: true,
+                msg: "password can not be blank!"
+            })
+            return false;
+        }
+        postData("/api/user/signin", formFields).then((res) => {
+            try {
+                console.log(res);
+                localStorage.setItem("token",res.token);
+                const user = {
+                    name: res.user?.name,
+                    email: res.user?.email,
+                    userId: res.user?.id
+                }
+                localStorage.setItem("user",JSON.stringify(user));
+                context.setAlertBox({
+                    open: true,
+                    error: false,
+                    msg: "Login Successfully!"
+                });
+                setTimeout(() => {
+                    history('/');
+                }, 1000);
+            } catch (error) {
+                console.log(error);
+                context.setAlertBox({
+                    open: true,
+                    error: true,
+                    msg: "Something went wrong. Please try again."
+                });
+            }
+        })
+    }
 
     return (
         <>
@@ -48,6 +109,8 @@ const Login = () => {
                                     placeholder="enter your email"
                                     onFocus={() => focusInput(0)}
                                     onBlur={() => setInputIndex(null)}
+                                    name='email'
+                                    onChange={onChangeInput}
                                 />
                             </div>
 
@@ -63,6 +126,8 @@ const Login = () => {
                                     placeholder="enter your password"
                                     onFocus={() => focusInput(1)}
                                     onBlur={() => setInputIndex(null)}
+                                    name='password'
+                                    onChange={onChangeInput}
                                 />
 
                                 <span
@@ -80,7 +145,7 @@ const Login = () => {
                             </div>
 
                             <div className="form-group">
-                                <Button className="btn-blue btn-lg w-100 btn-big">
+                                <Button onClick={signIn} className="btn-blue btn-lg w-100 btn-big">
                                     Sign In
                                 </Button>
                             </div>

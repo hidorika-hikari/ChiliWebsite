@@ -33,6 +33,11 @@ function App() {
     const [catData, setCatData] = useState([]);
     const [subCatData, setSubCatData] = useState([]);
     const [progress, setProgress] = useState(0);
+    const [user,setUser] = useState({
+        name: '',
+        email: '',
+        userId: ''
+    })
     const [alertBox, setAlertBox] = useState({
         msg: '',
         error: false,
@@ -51,6 +56,17 @@ function App() {
             localStorage.setItem('themeMode', 'dark');
         }
     }, [themeMode]);
+
+    useEffect(() => {
+        const token = localStorage.getItem("token");
+        if (token !== "" && token !== undefined && token !== null){
+            setIsLogin(true);
+            const userData = JSON.parse(localStorage.getItem("user"));
+            setUser(userData);
+        } else {
+            setIsLogin(false);
+        }
+    },[isLogin])
 
     const handleClose = (event, reason) => {
         if (reason === 'clickaway') {
@@ -97,7 +113,9 @@ function App() {
         catData,
         fetchCategory,
         subCatData,
-        fetchSubCategory
+        fetchSubCategory,
+        setUser,
+        user
     };
 
     return (
