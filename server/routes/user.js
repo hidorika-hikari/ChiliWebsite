@@ -9,8 +9,11 @@ router.post('/signup', async (req, res) => {
     try {
         const existingUser = await User.findOne({ email });
         const existingByPhone = await User.findOne({ phone });
-        if (existingUser || existingByPhone) {
+        if (existingUser) {
             return res.status(400).json({ status: false, msg: "User already exists!" });
+        }
+        if (existingByPhone) {
+            return res.status(400).json({ status: false, msg: "Phone number is already registered!" });
         }
 
         const hashPassword = await bcrypt.hash(password, 10);
@@ -29,7 +32,7 @@ router.post('/signup', async (req, res) => {
         res.status(200).json({
             status: true,
             user: result,
-            token
+            token: token
         });
     } catch (error) {
         console.error('Signup error:', error);
@@ -58,7 +61,7 @@ router.post('/signin', async (req, res) => {
         res.status(200).json({
             status: true,
             user: existingUser,
-            token,
+            token: token,
             msg: "User authenticated"
         });
     } catch (error) {

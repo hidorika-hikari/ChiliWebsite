@@ -3,7 +3,7 @@ import { MyContext } from '../../App';
 import { MdEmail } from 'react-icons/md';
 import { RiLockPasswordFill } from 'react-icons/ri';
 import { IoMdEye, IoMdEyeOff, IoMdHome } from 'react-icons/io';
-import { Button } from '@mui/material';
+import { Button, CircularProgress } from '@mui/material';
 import { Link, useNavigate } from 'react-router-dom';
 import { FaUserCircle } from 'react-icons/fa';
 import { IoShieldCheckmarkSharp } from 'react-icons/io5';
@@ -15,6 +15,7 @@ import Logo from '../../assets/images/logo.png';
 
 const SignUp = () => {
     const history = useNavigate();
+    const [isLoading, setIsLoading] = useState(false);
     const [inputIndex, setInputIndex] = useState(null);
     const [isShowPassword, setIsShowPassword] = useState(false);
     const [isShowConfirmPassword, setIsShowConfirmPassword] = useState(false);
@@ -42,6 +43,7 @@ const SignUp = () => {
     }
     const signUp = (e) => {
         e.preventDefault();
+        setIsLoading(true);
         if(formFields.name === ""){
             context.setAlertBox({
                 open: true,
@@ -91,13 +93,14 @@ const SignUp = () => {
                         msg: "Register Successfully!"
                     });
                     setTimeout(() => {
+                        setIsLoading(true);
                         history('/login');
                     }, 2000);
                 } else {
                     context.setAlertBox({
                         open: true,
                         error: true,
-                        msg: "Register Fail!"
+                        msg: res.msg
                     });
                 }
             })
@@ -255,8 +258,10 @@ const SignUp = () => {
                                     <FormControlLabel className="mb-2" control={<Checkbox />} label="I agree to the all Terms & Conditions" />
 
                                     <div className="form-group">
-                                        <Button  type="submit" className="btn-blue btn-lg w-100 btn-big">
-                                            Sign Up
+                                        <Button type="submit" className="btn-blue btn-lg w-100 btn-big">
+                                            {
+                                                isLoading === true ? <CircularProgress/> : 'Sign Up'
+                                            }
                                         </Button>
                                     </div>
 

@@ -1497,3 +1497,9 @@ button .loader{
   height: 150px;
   object-fit: cover;
 }
+
+.form-group .css-1uent87-MuiButtonBase-root-MuiButton-root .css-1wxecgq-MuiCircularProgress-root .css-54pwck-MuiCircularProgress-svg{
+  color: #fff !important;
+  width: 30px !important;
+  height: 30px !important;
+}

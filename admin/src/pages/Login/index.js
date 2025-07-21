@@ -3,12 +3,13 @@ import { MyContext } from '../../App';
 import { MdEmail } from 'react-icons/md';
 import { RiLockPasswordFill } from 'react-icons/ri';
 import { IoMdEye, IoMdEyeOff } from 'react-icons/io';
-import { Button } from '@mui/material';
+import { Button, CircularProgress } from '@mui/material';
 import { Link, useNavigate } from 'react-router-dom';
 import Logo from '../../assets/images/logo.png';
 import { postData } from '../../utils/api';
 
 const Login = () => {
+    const [isLoading, setIsLoading] = useState(false);
     const [inputIndex, setInputIndex] = useState(null);
     const [isShowPassword, setIsShowPassword] = useState(false);
     const context = useContext(MyContext);
@@ -52,26 +53,38 @@ const Login = () => {
             })
             return false;
         }
+        setIsLoading(true);
         postData("/api/user/signin", formFields).then((res) => {
             try {
-                console.log(res);
-                localStorage.setItem("token",res.token);
-                const user = {
-                    name: res.user?.name,
-                    email: res.user?.email,
-                    userId: res.user?.id
+                if (res.status === true) {
+                    console.log(res);
+                    localStorage.setItem("token", res.token);
+                    const user = {
+                        name: res.user?.name,
+                        email: res.user?.email,
+                        userId: res.user?.id
+                    }
+                    localStorage.setItem("user", JSON.stringify(user));
+                    context.setAlertBox({
+                        open: true,
+                        error: false,
+                        msg: "Login Successfully!"
+                    });
+                    setTimeout(() => {
+                        setIsLoading(false);
+                        history('/');
+                    }, 1000);
+                } else {
+                    context.setAlertBox({
+                        open: true,
+                        error: true,
+                        msg: res.msg
+                    });
+                    setIsLoading(false);
                 }
-                localStorage.setItem("user",JSON.stringify(user));
-                context.setAlertBox({
-                    open: true,
-                    error: false,
-                    msg: "Login Successfully!"
-                });
-                setTimeout(() => {
-                    history('/');
-                }, 1000);
             } catch (error) {
                 console.log(error);
+                setIsLoading(false);
                 context.setAlertBox({
                     open: true,
                     error: true,
@@ -146,7 +159,9 @@ const Login = () => {
 
                             <div className="form-group">
                                 <Button onClick={signIn} className="btn-blue btn-lg w-100 btn-big">
-                                    Sign In
+                                    {
+                                        isLoading === true ? <CircularProgress /> : 'Login'
+                                    }
                                 </Button>
                             </div>
 
