@@ -17,9 +17,16 @@ export const postData = async (url, formData) => {
         return response.data;
     } catch (error) {
         console.log("POST Error:", error);
-        return error;
+
+        if (error.response && error.response.data) {
+            return error.response.data;
+        }
+        return {
+            status: false,
+            msg: "Unexpected error"
+        };
     }
-}
+};
 
 export const editData = async(url, updatedData) => {
     const {res} = await axios.put(`http://localhost:4000${url}`,updatedData)

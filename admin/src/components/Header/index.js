@@ -49,7 +49,8 @@ const Header = () => {
             msg: "Logout Successfully"
         })
         setTimeout(() => {
-            history('/login');
+            //history('/login');
+            window.location.href = '/login';
         },1500);
     }
 
@@ -220,7 +221,7 @@ const Header = () => {
                             
                         </div>
                         {
-                            context.isLogin !== true ? 
+                            context.isLogin !== true ?
                             <Link to={'/login'}>
                             <Button className="btn-blue btn-lg">Sign In</Button></Link>
                             :

@@ -1,7 +1,7 @@
 import "bootstrap/dist/css/bootstrap.min.css"
 import './App.css';
 import { createContext, useEffect, useState } from "react";
-import { BrowserRouter, Route , Routes} from "react-router-dom";
+import { BrowserRouter, Route, Routes } from "react-router-dom";
 import Home from "./Pages/Home";
 import Listing from "./Pages/Listing";
 import ProductDetails from "./Pages/ProductDetails";
@@ -12,29 +12,52 @@ import ProductModel from "./Components/ProductModel";
 import Cart from "./Pages/Cart";
 import SignIn from "./Pages/SignIn";
 import SignUp from "./Pages/SignUp";
+import Snackbar from '@mui/material/Snackbar';
+import Alert from '@mui/material/Alert';
 import { fetchDataFromApi } from "./utils/api";
 
 const MyContext = createContext();
 
 function App() {
 
-  const [countryList,setCountryList] = useState([]);
-  const [selectedCountry,setSelectedCountry] = useState('');
-  const [isOpenProductModel,setIsOpenProductModel] = useState({
-    id:'',
-    open:false
+  const [countryList, setCountryList] = useState([]);
+  const [selectedCountry, setSelectedCountry] = useState('');
+  const [isOpenProductModel, setIsOpenProductModel] = useState({
+    id: '',
+    open: false
   });
+  const [user, setUser] = useState({
+    name: '',
+    email: '',
+    userId: ''
+  })
   const [isHeaderFooterShow, setIsHeaderFooterShow] = useState(true);
   const [isLogin, setIsLogin] = useState(false);
   const [productData, setProductData] = useState();
 
   const [categoryData, setCategoryData] = useState([]);
   const [subCategoryData, setSubCategoryData] = useState([]);
-  const [activeCat,setActiveCat] = useState('');
+  const [activeCat, setActiveCat] = useState('');
+
+  const [alertBox, setAlertBox] = useState({
+    msg: '',
+    error: false,
+    open: false
+  });
+
+  const handleClose = (event, reason) => {
+    if (reason === 'clickaway') {
+      return;
+    }
+    setAlertBox({
+      open: false,
+      msg: ''
+    });
+  };
 
   useEffect(() => {
     getCountry("https://countriesnow.space/api/v0.1/countries/");
-    
+
     fetchDataFromApi("/api/category").then((res) => {
       setCategoryData(res.categoryList);
       setActiveCat(res.categoryList[0]?.name)
@@ -42,17 +65,28 @@ function App() {
     fetchDataFromApi("/api/subCat").then((res) => {
       setSubCategoryData(res.subCategoryList);
     })
-  },[]);
+  }, []);
+
+  useEffect(() => {
+    const token = localStorage.getItem("token");
+    if (token !== "" && token !== undefined && token !== null) {
+      setIsLogin(true);
+      const userData = JSON.parse(localStorage.getItem("user"));
+      setUser(userData);
+    } else {
+      setIsLogin(false);
+    }
+  }, [isLogin])
 
   useEffect(() => {
     isOpenProductModel.open === true &&
-    fetchDataFromApi(`/api/products/${isOpenProductModel.id}`).then((res) => {
-      setProductData(res);
-    })
-  },[isOpenProductModel]);
-  
+      fetchDataFromApi(`/api/products/${isOpenProductModel.id}`).then((res) => {
+        setProductData(res);
+      })
+  }, [isOpenProductModel]);
+
   const getCountry = async (url) => {
-    const responsive = await axios.get(url).then((res)=>{
+    const responsive = await axios.get(url).then((res) => {
       setCountryList(res.data.data)
     })
   }
@@ -71,33 +105,45 @@ function App() {
     setCategoryData,
     subCategoryData,
     setSubCategoryData,
-    activeCat
+    activeCat,
+    alertBox,
+    setAlertBox
   }
   return (
     <BrowserRouter>
-    <MyContext.Provider value={values}>
-      {
-        isHeaderFooterShow === true && <Header/>
-      }
-      <Routes>
-        <Route path="/" exact={true} element={<Home/>}/>
-        <Route path="/subCat/:id" exact={true} element={<Listing/>}/>
-        <Route path="/product/:id" exact={true} element={<ProductDetails/>}/>
-        <Route path="/cart" exact={true} element={<Cart/>}/>
-        <Route path="/signIn" exact={true} element={<SignIn/>}/>
-        <Route path="/signUp" exact={true} element={<SignUp/>}/>
-      </Routes>
-      {
-        isHeaderFooterShow === true && <Footer/>
-      }
-      
-      {
-        isOpenProductModel.open === true && <ProductModel data={productData}/>
-      }
+      <MyContext.Provider value={values}>
+        {
+          isHeaderFooterShow === true && <Header />
+        }
+        <Snackbar open={alertBox.open} autoHideDuration={6000} onClose={handleClose}>
+          <Alert
+            onClose={handleClose}
+            severity={alertBox.error === false ? "success" : "error"}
+            variant="filled"
+            sx={{ width: '100%' }}
+          >
+            {alertBox.msg}
+          </Alert>
+        </Snackbar>
+        <Routes>
+          <Route path="/" exact={true} element={<Home />} />
+          <Route path="/subCat/:id" exact={true} element={<Listing />} />
+          <Route path="/product/:id" exact={true} element={<ProductDetails />} />
+          <Route path="/cart" exact={true} element={<Cart />} />
+          <Route path="/signin" exact={true} element={<SignIn />} />
+          <Route path="/signUp" exact={true} element={<SignUp />} />
+        </Routes>
+        {
+          isHeaderFooterShow === true && <Footer />
+        }
+
+        {
+          isOpenProductModel.open === true && <ProductModel data={productData} />
+        }
       </MyContext.Provider>
     </BrowserRouter>
   );
 }
 
 export default App;
-export {MyContext}
+export { MyContext }

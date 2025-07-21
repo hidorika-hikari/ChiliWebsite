@@ -94,7 +94,8 @@ const SignUp = () => {
                     });
                     setTimeout(() => {
                         setIsLoading(true);
-                        history('/login');
+                        window.location.href = '/login';
+                        //history('/login');
                     }, 2000);
                 } else {
                     context.setAlertBox({
@@ -260,7 +261,7 @@ const SignUp = () => {
                                     <div className="form-group">
                                         <Button type="submit" className="btn-blue btn-lg w-100 btn-big">
                                             {
-                                                isLoading === true ? <CircularProgress/> : 'Sign Up'
+                                                isLoading === true ? <CircularProgress style={{ width: 30, height: 27 }} /> : 'Sign Up'
                                             }
                                         </Button>
                                     </div>

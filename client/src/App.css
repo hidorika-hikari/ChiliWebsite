@@ -1701,3 +1701,18 @@ a:hover{
   transition: transform 0.3s ease;
   border-radius: 6px;
 }
+
+.css-1uent87-MuiButtonBase-root-MuiButton-root .css-1wxecgq-MuiCircularProgress-root .css-54pwck-MuiCircularProgress-svg{
+  color: #fff !important;
+  width: 25px !important;
+  height: 25px !important;
+}
+
+#accDrop ul li{
+  font-size: 16px !important;
+  padding: 7px 15px !important;
+}
+
+#accDrop ul li svg{
+  font-size: 15px !important;
+}

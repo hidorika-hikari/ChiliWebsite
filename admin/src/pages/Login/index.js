@@ -5,8 +5,8 @@ import { RiLockPasswordFill } from 'react-icons/ri';
 import { IoMdEye, IoMdEyeOff } from 'react-icons/io';
 import { Button, CircularProgress } from '@mui/material';
 import { Link, useNavigate } from 'react-router-dom';
-import Logo from '../../assets/images/logo.png';
 import { postData } from '../../utils/api';
+import Logo from '../../assets/images/logo.png';
 
 const Login = () => {
     const [isLoading, setIsLoading] = useState(false);
@@ -72,7 +72,8 @@ const Login = () => {
                     });
                     setTimeout(() => {
                         setIsLoading(false);
-                        history('/');
+                        window.location.href = '/';
+                        //history('/');
                     }, 1000);
                 } else {
                     context.setAlertBox({
@@ -109,7 +110,7 @@ const Login = () => {
                     </div>
 
                     <div className="wrapper mt-3 card border">
-                        <form>
+                        <form onSubmit={signIn}>
                             <div
                                 className={`form-group position-relative ${inputIndex === 0 && 'focus'}`}
                             >
@@ -158,9 +159,9 @@ const Login = () => {
                             </div>
 
                             <div className="form-group">
-                                <Button onClick={signIn} className="btn-blue btn-lg w-100 btn-big">
+                                <Button type='submit' className="btn-blue btn-lg w-100 btn-big">
                                     {
-                                        isLoading === true ? <CircularProgress /> : 'Login'
+                                        isLoading === true ? <CircularProgress style={{ width: 30, height: 27 }}/> : 'Login'
                                     }
                                 </Button>
                             </div>
