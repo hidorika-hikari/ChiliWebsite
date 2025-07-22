@@ -20,6 +20,7 @@ const ProductDetails = () => {
     const [activeTabs, setActiveTabs] = useState(0);
 
     let [cartFields, setCartFields] = useState({});
+    let [productQuantity, setProductQuantity] = useState();
     const [productData, setProductData] = useState();
     const [relatedProductData, setRelatedProductData] = useState([]);
     const [recentlyViewProducts, setRecentlyViewProducts] = useState([]);
@@ -42,16 +43,21 @@ const ProductDetails = () => {
         })
     }, [id])
 
+    const quantity = (val) => {
+        setProductQuantity(val);
+    }
+
     const addToCart = (data) => {
-        //cartFields.productTitle = productData?.name
-        //cartFields.images = productData?.images[0]
-        //cartFields.ratting = productData?.ratting
-        //cartFields.price = productData?.price
-        //cartFields.quantity = 0
-        //cartFields.subTotal = 0
-        //cartFields.productId = productData?.id
-        //cartFields.userId = user?.userId
-        context.addToCart(data);
+        const user = JSON.parse(localStorage.getItem("user"));
+        cartFields.productTitle = productData?.name
+        cartFields.images = productData?.images[0]
+        cartFields.rating = productData?.rating
+        cartFields.price = productData?.price
+        cartFields.quantity = productQuantity
+        cartFields.subTotal = parseInt(productData?.price * productQuantity)
+        cartFields.productId = productData?.id
+        cartFields.userId = user?.userId
+        context.addToCart(cartFields);
     }
 
     return (
@@ -149,7 +155,7 @@ const ProductDetails = () => {
                                 </div>
                             }
                             <div className="d-flex align-items-center mt-4">
-                                <QuantityBox />
+                                <QuantityBox quantity={quantity}/>
                                 <Button className="btn-blue btn-lg btn-big btn-round" onClick={() => addToCart(productData)}>
                                     <BsCartFill /> &nbsp; Add to Cart</Button>
                                 <Button className="btn-blue btn-lg btn-big btn-circle ms-4">

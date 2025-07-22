@@ -1,26 +1,30 @@
 import { FaMinus } from "react-icons/fa6";
 import { FaPlus } from "react-icons/fa6";
 import Button from '@mui/material/Button';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 
-const QuantityBox = () => {
+const QuantityBox = (props) => {
 
-const [inputVal, setInputVal] = useState(1);
+    const [inputVal, setInputVal] = useState(1);
 
-const minus = () => {
-    if(inputVal !==1 && inputVal>0){
-        setInputVal(inputVal-1);
+    const minus = () => {
+        if (inputVal !== 1 && inputVal > 0) {
+            setInputVal(inputVal - 1);
+        }
     }
-}
 
-const plus = () => {
-    setInputVal(inputVal+1);
-}
+    const plus = () => {
+        setInputVal(inputVal + 1);
+    }
 
+    useEffect(() => {
+        props.quantity(inputVal);
+    }, [inputVal]);
+    
     return (
         <div className='quantityDrop d-flex align-items-center'>
             <Button onClick={minus}><FaMinus /></Button>
-            <input type='text' value={inputVal}/>
+            <input type='text' value={inputVal} />
             <Button onClick={plus}><FaPlus /></Button>
         </div>
     )

@@ -94,17 +94,7 @@ function App() {
   }
 
   const addToCart = (data) => {
-    const user = JSON.parse(localStorage.getItem("user"));
-    //console.log(data);
-      cartFields.productTitle = data?.name
-      cartFields.images = data?.images[0]
-      cartFields.ratting = data?.ratting
-      cartFields.price = data?.price
-      cartFields.quantity = 0
-      cartFields.subTotal = 0
-      cartFields.productId = data?.id
-      cartFields.userId = user?.userId
-    console.log(cartFields);
+    console.log(data);
   }
 
   const values = {
