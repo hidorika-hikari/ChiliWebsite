@@ -15,27 +15,30 @@ router.get('/', async (req, res) => {
 });
 
 router.post('/add', async (req, res) => {
-    let cartList = new Cart({
-        productTitle: req.body.productTitle,
-        images: req.body.images,
-        ratting: req.body.ratting,
-        price: req.body.price,
-        quantity: req.body.quantity,
-        subTotal: req.body.subTotal,
-        productId: req.body.productId,
-        userId: req.body.userId
-    });
-
-    if (!cartList) {
-        res.status(500).json({
-            error: err,
-            success: false
-        })
+    const cartItem = await Cart.find({productId:req.body.productId});
+    if (cartItem.length === 0){
+        let cartList = new Cart({
+            productTitle: req.body.productTitle,
+            images: req.body.images,
+            rating: req.body.rating,
+            price: req.body.price,
+            quantity: req.body.quantity,
+            subTotal: req.body.subTotal,
+            productId: req.body.productId,
+            userId: req.body.userId
+        });
+        if (!cartList) {
+            res.status(500).json({
+                error: err,
+                success: false
+            })
+        }
+        cartList = await cartList.save();
+        res.status(201).json(cartList);
+    } else {
+        res.status(401).json({ status: false ,msg: 'Product already added in the cart' })
     }
-    cartList = await cartList.save();
-    res.status(201).json(cartList);
 });
-
 
 router.delete('/:id', async (req, res) => {
     const cartItem = await Cart.findById(req.params.id);
@@ -61,7 +64,7 @@ router.put('/:id', async (req, res) => {
         {
             productTitle: req.body.productTitle,
             images: req.body.images,
-            ratting: req.body.ratting,
+            rating: req.body.rating,
             price: req.body.price,
             quantity: req.body.quantity,
             subTotal: req.body.subTotal,

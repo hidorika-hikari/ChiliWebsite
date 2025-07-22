@@ -14,7 +14,7 @@ import SignIn from "./Pages/SignIn";
 import SignUp from "./Pages/SignUp";
 import Snackbar from '@mui/material/Snackbar';
 import Alert from '@mui/material/Alert';
-import { fetchDataFromApi } from "./utils/api";
+import { fetchDataFromApi, postData } from "./utils/api";
 
 const MyContext = createContext();
 
@@ -94,6 +94,21 @@ function App() {
   }
 
   const addToCart = (data) => {
+    postData(`/api/cart/add`,data).then((res) => {
+      if (res.status !== false){
+        setAlertBox({
+          open: true,
+          error: false,
+          msg: 'Item is add to cart'
+        })
+      } else {
+        setAlertBox({
+          open: true,
+          error: true,
+          msg: res.msg
+        })
+      }
+    })
     console.log(data);
   }
 

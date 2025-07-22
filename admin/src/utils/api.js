@@ -27,7 +27,6 @@ export const postData = async (url, formData) => {
     }
 };
 
-
 export const editData = async(url, updatedData) => {
     const {res} = await axios.put(`http://localhost:4000${url}`,updatedData)
     return res;
