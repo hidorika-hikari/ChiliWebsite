@@ -5,9 +5,23 @@ import { Link } from 'react-router-dom';
 import { useContext, useState } from 'react';
 import { FaAngleRight } from "react-icons/fa";
 import { MyContext } from '../../../App';
+import { Tabs, Tab } from '@mui/material';
+import { useNavigate } from 'react-router-dom';
 
 const Navigation = (props) => {
-
+    const navigate = useNavigate();
+    const [value, setValue] = useState(0);
+    const handleChange = (event, newValue) => {
+        setValue(newValue);
+        if (newValue === 0) {
+            navigate('/');
+        } else {
+            const category = context.categoryData[newValue - 1];
+            if (category) {
+                navigate(`/category/${category._id}`);
+            }
+        }
+    };
     const [isOpenSidebarVal, setIsOpenSidebarVal] = useState(false);
     const context = useContext(MyContext)
     return (
@@ -48,24 +62,25 @@ const Navigation = (props) => {
 
                     <div className='col-sm-10 navPart2 d-flex align-items-center'>
                         <ul className='list-inline ms-auto'>
-                            <li className='list-inline-item'><Link to="/"><Button>Home
-                            </Button></Link></li>
-                            {
-                                props.navData?.length !== 0 && props.navData?.map((item, index) => {
-                                    return (
-                                        <li className='list-inline-item'>
-                                            <Link to={`/subCat/${item?.id}`}><Button>{item?.subCat}</Button></Link>
-                                            {
-                                                // <div className='submenu shadow'>
-                                                    // <Link to="/"><Button>Clothing</Button></Link>
-                                                    // <Link to="/"><Button>Footwear</Button></Link>
-                                                    // <Link to="/"><Button>Watches</Button></Link>
-                                                // </div>
-                                            }
-                                        </li>
-                                    )
-                                })
-                            }
+                            <li className='list-inline-item'>
+                                <Tabs
+                                    value={value}
+                                    onChange={handleChange}
+                                    variant="scrollable"
+                                    scrollButtons="auto"
+                                    aria-label="scrollable tabs"
+                                    className='w-75'
+                                >
+                                    <Tab key="home" label="Home" />
+                                    {context.categoryData?.map((item, index) => (
+                                        <Tab
+                                            key={item._id || index}
+                                            className="item"
+                                            label={item.name}
+                                        />
+                                    ))}
+                                </Tabs>
+                            </li>
                         </ul>
                     </div>
                 </div>

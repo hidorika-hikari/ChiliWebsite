@@ -3,30 +3,29 @@ import { FaRegHeart } from "react-icons/fa";
 import { BsCartFill } from "react-icons/bs";
 import { useContext, useEffect, useState } from "react";
 import { MdOutlineCompareArrows } from "react-icons/md";
+import { useParams } from "react-router-dom";
+import { fetchDataFromApi, postData } from "../../utils/api";
+import { MyContext } from "../../App";
 import Tooltip from "@mui/material/Tooltip";
 import RelatedProducts from "../../Pages/ProductDetails/RelatedProducts";
 import ProductZoom from "../../Components/ProductZoom";
 import QuantityBox from "../../Components/QuantityDrop";
 import Button from '@mui/material/Button';
-import { useParams } from "react-router-dom";
-import { fetchDataFromApi, postData } from "../../utils/api";
-import { MyContext } from "../../App";
 
 const ProductDetails = () => {
 
     const [activeSpicy, setActiveSpicy] = useState(null);
     const [activeWeight, setActiveWeight] = useState(null);
     const [activeContent, setActiveContent] = useState(null);
-
     const [activeTabs, setActiveTabs] = useState(0);
+
+    let [cartFields, setCartFields] = useState({});
     const [productData, setProductData] = useState();
     const [relatedProductData, setRelatedProductData] = useState([]);
     const [recentlyViewProducts, setRecentlyViewProducts] = useState([]);
-
     const context = useContext(MyContext);
 
     const { id } = useParams();
-    console.log('Rating:', productData?.rating);
     useEffect(() => {
         window.scrollTo(0, 0);
         fetchDataFromApi(`/api/products/${id}`).then((res) => {
@@ -42,8 +41,17 @@ const ProductDetails = () => {
             postData(`/api/products/recentlyViewed`, res)
         })
     }, [id])
-    const addToCart = (id) => {
-        context.addToCart(id);
+
+    const addToCart = (data) => {
+        //cartFields.productTitle = productData?.name
+        //cartFields.images = productData?.images[0]
+        //cartFields.ratting = productData?.ratting
+        //cartFields.price = productData?.price
+        //cartFields.quantity = 0
+        //cartFields.subTotal = 0
+        //cartFields.productId = productData?.id
+        //cartFields.userId = user?.userId
+        context.addToCart(data);
     }
 
     return (
@@ -142,7 +150,7 @@ const ProductDetails = () => {
                             }
                             <div className="d-flex align-items-center mt-4">
                                 <QuantityBox />
-                                <Button className="btn-blue btn-lg btn-big btn-round" onClick={() => addToCart(id)}>
+                                <Button className="btn-blue btn-lg btn-big btn-round" onClick={() => addToCart(productData)}>
                                     <BsCartFill /> &nbsp; Add to Cart</Button>
                                 <Button className="btn-blue btn-lg btn-big btn-circle ms-4">
                                     <BsCartFill /></Button>
@@ -186,7 +194,6 @@ const ProductDetails = () => {
                                     <p>{productData?.description}</p>
                                 </div>
                             }
-
                             {
                                 activeTabs === 1 &&
                                 <div className="tabContent">
@@ -275,7 +282,6 @@ const ProductDetails = () => {
                                     </table>
                                 </div>
                             }
-
                             {
                                 activeTabs === 2 &&
                                 <div className="tabContents">

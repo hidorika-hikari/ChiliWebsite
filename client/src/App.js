@@ -30,7 +30,8 @@ function App() {
     name: '',
     email: '',
     userId: ''
-  })
+  });
+  let [cartFields, setCartFields] = useState({});
   const [isHeaderFooterShow, setIsHeaderFooterShow] = useState(true);
   const [isLogin, setIsLogin] = useState(false);
   const [productData, setProductData] = useState();
@@ -92,8 +93,18 @@ function App() {
     })
   }
 
-  const addToCart = (id) => {
-    alert(id);
+  const addToCart = (data) => {
+    const user = JSON.parse(localStorage.getItem("user"));
+    //console.log(data);
+      cartFields.productTitle = data?.name
+      cartFields.images = data?.images[0]
+      cartFields.ratting = data?.ratting
+      cartFields.price = data?.price
+      cartFields.quantity = 0
+      cartFields.subTotal = 0
+      cartFields.productId = data?.id
+      cartFields.userId = user?.userId
+    console.log(cartFields);
   }
 
   const values = {
@@ -135,7 +146,7 @@ function App() {
         </Snackbar>
         <Routes>
           <Route path="/" exact={true} element={<Home />} />
-          <Route path="/subCat/:id" exact={true} element={<Listing />} />
+          <Route path="/category/:id" exact={true} element={<Listing />} />
           <Route path="/product/:id" exact={true} element={<ProductDetails />} />
           <Route path="/cart" exact={true} element={<Cart />} />
           <Route path="/signin" exact={true} element={<SignIn />} />

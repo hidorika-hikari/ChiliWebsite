@@ -9,7 +9,7 @@ import { MyContext } from "../../App";
 import { Rating } from "@mui/material";
 
 const Sidebar = (props) => {
-    const [value, setValue] = useState([100, 10000]);
+    const [value, setValue] = useState([1, 10000]);
     const context = useContext(MyContext);
     const [filterSubCat, setFilterSubCat] = useState();
     const [subCatId, setSubCatId] = useState('');
@@ -40,7 +40,7 @@ const Sidebar = (props) => {
         <>
             <div className="sidebar">
                 <div className="filterBox">
-                    <h6>PRODUCT CATEGORIES</h6>
+                    <h6>PRODUCT SUBCATEGORIES</h6>
                     <div className="scroll">
                         <RadioGroup
                             aria-labelledby="demo-controlled-radio-buttons-group"
@@ -60,12 +60,12 @@ const Sidebar = (props) => {
                 </div>
 
                 <div className="filterBox">
-                    <h6>FILTER BY PRICE</h6>
+                    <h6>FILTER BY SUBCATEGORY PRICE</h6>
                     <Slider
                         value={value}
                         onChange={(e, newValue) => setValue(newValue)}
                         valueLabelDisplay="auto"
-                        min={100}
+                        min={1}
                         max={10000}
                         step={5}
                     />
@@ -80,11 +80,11 @@ const Sidebar = (props) => {
                     <h6>FILTER BY RATING</h6>
                     <div className="scroll ps-0">
                         <ul style={{ paddingLeft: 0 }}>
-                            <li onClick={() => filterByRating(5)}><Rating name="read-only" value={5} readOnly size="small"/></li>
-                            <li onClick={() => filterByRating(4)}><Rating name="read-only" value={4} readOnly size="small"/></li>
-                            <li onClick={() => filterByRating(3)}><Rating name="read-only" value={3} readOnly size="small"/></li>
-                            <li onClick={() => filterByRating(2)}><Rating name="read-only" value={2} readOnly size="small"/></li>
-                            <li onClick={() => filterByRating(1)}><Rating name="read-only" value={1} readOnly size="small"/></li>
+                            <li onClick={() => filterByRating(5)}><Rating name="read-only" value={5} readOnly size="small" /></li>
+                            <li onClick={() => filterByRating(4)}><Rating name="read-only" value={4} readOnly size="small" /></li>
+                            <li onClick={() => filterByRating(3)}><Rating name="read-only" value={3} readOnly size="small" /></li>
+                            <li onClick={() => filterByRating(2)}><Rating name="read-only" value={2} readOnly size="small" /></li>
+                            <li onClick={() => filterByRating(1)}><Rating name="read-only" value={1} readOnly size="small" /></li>
                         </ul>
                     </div>
                 </div>

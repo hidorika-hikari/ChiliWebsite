@@ -4,12 +4,12 @@ import Sidebar from '../../Components/Sidebar';
 import Menu from '@mui/material/Menu'
 import MenuItem from '@mui/material/MenuItem';
 import ProductItem from '../../Components/ProductItem';
+import Pagination from '@mui/material/Pagination';
 import { IoIosMenu } from 'react-icons/io';
 import { CgMenuGridR } from "react-icons/cg";
 import { HiViewGrid } from "react-icons/hi";
 import { TfiLayoutGrid4Alt } from 'react-icons/tfi';
 import { FaAngleDown } from 'react-icons/fa';
-import Pagination from '@mui/material/Pagination';
 import { fetchDataFromApi } from '../../utils/api';
 import { useParams } from 'react-router-dom';
 
@@ -43,10 +43,9 @@ const Listing = () => {
                 setProductData(res.products);
             });
     }
-    
     useEffect(() => {
         if (!id) return;
-        fetchDataFromApi(`/api/products?subCat=${id}`).then((res) => {
+        fetchDataFromApi(`/api/products?category=${id}`).then((res) => {
             setProductData(res.products);
         });
     }, [id]);
@@ -83,9 +82,6 @@ const Listing = () => {
                                         anchorEl={anchorEl}
                                         open={openDropdown}
                                         onClose={handleClose}
-                                        MenuListProps={{
-                                            'aria-labelledby': 'basic-button',
-                                        }}
                                     >
                                         <MenuItem onClick={handleClose}>10</MenuItem>
                                         <MenuItem onClick={handleClose}>20</MenuItem>

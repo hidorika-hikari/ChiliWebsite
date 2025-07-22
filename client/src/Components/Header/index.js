@@ -38,7 +38,7 @@ const Header = () => {
         setTimeout(() => {
             //history('/login');
             window.location.href = '/signIn';
-        },1500);
+        }, 1500);
     }
 
     return (
@@ -68,40 +68,40 @@ const Header = () => {
                                             <Link to="/signIn"><Button className='btn-blue btn-round'>Sign In</Button></Link> :
                                             <>
                                                 <Button className='circle' onClick={handleClick}><FiUser /></Button>
-                                                    <Menu
-                                                        anchorEl={anchorEl}
-                                                        id="accDrop"
-                                                        open={open}
-                                                        onClose={handleClose}
-                                                        onClick={handleClose}
-                                                        transformOrigin={{ horizontal: 'right', vertical: 'top' }}
-                                                        anchorOrigin={{ horizontal: 'right', vertical: 'bottom' }}
-                                                    >
-                                                        <MenuItem onClick={handleClose}>
-                                                            <ListItemIcon>
-                                                                <MdAccountCircle  fontSize="small" />
-                                                            </ListItemIcon>
-                                                            My Account
-                                                        </MenuItem>
-                                                        <MenuItem onClick={handleClose}>
-                                                            <ListItemIcon>
-                                                                <TbChecklist fontSize="small" />
-                                                            </ListItemIcon>
-                                                            My Orders
-                                                        </MenuItem>
-                                                        <MenuItem onClick={handleClose}>
-                                                            <ListItemIcon>
-                                                                <LiaClipboardListSolid />
-                                                            </ListItemIcon>
-                                                            My Lists
-                                                        </MenuItem>
-                                                        <MenuItem onClick={logout}>
-                                                            <ListItemIcon>
-                                                                <Logout fontSize="small" />
-                                                            </ListItemIcon>
-                                                            Logout
-                                                        </MenuItem>
-                                                    </Menu>
+                                                <Menu
+                                                    anchorEl={anchorEl}
+                                                    id="accDrop"
+                                                    open={open}
+                                                    onClose={handleClose}
+                                                    onClick={handleClose}
+                                                    transformOrigin={{ horizontal: 'right', vertical: 'top' }}
+                                                    anchorOrigin={{ horizontal: 'right', vertical: 'bottom' }}
+                                                >
+                                                    <MenuItem onClick={handleClose}>
+                                                        <ListItemIcon>
+                                                            <MdAccountCircle fontSize="small" />
+                                                        </ListItemIcon>
+                                                        My Account
+                                                    </MenuItem>
+                                                    <MenuItem onClick={handleClose}>
+                                                        <ListItemIcon>
+                                                            <TbChecklist fontSize="small" />
+                                                        </ListItemIcon>
+                                                        My Orders
+                                                    </MenuItem>
+                                                    <MenuItem onClick={handleClose}>
+                                                        <ListItemIcon>
+                                                            <LiaClipboardListSolid />
+                                                        </ListItemIcon>
+                                                        My Lists
+                                                    </MenuItem>
+                                                    <MenuItem onClick={logout}>
+                                                        <ListItemIcon>
+                                                            <Logout fontSize="small" />
+                                                        </ListItemIcon>
+                                                        Logout
+                                                    </MenuItem>
+                                                </Menu>
                                             </>
                                     }
                                     <div className='ms-2 cartTab d-flex align-items-center'>
@@ -121,7 +121,8 @@ const Header = () => {
                     </div>
                 </header>
                 {
-                    context.subCategoryData?.length !== 0 && <Navigation navData={context.subCategoryData} />
+                    context.categoryData?.length > 0 &&
+                    <Navigation navData={context.categoryData} />
                 }
             </div>
         </>
