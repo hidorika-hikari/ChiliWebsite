@@ -22,12 +22,13 @@ const categoryRoutes = require('./routes/categories');
 const productRoutes = require('./routes/products');
 const subCatSchema = require('./routes/subCat');
 const productWeightRoutes = require('./routes/productWeight');
-const productRamsRoutes = require('./routes/productRams')
-const productSizeRoutes = require('./routes/productSize')
-const userRoutes = require('./routes/user')
+const productRamsRoutes = require('./routes/productRams');
+const productSizeRoutes = require('./routes/productSize');
+const userRoutes = require('./routes/user');
+const cart = require('./routes/cart');
 
 app.use('/api/user', userRoutes);
-//app.use('/api/user/id',userRoutes); // for /api/user/etc.
+app.use('/api/cart',cart);
 app.use('/api/subCat', subCatSchema);
 app.use('/api/category', categoryRoutes);
 app.use('/api/products', productRoutes);

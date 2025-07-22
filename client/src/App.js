@@ -38,6 +38,7 @@ function App() {
   const [categoryData, setCategoryData] = useState([]);
   const [subCategoryData, setSubCategoryData] = useState([]);
   const [activeCat, setActiveCat] = useState('');
+  const [cartData, setCartData] = useState('');
 
   const [alertBox, setAlertBox] = useState({
     msg: '',
@@ -91,6 +92,10 @@ function App() {
     })
   }
 
+  const addToCart = (id) => {
+    alert(id);
+  }
+
   const values = {
     countryList,
     setSelectedCountry,
@@ -107,7 +112,10 @@ function App() {
     setSubCategoryData,
     activeCat,
     alertBox,
-    setAlertBox
+    setAlertBox,
+    addToCart,
+    cartData,
+    setCartData
   }
   return (
     <BrowserRouter>

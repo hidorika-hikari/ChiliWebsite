@@ -1,7 +1,7 @@
 import { Rating } from "@mui/material";
 import { FaRegHeart } from "react-icons/fa";
 import { BsCartFill } from "react-icons/bs";
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { MdOutlineCompareArrows } from "react-icons/md";
 import Tooltip from "@mui/material/Tooltip";
 import RelatedProducts from "../../Pages/ProductDetails/RelatedProducts";
@@ -10,18 +10,20 @@ import QuantityBox from "../../Components/QuantityDrop";
 import Button from '@mui/material/Button';
 import { useParams } from "react-router-dom";
 import { fetchDataFromApi, postData } from "../../utils/api";
+import { MyContext } from "../../App";
 
 const ProductDetails = () => {
 
-    const [activeSize, setActiveSize] = useState(null);
+    const [activeSpicy, setActiveSpicy] = useState(null);
+    const [activeWeight, setActiveWeight] = useState(null);
+    const [activeContent, setActiveContent] = useState(null);
+
     const [activeTabs, setActiveTabs] = useState(0);
     const [productData, setProductData] = useState();
     const [relatedProductData, setRelatedProductData] = useState([]);
     const [recentlyViewProducts, setRecentlyViewProducts] = useState([]);
 
-    const isActive = (index) => {
-        setActiveSize(index);
-    }
+    const context = useContext(MyContext);
 
     const { id } = useParams();
     console.log('Rating:', productData?.rating);
@@ -40,6 +42,9 @@ const ProductDetails = () => {
             postData(`/api/products/recentlyViewed`, res)
         })
     }, [id])
+    const addToCart = (id) => {
+        context.addToCart(id);
+    }
 
     return (
         <>
@@ -82,8 +87,8 @@ const ProductDetails = () => {
                                             productData.productSize.map((item, index) => (
                                                 <li key={item._id} className="list-inline-item">
                                                     <a
-                                                        className={`tag ${activeSize === index ? 'active' : ''}`}
-                                                        onClick={() => isActive(index)}
+                                                        className={`tag ${activeSpicy === index ? 'active' : ''}`}
+                                                        onClick={() => setActiveSpicy(index)}
                                                     >
                                                         {item.productSize}
                                                     </a>
@@ -93,6 +98,7 @@ const ProductDetails = () => {
                                     </ul>
                                 </div>
                             }
+
                             {
                                 productData?.productWeight?.length > 0 &&
                                 <div className="productSize d-flex align-items-center">
@@ -102,8 +108,8 @@ const ProductDetails = () => {
                                             productData.productWeight.map((item, index) => (
                                                 <li key={item._id} className="list-inline-item">
                                                     <a
-                                                        className={`tag ${activeSize === index ? 'active' : ''}`}
-                                                        onClick={() => isActive(index)}
+                                                        className={`tag ${activeWeight === index ? 'active' : ''}`}
+                                                        onClick={() => setActiveWeight(index)}
                                                     >
                                                         {item.productWeight}
                                                     </a>
@@ -113,6 +119,7 @@ const ProductDetails = () => {
                                     </ul>
                                 </div>
                             }
+
                             {
                                 productData?.productRams?.length > 0 &&
                                 <div className="productSize d-flex align-items-center">
@@ -122,8 +129,8 @@ const ProductDetails = () => {
                                             productData.productRams.map((item, index) => (
                                                 <li key={item._id} className="list-inline-item">
                                                     <a
-                                                        className={`tag ${activeSize === index ? 'active' : ''}`}
-                                                        onClick={() => isActive(index)}
+                                                        className={`tag ${activeContent === index ? 'active' : ''}`}
+                                                        onClick={() => setActiveContent(index)}
                                                     >
                                                         {item.productRams}
                                                     </a>
@@ -135,7 +142,7 @@ const ProductDetails = () => {
                             }
                             <div className="d-flex align-items-center mt-4">
                                 <QuantityBox />
-                                <Button className="btn-blue btn-lg btn-big btn-round">
+                                <Button className="btn-blue btn-lg btn-big btn-round" onClick={() => addToCart(id)}>
                                     <BsCartFill /> &nbsp; Add to Cart</Button>
                                 <Button className="btn-blue btn-lg btn-big btn-circle ms-4">
                                     <BsCartFill /></Button>
