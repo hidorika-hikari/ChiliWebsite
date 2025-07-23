@@ -20,10 +20,13 @@ const ProductDetails = () => {
     const [activeTabs, setActiveTabs] = useState(0);
 
     let [cartFields, setCartFields] = useState({});
-    let [productQuantity, setProductQuantity] = useState();
+    const [quantityVal, setQuantityVal] = useState(1);
     const [productData, setProductData] = useState();
     const [relatedProductData, setRelatedProductData] = useState([]);
     const [recentlyViewProducts, setRecentlyViewProducts] = useState([]);
+    const handleSelectedItem = (item, quantity) => {
+        setQuantityVal(quantity);
+    };
     const context = useContext(MyContext);
 
     const { id } = useParams();
@@ -43,10 +46,6 @@ const ProductDetails = () => {
         })
     }, [id])
 
-    const quantity = (val) => {
-        setProductQuantity(val);
-    }
-
     const isAddToCartDisabled = (
         (productData?.productSize?.length > 0 && activeSpicy === null) ||
         (productData?.productWeight?.length > 0 && activeWeight === null) ||
@@ -60,8 +59,8 @@ const ProductDetails = () => {
         cartFields.images = productData?.images[0]
         cartFields.rating = productData?.rating
         cartFields.price = productData?.price
-        cartFields.quantity = productQuantity
-        cartFields.subTotal = parseInt(productData?.price * productQuantity)
+        cartFields.quantity = quantityVal
+        cartFields.subTotal = parseInt(productData?.price * quantityVal)
         cartFields.productId = productData?.id
         cartFields.userId = user?.userId
         context.addToCart(cartFields);
@@ -162,14 +161,19 @@ const ProductDetails = () => {
                                 </div>
                             }
                             <div className="d-flex align-items-center mt-4">
-                                <QuantityBox quantity={quantity} />
+                                { /* <QuantityBox
+                                    item={productData}
+                                    onQuantityChange={handleSelectedItem}
+                                /> */}
                                 <Button
                                     className={`btn-lg btn-big btn-round ${isAddToCartDisabled ? 'btn-danger' : 'btn-blue'}`}
-                                    onClick={() => !isAddToCartDisabled && addToCart(productData)}
+                                    onClick={() => !isAddToCartDisabled && addToCart()}
                                     disabled={isAddToCartDisabled}
                                 >
-                                    <BsCartFill /> &nbsp; Add to Cart
+                                    <BsCartFill /> &nbsp;
+                                    {context.addingInCart ? "adding..." : "Add to Cart"}
                                 </Button>
+
                                 <Button className="btn-blue btn-lg btn-big btn-circle ms-4">
                                     <BsCartFill />
                                 </Button>
@@ -185,7 +189,7 @@ const ProductDetails = () => {
                                 </Tooltip>
                             </div>
                             { isAddToCartDisabled && (
-                                <p className="text-danger mt-2">
+                                <p className="text-danger mt-3">
                                     Please select Spicy level, Weight, and Content before adding to cart.
                                 </p>
                             )}

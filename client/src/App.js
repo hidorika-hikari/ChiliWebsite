@@ -39,7 +39,7 @@ function App() {
   const [categoryData, setCategoryData] = useState([]);
   const [subCategoryData, setSubCategoryData] = useState([]);
   const [activeCat, setActiveCat] = useState('');
-  const [cartData, setCartData] = useState('');
+  const [addingInCart, setAddingInCart] = useState(false);
 
   const [alertBox, setAlertBox] = useState({
     msg: '',
@@ -94,19 +94,24 @@ function App() {
   }
 
   const addToCart = (data) => {
-    postData(`/api/cart/add`,data).then((res) => {
-      if (res.status !== false){
+    setAddingInCart(true);
+    postData(`/api/cart/add`, data).then((res) => {
+      if (res.status !== false) {
         setAlertBox({
           open: true,
           error: false,
           msg: 'Item is add to cart'
         })
+        setTimeout(() => {
+          setAddingInCart(false);
+        }, 1000);
       } else {
         setAlertBox({
           open: true,
           error: true,
           msg: res.msg
         })
+        setAddingInCart(false);
       }
     })
     console.log(data);
@@ -130,8 +135,8 @@ function App() {
     alertBox,
     setAlertBox,
     addToCart,
-    cartData,
-    setCartData
+    addingInCart,
+    setAddingInCart
   }
   return (
     <BrowserRouter>
