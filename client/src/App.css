@@ -1717,3 +1717,16 @@ a:hover{
 #accDrop ul li svg{
   font-size: 15px !important;
 }
+
+.tag {
+  border: 1px solid #ccc;
+  cursor: pointer;
+}
+.tag.error {
+  border-color: red;
+}
+
+.css-1uent87-MuiButtonBase-root-MuiButton-root.Mui-disabled{
+  color: red !important;
+  border: 1px solid red !important;
+}

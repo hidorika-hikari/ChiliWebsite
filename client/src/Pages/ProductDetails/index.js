@@ -47,6 +47,13 @@ const ProductDetails = () => {
         setProductQuantity(val);
     }
 
+    const isAddToCartDisabled = (
+        (productData?.productSize?.length > 0 && activeSpicy === null) ||
+        (productData?.productWeight?.length > 0 && activeWeight === null) ||
+        (productData?.productRams?.length > 0 && activeContent === null)
+    );
+
+
     const addToCart = (data) => {
         const user = JSON.parse(localStorage.getItem("user"));
         cartFields.productTitle = productData?.name
@@ -155,18 +162,33 @@ const ProductDetails = () => {
                                 </div>
                             }
                             <div className="d-flex align-items-center mt-4">
-                                <QuantityBox quantity={quantity}/>
-                                <Button className="btn-blue btn-lg btn-big btn-round" onClick={() => addToCart(productData)}>
-                                    <BsCartFill /> &nbsp; Add to Cart</Button>
+                                <QuantityBox quantity={quantity} />
+                                <Button
+                                    className={`btn-lg btn-big btn-round ${isAddToCartDisabled ? 'btn-danger' : 'btn-blue'}`}
+                                    onClick={() => !isAddToCartDisabled && addToCart(productData)}
+                                    disabled={isAddToCartDisabled}
+                                >
+                                    <BsCartFill /> &nbsp; Add to Cart
+                                </Button>
                                 <Button className="btn-blue btn-lg btn-big btn-circle ms-4">
-                                    <BsCartFill /></Button>
+                                    <BsCartFill />
+                                </Button>
                                 <Tooltip title="Add to Wishlist" placement="top">
                                     <Button className="btn-blue btn-lg btn-big btn-circle ms-4">
-                                        <FaRegHeart /></Button></Tooltip>
+                                        <FaRegHeart />
+                                    </Button>
+                                </Tooltip>
                                 <Tooltip title="Add to Compare" placement="top">
                                     <Button className="btn-blue btn-lg btn-big btn-circle ms-4">
-                                        <MdOutlineCompareArrows /></Button></Tooltip>
+                                        <MdOutlineCompareArrows />
+                                    </Button>
+                                </Tooltip>
                             </div>
+                            { isAddToCartDisabled && (
+                                <p className="text-danger mt-2">
+                                    Please select Spicy level, Weight, and Content before adding to cart.
+                                </p>
+                            )}
                         </div>
                     </div>
                     <br />
