@@ -105,14 +105,14 @@ const Header = () => {
                                             </>
                                     }
                                     <div className='ms-2 cartTab d-flex align-items-center'>
-                                        <span className='price'>3.29$</span>
+                                        <span className='price'>{context.cartData.reduce((sum, item) => sum + item.subTotal, 0).toFixed(2)} ฿</span>
                                         <div className='position-relative ms-2 res-hide'>
                                             <Link to="/cart">
                                                 <Button className="circle">
                                                     <IoBagOutline />
                                                 </Button>
                                             </Link>
-                                            <span className='count d-flex align-items-center justify-content-center'>1</span>
+                                            <span className='count d-flex align-items-center justify-content-center'>{context.cartData.length}</span>
                                         </div>
                                     </div>
                                 </div>

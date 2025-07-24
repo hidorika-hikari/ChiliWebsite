@@ -31,7 +31,7 @@ function App() {
     email: '',
     userId: ''
   });
-  let [cartFields, setCartFields] = useState({});
+  const [cartFields, setCartFields] = useState({});
   const [isHeaderFooterShow, setIsHeaderFooterShow] = useState(true);
   const [isLogin, setIsLogin] = useState(false);
   const [productData, setProductData] = useState();
@@ -40,6 +40,7 @@ function App() {
   const [subCategoryData, setSubCategoryData] = useState([]);
   const [activeCat, setActiveCat] = useState('');
   const [addingInCart, setAddingInCart] = useState(false);
+  const [cartData, setCartData] = useState([]);
 
   const [alertBox, setAlertBox] = useState({
     msg: '',
@@ -67,7 +68,16 @@ function App() {
     fetchDataFromApi("/api/subCat").then((res) => {
       setSubCategoryData(res.subCategoryList);
     })
+    fetchDataFromApi("/api/cart").then((res) => {
+      setCartData(res);
+    })
   }, []);
+
+  const getCartData = () => {
+    fetchDataFromApi("/api/cart").then((res) => {
+      setCartData(res);
+    })
+  }
 
   useEffect(() => {
     const token = localStorage.getItem("token");
@@ -102,6 +112,7 @@ function App() {
           error: false,
           msg: 'Item is add to cart'
         })
+        getCartData();
         setTimeout(() => {
           setAddingInCart(false);
         }, 1000);
@@ -136,7 +147,10 @@ function App() {
     setAlertBox,
     addToCart,
     addingInCart,
-    setAddingInCart
+    setAddingInCart,
+    cartData,
+    setCartData,
+    getCartData
   }
   return (
     <BrowserRouter>

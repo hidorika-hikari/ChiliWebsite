@@ -9,7 +9,7 @@ import { MyContext } from "../../App";
 import Tooltip from "@mui/material/Tooltip";
 import RelatedProducts from "../../Pages/ProductDetails/RelatedProducts";
 import ProductZoom from "../../Components/ProductZoom";
-import QuantityBox from "../../Components/QuantityDrop";
+//import QuantityBox from "../../Components/QuantityDrop";
 import Button from '@mui/material/Button';
 
 const ProductDetails = () => {
@@ -24,9 +24,7 @@ const ProductDetails = () => {
     const [productData, setProductData] = useState();
     const [relatedProductData, setRelatedProductData] = useState([]);
     const [recentlyViewProducts, setRecentlyViewProducts] = useState([]);
-    const handleSelectedItem = (item, quantity) => {
-        setQuantityVal(quantity);
-    };
+    //const handleSelectedItem = (item, quantity) => { setQuantityVal(quantity);};
     const context = useContext(MyContext);
 
     const { id } = useParams();
@@ -52,7 +50,6 @@ const ProductDetails = () => {
         (productData?.productRams?.length > 0 && activeContent === null)
     );
 
-
     const addToCart = (data) => {
         const user = JSON.parse(localStorage.getItem("user"));
         cartFields.productTitle = productData?.name
@@ -64,6 +61,7 @@ const ProductDetails = () => {
         cartFields.productId = productData?.id
         cartFields.userId = user?.userId
         context.addToCart(cartFields);
+        context.getCartData();
     }
 
     return (

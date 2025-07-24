@@ -3,10 +3,10 @@ import { Link } from "react-router-dom";
 import QuantityBox from "../../Components/QuantityDrop";
 import { IoIosClose } from "react-icons/io";
 import Button from "@mui/material/Button";
-import { IoCartSharp } from "react-icons/io5";
+import { IoBagCheckOutline } from "react-icons/io5";
 import { useContext, useEffect, useState } from "react";
 import { MyContext } from "../../App";
-import { editData, fetchDataFromApi } from "../../utils/api";
+import { deleteData, editData, fetchDataFromApi } from "../../utils/api";
 
 const Cart = () => {
     const [cartData, setCartData] = useState([]);
@@ -39,7 +39,20 @@ const Cart = () => {
             .then(res => console.log('Quantity updated in DB:', updatedFields))
             .catch(err => console.error('Failed to update quantity in DB:', err));
     };
-    
+
+    const removeItem = (id) => {
+        deleteData(`/api/cart/${id}`).then((res) => {
+            context.setAlertBox({
+                open: true,
+                error: true,
+                msg: "Item remove form cart"
+            })
+            fetchDataFromApi(`/api/cart`).then((res) => {
+                setCartData(res);
+            })
+            context.getCartData();
+        })
+    }
     return (
         <>
             <section className="section cartPage">
@@ -84,7 +97,7 @@ const Cart = () => {
                                                         />
                                                     </td>
                                                     <td width="15%">{item.subTotal} ฿</td>
-                                                    <td width="10%"><span className="remove"><IoIosClose /></span></td>
+                                                    <td width="10%"><span className="remove" onClick={() => removeItem(item?._id)}><IoIosClose /></span></td>
                                                 </tr>
                                             ))
                                         }
@@ -121,7 +134,7 @@ const Cart = () => {
                                 </div>
 
                                 <Button className="btn-blue bg-red btn-lg btn-big">
-                                    <IoCartSharp />Add to Cart
+                                    <IoBagCheckOutline  />&nbsp; Checkout
                                 </Button>
                             </div>
                         </div>
