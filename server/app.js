@@ -26,7 +26,9 @@ const productRamsRoutes = require('./routes/productRams');
 const productSizeRoutes = require('./routes/productSize');
 const userRoutes = require('./routes/user');
 const cart = require('./routes/cart');
+const productReviews = require('./routes/productReviews');
 
+app.use('/api/productReviews',productReviews);
 app.use('/api/user', userRoutes);
 app.use('/api/cart',cart);
 app.use('/api/subCat', subCatSchema);

@@ -1,4 +1,4 @@
-import { Rating } from "@mui/material";
+import { CircularProgress, Rating } from "@mui/material";
 import { FaRegHeart } from "react-icons/fa";
 import { BsCartFill } from "react-icons/bs";
 import { useContext, useEffect, useState } from "react";
@@ -6,6 +6,7 @@ import { MdOutlineCompareArrows } from "react-icons/md";
 import { useParams } from "react-router-dom";
 import { fetchDataFromApi, postData } from "../../utils/api";
 import { MyContext } from "../../App";
+import { FaExclamationTriangle } from "react-icons/fa";
 import Tooltip from "@mui/material/Tooltip";
 import RelatedProducts from "../../Pages/ProductDetails/RelatedProducts";
 import ProductZoom from "../../Components/ProductZoom";
@@ -18,6 +19,7 @@ const ProductDetails = () => {
     const [activeWeight, setActiveWeight] = useState(null);
     const [activeContent, setActiveContent] = useState(null);
     const [activeTabs, setActiveTabs] = useState(0);
+    const [isLoading, setIsLoading] = useState(false);
 
     let [cartFields, setCartFields] = useState({});
     const [quantityVal, setQuantityVal] = useState(1);
@@ -25,6 +27,7 @@ const ProductDetails = () => {
     const [relatedProductData, setRelatedProductData] = useState([]);
     const [recentlyViewProducts, setRecentlyViewProducts] = useState([]);
     //const handleSelectedItem = (item, quantity) => { setQuantityVal(quantity);};
+    const [reviewsData, setReviewsData] = useState([]);
     const context = useContext(MyContext);
 
     const { id } = useParams();
@@ -41,6 +44,9 @@ const ProductDetails = () => {
                 setRecentlyViewProducts(response)
             })
             postData(`/api/products/recentlyViewed`, res)
+        })
+        fetchDataFromApi(`/api/productReviews?productId=${id}`).then((res) => {
+            setReviewsData(res);
         })
     }, [id])
 
@@ -64,6 +70,50 @@ const ProductDetails = () => {
         context.getCartData();
     }
 
+    const [rating, setRating] = useState(0);
+    const [reviews, setReviews] = useState({
+        productId: '',
+        customerName: '',
+        customerId: '',
+        review: '',
+        customerRating: 0
+    });
+
+    const onChangeInput = (e) => {
+        setReviews(() => ({
+            ...reviews,
+            [e.target.name]: e.target.value
+        }))
+    }
+
+    const changeRating = (event, newValue) => {
+        setRating(newValue);
+        setReviews((prev) => ({
+            ...prev,
+            customerRating: newValue
+        }));
+    }
+
+    const addReview = (e) => {
+        e.preventDefault();
+        const user = JSON.parse(localStorage.getItem("user"));
+        reviews.customerName = user?.name;
+        reviews.customerId = user?.userId;
+        reviews.productId = id;
+        setIsLoading(true);
+        postData("/api/productReviews/add", reviews).then((res) => {
+            setIsLoading(false);
+            reviews.customerRating = 1;
+            setReviews({
+                review: '',
+                customerRating: 1
+            })
+            fetchDataFromApi(`/api/productReviews?productId=${id}`).then((res) => {
+                setReviewsData(res);
+            })
+        })
+    }
+
     return (
         <>
             <section className="productDetails section">
@@ -73,8 +123,7 @@ const ProductDetails = () => {
                             <ProductZoom images={productData?.images} discount={productData?.discount} />
                         </div>
                         <div className="col-md-7 ps-5 pe-5">
-                            <h2 className="hd text-capitalize">
-                                {productData?.name}</h2>
+                            <h2 className="hd text-capitalize">{productData?.name}</h2>
                             <ul className="list list-inline d-flex align-items-center">
                                 <li className="list-inline-item">
                                     <div className="d-flex align-items-center">
@@ -84,8 +133,8 @@ const ProductDetails = () => {
                                 </li>
                                 <li className="list-inline-item d-flex align-items-center">
                                     <div className="d-flex align-items-center">
-                                        <Rating name="read-only" value={parseInt(productData?.rating)} precision={0.5} readOnly size="small" />
-                                        <span className="text-light cursor ms-2">1 Review</span>
+                                        <Rating name="read-only" value={parseInt(productData?.rating)} readOnly size="small" />
+                                        <span className="text-light cursor ms-2">{reviewsData.length} Review</span>
                                     </div>
                                 </li>
                             </ul>
@@ -94,8 +143,7 @@ const ProductDetails = () => {
                                 <span className="newPrice text-danger ms-2">{productData?.price}฿</span>
                             </div>
                             <span className="badge badge-success">IN STOCK</span>
-                            <p className="mt-2">{productData?.description}
-                            </p>
+                            <p className="mt-2">{productData?.description}</p>
                             {
                                 productData?.productSize?.length > 0 &&
                                 <div className="productSize d-flex align-items-center">
@@ -159,10 +207,7 @@ const ProductDetails = () => {
                                 </div>
                             }
                             <div className="d-flex align-items-center mt-4">
-                                { /* <QuantityBox
-                                    item={productData}
-                                    onQuantityChange={handleSelectedItem}
-                                /> */}
+                                { /* <QuantityBox item={productData} onQuantityChange={handleSelectedItem}/> */}
                                 <Button
                                     className={`btn-lg btn-big btn-round ${isAddToCartDisabled ? 'btn-danger' : 'btn-blue'}`}
                                     onClick={() => !isAddToCartDisabled && addToCart()}
@@ -171,7 +216,6 @@ const ProductDetails = () => {
                                     <BsCartFill /> &nbsp;
                                     {context.addingInCart ? "adding..." : "Add to Cart"}
                                 </Button>
-
                                 <Button className="btn-blue btn-lg btn-big btn-circle ms-4">
                                     <BsCartFill />
                                 </Button>
@@ -187,9 +231,12 @@ const ProductDetails = () => {
                                 </Tooltip>
                             </div>
                             { isAddToCartDisabled && (
-                                <p className="text-danger mt-3">
-                                    Please select Spicy level, Weight, and Content before adding to cart.
-                                </p>
+                                <div className="alert alert-danger d-flex align-items-center gap-2 mt-4 p-3 rounded shadow-sm">
+                                    <FaExclamationTriangle className="me-2" />
+                                    <div>
+                                        <strong>Please select:</strong> Spicy level, Weight, and Content before adding to cart.
+                                    </div>
+                                </div>
                             )}
                         </div>
                     </div>
@@ -213,7 +260,7 @@ const ProductDetails = () => {
                                     <Button className={`tag ${activeTabs === 2 && 'active'}`}
                                         onClick={() => {
                                             setActiveTabs(2)
-                                        }}>Review(3)</Button>
+                                        }}>Review ({reviewsData.length})</Button>
                                 </li>
                             </ul>
                             <br />
@@ -319,48 +366,58 @@ const ProductDetails = () => {
                                         <div className="col-md-8">
                                             <h3>Customer Question & Answers</h3>
                                             <br />
-                                            <div className="card p-4 reviewsCard flex-row">
-                                                <div className="reviewCard">
-                                                    <div className="rounded-circle">
-                                                        <img src="https://i.scdn.co/image/ab67616d00001e026f157409ae8578b9695be2b3" alt="" />
-                                                    </div>
-                                                    <span className="text-g d-block text-center fw-bold">
-                                                        Rinku Verma</span>
-                                                </div>
-                                                <div className="info ps-5">
-                                                    <div className="d-flex align-items-center w-100 gap-3">
-                                                        <h5 className="text-light">01/03/1993</h5>
-                                                        <div className="ms-auto mb-1">
-                                                            { /* <Rating name="half-rating-read" value={4.5} precision={0.5} readOnly size="small" /> */}
+                                            {
+                                                reviewsData?.length > 0 && reviewsData?.map((item, index) => {
+                                                    return (
+                                                        <div className="card p-4 reviewsCard flex-row shadow" key={index}>
+                                                            <div className="reviewCard">
+                                                                { /* <div className="rounded-circle">
+                                                                    <img src="https://i.scdn.co/image/ab67616d00001e026f157409ae8578b9695be2b3" alt="" />
+                                                                </div> */}
+                                                            </div>
+                                                            <div className="info">
+                                                                <div className="d-flex align-items-center w-100 gap-3">
+                                                                    <h5>{item?.customerName}</h5>
+                                                                    <h5 className="text-light">{item?.dateCreated?.slice(0, 10)}</h5>
+                                                                    <div className="ms-auto mb-1">
+                                                                        <Rating name="half-rating-read" value={item?.customerRating} readOnly size="small" />
+                                                                    </div>
+                                                                </div>
+                                                                <p>{item?.review}</p>
+                                                            </div>
                                                         </div>
-                                                    </div>
-                                                    <p>Review</p>
-                                                </div>
-                                            </div>
+                                                    )
+                                                })
+                                            }
+
                                             <br className="res-hide" />
                                             <br className="res-hide" />
-                                            <form className="reviewForm">
+                                            <form className="reviewForm" onSubmit={addReview}>
                                                 <h4>Add a review</h4>
                                                 <div className="form-group">
                                                     <textarea className="form-control"
-                                                        placeholder="Write a Review" name="review">
+                                                        placeholder="Write a Review"
+                                                        name="review"
+                                                        value={reviews.review}
+                                                        onChange={onChangeInput}>
                                                     </textarea>
                                                 </div>
                                                 <div className="row">
-                                                    <div className="col-md-6">
+                                                    <div className="col-md-6 mt-0">
                                                         <div className="form-group">
-                                                            <input type="text" className="form-control" placeholder="Name" name="userName" />
-                                                        </div>
-                                                    </div>
-                                                    <div className="col-md-6 mt-2">
-                                                        <div className="form-group">
-                                                            { /* <Rating name="half-rating-read" value={4.5} precision={0.5} readOnly size="small" /> */}
+                                                            <Rating
+                                                                name="rating"
+                                                                value={rating}
+                                                                size="medium"
+                                                                onChange={changeRating} />
                                                         </div>
                                                     </div>
                                                     <br />
                                                     <div className="form-group">
-                                                        <Button type="submit" className="btn-blue btn-lg btn-big btn-round">
-                                                            Submit Review</Button>
+                                                        <Button type="submit"
+                                                            className="btn-blue btn-lg btn-big btn-round">
+                                                            {isLoading === true ? <CircularProgress color="inherit" className="loader" /> : 'Submit Review'}
+                                                        </Button>
                                                     </div>
                                                 </div>
                                             </form>
