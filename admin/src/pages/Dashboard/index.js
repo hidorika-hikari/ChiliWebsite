@@ -7,6 +7,8 @@ import { HiDotsVertical } from "react-icons/hi";
 import { useContext, useEffect, useState } from 'react'
 import { Chart } from "react-google-charts";
 import { Link } from "react-router-dom";
+import { MyContext } from "../../App";
+import { deleteData, fetchDataFromApi } from '../../utils/api';
 import Menu from '@mui/material/Menu';
 import Button from "@mui/material/Button";
 import MenuItem from '@mui/material/MenuItem';
@@ -15,8 +17,6 @@ import Select from '@mui/material/Select';
 import FormControl from '@mui/material/FormControl';
 import Pagination from "@mui/material/Pagination";
 import Rating from "@mui/material/Rating";
-import { MyContext } from "../../App";
-import { deleteData, fetchDataFromApi } from '../../utils/api';
 
 export const data = [
   ["Year", "Sales", "Expense"],
@@ -49,7 +49,7 @@ const Dashboard = () => {
       context.setProgress(100);
     })
     window.scrollTo(0, 0);
-  }, []);
+  }, [context]);
 
   const deleteProduct = (id) => {
     context.setProgress(40);

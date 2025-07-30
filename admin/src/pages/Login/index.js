@@ -4,7 +4,7 @@ import { MdEmail } from 'react-icons/md';
 import { RiLockPasswordFill } from 'react-icons/ri';
 import { IoMdEye, IoMdEyeOff } from 'react-icons/io';
 import { Button, CircularProgress } from '@mui/material';
-import { Link, useNavigate } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import { postData } from '../../utils/api';
 import Logo from '../../assets/images/logo.png';
 
@@ -13,7 +13,7 @@ const Login = () => {
     const [inputIndex, setInputIndex] = useState(null);
     const [isShowPassword, setIsShowPassword] = useState(false);
     const context = useContext(MyContext);
-    const history = useNavigate();
+    //const history = useNavigate();
     const [formFields, setFormFields] = useState({
         email: '',
         password: '',
@@ -22,7 +22,7 @@ const Login = () => {
 
     useEffect(() => {
         context.setIsHideSidebarAndHeader(true);
-    }, []);
+    }, [context]);
 
     const focusInput = (index) => {
         setInputIndex(index);
@@ -57,7 +57,6 @@ const Login = () => {
         postData("/api/user/signin", formFields).then((res) => {
             try {
                 if (res.status === true) {
-                    console.log(res);
                     localStorage.setItem("token", res.token);
                     const user = {
                         name: res.user?.name,

@@ -3,8 +3,7 @@ import { FaProductHunt } from "react-icons/fa";
 import { FaAngleRight } from "react-icons/fa6";
 import { IoMdLogOut } from "react-icons/io";
 import { Link } from "react-router-dom";
-import { useContext, useState } from "react";
-import { MyContext } from "../../App";
+import { useState } from "react";
 import { MdDashboard } from "react-icons/md";
 import { TbCategoryFilled } from "react-icons/tb";
 
@@ -12,8 +11,6 @@ const Sidebar = () => {
 
     const [activeTab, setActiveTab] = useState(0);
     const [isToggleSubmenu, setIsToggleSubmenu] = useState(false);
-
-    const context = useContext(MyContext);
 
     const isOpenSubmenu = (index) => {
         setActiveTab(index);

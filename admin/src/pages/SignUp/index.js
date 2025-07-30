@@ -4,7 +4,7 @@ import { MdEmail } from 'react-icons/md';
 import { RiLockPasswordFill } from 'react-icons/ri';
 import { IoMdEye, IoMdEyeOff, IoMdHome } from 'react-icons/io';
 import { Button, CircularProgress } from '@mui/material';
-import { Link, useNavigate } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import { FaUserCircle } from 'react-icons/fa';
 import { IoShieldCheckmarkSharp } from 'react-icons/io5';
 import { postData } from '../../utils/api';
@@ -14,7 +14,7 @@ import Checkbox from '@mui/material/Checkbox';
 import Logo from '../../assets/images/logo.png';
 
 const SignUp = () => {
-    const history = useNavigate();
+    //const history = useNavigate();
     const [isLoading, setIsLoading] = useState(false);
     const [inputIndex, setInputIndex] = useState(null);
     const [isShowPassword, setIsShowPassword] = useState(false);
@@ -30,7 +30,7 @@ const SignUp = () => {
     })
     useEffect(() => {
         context.setIsHideSidebarAndHeader(true);
-    }, []);
+    }, [context]);
 
     const focusInput = (index) => {
         setInputIndex(index);

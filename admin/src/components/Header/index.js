@@ -1,5 +1,5 @@
 import { MdMenuOpen, MdOutlineLightMode, MdOutlineMailOutline, MdOutlineMenu } from "react-icons/md";
-import { Link, useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom";
 import { IoCartOutline, IoShieldHalfSharp } from "react-icons/io5";
 import { FaRegBell } from "react-icons/fa";
 import { useContext, useState } from "react";
@@ -22,7 +22,7 @@ const Header = () => {
     const [isOpenNotifications, setIsOpenNotificationsDrop] = useState(false);
     const openNotifications = Boolean(isOpenNotifications);
     const openMyAcc = Boolean(anchorEl);
-    const history = useNavigate();
+    //const history = useNavigate();
     const context = useContext(MyContext);
 
     const handleOpenMyAccDrop = (event) => {

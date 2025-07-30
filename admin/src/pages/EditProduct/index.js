@@ -127,7 +127,8 @@ const ProductEdit = () => {
                     msg: 'Invalid Product ID format',
                     error: true
                 });
-                history('/products');
+                //history('/products');
+                window.location.href = '/products';
                 return;
             }
 
@@ -173,16 +174,16 @@ const ProductEdit = () => {
                 setProductSizeData(res);
             })
         }
-    }, [id]);
+    }, [context, id]);
 
     useEffect(() => {
         window.scrollTo(0, 0);
-        context.setProgress(20)
+        context.setProgress(20);
         fetchDataFromApi('/api/category').then((res) => {
             setCatData(res);
             context.setProgress(100);
         })
-    }, []);
+    }, [context]);
 
     const handleChangeCategory = (event) => {
         setCategoryVal(event.target.value);

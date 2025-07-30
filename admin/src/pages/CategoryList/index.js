@@ -46,10 +46,9 @@ const CategoryList = () => {
         context.setProgress(20)
         fetchDataFromApi('/api/category').then((res) => {
             setCatData(res);
-            console.log(res);
             context.setProgress(100);
         })
-    }, []);
+    }, [context]);
 
     const handleClose = () => {
         setOpen(false);
@@ -69,7 +68,6 @@ const CategoryList = () => {
                 images: res.images,
                 color: res.color
             });
-            console.log(res);
         })
     }
 
