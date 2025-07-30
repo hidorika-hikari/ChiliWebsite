@@ -89,12 +89,14 @@ const Header = () => {
                                                         </ListItemIcon>
                                                         My Orders
                                                     </MenuItem>
-                                                    <MenuItem onClick={handleClose}>
-                                                        <ListItemIcon>
-                                                            <LiaClipboardListSolid />
-                                                        </ListItemIcon>
-                                                        My Lists
-                                                    </MenuItem>
+                                                    <Link to="/my-list">
+                                                        <MenuItem onClick={handleClose}>
+                                                            <ListItemIcon>
+                                                                <LiaClipboardListSolid />
+                                                            </ListItemIcon>
+                                                            My Lists
+                                                        </MenuItem>
+                                                    </Link>
                                                     <MenuItem onClick={logout}>
                                                         <ListItemIcon>
                                                             <Logout fontSize="small" />

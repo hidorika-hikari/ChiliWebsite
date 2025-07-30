@@ -15,6 +15,7 @@ import SignUp from "./Pages/SignUp";
 import Snackbar from '@mui/material/Snackbar';
 import Alert from '@mui/material/Alert';
 import { fetchDataFromApi, postData } from "./utils/api";
+import MyList from "./Pages/MyList";
 
 const MyContext = createContext();
 
@@ -175,6 +176,7 @@ function App() {
           <Route path="/cart" exact={true} element={<Cart />} />
           <Route path="/signin" exact={true} element={<SignIn />} />
           <Route path="/signUp" exact={true} element={<SignUp />} />
+          <Route path="/my-list" exact={true} element={<MyList />} />
         </Routes>
         {
           isHeaderFooterShow === true && <Footer />

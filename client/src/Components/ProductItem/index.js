@@ -3,18 +3,71 @@ import { CiHeart } from "react-icons/ci";
 import Rating from "@mui/material/Rating";
 import Button from '@mui/material/Button'
 import { Link } from "react-router-dom";
-import { useContext } from "react";
+import { FaHeart } from "react-icons/fa6";
+import { useContext, useEffect, useState } from "react";
 import { MyContext } from "../../App";
+import { postData } from "../../utils/api";
 
 const ProductItem = (props) => {
 
     const context = useContext(MyContext);
+    const [isAddedtoMyList,setAddedToMyList] = useState(false);
     const viewProductDetails = (id) => {
         context.setIsOpenProductModel({
-            id:id,
-            open:true
+            id: id,
+            open: true
         });
     }
+
+    const addToMyList = (id) => {
+        const user = JSON.parse(localStorage.getItem("user"));
+        if (user !== undefined && user !== null && user !== ''){
+            const data = {
+                productTitle: props?.data?.name,
+                images: props.data?.images[0],
+                rating: props?.data?.rating,
+                price: props?.data?.price,
+                productId: id,
+                userId: user?.userId
+            }
+            postData(`/api/my-list/add/`,data).then((res) => {
+                setAddedToMyList(true);
+                if(res.status !== false){
+                    context.setAlertBox({
+                        open: true,
+                        error: false,
+                        msg: "The product added in my list"
+                    })
+                } else {
+                    context.setAlertBox({
+                        open: true,
+                        error: true,
+                        msg: res.msg
+                    })
+                }
+            })
+        } else {
+            context.setAlertBox({
+                open: true,
+                error: true,
+                msg: "Please Login to Continue"
+            })
+        }
+    }
+
+    useEffect(() => {
+        const user = JSON.parse(localStorage.getItem("user"));
+        if (user && props.item?.id) {
+            postData('/api/my-list/check', {
+                productId: props.itemView === 'recentlyView' ? props.item?.prodId : props.item?.id,
+                userId: user.userId
+            }).then(res => {
+                if (res.status && res.isAdded) {
+                    setAddedToMyList(true);
+                }
+            });
+        }
+    }, [props.item?.id]);
 
     return (
         <>
@@ -26,7 +79,12 @@ const ProductItem = (props) => {
                     <span className="badge badge-primary">{props.item?.discount}%</span>
                     <div className="actions">
                         <Button onClick={ () => viewProductDetails(props.item?.id)}><TfiFullscreen/></Button>
-                        <Button><CiHeart style={{ fontSize:'20px'}}/></Button>
+                        
+                        <Button className={isAddedtoMyList === true && 'active'} onClick={ () => addToMyList(props?.itemView === 'recentlyView' ? props.item?.proId : props.item?.id)}>
+                        {
+                            isAddedtoMyList === true ? <FaHeart className="wishlist-icon" style={{ fontSize:'20px'}}/> : <CiHeart style={{ fontSize:'20px'}}/>
+                        }
+                        </Button>
                     </div>
                 </div>
                 </Link>

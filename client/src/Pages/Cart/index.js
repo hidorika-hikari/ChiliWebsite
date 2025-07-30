@@ -47,7 +47,8 @@ const Cart = () => {
                 error: true,
                 msg: "Item remove form cart"
             })
-            fetchDataFromApi(`/api/cart`).then((res) => {
+            const user = JSON.parse(localStorage.getItem("user"));
+            fetchDataFromApi(`/api/cart?userId=${user?.userId}`).then((res) => {
                 setCartData(res);
             })
             context.getCartData();

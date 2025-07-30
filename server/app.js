@@ -27,7 +27,11 @@ const productSizeRoutes = require('./routes/productSize');
 const userRoutes = require('./routes/user');
 const cart = require('./routes/cart');
 const productReviews = require('./routes/productReviews');
+const myListSchema = require('./routes/myList');
+//const checkoutSchema = require('./routes/checkout');
 
+//app.usr('/api/checkout, checkoutSchema);
+app.use('/api/my-list', myListSchema);
 app.use('/api/productReviews',productReviews);
 app.use('/api/user', userRoutes);
 app.use('/api/cart',cart);

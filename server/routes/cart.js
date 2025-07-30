@@ -15,7 +15,7 @@ router.get('/', async (req, res) => {
 });
 
 router.post('/add', async (req, res) => {
-    const cartItem = await Cart.find({productId:req.body.productId});
+    const cartItem = await Cart.find({productId:req.body.productId, userId: req.body.userId});
     if (cartItem.length === 0){
         let cartList = new Cart({
             productTitle: req.body.productTitle,
@@ -43,20 +43,28 @@ router.post('/add', async (req, res) => {
 router.delete('/:id', async (req, res) => {
     const cartItem = await Cart.findById(req.params.id);
     if(!cartItem) {
-        res.status(404).json({ msg: 'The cart item given id not found!' })
+        res.status(404).json({ msg: 'Cart item given id not found!' })
     }
     const deleteItem = await Cart.findByIdAndDelete(req.params.id);
     if (!deleteItem) {
         return res.status(404).json({
-            message: 'Cart item not found.',
+            message: 'Cart item not found',
             success: false
         });
     }
     res.status(200).json({
         success: true,
-        message: 'Cart Item Deleted!'
+        message: 'Cart item deleted!'
     });
 });
+
+router.get('/:id', async (req, res) => {
+    const cartItem = await Cart.findById(req.params.id);
+    if (!cartItem) {
+        return res.status(500).json({ message: 'Cart item with the given ID was not found' })
+    }
+    return res.status(200).send(cartItem);
+})
 
 router.put('/:id', async (req, res) => {
     const cartList = await Cart.findByIdAndUpdate(

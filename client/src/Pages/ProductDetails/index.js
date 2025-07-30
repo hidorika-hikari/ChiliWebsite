@@ -1,5 +1,5 @@
 import { CircularProgress, Rating } from "@mui/material";
-import { FaRegHeart } from "react-icons/fa";
+import { FaHeart, FaRegHeart } from "react-icons/fa6";
 import { BsCartFill } from "react-icons/bs";
 import { useContext, useEffect, useState } from "react";
 import { MdOutlineCompareArrows } from "react-icons/md";
@@ -21,13 +21,14 @@ const ProductDetails = () => {
     const [activeTabs, setActiveTabs] = useState(0);
     const [isLoading, setIsLoading] = useState(false);
 
-    let [cartFields, setCartFields] = useState({});
+    let [cartFields] = useState({});
     const [quantityVal, setQuantityVal] = useState(1);
     const [productData, setProductData] = useState();
     const [relatedProductData, setRelatedProductData] = useState([]);
     const [recentlyViewProducts, setRecentlyViewProducts] = useState([]);
     //const handleSelectedItem = (item, quantity) => { setQuantityVal(quantity);};
     const [reviewsData, setReviewsData] = useState([]);
+    const [isAddedtoMyList, setAddedToMyList] = useState(false);
     const context = useContext(MyContext);
 
     const { id } = useParams();
@@ -49,6 +50,20 @@ const ProductDetails = () => {
             setReviewsData(res);
         })
     }, [id])
+
+    useEffect(() => {
+        const user = JSON.parse(localStorage.getItem("user"));
+        if (user && productData?.id) {
+            postData('/api/my-list/check', {
+                productId: productData?.id,
+                userId: user.userId
+            }).then(res => {
+                if (res.status && res.isAdded) {
+                    setAddedToMyList(true);
+                }
+            });
+        }
+    }, [productData?.id]);
 
     const isAddToCartDisabled = (
         (productData?.productSize?.length > 0 && activeSpicy === null) ||
@@ -112,6 +127,41 @@ const ProductDetails = () => {
                 setReviewsData(res);
             })
         })
+    }
+
+    const addToMyList = (id) => {
+        const user = JSON.parse(localStorage.getItem("user"));
+        if (user !== undefined && user !== null && user !== '') {
+            const data = {
+                productTitle: productData?.name,
+                images: productData?.images[0],
+                rating: productData?.rating,
+                price: productData?.price,
+                productId: id,
+                userId: user?.userId
+            }
+            postData(`/api/my-list/add/`, data).then((res) => {
+                if (res.status !== false) {
+                    context.setAlertBox({
+                        open: true,
+                        error: false,
+                        msg: "The product added in my list"
+                    })
+                } else {
+                    context.setAlertBox({
+                        open: true,
+                        error: true,
+                        msg: res.msg
+                    })
+                }
+            })
+        } else {
+            context.setAlertBox({
+                open: true,
+                error: true,
+                msg: "Please Login to Continue"
+            })
+        }
     }
 
     return (
@@ -219,9 +269,16 @@ const ProductDetails = () => {
                                 <Button className="btn-blue btn-lg btn-big btn-circle ms-4">
                                     <BsCartFill />
                                 </Button>
-                                <Tooltip title="Add to Wishlist" placement="top">
-                                    <Button className="btn-blue btn-lg btn-big btn-circle ms-4">
-                                        <FaRegHeart />
+                                <Tooltip title={`${isAddedtoMyList ? 'Added to Wishlist' : 'Add to Wishlist'}`} placement="top">
+                                    <Button
+                                        className="btn-blue btn-lg btn-big btn-circle ms-4"
+                                        onClick={() => addToMyList(id)}
+                                    >
+                                        {
+                                            isAddedtoMyList
+                                                ? <FaHeart className="text-danger" />
+                                                : <FaRegHeart />
+                                        }
                                     </Button>
                                 </Tooltip>
                                 <Tooltip title="Add to Compare" placement="top">
@@ -230,7 +287,7 @@ const ProductDetails = () => {
                                     </Button>
                                 </Tooltip>
                             </div>
-                            { isAddToCartDisabled && (
+                            {isAddToCartDisabled && (
                                 <div className="alert alert-danger d-flex align-items-center gap-2 mt-4 p-3 rounded shadow-sm">
                                     <FaExclamationTriangle className="me-2" />
                                     <div>
