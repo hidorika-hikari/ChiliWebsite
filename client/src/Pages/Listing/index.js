@@ -56,7 +56,6 @@ const Listing = () => {
                 <div className='container'>
                     <div className='productListing d-flex'>
                         <Sidebar filterByPrice={filterByPrice} filterData={filterData} filterByRating={filterByRating}/>
-
                         <div className='content_right'>
                             <div className='showBy mt-3 mb-3 d-flex align-items-center'>
                                 <div className='d-flex align-items-center btnWrapper'>
@@ -103,7 +102,7 @@ const Listing = () => {
                             </div>
 
                             <div className='d-flex align-items-center justify-content-center mt-5'>
-                                <Pagination count={10} color="primary" size='large' />
+                                <Pagination count={5} color="primary" size='large' />
                             </div>
                         </div>
                     </div>

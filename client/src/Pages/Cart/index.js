@@ -1,8 +1,8 @@
 import Rating from "@mui/material/Rating";
-import { Link } from "react-router-dom";
 import QuantityBox from "../../Components/QuantityDrop";
-import { IoIosClose } from "react-icons/io";
 import Button from "@mui/material/Button";
+import { Link } from "react-router-dom";
+import { IoIosClose } from "react-icons/io";
 import { IoBagCheckOutline } from "react-icons/io5";
 import { useContext, useEffect, useState } from "react";
 import { MyContext } from "../../App";

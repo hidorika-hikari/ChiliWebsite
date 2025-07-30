@@ -1,11 +1,11 @@
-import InnerImageZoom from 'react-inner-image-zoom';
-import 'react-inner-image-zoom/lib/styles.min.css';
-import { useState } from 'react';
-import { Swiper, SwiperSlide } from 'swiper/react';
-import { Navigation, Thumbs } from 'swiper/modules';
 import 'swiper/css';
 import 'swiper/css/navigation';
 import 'swiper/css/thumbs';
+import 'react-inner-image-zoom/lib/styles.min.css';
+import InnerImageZoom from 'react-inner-image-zoom';
+import { useState } from 'react';
+import { Swiper, SwiperSlide } from 'swiper/react';
+import { Navigation, Thumbs } from 'swiper/modules';
 
 const ProductZoom = (props) => {
     const [thumbsSwiper, setThumbsSwiper] = useState(null);

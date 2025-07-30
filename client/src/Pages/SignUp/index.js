@@ -1,6 +1,6 @@
 import { useContext, useEffect, useState } from "react";
 import { MyContext } from "../../App";
-import { Link, useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom";
 import { FaFacebookF } from "react-icons/fa";
 import { FaTwitter } from "react-icons/fa";
 import { FaInstagram } from "react-icons/fa";
@@ -10,7 +10,7 @@ import Logo from '../../assets/logo.png'
 import TextField from "@mui/material/TextField";
 
 const SignUp = () => {
-    const history = useNavigate();
+    //const history = useNavigate();
     const context = useContext(MyContext);
     const [isLoading, setIsLoading] = useState(false);
     const [formFields, setFormFields] = useState({
@@ -23,7 +23,7 @@ const SignUp = () => {
 
     useEffect(() => {
         context.setIsHeaderFooterShow(false);
-    }, []);
+    }, [context]);
 
     const onChangeInput = (e) => {
         setFormFields(() => ({
@@ -151,7 +151,7 @@ const SignUp = () => {
                                 required variant="standard" className="w-100" />
                         </div>
 
-                        <a className="border-effect cursor">Forgot Password?</a>
+                        <button className="border-effect cursor">Forgot Password?</button>
                         <div className="d-flex align-items-center mt-3 mb-3">
                             <div className="row w-100">
                                 <div className="col-md-6">

@@ -1,5 +1,6 @@
 import "bootstrap/dist/css/bootstrap.min.css"
 import './App.css';
+import { fetchDataFromApi, postData } from "./utils/api";
 import { createContext, useEffect, useState } from "react";
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 import Home from "./Pages/Home";
@@ -14,7 +15,6 @@ import SignIn from "./Pages/SignIn";
 import SignUp from "./Pages/SignUp";
 import Snackbar from '@mui/material/Snackbar';
 import Alert from '@mui/material/Alert';
-import { fetchDataFromApi, postData } from "./utils/api";
 import MyList from "./Pages/MyList";
 
 const MyContext = createContext();
@@ -32,7 +32,7 @@ function App() {
     email: '',
     userId: ''
   });
-  const [cartFields, setCartFields] = useState({});
+  //const [cartFields, setCartFields] = useState({});
   const [isHeaderFooterShow, setIsHeaderFooterShow] = useState(true);
   const [isLogin, setIsLogin] = useState(false);
   const [productData, setProductData] = useState();
@@ -99,10 +99,9 @@ function App() {
   }, [isOpenProductModel]);
 
   const getCountry = async (url) => {
-    const responsive = await axios.get(url).then((res) => {
-      setCountryList(res.data.data)
-    })
-  }
+    const res = await axios.get(url);
+    setCountryList(res.data.data);
+  };
 
   const addToCart = (data) => {
     setAddingInCart(true);

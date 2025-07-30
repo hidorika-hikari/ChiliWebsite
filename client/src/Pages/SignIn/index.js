@@ -1,5 +1,5 @@
 import { useContext, useEffect, useState } from "react";
-import { useNavigate } from 'react-router-dom';
+//import { useNavigate } from 'react-router-dom';
 import { MyContext } from "../../App";
 import { Link } from "react-router-dom";
 import { FaFacebookF } from "react-icons/fa";
@@ -13,7 +13,7 @@ import { postData } from "../../utils/api";
 const SignIn = () => {
     const [isLoading, setIsLoading] = useState(false);
     const context = useContext(MyContext);
-    const history = useNavigate();
+    //const history = useNavigate();
     const [formFields, setFormFields] = useState({
         email: '',
         password: ''
@@ -26,9 +26,9 @@ const SignIn = () => {
         }))
     }
 
-    useEffect(()=>{
+    useEffect(() => {
         context.setIsHeaderFooterShow(false);
-    },[]);
+    }, [context]);
 
     const login = (e) => {
         e.preventDefault();
@@ -122,7 +122,7 @@ const SignIn = () => {
                                 required variant="standard"
                                 className="w-100"/>
                             </div>
-                            <a className="border-effect cursor">Forgot Password?</a>
+                            <button className="border-effect cursor">Forgot Password?</button>
                             <div className="d-flex align-items-center mt-3 mb-3 gap-4">
                                 <Button type="submit" className="btn-blue col btn-lg btn-big">
                                     {

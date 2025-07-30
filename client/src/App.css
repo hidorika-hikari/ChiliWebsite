@@ -1320,7 +1320,7 @@ button{
   margin-right: 10px !important;
 }
 
-.productSize ul li a{
+.productSize ul li button{
   display: flex;
   align-items: center;
   justify-content: center;
@@ -1334,12 +1334,12 @@ button{
   transition: all 0.1s ease-in-out;
 }
 
-.productSize ul li a:hover{
+.productSize ul li button:hover{
   background: #ececec;
 }
 
-.productSize ul li a.active{
-  background: #6d4aae !important;
+.productSize ul li button.active{
+  background: #2bbef9 !important;
   color: #fff !important;
 }
 
@@ -1786,4 +1786,34 @@ a:hover{
 .myListTable .cartItemImgWrapper .imgWrapper{
   width: 100px !important;
   height: 100px !important;
+}
+
+.border-effect {
+  border: none;
+  background: none;
+  text-decoration: none;
+  padding: 0;
+  margin: 0;
+  color: #007bff;
+  cursor: pointer;
+  font: inherit;
+}
+
+.css-dkekmf-MuiButtonBase-root-MuiPaginationItem-root.Mui-selected:hover
+.border-effect:hover {
+  background: #f1f1f1;
+}
+
+.MuiTab-root {
+  color: #000 !important;
+}
+
+.Mui-selected {
+  color: #000 !important;
+  font-weight: bold !important;
+}
+
+.css-dkekmf-MuiButtonBase-root-MuiPaginationItem-root.Mui-selected{
+  color: #f1f1f1 !important;
+  background-color: #2bbef9 !important;
 }

@@ -1,5 +1,7 @@
 import 'swiper/css';
 import 'swiper/css/navigation';
+import Tabs from '@mui/material/Tabs';
+import Tab from '@mui/material/Tab';
 import HomeBanner from "../../Components/HomeBanner/index";
 import Button from '@mui/material/Button'
 import ProductItem from "../../Components/ProductItem";
@@ -12,8 +14,6 @@ import { Navigation } from 'swiper/modules';
 import { useEffect, useState, useContext } from 'react';
 import { fetchDataFromApi } from '../../utils/api';
 import { MyContext } from '../../App';
-import Tabs from '@mui/material/Tabs';
-import Tab from '@mui/material/Tab';
 
 const Home = () => {
 

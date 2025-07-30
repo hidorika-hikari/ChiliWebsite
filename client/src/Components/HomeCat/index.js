@@ -1,6 +1,5 @@
 import 'swiper/css';
 import 'swiper/css/navigation';
-// import Chili from '../../assets/peper.png'
 import React from "react";
 import { Swiper, SwiperSlide } from 'swiper/react';
 import { Navigation } from 'swiper/modules';

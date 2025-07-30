@@ -1,7 +1,7 @@
 import Rating from "@mui/material/Rating";
+import Button from "@mui/material/Button";
 import { Link } from "react-router-dom";
 import { IoIosClose } from "react-icons/io";
-import Button from "@mui/material/Button";
 import { FaHome } from "react-icons/fa";
 import { useContext, useEffect, useState } from "react";
 import { MyContext } from "../../App";
@@ -87,8 +87,8 @@ const MyList = () => {
                                 </div>
                                 :
                                 <div className="empty d-flex align-items-center justify-content-center flex-column">
-                                    <img src="https://cdn-icons-png.flaticon.com/512/11329/11329060.png" width="150" alt="" />
-                                    <h3>My list is currently empty</h3>
+                                    <img src="https://www.freeiconspng.com/thumbs/list-icon/to-do-list-icon-buy-this-icon-for--0-48-1.png" width="200" alt="" />
+                                    <h3 className="mt-3">My list is currently empty</h3>
                                     <br />
                                     <Link to="/"><Button className="btn-blue bg-red btn-lg btn-big btn-round"><FaHome /> &nbsp; Continue Shopping</Button></Link>
                                 </div>

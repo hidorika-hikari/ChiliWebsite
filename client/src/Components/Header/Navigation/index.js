@@ -62,7 +62,7 @@ const Navigation = (props) => {
 
                     <div className='col-sm-10 navPart2 d-flex align-items-center'>
                         <ul className='list-inline ms-auto'>
-                            <li className='list-inline-item'>
+                            <li className='list-inline-item' >
                                 <Tabs
                                     value={value}
                                     onChange={handleChange}
@@ -70,8 +70,9 @@ const Navigation = (props) => {
                                     scrollButtons="auto"
                                     aria-label="scrollable tabs"
                                     className='w-75'
+                                    sx={{ color: 'black' }}
                                 >
-                                    <Tab key="home" label="Home" />
+                                    <Tab key="home" label="Home"/>
                                     {context.categoryData?.map((item, index) => (
                                         <Tab
                                             key={item._id || index}

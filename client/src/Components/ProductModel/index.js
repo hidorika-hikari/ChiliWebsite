@@ -1,6 +1,8 @@
 import Button from '@mui/material/Button';
 import Dialog from '@mui/material/Dialog';
 import Rating from "@mui/material/Rating";
+import ProductZoom from '../ProductZoom';
+import QuantityBox from '../QuantityDrop';
 import { IoIosHeartEmpty } from "react-icons/io";
 import { useContext, useEffect, useState } from 'react';
 import { MdClose } from "react-icons/md";
@@ -8,8 +10,6 @@ import { MdCompareArrows } from "react-icons/md";
 import { MyContext } from '../../App';
 import { IoCartSharp } from 'react-icons/io5';
 import { FaHeart } from "react-icons/fa6";
-import ProductZoom from '../ProductZoom';
-import QuantityBox from '../QuantityDrop';
 import { postData } from '../../utils/api';
 
 const ProductModel = (props) => {

@@ -22,7 +22,7 @@ const ProductDetails = () => {
     const [isLoading, setIsLoading] = useState(false);
 
     let [cartFields] = useState({});
-    const [quantityVal, setQuantityVal] = useState(1);
+    const [quantityVal] = useState(1); //const [quantityVal, setQuantityVal] = useState(1);
     const [productData, setProductData] = useState();
     const [relatedProductData, setRelatedProductData] = useState([]);
     const [recentlyViewProducts, setRecentlyViewProducts] = useState([]);
@@ -202,12 +202,12 @@ const ProductDetails = () => {
                                         {
                                             productData.productSize.map((item, index) => (
                                                 <li key={item._id} className="list-inline-item">
-                                                    <a
+                                                    <Button
                                                         className={`tag ${activeSpicy === index ? 'active' : ''}`}
                                                         onClick={() => setActiveSpicy(index)}
                                                     >
                                                         {item.productSize}
-                                                    </a>
+                                                    </Button>
                                                 </li>
                                             ))
                                         }
@@ -223,12 +223,12 @@ const ProductDetails = () => {
                                         {
                                             productData.productWeight.map((item, index) => (
                                                 <li key={item._id} className="list-inline-item">
-                                                    <a
+                                                    <Button
                                                         className={`tag ${activeWeight === index ? 'active' : ''}`}
                                                         onClick={() => setActiveWeight(index)}
                                                     >
                                                         {item.productWeight}
-                                                    </a>
+                                                    </Button>
                                                 </li>
                                             ))
                                         }
@@ -244,12 +244,12 @@ const ProductDetails = () => {
                                         {
                                             productData.productRams.map((item, index) => (
                                                 <li key={item._id} className="list-inline-item">
-                                                    <a
+                                                    <Button
                                                         className={`tag ${activeContent === index ? 'active' : ''}`}
                                                         onClick={() => setActiveContent(index)}
                                                     >
                                                         {item.productRams}
-                                                    </a>
+                                                    </Button>
                                                 </li>
                                             ))
                                         }
