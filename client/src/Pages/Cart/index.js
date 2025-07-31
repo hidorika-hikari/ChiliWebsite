@@ -36,7 +36,6 @@ const Cart = () => {
             userId: user?.userId
         };
         editData(`/api/cart/${itemId}`, updatedFields)
-            .then(res => console.log('Quantity updated in DB:', updatedFields))
             .catch(err => console.error('Failed to update quantity in DB:', err));
     };
 
@@ -133,10 +132,11 @@ const Cart = () => {
                                         {cartData.reduce((sum, item) => sum + item.subTotal, 0).toFixed(2)} ฿
                                     </span>
                                 </div>
-
-                                <Button className="btn-blue bg-red btn-lg btn-big">
-                                    <IoBagCheckOutline  />&nbsp; Checkout
-                                </Button>
+                                <Link to="/checkout">
+                                    <Button className="btn-red btn-lg btn-big w-100">
+                                        <IoBagCheckOutline />&nbsp; Checkout
+                                    </Button>
+                                </Link>
                             </div>
                         </div>
                     </div>

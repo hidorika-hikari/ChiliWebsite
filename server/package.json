@@ -10,6 +10,7 @@
     "test": "echo \"Error: no tesdddddt specified\" && exit 1"
   },
   "dependencies": {
+    "@stripe/stripe-js": "^7.7.0",
     "bcrypt": "^6.0.0",
     "body-parser": "^2.2.0",
     "cloudinary": "^2.6.1",
@@ -23,6 +24,7 @@
     "mongoose": "^8.15.1",
     "multer": "^2.0.1",
     "nodemon": "^3.1.10",
-    "p-limit": "^3.1.0"
+    "p-limit": "^3.1.0",
+    "stripe": "^18.4.0"
   }
 }

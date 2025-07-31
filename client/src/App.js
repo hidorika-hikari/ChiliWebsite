@@ -16,8 +16,13 @@ import SignUp from "./Pages/SignUp";
 import Snackbar from '@mui/material/Snackbar';
 import Alert from '@mui/material/Alert';
 import MyList from "./Pages/MyList";
-
+import Checkout from "./Pages/Checkout";
+import { Elements } from '@stripe/react-stripe-js';
+import { loadStripe } from '@stripe/stripe-js';
 const MyContext = createContext();
+const stripePromise = loadStripe('pk_test_51RqrM6E8TB46iepBZDHJ5lDzW863H6xzVR2FCfYojdiN2GYVy4YLCTqalEfr3iYMxXHiADzlRYYqIEypDEM6LHoo002nAJGi2I', {
+  locale: 'en'
+});
 
 function App() {
 
@@ -125,7 +130,6 @@ function App() {
         setAddingInCart(false);
       }
     })
-    console.log(data);
   }
 
   const values = {
@@ -153,39 +157,41 @@ function App() {
     getCartData
   }
   return (
-    <BrowserRouter>
-      <MyContext.Provider value={values}>
-        {
-          isHeaderFooterShow === true && <Header />
-        }
-        <Snackbar open={alertBox.open} autoHideDuration={6000} onClose={handleClose}>
-          <Alert
-            onClose={handleClose}
-            severity={alertBox.error === false ? "success" : "error"}
-            variant="filled"
-            sx={{ width: '100%' }}
-          >
-            {alertBox.msg}
-          </Alert>
-        </Snackbar>
-        <Routes>
-          <Route path="/" exact={true} element={<Home />} />
-          <Route path="/category/:id" exact={true} element={<Listing />} />
-          <Route path="/product/:id" exact={true} element={<ProductDetails />} />
-          <Route path="/cart" exact={true} element={<Cart />} />
-          <Route path="/signin" exact={true} element={<SignIn />} />
-          <Route path="/signUp" exact={true} element={<SignUp />} />
-          <Route path="/my-list" exact={true} element={<MyList />} />
-        </Routes>
-        {
-          isHeaderFooterShow === true && <Footer />
-        }
-
-        {
-          isOpenProductModel.open === true && <ProductModel data={productData} />
-        }
-      </MyContext.Provider>
-    </BrowserRouter>
+    <Elements stripe={stripePromise}>
+      <BrowserRouter>
+        <MyContext.Provider value={values}>
+          {
+            isHeaderFooterShow === true && <Header />
+          }
+          <Snackbar open={alertBox.open} autoHideDuration={6000} onClose={handleClose}>
+            <Alert
+              onClose={handleClose}
+              severity={alertBox.error === false ? "success" : "error"}
+              variant="filled"
+              sx={{ width: '100%' }}
+            >
+              {alertBox.msg}
+            </Alert>
+          </Snackbar>
+          <Routes>
+            <Route path="/" exact={true} element={<Home />} />
+            <Route path="/category/:id" exact={true} element={<Listing />} />
+            <Route path="/product/:id" exact={true} element={<ProductDetails />} />
+            <Route path="/cart" exact={true} element={<Cart />} />
+            <Route path="/signin" exact={true} element={<SignIn />} />
+            <Route path="/signUp" exact={true} element={<SignUp />} />
+            <Route path="/my-list" exact={true} element={<MyList />} />
+            <Route path="/checkout" exact={true} element={<Checkout />} />
+          </Routes>
+          {
+            isHeaderFooterShow === true && <Footer />
+          }
+          {
+            isOpenProductModel.open === true && <ProductModel data={productData} />
+          }
+        </MyContext.Provider>
+      </BrowserRouter>
+    </Elements>
   );
 }
 

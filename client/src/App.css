@@ -1040,12 +1040,25 @@ footer .linkWrap ul li a{
   padding: 5px 20px !important;
 }
 
+.btn-red{
+  background: #ed174a !important;
+  color: #fff !important;
+  text-transform: capitalize !important;
+  font-weight: 500 !important;
+  padding: 5px 20px !important;
+}
+
+.btn-red svg{
+  font-size: 22px;
+}
+
 .btn-blue svg{
   font-size: 22px;
 }
 
-.btn-big{
+.btn-big {
   font-size: 15px !important;
+  font-weight: 700 !important;
   min-width: auto !important;
   padding: 8px 30px !important;
 }
@@ -1816,4 +1829,44 @@ a:hover{
 .css-dkekmf-MuiButtonBase-root-MuiPaginationItem-root.Mui-selected{
   color: #f1f1f1 !important;
   background-color: #2bbef9 !important;
+}
+
+.card {
+  word-wrap: break-word;
+  background-clip: initial;
+  background-color: #fff;
+  border: 1px solid rgba(0, 0, 0, .125);
+  border-radius: .25rem;
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+  position: relative;
+}
+
+.orderInfo {
+  background: #fafafa !important;
+  padding: 25px !important;
+  border: 1px solid rgba(0, 0, 0, .125);
+  border-radius: .25rem;
+}
+
+.orderInfo thead {
+  border-bottom: 1px solid #0000001a !important;
+  border-top: 1px solid #0000001a !important;
+}
+
+.orderInfo table th{
+  background: #fafafa !important;
+}
+
+.orderInfo h4{
+  font-weight: 500;
+}
+
+.checkoutForm .form-group{
+  margin-bottom: 20px;
+}
+
+.checkoutForm .form-group .MuiOutlinedInput-input {
+  background: #f7f7f7 !important;
 }
