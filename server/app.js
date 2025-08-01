@@ -30,11 +30,11 @@ const userRoutes = require('./routes/user');
 const cart = require('./routes/cart');
 const productReviews = require('./routes/productReviews');
 const myListSchema = require('./routes/myList');
-//const checkoutSchema = require('./routes/checkout');
+const ordersSchema = require('./routes/orders');
 const paymentRoutes = require('./routes/payment');
 
 app.use('/api/payment', paymentRoutes);
-//app.usr('/api/checkout, checkoutSchema);
+app.use('/api/orders', ordersSchema);
 app.use('/api/my-list', myListSchema);
 app.use('/api/productReviews', productReviews);
 app.use('/api/user', userRoutes);

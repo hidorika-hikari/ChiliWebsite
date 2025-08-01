@@ -2,12 +2,14 @@ import { Button, TextField } from '@mui/material';
 import React, { useContext, useState, useEffect } from 'react';
 import { MyContext } from '../../App';
 import { IoBagCheckOutline } from 'react-icons/io5';
-import { fetchDataFromApi } from '../../utils/api';
+import { fetchDataFromApi, postData } from '../../utils/api';
 import { CardElement, useStripe, useElements } from '@stripe/react-stripe-js';
+import { useNavigate } from 'react-router-dom';
 
 const Checkout = () => {
     const stripe = useStripe();
     const elements = useElements();
+    const history = useNavigate();
     const CARD_ELEMENT_OPTIONS = {
         style: {
             base: {
@@ -70,7 +72,6 @@ const Checkout = () => {
         const paymentResult = await stripe.confirmCardPayment(clientSecret, {
             payment_method: { card: cardElement },
         });
-
         setProcessing(false);
         if (paymentResult.error) {
             context.setAlertBox({
@@ -85,7 +86,28 @@ const Checkout = () => {
                 msg: 'Payment successful!',
             });
         }
-        console.log(formFields);
+        const payload = {
+            user: JSON.parse(localStorage.getItem("user")),
+            billingDetails: formFields,
+            cartItems: cartData.map((item) => ({
+                productId: item.productId,
+                productTitle: item.productTitle,
+                price: item.price,
+                quantity: item.quantity,
+            })),
+            totalAmount: amount / 100,
+            paymentDetails: {
+                paymentIntentId: paymentResult.paymentIntent.id,
+                status: paymentResult.paymentIntent.status,
+                created: paymentResult.paymentIntent.created,
+            },
+            createdAt: new Date().toISOString()
+        };
+        console.log(payload);
+        postData(`/api/orders/create`,payload).then(res => {
+            console.log(res);
+            history('/');
+        })
     };
 
     return (
