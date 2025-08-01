@@ -83,12 +83,14 @@ const Header = () => {
                                                         </ListItemIcon>
                                                         My Account
                                                     </MenuItem>
+                                                    <Link to="/orders">
                                                     <MenuItem onClick={handleClose}>
                                                         <ListItemIcon>
                                                             <TbChecklist fontSize="small" />
                                                         </ListItemIcon>
                                                         My Orders
                                                     </MenuItem>
+                                                    </Link>
                                                     <Link to="/my-list">
                                                         <MenuItem onClick={handleClose}>
                                                             <ListItemIcon>

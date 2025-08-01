@@ -1870,3 +1870,13 @@ a:hover{
 .checkoutForm .form-group .MuiOutlinedInput-input {
   background: #f7f7f7 !important;
 }
+
+.table .thead-light th {
+  background-color: #e9ecef;
+  border-color: #dee2e6;
+  color: #495057;
+}
+
+.orderTable td, .orderTable th{
+  white-space: nowrap;
+}

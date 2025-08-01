@@ -48,7 +48,7 @@ const CategoryList = () => {
             setCatData(res);
             context.setProgress(100);
         })
-    }, [context]);
+    }, []);
 
     const handleClose = () => {
         setOpen(false);

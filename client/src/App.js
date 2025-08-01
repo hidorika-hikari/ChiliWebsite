@@ -17,6 +17,7 @@ import Snackbar from '@mui/material/Snackbar';
 import Alert from '@mui/material/Alert';
 import MyList from "./Pages/MyList";
 import Checkout from "./Pages/Checkout";
+import Orders from "./Pages/Orders";
 import { Elements } from '@stripe/react-stripe-js';
 import { loadStripe } from '@stripe/stripe-js';
 const MyContext = createContext();
@@ -182,6 +183,7 @@ function App() {
             <Route path="/signUp" exact={true} element={<SignUp />} />
             <Route path="/my-list" exact={true} element={<MyList />} />
             <Route path="/checkout" exact={true} element={<Checkout />} />
+            <Route path="/orders" exact={true} element={<Orders />} />
           </Routes>
           {
             isHeaderFooterShow === true && <Footer />

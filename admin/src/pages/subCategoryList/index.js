@@ -49,7 +49,7 @@ const SubCategoryList = () => {
             console.log(res);
             context.setProgress(100);
         })
-    }, [context]);
+    }, []);
 
     const handleClose = () => {
         setOpen(false);

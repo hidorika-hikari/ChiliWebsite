@@ -49,7 +49,7 @@ const Dashboard = () => {
       context.setProgress(100);
     })
     window.scrollTo(0, 0);
-  }, [context]);
+  }, []);
 
   const deleteProduct = (id) => {
     context.setProgress(40);

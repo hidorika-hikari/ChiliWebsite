@@ -105,7 +105,6 @@ const Checkout = () => {
         };
         console.log(payload);
         postData(`/api/orders/create`,payload).then(res => {
-            console.log(res);
             history('/');
         })
     };

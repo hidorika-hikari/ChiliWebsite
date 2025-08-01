@@ -153,14 +153,14 @@ const ProductEdit = () => {
                         productWeight: res.productWeight
                     });
 
-                    setCategoryVal(res.category);
-                    setSubCategoryVal(res.subCat)
+                    setCategoryVal(res.category?._id);
+                    setSubCategoryVal(res.subCat?._id);
                     setIsFeaturedVal(res.isFeatured);
                     setRatingValue(res.rating);
                     setImagePreviews(res.images);
-                    setProductRams(res.productRams);
-                    setProductWeight(res.productWeight);
-                    setProductSize(res.productSize);
+                    setProductRams(res.productRams.map(p => p._id));
+                    setProductWeight(res.productWeight.map(p => p._id));
+                    setProductSize(res.productSize.map(p => p._id));
                 }
                 setProductLoading(false);
             });
@@ -183,7 +183,7 @@ const ProductEdit = () => {
             setCatData(res);
             context.setProgress(100);
         })
-    }, [context]);
+    }, []);
 
     const handleChangeCategory = (event) => {
         setCategoryVal(event.target.value);
@@ -431,6 +431,7 @@ const ProductEdit = () => {
                                                                 <MenuItem className='text-capitalize'
                                                                     value={subCat.id} key={index}>{subCat.subCat}
                                                                 </MenuItem>
+
                                                             )
                                                         })
                                                 }
