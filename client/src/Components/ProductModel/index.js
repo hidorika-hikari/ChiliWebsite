@@ -90,8 +90,9 @@ const ProductModel = (props) => {
                             <span className='newPrice text-danger lg'>{props?.data?.price}฿</span>
                         </div>
 
-                        <span className='badge bg-success'>IN STOCK</span>
-
+                        <span className={`badge ${props?.data?.countInStock > 0 ? 'bg-success' : 'bg-danger'}`}>
+                        {props?.data?.countInStock > 0 ? 'IN STOCK' : 'OUT OF STOCK'}
+                        </span>
                         <p className='mt-2'>{props?.data?.description}</p>
                         <div className='d-flex align-items-center'>
                             <QuantityBox />

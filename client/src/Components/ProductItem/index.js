@@ -81,7 +81,7 @@ const ProductItem = (props) => {
                     <div className="imgWrapper">
                         <img src={props.item?.images[0]} alt=""
                             className="w-100" style={{ objectFit: "cover" }} />
-                        <span className="badge badge-primary">{props.item?.discount}%</span>
+                        <span className="badge badge-primary">{props.item?.discount} 🌶️</span>
                         <div className="actions">
                             <Button onClick={() => viewProductDetails(props.item?.id)}><TfiFullscreen /></Button>
                             <Button className={isAddedtoMyList ? 'active' : ''}
@@ -97,7 +97,7 @@ const ProductItem = (props) => {
                 <div className="info">
                     <h4>{props?.item?.name}</h4>
                     <span className="text-success d-block">
-                        {props.item?.inStock ? 'In Stock' : 'Out of Stock'}
+                        {props.item?.countInStock ? 'In Stock' : 'Out of Stock'}
                     </span>
                     <Rating className="mt-2 mb-2" name="read-only" value={props?.item?.rating} readOnly size="small" precision={0.5} />
 

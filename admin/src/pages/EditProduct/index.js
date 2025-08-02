@@ -174,7 +174,7 @@ const ProductEdit = () => {
                 setProductSizeData(res);
             })
         }
-    }, [context, id]);
+    }, [id]);
 
     useEffect(() => {
         window.scrollTo(0, 0);

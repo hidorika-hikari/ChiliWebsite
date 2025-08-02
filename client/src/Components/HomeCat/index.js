@@ -27,7 +27,7 @@ const HomeCat = (props) => {
                                 <SwiperSlide key={index}>
                                     <div className="item text-center cursor" style={{background:cat.color}}>
                                         <img src={cat.images[0]} alt=''className='w-100 h-100'/>
-                                        <h6 className='text-bold'>{cat.name}</h6>
+                                        <h6 className='fw-bold'>{cat.name}</h6>
                                     </div>
                                 </SwiperSlide>
                             )

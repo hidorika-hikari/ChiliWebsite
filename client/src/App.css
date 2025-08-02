@@ -687,12 +687,13 @@ nav .navPart2 ul li .submenu a button:hover{
 }
 
 .badge-primary{
-  background: #2bbef9 !important;
+  background: #FF0000 !important;
 }
 
 .homeCat{
   padding: 35px 0px;
 }
+
 .homeCat .swiper{
   overflow: inherit !important;
 }
@@ -948,6 +949,7 @@ footer .linkWrap ul li a{
 
 .productZoom .badge{
   position: absolute;
+  padding: 7px 10px;
   top: 20px;
   left: 20px;
   z-index: 100;
@@ -1014,11 +1016,6 @@ footer .linkWrap ul li a{
   border: 2px dashed #ccc !important;
   border-radius: 7px;
   overflow: hidden;
-}
-
-.badge.bg-success{
-  background: #e5f8ed !important;
-  color: #16b585 !important;
 }
 
 .badge-success{

@@ -22,7 +22,7 @@ const ProductZoom = (props) => {
             >
                 {props?.images?.map((img, index) => (
                     <SwiperSlide key={index}>
-                        <div className='badge badge-primary'>{props?.discount}</div>
+                        <div className='badge badge-primary'>{props?.discount} 🌶️</div>
                         <InnerImageZoom
                             zoomType="hover"
                             zoomScale={1}

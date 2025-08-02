@@ -106,9 +106,9 @@ const Orders = () => {
                                     <td>{order.user.name}</td>
                                     <td>
                                         {order.paymentDetails.status === 'succeeded' ? (
-                                            <span className="badge badge-success">Succeeded</span>
+                                            <span className="badge bg-success">Succeeded</span>
                                         ) : (
-                                            <span className="badge badge-danger">{order.paymentDetails.status}</span>
+                                            <span className="badge bg-danger">{order.paymentDetails.status}</span>
                                         )}
                                     </td>
                                     <td>{new Date(order.paymentDetails.created * 1000).toLocaleString()}</td>

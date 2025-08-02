@@ -192,7 +192,7 @@ const ProductDetails = () => {
                                 <span className="oldPrice">{productData?.oldPrice}฿</span>
                                 <span className="newPrice text-danger ms-2">{productData?.price}฿</span>
                             </div>
-                            <span className="badge badge-success">IN STOCK</span>
+                            <span className="badge bg-success">IN STOCK</span>
                             <p className="mt-2">{productData?.description}</p>
                             {
                                 productData?.productSize?.length > 0 &&

@@ -186,6 +186,7 @@ const ProductAdd = () => {
                 msg: 'Please Add Product Name',
                 error: true
             });
+            return false;
         }
 
         if (formFields.description === "") {
@@ -194,6 +195,7 @@ const ProductAdd = () => {
                 msg: 'Please Add Product Description',
                 error: true
             });
+            return false;
         }
 
         if (!formFields.category) {
@@ -202,7 +204,7 @@ const ProductAdd = () => {
                 msg: 'Please Select a Category',
                 error: true
             });
-            return;
+            return false;
         }
 
         if (!formFields.price) {
@@ -211,7 +213,7 @@ const ProductAdd = () => {
                 msg: 'Please Add Product Price',
                 error: true
             });
-            return;
+            return false;
         }
 
         if (!formFields.oldPrice) {
@@ -220,7 +222,7 @@ const ProductAdd = () => {
                 msg: 'Please Add Product Old Price',
                 error: true
             });
-            return;
+            return false;
         }
 
         if (formFields.isFeatured === "") {
@@ -229,7 +231,7 @@ const ProductAdd = () => {
                 msg: 'Please Select if Product is Organic or Not',
                 error: true
             });
-            return;
+            return false;
         }
 
         if (!formFields.countInStock) {
@@ -238,7 +240,7 @@ const ProductAdd = () => {
                 msg: 'Please Add Product Stock',
                 error: true
             });
-            return;
+            return false;
         }
 
         if (formFields.brand === "") {
@@ -247,6 +249,7 @@ const ProductAdd = () => {
                 msg: 'Please Add Product Brand',
                 error: true
             });
+            return false;
         }
 
         if (!formFields.rating || formFields.rating === 0) {
@@ -255,7 +258,7 @@ const ProductAdd = () => {
                 msg: 'Please Add Product Rating',
                 error: true
             });
-            return;
+            return false;
         }
 
         if (formFields.images.length === 0) {
@@ -264,6 +267,7 @@ const ProductAdd = () => {
                 msg: 'Please Add Product Images',
                 error: true
             });
+            return false;
         }
 
         console.log(formFields)

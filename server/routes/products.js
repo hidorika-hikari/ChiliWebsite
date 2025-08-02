@@ -58,7 +58,7 @@ router.get('/', async (req, res) => {
 });
 
 router.get('/featured', async (req, res) => {
-    const productList = await Product.find({ isFeatured: false });
+    const productList = await Product.find({ isFeatured: true });
     if (!productList) {
         return res.status(500).json({ success: false });
     }
