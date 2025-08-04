@@ -94,6 +94,7 @@ const Checkout = () => {
                 productTitle: item.productTitle,
                 price: item.price,
                 quantity: item.quantity,
+                images: item.images?.[0]
             })),
             totalAmount: amount / 100,
             paymentDetails: {

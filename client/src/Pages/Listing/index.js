@@ -38,7 +38,7 @@ const Listing = () => {
             });
     };
     const filterByRating = (rating) => {
-        fetchDataFromApi(`/api/products?rating=${rating}${id ? `&subCat=${id}` : ''}`)
+        fetchDataFromApi(`/api/products?rating=${rating}${id ? `&category=${id}` : ''}`)
             .then((res) => {
                 setProductData(res.products);
             });

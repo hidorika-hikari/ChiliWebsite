@@ -54,7 +54,7 @@ const Orders = () => {
                                 <th>Email</th>
                                 <th>User</th>
                                 <th>Order Status</th>
-                                <th>Date</th>
+                                <th>Date / Time</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -75,6 +75,7 @@ const Orders = () => {
                                     <td>
                                         <button
                                             className="btn btn-sm btn-outline-dark"
+                                            style={{ display: 'block', width: '100%', textAlign: 'left' }}
                                             onClick={() => context.setAlertBox({
                                                 open: true,
                                                 error: false,
@@ -87,12 +88,14 @@ const Orders = () => {
                                     <td>
                                         <ul className="list-unstyled mb-0">
                                             {order.cartItems.map((item, idx) => (
-                                                <li key={idx}>
+                                                <li key={idx} style={{ marginBottom: '0.25rem' }}>
                                                     <button
-                                                        className="btn btn-link p-0 text-decoration-none text-primary"
+                                                        type="button"
+                                                        className="btn btn-sm btn-outline-primary"
                                                         onClick={() => handleOpenProductDialog(item)}
+                                                        style={{ display: 'block', width: '100%', textAlign: 'left' }}
                                                     >
-                                                        {item.productTitle}
+                                                        {item.productTitle.slice(0, 30)}...
                                                     </button>
                                                 </li>
                                             ))}
@@ -122,42 +125,66 @@ const Orders = () => {
                     onClose={handleCloseDialog}
                     maxWidth="sm"
                     fullWidth
+                    sx={{
+                        '& .MuiDialog-paper': {
+                            minHeight: '50vh',
+                            maxHeight: '85vh',
+                            padding: 2,
+                            borderRadius: 2,
+                        },
+                    }}
                 >
                     <DialogTitle>
-                        <Typography variant="h6" component="div">
+                        <Typography variant="h6" fontWeight="bold" gutterBottom>
                             🛒 Product Details
                         </Typography>
                     </DialogTitle>
+
                     <Divider />
-                    <DialogContent dividers>
+
+                    <DialogContent dividers sx={{ overflowY: 'auto' }}>
                         {selectedProduct && (
-                            <Grid container spacing={2}>
-                                <Grid item xs={12}>
-                                    <Typography variant="subtitle1">
-                                        <strong>Product Title:</strong> {selectedProduct.productTitle}
-                                    </Typography>
+                            <Grid container spacing={3} justifyContent="center">
+                                <Grid item xs={12} sx={{ textAlign: 'center' }}>
+                                    {selectedProduct.images ? (
+                                        <img
+                                            src={selectedProduct.images}
+                                            alt={selectedProduct.productTitle}
+                                            style={{
+                                                maxWidth: '100%',
+                                                maxHeight: '250px',
+                                                objectFit: 'contain',
+                                                borderRadius: 6,
+                                                boxShadow: '0 2px 8px rgba(0,0,0,0.1)',
+                                            }}
+                                        />
+                                    ) : (
+                                        <Typography variant="body2" color="textSecondary">
+                                            No image available
+                                        </Typography>
+                                    )}
                                 </Grid>
-                                <Grid item xs={12}>
-                                    <Typography>
+                                <Grid item xs={12} className="product-info">
+                                    <Typography variant="subtitle1" fontWeight="medium" gutterBottom>
+                                        {selectedProduct.productTitle}
+                                    </Typography>
+                                    <Typography variant="body2" mb={1}>
                                         <strong>Product ID:</strong>{' '}
                                         <span className="text-monospace">{selectedProduct.productId}</span>
                                     </Typography>
-                                </Grid>
-                                <Grid item xs={6}>
-                                    <Typography>
+                                    <Typography variant="body2" mb={1}>
                                         <strong>Quantity:</strong> {selectedProduct.quantity}
                                     </Typography>
-                                </Grid>
-                                <Grid item xs={6}>
-                                    <Typography>
+                                    <Typography variant="body2" mb={1}>
                                         <strong>Price:</strong> {selectedProduct.price} ฿
                                     </Typography>
                                 </Grid>
+
                             </Grid>
                         )}
                     </DialogContent>
                     <DialogActions>
-                        <Button onClick={handleCloseDialog} className='btn-blue btn-sml btn-lg'>
+                        <Button onClick={handleCloseDialog} className="btn-blue btn-sml btn-big btn-lg w-100">
                             Close
                         </Button>
                     </DialogActions>

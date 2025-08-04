@@ -25,7 +25,7 @@ router.get('/', async (req, res) => {
             if (minPrice) filter.price.$gte = parseInt(minPrice);
             if (maxPrice) filter.price.$lte = parseInt(maxPrice);
         }
-        if (rating) {
+        if (rating && !isNaN(parseInt(rating))) {
             const r = parseInt(rating);
             filter.rating = { $gte: r, $lt: r + 1 };
         }

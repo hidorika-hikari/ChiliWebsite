@@ -1018,11 +1018,6 @@ footer .linkWrap ul li a{
   overflow: hidden;
 }
 
-.badge-success{
-  color: #00b853;
-  background: #e5f8ed;
-}
-
 .badge{
   display: inline-block;
   padding: 7px 10px;
@@ -1876,4 +1871,8 @@ a:hover{
 
 .orderTable td, .orderTable th{
   white-space: nowrap;
+}
+
+.product-info * {
+  font-size: 18px !important;
 }
