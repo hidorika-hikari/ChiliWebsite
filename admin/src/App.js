@@ -21,6 +21,7 @@ import AddProductWeight from './pages/ProductWeightAdd';
 import AddProductSpicy from './pages/ProductSizeAdd';
 import AddProductContent from './pages/ProductRamsAdd';
 import ProductAdd from './pages/ProductAdd';
+import Orders from './pages/Orders';
 import SubCategoryList from './pages/subCategoryList';
 
 const MyContext = createContext();
@@ -66,7 +67,7 @@ function App() {
         } else {
             setIsLogin(false);
         }
-    },[isLogin])
+    },[isLogin]);
 
     const handleClose = (event, reason) => {
         if (reason === 'clickaway') {
@@ -224,6 +225,11 @@ function App() {
                                 path="/productSpicy/add"
                                 exact={true}
                                 element={<AddProductSpicy />}
+                            />
+                            <Route
+                                path="/orders"
+                                exact={true}
+                                element={<Orders />}
                             />
                         </Routes>
                     </div>

@@ -46,20 +46,6 @@ app.use('/api/productWeight', productWeightRoutes);
 app.use('/api/productRams', productRamsRoutes);
 app.use('/api/productSize', productSizeRoutes);
 
-app.post('/api/payment/create-payment-intent', async (req, res) => {
-    const { amount, currency = 'thb' } = req.body;
-    try {
-        const paymentIntent = await stripe.paymentIntents.create({
-            amount,
-            currency,
-        });
-        res.json({ clientSecret: paymentIntent.client_secret });
-    } catch (err) {
-        res.status(500).json({ error: err.message });
-    }
-});
-
-
 app.get('/', (req, res) => {
     res.json({ message: 'Server is running!' });
 });

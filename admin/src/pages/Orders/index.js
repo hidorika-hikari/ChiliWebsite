@@ -1,8 +1,36 @@
+import { Breadcrumbs, Chip, emphasize, styled } from '@mui/material';
+import { FaHome } from 'react-icons/fa';
 import React, { useEffect, useState, useContext } from 'react';
-import { fetchDataFromApi } from '../../utils/api';
+import { editData, fetchDataFromApi } from '../../utils/api';
 import { MyContext } from '../../App';
-import Pagination from '@mui/material/Pagination';
 import { Dialog, DialogTitle, DialogContent, DialogActions, Button, Typography, Grid, Divider } from '@mui/material';
+import Pagination from '@mui/material/Pagination';
+import { FormControl, Select, MenuItem } from '@mui/material';
+
+const StyleBreadcrumb = styled(Chip)(({ theme }) => {
+    const backgroundColor =
+        theme.palette.mode === 'light'
+            ? theme.palette.grey[100]
+            : theme.palette.grey[800];
+    return {
+        backgroundColor,
+        height: theme.spacing(3),
+        color: theme.palette.text.primary,
+        fontWeight: theme.typography.fontWeightRegular,
+        '&:hover, &:focus': {
+            backgroundColor: emphasize(backgroundColor, 0.06),
+        },
+        '&:active': {
+            boxShadow: theme.shadows[1],
+            backgroundColor: emphasize(backgroundColor, 0.12),
+        },
+    };
+});
+
+const menuProps = {
+    disableAutoFocusItem: true,
+    disableEnforceFocus: true,
+};
 
 const Orders = () => {
     const [selectedProduct, setSelectedProduct] = useState(null);
@@ -10,6 +38,7 @@ const Orders = () => {
     const [orders, setOrders] = useState([]);
     const [page, setPage] = useState(1);
     const [selectedAddress, setSelectedAddress] = useState(null);
+    const [updatingOrderId, setUpdatingOrderId] = useState(null);
     const [openAddressDialog, setOpenAddressDialog] = useState(false);
     const context = useContext(MyContext);
 
@@ -41,22 +70,40 @@ const Orders = () => {
         })
     };
 
-    const getStatusBadgeClass = (status) => {
-        switch (status) {
-            case 'pending':
-                return 'bg-secondary';
-            case 'processing':
-                return 'bg-warning text-dark';
-            case 'shipped':
-                return 'bg-info text-dark';
-            case 'delivered':
-                return 'bg-primary';
-            case 'cancelled':
-                return 'bg-danger';
-            case 'succeeded':
-                return 'bg-success';
-            default:
-                return 'bg-dark';
+    const updateOrderStatus = async (id, newStatus) => {
+        setUpdatingOrderId(id);
+        try {
+            const res = await editData(`/api/orders/${id}`, { status: newStatus });
+            if (res.success) {
+                setOrders((prevOrders) => {
+                    const updatedList = prevOrders.ordersList.map(order =>
+                        order._id === id
+                            ? { ...order, paymentDetails: { ...order.paymentDetails, status: newStatus } }
+                            : order
+                    );
+                    return { ...prevOrders, ordersList: updatedList };
+                });
+
+                context.setAlertBox({
+                    open: true,
+                    error: false,
+                    msg: 'Order status updated successfully!'
+                });
+            } else {
+                context.setAlertBox({
+                    open: true,
+                    error: true,
+                    msg: res.message || 'Failed to update status.'
+                });
+            }
+        } catch (err) {
+            context.setAlertBox({
+                open: true,
+                error: true,
+                msg: 'Error while updating status.'
+            });
+        } finally {
+            setUpdatingOrderId(null);
         }
     };
 
@@ -68,11 +115,32 @@ const Orders = () => {
     }, []);
 
     return (
-        <section className='section'>
-            <div className="container">
-                <h2 className='hd'>Orders</h2>
-                <div className='table-responsive orderTable mt-3'>
-                    <table className='table table-striped table-borderless'>
+        <div className="right-content w-100">
+            <div className="card shadow border-0 w-100 flex-row p-4 res-col">
+                <h5 className="mb-0">Orders</h5>
+                <Breadcrumbs
+                    aria-label="breadcrumb"
+                    className="ms-auto breadcrumb_"
+                >
+                    <StyleBreadcrumb
+                        component="a"
+                        href={'/'}
+                        label="Dashboard"
+                        icon={<FaHome fontSize="small" />}
+                    />
+                    <StyleBreadcrumb
+                        label="Orders"
+                        component="a"
+                        href="/orders"
+                    />
+                </Breadcrumbs>
+            </div>
+            <div className="card shadow border-0 p-3 mt-4">
+                <div className='table-responsive mt-3'>
+                    <table
+                        className='table table-bordered table-striped v-align'
+                        style={{ whiteSpace: 'nowrap' }}
+                    >
                         <thead className='table-dark'>
                             <tr>
                                 <th>Order Id</th>
@@ -141,9 +209,21 @@ const Orders = () => {
                                     <td>{order.totalAmount} ฿</td>
                                     <td>{order.user.name}</td>
                                     <td>
-                                        <span className={`badge ${getStatusBadgeClass(order.paymentDetails.status)}`}>
-                                            {order.paymentDetails.status.charAt(0).toUpperCase() + order.paymentDetails.status.slice(1)}
-                                        </span>
+                                        <FormControl size="small" fullWidth>
+                                            <Select
+                                                value={order.paymentDetails.status}
+                                                onChange={(e) => updateOrderStatus(order._id, e.target.value)}
+                                                disabled={updatingOrderId === order._id}
+                                                MenuProps={menuProps}
+                                            >
+                                                <MenuItem value="pending">Pending</MenuItem>
+                                                <MenuItem value="processing">Processing</MenuItem>
+                                                <MenuItem value="shipped">Shipped</MenuItem>
+                                                <MenuItem value="delivered">Delivered</MenuItem>
+                                                <MenuItem value="cancelled">Cancelled</MenuItem>
+                                                <MenuItem value="succeeded">Succeeded</MenuItem>
+                                            </Select>
+                                        </FormControl>
                                     </td>
                                     <td>{new Date(order.paymentDetails.created * 1000).toLocaleString()}</td>
                                 </tr>
@@ -153,6 +233,7 @@ const Orders = () => {
                 </div>
                 <Dialog
                     open={openDialog}
+                    disableEnforceFocus
                     onClose={handleCloseDialog}
                     maxWidth="sm"
                     fullWidth
@@ -208,7 +289,6 @@ const Orders = () => {
                                         <strong>Price:</strong> {selectedProduct.price} ฿
                                     </Typography>
                                 </Grid>
-
                             </Grid>
                         )}
                     </DialogContent>
@@ -218,6 +298,7 @@ const Orders = () => {
                     </DialogActions>
                 </Dialog>
                 <Dialog
+                    disableEnforceFocus
                     open={openAddressDialog}
                     maxWidth="sm"
                     fullWidth
@@ -232,7 +313,7 @@ const Orders = () => {
                 >
                     <DialogTitle>
                         <Typography variant="h6" fontWeight="bold" gutterBottom>
-                            👤 Customer Details
+                            👤Customer Details
                         </Typography>
                     </DialogTitle>
                     <Divider />
@@ -257,8 +338,8 @@ const Orders = () => {
                         )}
                     </DialogContent>
                     <DialogActions>
-                        <Button onClick={() => handleCloseDialog('address')}
-                            className="btn-blue btn-sml btn-lg w-100">Close</Button>
+                    <Button onClick={() => handleCloseDialog('address')}
+                        className="btn-blue btn-sml btn-lg w-100">Close</Button>
                     </DialogActions>
                 </Dialog>
                 {
@@ -272,8 +353,8 @@ const Orders = () => {
                     </div>
                 }
             </div>
-        </section>
-    );
-};
+        </div>
+    )
+}
 
 export default Orders;

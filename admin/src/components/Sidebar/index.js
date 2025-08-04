@@ -1,21 +1,33 @@
 import Button from "@mui/material/Button";
 import { FaProductHunt } from "react-icons/fa";
 import { FaAngleRight } from "react-icons/fa6";
-import { IoMdLogOut } from "react-icons/io";
+import { IoMdListBox, IoMdLogOut } from "react-icons/io";
 import { Link } from "react-router-dom";
-import { useState } from "react";
 import { MdDashboard } from "react-icons/md";
 import { TbCategoryFilled } from "react-icons/tb";
+import { useNavigate } from 'react-router-dom';
+import { useEffect, useState } from 'react';
 
 const Sidebar = () => {
 
     const [activeTab, setActiveTab] = useState(0);
     const [isToggleSubmenu, setIsToggleSubmenu] = useState(false);
+    const [isLogin, setIsLogin] = useState(null);
 
     const isOpenSubmenu = (index) => {
         setActiveTab(index);
         setIsToggleSubmenu(!isToggleSubmenu);
     }
+
+    const history = useNavigate();
+    useEffect(() => {
+        const token = localStorage.getItem("token");
+        if (token !== "" && token !== undefined && token !== null){
+            setIsLogin(true);
+        } else {
+            history('/login')
+        }
+    },[]);
 
     return (
         <>
@@ -62,17 +74,16 @@ const Sidebar = () => {
                             </ul>
                         </div>
                     </li>
-                    {/*
                     <li>
-                        <Link to="/">
+                        <Link to="/orders">
                         <Button className={`w-100 ${activeTab === 3 ? 'active' : ''}`} onClick={() => isOpenSubmenu(3)}>
-                                <span className="icon"><MdMessage/></span>
-                                    Messages
+                                <span className="icon"><IoMdListBox /></span>
+                                    Orders
                                 <span className="arrow"><FaAngleRight/></span>
                             </Button>
                         </Link>
                     </li>
-
+                    {/*
                     <li>
                         <Link to="/">
                         <Button className={`w-100 ${activeTab === 4 ? 'active' : ''}`} onClick={() => isOpenSubmenu(4)}>

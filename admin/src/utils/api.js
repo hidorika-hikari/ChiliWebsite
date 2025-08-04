@@ -27,10 +27,18 @@ export const postData = async (url, formData) => {
     }
 };
 
-export const editData = async(url, updatedData) => {
-    const {res} = await axios.put(`http://localhost:4000${url}`,updatedData)
-    return res;
-}
+export const editData = async (url, updatedData) => {
+    try {
+        const response = await axios.put(`http://localhost:4000${url}`, updatedData);
+        return response.data;
+    } catch (error) {
+        console.error('editData error:', error.message);
+        return {
+            success: false,
+            message: error.response?.data?.message || 'Unknown error while updating',
+        };
+    }
+};
 
 export const deleteData = async (url) => {
     const {res} = await axios.delete(`http://localhost:4000${url}`)
