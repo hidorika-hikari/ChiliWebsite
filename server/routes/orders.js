@@ -70,7 +70,7 @@ router.get('/:id', async (req, res) => {
     const order = await Orders.findById(req.params.id);
     if (!order) {
         return res.status(500).json({
-            message: 'The order with the given ID was not found.'
+            message: "Order with the given ID wasn't found"
         });
     }
     return res.status(200).send(order);
@@ -86,7 +86,7 @@ router.delete('/:id', async (req, res) => {
     }
     res.status(200).json({
         success: true,
-        message: 'Order Deleted!'
+        message: 'Order deleted!'
     });
 });
 

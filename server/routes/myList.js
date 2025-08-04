@@ -28,7 +28,7 @@ router.post('/check', async (req, res) => {
 });
 
 router.post('/add', async (req, res) => {
-    const item = await MyList.find({productId:req.body.productId, userId: req.body.userId });
+    const item = await MyList.find({ productId: req.body.productId, userId: req.body.userId });
     if (item.length === 0){
         let list = new MyList({
             productTitle: req.body.productTitle,
@@ -54,7 +54,7 @@ router.post('/add', async (req, res) => {
 router.delete('/:id', async (req, res) => {
     const item = await MyList.findById(req.params.id);
     if(!item) {
-        res.status(404).json({ msg: 'Item with the given ID was not found' })
+        res.status(404).json({ msg: "Item with the given ID wasn't found" })
     }
     const deleteItem = await MyList.findByIdAndDelete(req.params.id);
     if (!deleteItem) {
@@ -72,7 +72,7 @@ router.delete('/:id', async (req, res) => {
 router.get('/:id', async (req, res) => {
     const item = await MyList.findById(req.params.id);
     if (!item) {
-        return res.status(500).json({ message: 'Item with the given ID was not found' })
+        return res.status(500).json({ message: "Item with the given ID wasn't found" })
     }
     return res.status(200).send(item);
 })

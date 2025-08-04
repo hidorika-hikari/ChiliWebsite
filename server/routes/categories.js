@@ -17,7 +17,7 @@ router.get('/', async (req, res) => {
     const totalPages = Math.ceil(totalPosts/perPage);
 
     if(page > totalPages) {
-        return res.status(404).json({ message:"Page not found"})
+        return res.status(404).json({ message: "Page not found" })
     }
 
     const categoryList = await Category.find()
@@ -30,16 +30,16 @@ router.get('/', async (req, res) => {
     }
 
     return res.status(200).json({
-        "categoryList":categoryList,
-        "totalPages":totalPages,
-        "page":page
+        "categoryList": categoryList,
+        "totalPages": totalPages,
+        "page": page
     })
 });
 
 router.post('/create', async (req, res) => {
     if (!req.body || !Array.isArray(req.body.images)) {
         return res.status(400).json({
-            error: "'images' must be an array in the request body",
+            error: "Images must be an array in the request body",
             status: false
         });
     }
@@ -84,7 +84,7 @@ router.get('/:id', async (req, res) => {
     const category = await Category.findById(req.params.id);
     if (!category) {
         return res.status(500).json({
-            message: 'The category with the given ID was not found.'
+            message: "Category with the given ID wasn't found"
         });
     }
     return res.status(200).send(category);
@@ -100,7 +100,7 @@ router.delete('/:id', async (req, res) => {
     }
     res.status(200).json({
         success: true,
-        message: 'Category Deleted!'
+        message: 'Category deleted!'
     });
 });
 
@@ -130,8 +130,8 @@ router.put('/:id', async (req, res) =>{
 
     if(!category){
         return res.status(500).json({
-            message:'Category cant be updated',
-            success:false
+            message: "Category can't be updated",
+            success: false
         })
     }
     res.send(category);

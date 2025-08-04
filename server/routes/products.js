@@ -77,7 +77,7 @@ router.get('/recentlyViewed', async (req, res) => {
     if (!productList) {
         return res.status(500).json({
             success: false,
-            message: "Product cant be updated"
+            message: "Product can't be updated"
         });
     }
     return res.status(200).json(productList);
@@ -93,7 +93,7 @@ router.post('/recentlyViewed', async (req, res) => {
 
     const category = await Category.findById(req.body.category);
     if (!category) {
-        return res.status(404).send("Invalid Category");
+        return res.status(404).send("Invalid category");
     }
 
     const limit = pLimit(2);
@@ -148,14 +148,14 @@ router.post('/recentlyViewed', async (req, res) => {
 router.post('/create', async (req, res) => {
     if (!Array.isArray(req.body.images)) {
         return res.status(400).json({
-            error: "Images must be an Array",
+            error: "Images must be an array",
             status: false
         });
     }
 
     const category = await Category.findById(req.body.category);
     if (!category) {
-        return res.status(404).send("Invalid Category");
+        return res.status(404).send("Invalid category");
     }
 
     const limit = pLimit(2);
@@ -266,7 +266,7 @@ router.put('/:id', async (req, res) => {
     if (!product) {
         return res.status(404).json({
             success: false,
-            message: "Product cant be updated"
+            message: "Product can't be updated"
         });
     }
     res.status(200).json({

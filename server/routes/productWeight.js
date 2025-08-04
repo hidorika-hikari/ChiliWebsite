@@ -18,7 +18,7 @@ router.get('/', async (req, res) => {
 router.get('/:id', async (req, res) => {
     const item = await ProductWeight.findById(req.params.id);
     if(!item) {
-        res.status(500).json({ message: 'The ProductWeight with the given ID was not found'})
+        res.status(500).json({ message: "ProductWeight with the given ID wasn't found" })
     }
     return res.status(200).send(item);
 })
@@ -47,7 +47,7 @@ router.delete('/:id', async (req,res) => {
     }
     res.status(200).json({
         success: true,
-        message: 'Item Deleted'
+        message: 'Item deleted'
     })
 });
 
@@ -61,7 +61,7 @@ router.put('/:id',async (req, res) => {
     )
     if (!item) {
         return res.status(500).json({
-            message: 'Item cant Updated',
+            message: "Item can't be updated",
             success: false
         })
     }

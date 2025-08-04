@@ -12,7 +12,7 @@ router.get('/', async (req, res) => {
         }
 
         if (!reviews) {
-            return res.status(404).json({ success: false, message: "No reviews found." });
+            return res.status(404).json({ success: false, message: "No reviews found" });
         }
 
         return res.status(200).json(reviews);
@@ -42,9 +42,7 @@ router.post('/add', async (req, res) => {
             customerRating: req.body.customerRating,
             productId: req.body.productId
         });
-
         review = await review.save();
-
         return res.status(201).json(review);
     } catch (err) {
         return res.status(500).json({

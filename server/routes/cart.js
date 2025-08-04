@@ -15,7 +15,7 @@ router.get('/', async (req, res) => {
 });
 
 router.post('/add', async (req, res) => {
-    const cartItem = await Cart.find({productId:req.body.productId, userId: req.body.userId});
+    const cartItem = await Cart.find({ productId: req.body.productId, userId: req.body.userId });
     if (cartItem.length === 0){
         let cartList = new Cart({
             productTitle: req.body.productTitle,
@@ -43,7 +43,7 @@ router.post('/add', async (req, res) => {
 router.delete('/:id', async (req, res) => {
     const cartItem = await Cart.findById(req.params.id);
     if(!cartItem) {
-        res.status(404).json({ msg: 'Cart item given id not found!' })
+        res.status(404).json({ msg: "Cart item given ID wasn't found" })
     }
     const deleteItem = await Cart.findByIdAndDelete(req.params.id);
     if (!deleteItem) {
@@ -61,7 +61,7 @@ router.delete('/:id', async (req, res) => {
 router.get('/:id', async (req, res) => {
     const cartItem = await Cart.findById(req.params.id);
     if (!cartItem) {
-        return res.status(500).json({ message: 'Cart item with the given ID was not found' })
+        return res.status(500).json({ message: "Cart item with the given ID wasn't found" })
     }
     return res.status(200).send(cartItem);
 })
@@ -83,7 +83,7 @@ router.put('/:id', async (req, res) => {
     )
     if (!cartList) {
         return res.status(500).json({
-            message: 'Cart item can not be updated',
+            message: "Cart item can't be updated",
             success: false
         })
     }

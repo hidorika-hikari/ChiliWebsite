@@ -9,7 +9,7 @@ router.get('/', async (req, res) => {
     const totalPages = Math.ceil(totalPosts/perPage);
 
     if(page > totalPages) {
-        return res.status(404).json({ message:"Page not found"})
+        return res.status(404).json({ message: "Page not found" })
     }
 
     const SubCategoryList = await SubCategory.find().populate("category")
@@ -22,9 +22,9 @@ router.get('/', async (req, res) => {
     }
 
     return res.status(200).json({
-        "subCategoryList":SubCategoryList,
-        "totalPages":totalPages,
-        "page":page
+        "subCategoryList": SubCategoryList,
+        "totalPages": totalPages,
+        "page": page
     })
 });
 
@@ -32,7 +32,7 @@ router.get('/:id', async (req, res) => {
     const subCat = await SubCategory.findById(req.params.id).populate("category");
     if (!subCat) {
         return res.status(500).json({
-            message: 'The Sub category with the given ID was not found.'
+            message: "Subcategory with the given ID wasn't found"
         });
     }
     return res.status(200).send(subCat);
@@ -57,13 +57,13 @@ router.delete('/:id', async (req, res) => {
     const deleteSubCat = await SubCategory.findByIdAndDelete(req.params.id);
     if (!deleteSubCat) {
         return res.status(404).json({
-            message: 'Sub Category not found.',
+            message: 'Subcategory not found.',
             success: false
         });
     }
     res.status(200).json({
         success: true,
-        message: 'Sub Category Deleted!'
+        message: 'Subcategory deleted!'
     });
 });
 
@@ -79,7 +79,7 @@ router.put('/:id', async (req, res) =>{
 
     if(!subCat){
         return res.status(500).json({
-            message:'Sub Category cant be updated',
+            message: "Subcategory can't be updated",
             success: false
         })
     }
