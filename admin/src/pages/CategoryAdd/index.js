@@ -71,7 +71,7 @@ const CategoryAdd = () => {
             context.setAlertBox({
                 open: true,
                 error: true,
-                msg: 'Please fill all the details'
+                msg: 'Please fill all a details'
             });
             return false;
         }

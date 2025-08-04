@@ -28,6 +28,7 @@ const SignUp = () => {
         confirmPassword: '',
         isAdmin: true
     })
+
     useEffect(() => {
         context.setIsHideSidebarAndHeader(true);
     }, [context]);
@@ -48,7 +49,7 @@ const SignUp = () => {
             context.setAlertBox({
                 open: true,
                 error: true,
-                msg: "name can not be blank!"
+                msg: "Name can not be blank!"
             })
             return false;
         }
@@ -56,7 +57,7 @@ const SignUp = () => {
             context.setAlertBox({
                 open: true,
                 error: true,
-                msg: "email can not be blank!"
+                msg: "Email can not be blank!"
             })
             return false;
         }
@@ -64,7 +65,7 @@ const SignUp = () => {
             context.setAlertBox({
                 open: true,
                 error: true,
-                msg: "phone can not be blank!"
+                msg: "Phone can not be blank!"
             })
             return false;
         }
@@ -72,7 +73,7 @@ const SignUp = () => {
             context.setAlertBox({
                 open: true,
                 error: true,
-                msg: "password can not be blank!"
+                msg: "Password can not be blank!"
             })
             return false;
         }
@@ -80,7 +81,7 @@ const SignUp = () => {
             context.setAlertBox({
                 open: true,
                 error: true,
-                msg: "password not match"
+                msg: "Password not match"
             })
             return false;
         }
@@ -90,7 +91,7 @@ const SignUp = () => {
                     context.setAlertBox({
                         open: true,
                         error: false,
-                        msg: "Register Successfully!"
+                        msg: "Register successfully!"
                     });
                     setTimeout(() => {
                         setIsLoading(true);

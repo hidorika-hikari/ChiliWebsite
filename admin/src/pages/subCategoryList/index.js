@@ -65,7 +65,6 @@ const SubCategoryList = () => {
             setFromFields({
                 subCat:res.subCat
             });
-            console.log(res);
         })
     }
 
@@ -83,7 +82,7 @@ const SubCategoryList = () => {
             context.setAlertBox({
                 open: true,
                 error: false,
-                msg: 'The Category Updated!'
+                msg: 'Category updated!'
             });
             context.setProgress(100);
         })
@@ -101,7 +100,6 @@ const SubCategoryList = () => {
             }
         ))
     }
-
 
     const deleteSubCat = (id) => {
         deleteData(`/api/subCat/${id}`).then(res => {

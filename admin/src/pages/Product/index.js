@@ -56,7 +56,7 @@ const Products = () => {
             context.setAlertBox({
                 open: true,
                 error: true,
-                msg: 'Product Deleted!'
+                msg: 'Product deleted!'
             });
             fetchDataFromApi("/api/products").then((res) => {
                 setProductList(res);

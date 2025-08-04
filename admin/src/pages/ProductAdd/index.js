@@ -183,7 +183,7 @@ const ProductAdd = () => {
         if (formFields.name === "") {
             context.setAlertBox({
                 open: true,
-                msg: 'Please Add Product Name',
+                msg: 'Please add product name',
                 error: true
             });
             return false;
@@ -192,7 +192,7 @@ const ProductAdd = () => {
         if (formFields.description === "") {
             context.setAlertBox({
                 open: true,
-                msg: 'Please Add Product Description',
+                msg: 'Please add product descriptions',
                 error: true
             });
             return false;
@@ -201,7 +201,7 @@ const ProductAdd = () => {
         if (!formFields.category) {
             context.setAlertBox({
                 open: true,
-                msg: 'Please Select a Category',
+                msg: 'Please select a category',
                 error: true
             });
             return false;
@@ -210,7 +210,7 @@ const ProductAdd = () => {
         if (!formFields.price) {
             context.setAlertBox({
                 open: true,
-                msg: 'Please Add Product Price',
+                msg: 'Please add product price',
                 error: true
             });
             return false;
@@ -219,7 +219,7 @@ const ProductAdd = () => {
         if (!formFields.oldPrice) {
             context.setAlertBox({
                 open: true,
-                msg: 'Please Add Product Old Price',
+                msg: 'Please add product old price',
                 error: true
             });
             return false;
@@ -228,7 +228,7 @@ const ProductAdd = () => {
         if (formFields.isFeatured === "") {
             context.setAlertBox({
                 open: true,
-                msg: 'Please Select if Product is Organic or Not',
+                msg: 'Please select if product is organic or not',
                 error: true
             });
             return false;
@@ -237,7 +237,7 @@ const ProductAdd = () => {
         if (!formFields.countInStock) {
             context.setAlertBox({
                 open: true,
-                msg: 'Please Add Product Stock',
+                msg: 'Please add product stock',
                 error: true
             });
             return false;
@@ -246,7 +246,7 @@ const ProductAdd = () => {
         if (formFields.brand === "") {
             context.setAlertBox({
                 open: true,
-                msg: 'Please Add Product Brand',
+                msg: 'Please add product brand',
                 error: true
             });
             return false;
@@ -255,7 +255,7 @@ const ProductAdd = () => {
         if (!formFields.rating || formFields.rating === 0) {
             context.setAlertBox({
                 open: true,
-                msg: 'Please Add Product Rating',
+                msg: 'Please add product rating',
                 error: true
             });
             return false;
@@ -264,19 +264,18 @@ const ProductAdd = () => {
         if (formFields.images.length === 0) {
             context.setAlertBox({
                 open: true,
-                msg: 'Please Add Product Images',
+                msg: 'Please add product images',
                 error: true
             });
             return false;
         }
 
-        console.log(formFields)
         setIsLoading(true);
         postData('api/products/create', formFields).then((res) => {
             setIsLoading(false);
             context.setAlertBox({
                 open: true,
-                msg: 'The Product is Created!',
+                msg: 'Product is created!',
                 error: false
             });
             setFormFields({

@@ -41,7 +41,7 @@ const Login = () => {
             context.setAlertBox({
                 open: true,
                 error: true,
-                msg: "email can not be blank!"
+                msg: "Email can not be blank!"
             })
             return false;
         }
@@ -49,7 +49,7 @@ const Login = () => {
             context.setAlertBox({
                 open: true,
                 error: true,
-                msg: "password can not be blank!"
+                msg: "Password can not be blank!"
             })
             return false;
         }
@@ -67,7 +67,7 @@ const Login = () => {
                     context.setAlertBox({
                         open: true,
                         error: false,
-                        msg: "Login Successfully!"
+                        msg: "Login successfully!"
                     });
                     setTimeout(() => {
                         setIsLoading(false);

@@ -37,7 +37,6 @@ const AddProductContent = () => {
     });
 
     const context = useContext(MyContext);
-
     const inputChange = (e) => {
         setFormFields(() => ({
             ...formFields,
@@ -53,12 +52,11 @@ const AddProductContent = () => {
 
     const addProductRams = (e) => {
         e.preventDefault();
-        console.log(formFields)
 
         if (formFields.productRams === "") {
             context.setAlertBox({
                 open: true,
-                msg: 'Please Add Product Content',
+                msg: 'Please add product content',
                 error: true
             });
             return false;

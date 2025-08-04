@@ -69,11 +69,10 @@ const AddSubCat = () => {
 
     const addSubCat = (e) => {
         e.preventDefault();
-        console.log(formFields)
         if (formFields.category === "") {
             context.setAlertBox({
                 open: true,
-                msg: 'Please Select a Category',
+                msg: 'Please select a category',
                 error: true
             });
         }

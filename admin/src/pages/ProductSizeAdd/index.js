@@ -52,12 +52,11 @@ const AddProductSpicy = () => {
 
     const addProductSize = (e) => {
         e.preventDefault();
-        console.log(formFields)
 
         if (formFields.productSize === "") {
             context.setAlertBox({
                 open: true,
-                msg: 'Please Add Product Spicy Level',
+                msg: 'Please add product spicy level',
                 error: true
             });
             return false;

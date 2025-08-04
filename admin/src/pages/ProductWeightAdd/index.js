@@ -52,12 +52,11 @@ const AddProductWeight = () => {
 
     const addProductWeight = (e) => {
         e.preventDefault();
-        console.log(formFields)
 
         if (formFields.productWeight === "") {
             context.setAlertBox({
                 open: true,
-                msg: 'Please Add Product Weight',
+                msg: 'Please add product weight',
                 error: true
             });
             return false;

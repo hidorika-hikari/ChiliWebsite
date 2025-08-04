@@ -58,7 +58,7 @@ const Dashboard = () => {
       context.setAlertBox({
         open: true,
         error: true,
-        msg: 'Product Deleted!'
+        msg: 'Product deleted!'
       });
       fetchDataFromApi("/api/products").then((res) => {
         setProductList(res);
@@ -148,7 +148,6 @@ const Dashboard = () => {
 
         <div className="card shadow border-0 p-3 mt-4">
           <h3 className="hd">Best Selling Products</h3>
-
           <div className="row cardFilters mt-3">
             <div className="col-md-3">
               <h4>SHOW BY</h4>

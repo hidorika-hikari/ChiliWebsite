@@ -81,11 +81,10 @@ const CategoryList = () => {
                 setOpen(false);
                 setIsLoading(false);
             });
-
             context.setAlertBox({
                 open: true,
                 error: false,
-                msg: 'The Category Updated!'
+                msg: 'Category updated!'
             });
             context.setProgress(100);
         })
