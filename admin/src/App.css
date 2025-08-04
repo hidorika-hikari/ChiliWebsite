@@ -1517,3 +1517,89 @@ button .loader{
   width: 30px !important;
   height: 30px !important;
 }
+
+.productZoom .swiper-button-prev,
+.productZoom .swiper-button-next {
+  display: none !important;
+}
+
+.productDetails .productZoomBig {
+  height: 350px !important;
+}
+
+.productZoom {
+  width: 100%;
+  max-width: 500px;
+  margin: auto;
+}
+
+.badge{
+  display: inline-block;
+  padding: 7px 10px;
+  border-radius: 20px;
+}
+
+.badge-primary{
+  background: #FF0000 !important;
+}
+
+.productZoom .badge{
+  position: absolute;
+  padding: 7px 10px;
+  top: 20px;
+  left: 20px;
+  z-index: 100;
+}
+
+.zoomSliderBig {
+  width: 100%;
+  border: 1px solid #eee;
+  border-radius: 8px;
+  overflow: hidden;
+  margin-bottom: 10px;
+}
+
+.zoomSlider .swiper-slide {
+  cursor: pointer;
+  opacity: 0.6;
+  border: 2px solid transparent;
+  border-radius: 6px;
+  overflow: hidden;
+  transition: all 0.3s ease;
+}
+
+.zoomSlider .swiper-slide-thumb-active {
+  opacity: 1;
+  border-color: #007bff;
+}
+
+.thumbnail {
+  width: 100%;
+  height: auto;
+  object-fit: cover;
+  border-radius: 4px;
+}
+
+.zoomSliderBig .item {
+  width: 100%;
+  height: auto;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.productZoom .swiper-button-prev,
+.productZoom .swiper-button-next {
+  display: none !important;
+}
+
+.swiper-button-disabled {
+  opacity: 0.3;
+  cursor: not-allowed
+}
+
+.iiz__btn.iiz__hint {
+  background: transparent !important;
+  border: none !important;
+  opacity: 1 !important;
+}

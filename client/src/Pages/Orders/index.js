@@ -3,6 +3,12 @@ import { fetchDataFromApi } from '../../utils/api';
 import { MyContext } from '../../App';
 import Pagination from '@mui/material/Pagination';
 import { Dialog, DialogTitle, DialogContent, DialogActions, Button, Typography, Grid, Divider } from '@mui/material';
+import dayjs from 'dayjs';
+import utc from 'dayjs/plugin/utc';
+import timezone from 'dayjs/plugin/timezone';
+
+dayjs.extend(utc);
+dayjs.extend(timezone);
 
 const Orders = () => {
     const [selectedProduct, setSelectedProduct] = useState(null);
@@ -145,7 +151,7 @@ const Orders = () => {
                                             {order.paymentDetails.status.charAt(0).toUpperCase() + order.paymentDetails.status.slice(1)}
                                         </span>
                                     </td>
-                                    <td>{new Date(order.paymentDetails.created * 1000).toLocaleString()}</td>
+                                    <td>{dayjs.unix(order.paymentDetails.created).tz('Asia/Bangkok').format('DD/MM/YY HH:mm')}</td>
                                 </tr>
                             ))}
                         </tbody>

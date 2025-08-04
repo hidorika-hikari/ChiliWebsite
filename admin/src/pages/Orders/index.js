@@ -6,6 +6,12 @@ import { MyContext } from '../../App';
 import { Dialog, DialogTitle, DialogContent, DialogActions, Button, Typography, Grid, Divider } from '@mui/material';
 import Pagination from '@mui/material/Pagination';
 import { FormControl, Select, MenuItem } from '@mui/material';
+import dayjs from 'dayjs';
+import utc from 'dayjs/plugin/utc';
+import timezone from 'dayjs/plugin/timezone';
+
+dayjs.extend(utc);
+dayjs.extend(timezone);
 
 const StyleBreadcrumb = styled(Chip)(({ theme }) => {
     const backgroundColor =
@@ -225,7 +231,7 @@ const Orders = () => {
                                             </Select>
                                         </FormControl>
                                     </td>
-                                    <td>{new Date(order.paymentDetails.created * 1000).toLocaleString()}</td>
+                                    <td>{dayjs.unix(order.paymentDetails.created).tz('Asia/Bangkok').format('DD/MM/YY HH:mm')}</td>
                                 </tr>
                             ))}
                         </tbody>

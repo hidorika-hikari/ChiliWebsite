@@ -196,8 +196,8 @@ const Products = () => {
                                                     />
                                                 </td>
                                                 <td>
-                                                    <div className="actions d-flex align-items-center">
-                                                        <Link to="/product/details">
+                                                    <div className="actions d-flex align-ite`ms-center">
+                                                        <Link to={`/product/details/${item._id}`}>
                                                             <Button className="secondary" color="secondary">
                                                                 <FaEye />
                                                             </Button>

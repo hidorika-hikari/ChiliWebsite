@@ -8,11 +8,23 @@ import { IoIosColorPalette } from 'react-icons/io';
 import { MdRateReview } from 'react-icons/md';
 import { MdOutlineStorage } from 'react-icons/md';
 import { MdOutlinePublishedWithChanges } from 'react-icons/md';
+import { useParams } from "react-router-dom";
 import UserAvatarImgComponent from '../../components/userAvatarImg';
 import Rating from '@mui/material/Rating';
 import Button from '@mui/material/Button';
-import React from 'react';
-import Slider from 'react-slick';
+import React, { useEffect, useState } from 'react';
+import { fetchDataFromApi } from '../../utils/api';
+import ProductZoom from '../../../../admin/src/components/ProductZoomAdmin';
+import dayjs from 'dayjs'
+import utc from 'dayjs/plugin/utc'
+import timezone from 'dayjs/plugin/timezone'
+import 'swiper/css';
+import 'swiper/css/navigation';
+import 'swiper/css/thumbs';
+import 'react-inner-image-zoom/lib/styles.min.css';
+
+dayjs.extend(utc)
+dayjs.extend(timezone)
 
 const StyleBreadcrumb = styled(Chip)(({ theme }) => {
     const backgroundColor =
@@ -35,27 +47,23 @@ const StyleBreadcrumb = styled(Chip)(({ theme }) => {
 });
 
 const ProductDetails = () => {
-    var productSliderOptions = {
-        dots: false,
-        infinite: false,
-        speed: 500,
-        slidesToShow: 1,
-        slidesToScroll: 1,
-        arrows: false,
-    };
 
-    var productSliderSmallOptions = {
-        dots: false,
-        infinite: false,
-        speed: 500,
-        slidesToShow: 3,
-        slidesToScroll: 1,
-        arrows: false,
-    };
+    const [productData, setProductData] = useState([]);
+    const [reviewsData, setReviewsData] = useState([]);
+    const { id } = useParams();
+    useEffect(() => {
+        window.scrollTo(0,0);
+        fetchDataFromApi(`/api/products/${id}`).then((res) => {
+            setProductData(res);
+        })
+        fetchDataFromApi(`/api/productReviews?productId=${id}`).then((res) => {
+            setReviewsData(res);
+        })
+    }, []);
 
     return (
         <>
-            <div className="right-content w-100">
+            <div className="right-content w-100 productDetails">
                 <div className="card shadow border-0 w-100 flex-row p-4 res-col">
                     <h5 className="mb-0">Product View</h5>
                     <Breadcrumbs
@@ -79,65 +87,14 @@ const ProductDetails = () => {
                 <div className="card productDetailsSEction">
                     <div className="row">
                         <div className="col-md-5">
-                            <div className="sliderWrapper pt-3 pb-3 ps-4 pe-4">
-                                <h6 className="mb-4">Product Gallery</h6>
-                                <Slider
-                                    {...productSliderOptions}
-                                    className="sliderBig mb-2"
-                                >
-                                    <div className="item">
-                                        <img
-                                            src="https://mironcoder-hotash.netlify.app/images/product/single/01.webp"
-                                            alt=""
-                                            className="w-100"
-                                        />
-                                    </div>
-                                </Slider>
-
-                                <Slider
-                                    {...productSliderSmallOptions}
-                                    className="sliderSml"
-                                >
-                                    <div className="item">
-                                        <img
-                                            src="https://mironcoder-hotash.netlify.app/images/product/single/02.webp"
-                                            alt=""
-                                            className="w-100"
-                                        />
-                                    </div>
-                                    <div className="item">
-                                        <img
-                                            src="https://mironcoder-hotash.netlify.app/images/product/single/03.webp"
-                                            alt=""
-                                            className="w-100"
-                                        />
-                                    </div>
-                                    <div className="item">
-                                        <img
-                                            src="https://mironcoder-hotash.netlify.app/images/product/single/04.webp"
-                                            alt=""
-                                            className="w-100"
-                                        />
-                                    </div>
-                                    <div className="item">
-                                        <img
-                                            src="https://mironcoder-hotash.netlify.app/images/product/single/05.webp"
-                                            alt=""
-                                            className="w-100"
-                                        />
-                                    </div>
-                                </Slider>
+                            <div className="sliderWrapper pt-3 pb-3 ps-4 pe-4 mt-3">
+                                <ProductZoom images={productData?.images} discount={productData?.discount}/>
                             </div>
                         </div>
 
                         <div className="col-md-7">
-                            <div className=" pt-3 pb-3 ps-4 pe-4">
-                                <h6 className="mb-4">Product Details</h6>
-                                <h4>
-                                    Formal suits for men wedding slim fit 3
-                                    piece dress business party jacket
-                                </h4>
-
+                            <div className=" pt-3 pb-3 ps-4 pe-4 mt-3">
+                                <h4>{productData?.name}</h4>
                                 <div className="productInfo mt-4">
                                     <div className="row mb-2">
                                         <div className="col-sm-3 d-flex align-items-center">
@@ -147,7 +104,7 @@ const ProductDetails = () => {
                                             <span className="name">Brand</span>
                                         </div>
                                         <div className="col-sm-9">
-                                            <span>Ecstasy</span>
+                                            <span>{productData?.brand}</span>
                                         </div>
                                     </div>
                                     <div className="row">
@@ -160,59 +117,90 @@ const ProductDetails = () => {
                                             </span>
                                         </div>
                                         <div className="col-sm-9">
-                                            <span>Man's</span>
+                                            <span>{productData?.category?.name}</span>
                                         </div>
                                     </div>
-                                    <div className="row">
-                                        <div className="col-sm-3 d-flex align-items-center">
-                                            <span className="icon">
-                                                <FaTag />
-                                            </span>
-                                            <span className="name">Tag</span>
-                                        </div>
-                                        <div className="col-sm-9">
-                                            <span>
-                                                <div className="row">
-                                                    <ul className="list list-inline tags sml">
-                                                        <li className="list-inline-item">
-                                                            <span>SUITE</span>
-                                                        </li>
-                                                        <li className="list-inline-item">
-                                                            <span>PARTY</span>
-                                                        </li>
-                                                        <li className="list-inline-item">
-                                                            <span>DRESS</span>
-                                                        </li>
-                                                    </ul>
+                                    {
+                                        productData?.productRams?.length !== 0 && (
+                                            <div className="row">
+                                                <div className="col-sm-3 d-flex align-items-center">
+                                                    <span className="icon"><FaTag /></span>
+                                                    <span className="name">Content</span>
                                                 </div>
-                                            </span>
-                                        </div>
-                                    </div>
-                                    <div className="row">
-                                        <div className="col-sm-3 d-flex align-items-center">
-                                            <span className="icon">
-                                                <IoIosColorPalette />
-                                            </span>
-                                            <span className="name">Color</span>
-                                        </div>
-                                        <div class="col-sm-9">
-                                            <span>
-                                                <div class="row">
-                                                    <ul class="list list-inline tags sml">
-                                                        <li class="list-inline-item">
-                                                            <span>RED</span>
-                                                        </li>
-                                                        <li class="list-inline-item">
-                                                            <span>BLUE</span>
-                                                        </li>
-                                                        <li class="list-inline-item">
-                                                            <span>WHITE</span>
-                                                        </li>
-                                                    </ul>
+                                                <div className="col-sm-9">
+                                                    <span>
+                                                            <div className="row">
+                                                                <ul className="list list-inline tags sml">
+                                                                    {
+                                                                        productData?.productRams?.map((item, index) => {
+                                                                            return (
+                                                                                <li className="list-inline-item" key={index}>
+                                                                                    <span>{item.productRams}</span>
+                                                                                </li>
+                                                                            )
+                                                                        })
+                                                                    }
+                                                                </ul>
+                                                            </div>
+                                                    </span>
                                                 </div>
-                                            </span>
-                                        </div>
-                                    </div>
+                                            </div>
+                                        )
+                                    }
+                                    {
+                                        productData?.productSize?.length !== 0 && (
+                                            <div className="row">
+                                                <div className="col-sm-3 d-flex align-items-center">
+                                                    <span className="icon"><FaTag /></span>
+                                                    <span className="name">Size</span>
+                                                </div>
+                                                <div className="col-sm-9">
+                                                    <span>
+                                                            <div className="row">
+                                                                <ul className="list list-inline tags sml">
+                                                                    {
+                                                                        productData?.productSize?.map((item, index) => {
+                                                                            return (
+                                                                                <li className="list-inline-item" key={index}>
+                                                                                    <span>{item.productSize}</span>
+                                                                                </li>
+                                                                            )
+                                                                        })
+                                                                    }
+                                                                </ul>
+                                                            </div>
+                                                    </span>
+                                                </div>
+                                            </div>
+                                        )
+                                    }
+                                    {
+                                        productData?.productWeight?.length !== 0 && (
+                                            <div className="row">
+                                                <div className="col-sm-3 d-flex align-items-center">
+                                                    <span className="icon"><FaTag /></span>
+                                                    <span className="name">Weight</span>
+                                                </div>
+                                                <div className="col-sm-9">
+                                                    <span>
+                                                            <div className="row">
+                                                                <ul className="list list-inline tags sml">
+                                                                    {
+                                                                        productData?.productWeight?.map((item, index) => {
+                                                                            return (
+                                                                                <li className="list-inline-item" key={index}>
+                                                                                    <span>{item.productWeight}</span>
+                                                                                </li>
+                                                                            )
+                                                                        })
+                                                                    }
+                                                                </ul>
+                                                            </div>
+                                                    </span>
+                                                </div>
+                                            </div>
+                                        )
+                                    }
                                     <div className="row">
                                         <div className="col-sm-3 d-flex align-items-center">
                                             <span className="icon">
@@ -232,7 +220,7 @@ const ProductDetails = () => {
                                             <span className="name">Stock</span>
                                         </div>
                                         <div className="col-sm-9">
-                                            <span>(68) Piece</span>
+                                            <span>({productData?.countInStock}) Piece</span>
                                         </div>
                                     </div>
                                     <div className="row">
@@ -243,7 +231,7 @@ const ProductDetails = () => {
                                             <span className="name">Review</span>
                                         </div>
                                         <div className="col-sm-9">
-                                            <span>(13) Review</span>
+                                            <span>({reviewsData.length}) Review</span>
                                         </div>
                                     </div>
                                     <div className="row">
@@ -256,7 +244,21 @@ const ProductDetails = () => {
                                             </span>
                                         </div>
                                         <div className="col-sm-9">
-                                            <span>02 Feb 2020</span>
+                                            <span>
+                                                {productData?.dateCreated
+                                                ? new Date(productData.dateCreated)
+                                                    .toLocaleString('en-GB', {
+                                                        day: '2-digit',
+                                                        month: '2-digit',
+                                                        year: '2-digit',
+                                                        hour: '2-digit',
+                                                        minute: '2-digit',
+                                                        hour12: false,
+                                                        timeZone: 'Asia/Bangkok'
+                                                    })
+                                                    .replace(',', '')
+                                                : ''}
+                                            </span>
                                         </div>
                                     </div>
                                 </div>
@@ -267,28 +269,12 @@ const ProductDetails = () => {
                     <div className="p-4">
                         <h6 className="mb-3 mt-4">Product Description</h6>
                         <p style={{ fontWeight: 400 }}>
-                            Lorem ipsum dolor sit amet consectetur adipisicing
-                            elit. Molestiae reprehenderit repellendus expedita
-                            esse cupiditate quos doloremque rerum, corrupti ab
-                            illum est nihil, voluptate ex dignissimos! Sit
-                            voluptatem delectus nam, molestiae, repellendus ab
-                            sint quo aliquam debitis amet natus doloremque
-                            laudantium? Repudiandae, consequuntur, officiis
-                            quidem quo deleniti, autem non laudantium sequi
-                            error molestiae ducimus accusamus facere velit
-                            consectetur vero dolore natus nihil temporibus
-                            aspernatur quia consequatur? Consequuntur voluptate
-                            deserunt repellat tenetur debitis molestiae
-                            doloribus dicta. In rem illum dolorem atque ratione
-                            voluptates asperiores maxime doloremque laudantium
-                            magni neque ad quae quos quidem, quaerat rerum
-                            ducimus blanditiis reiciendis
+                            {productData.description}
                         </p>
 
                         <br />
 
                         <h6 className="mt-4 mb-4">Rating Analytics</h6>
-
                         <div className="ratingSection">
                             <div className="ratingrow d-flex align-items-center">
                                 <span className="col1">5 Star</span>
@@ -359,7 +345,48 @@ const ProductDetails = () => {
                         <br />
                         <h6 className="mt-4 mb-4">Customer Reviews</h6>
                         <div className="reviewsSection">
-                            <div className="reviewsRow">
+                            {
+                                reviewsData?.length !== 0 && reviewsData?.map((review, index) => {
+                                    return (
+                                            <div className="reviewsRow">
+                                                <div className="row">
+                                                        <div className="col-sm-7 d-flex">
+                                                            <div className="d-flex flex-column">
+                                                                <div className="userInfo d-flex align-items-center mb-3">
+                                                                    <div className="userInfo lg">
+                                                                        <UserAvatarImgComponent
+                                                                            img="https://i.scdn.co/image/ab67616d00001e026f157409ae8578b9695be2b3"
+                                                                            lg={true}
+                                                                        />
+                                                                    </div>
+
+                                                                    <div className="info ps-3">
+                                                                        <h6>{review?.customerName}</h6>
+                                                                        <span>{dayjs(review?.dateCreated).tz('Asia/Bangkok').format('DD/MM/YY HH:mm')}</span>
+                                                                    </div>
+                                                                </div>
+                                                                <Rating
+                                                                    name="read-only"
+                                                                    value={review?.customerRating}
+                                                                    readOnly
+                                                                />
+                                                            </div>
+                                                        </div>
+                                                        <div className="col-md-5 d-flex align-items-center">
+                                                            <div className="ms-auto">
+                                                                <Button className="btn-blue btn-lg ms-auto">
+                                                                    <FaReply /> &nbsp; Reply
+                                                                </Button>
+                                                            </div>
+                                                        </div>
+                                                        <p className="mt-3">{review?.review}</p>
+                                                </div>
+                                            </div>
+                                    )
+                                })
+                            }
+                            
+                            {/* <div className="reviewsRow reply">
                                 <div className="row">
                                     <div className="col-sm-7 d-flex">
                                         <div className="d-flex flex-column">
@@ -444,93 +471,7 @@ const ProductDetails = () => {
                                         magni omnis quas.
                                     </p>
                                 </div>
-                            </div>
-                            <div className="reviewsRow reply">
-                                <div className="row">
-                                    <div className="col-sm-7 d-flex">
-                                        <div className="d-flex flex-column">
-                                            <div className="userInfo d-flex align-items-center mb-3">
-                                                <div className="userInfo lg">
-                                                    <UserAvatarImgComponent
-                                                        img="https://i.scdn.co/image/ab67616d00001e026f157409ae8578b9695be2b3"
-                                                        lg={true}
-                                                    />
-                                                </div>
-
-                                                <div className="info ps-3">
-                                                    <h6>hidorika</h6>
-                                                    <span>25 minutes ago</span>
-                                                </div>
-                                            </div>
-                                            <Rating
-                                                name="read-only"
-                                                value={4.5}
-                                                precision={0.5}
-                                                readOnly
-                                            />
-                                        </div>
-                                    </div>
-
-                                    <div className="col-md-5 d-flex align-items-center">
-                                        <div className="ms-auto">
-                                            <Button className="btn-blue btn-lg ms-auto">
-                                                <FaReply /> &nbsp; Reply
-                                            </Button>
-                                        </div>
-                                    </div>
-                                    <p className="mt-3">
-                                        Lorem ipsum dolor sit amet consectetur
-                                        adipisicing elit. Omnis quo nostrum
-                                        dolore fugiat ducimus labore debitis
-                                        unde autem recusandae? Eius harum
-                                        tempora quis minima, adipisci natus quod
-                                        magni omnis quas.
-                                    </p>
-                                </div>
-                            </div>
-                            <div className="reviewsRow">
-                                <div className="row">
-                                    <div className="col-sm-7 d-flex">
-                                        <div className="d-flex flex-column">
-                                            <div className="userInfo d-flex align-items-center mb-3">
-                                                <div className="userInfo lg">
-                                                    <UserAvatarImgComponent
-                                                        img="https://i.scdn.co/image/ab67616d00001e026f157409ae8578b9695be2b3"
-                                                        lg={true}
-                                                    />
-                                                </div>
-
-                                                <div className="info ps-3">
-                                                    <h6>hidorika</h6>
-                                                    <span>25 minutes ago</span>
-                                                </div>
-                                            </div>
-                                            <Rating
-                                                name="read-only"
-                                                value={4.5}
-                                                precision={0.5}
-                                                readOnly
-                                            />
-                                        </div>
-                                    </div>
-
-                                    <div className="col-md-5 d-flex align-items-center">
-                                        <div className="ms-auto">
-                                            <Button className="btn-blue btn-lg ms-auto">
-                                                <FaReply /> &nbsp; Reply
-                                            </Button>
-                                        </div>
-                                    </div>
-                                    <p className="mt-3">
-                                        Lorem ipsum dolor sit amet consectetur
-                                        adipisicing elit. Omnis quo nostrum
-                                        dolore fugiat ducimus labore debitis
-                                        unde autem recusandae? Eius harum
-                                        tempora quis minima, adipisci natus quod
-                                        magni omnis quas.
-                                    </p>
-                                </div>
-                            </div>
+                            </div> */}
                         </div>
 
                         <h6 className="mt-4 mb-4">Review Reply Form</h6>

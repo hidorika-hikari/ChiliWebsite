@@ -12,6 +12,12 @@ import RelatedProducts from "../../Pages/ProductDetails/RelatedProducts";
 import ProductZoom from "../../Components/ProductZoom";
 //import QuantityBox from "../../Components/QuantityDrop";
 import Button from '@mui/material/Button';
+import dayjs from 'dayjs'
+import utc from 'dayjs/plugin/utc'
+import timezone from 'dayjs/plugin/timezone'
+
+dayjs.extend(utc)
+dayjs.extend(timezone)
 
 const ProductDetails = () => {
 
@@ -435,7 +441,7 @@ const ProductDetails = () => {
                                                             <div className="info">
                                                                 <div className="d-flex align-items-center w-100 gap-3">
                                                                     <h5>{item?.customerName}</h5>
-                                                                    <h5 className="text-light">{item?.dateCreated?.slice(0, 10)}</h5>
+                                                                    <h5 className="text-light">{dayjs(item?.dateCreated).tz('Asia/Bangkok').format('DD/MM/YY HH:mm')}</h5>
                                                                     <div className="ms-auto mb-1">
                                                                         <Rating name="half-rating-read" value={item?.customerRating} readOnly size="small" />
                                                                     </div>

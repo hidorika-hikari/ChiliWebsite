@@ -177,7 +177,7 @@ function App() {
                                 element={<Product />}
                             />
                             <Route
-                                path="/product/details"
+                                path="/product/details/:id"
                                 exact={true}
                                 element={<ProductDetails />}
                             />
