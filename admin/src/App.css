@@ -226,10 +226,17 @@ body.dark  .css-ytlejw-MuiFormControl-root .MuiSelect-select {
   background: transparent !important;
 }
 
+.btn-red{
+  background: #ed174a !important;
+  color: #fff !important;
+  text-transform: capitalize !important;
+  font-weight: 500 !important;
+  padding: 5px 20px !important;
+}
+
 .btn-blue {
   background: #0858f7 !important;
-  border-radius: 5px !important;
-  border-radius: 8px !important;
+  padding: 5px 20px !important;
   color: #fff !important;
   font-size: 14px !important;
   font-weight: 600 !important;

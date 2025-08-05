@@ -22,6 +22,7 @@ const Home = () => {
     const [selectedCat, setSelectedCat] = useState(null);
     const [value, setValue] = useState(0);
     const [filterData, setFilterData] = useState([]);
+    const [homeBannerSlide, setHomeBannerSlide] = useState([]);
     const handleChange = (event, newValue) => {
         setValue(newValue);
     };
@@ -43,6 +44,10 @@ const Home = () => {
         fetchDataFromApi(`/api/products?perPage=8`).then((res) => {
             setProductsData(res);
         });
+
+        fetchDataFromApi(`/api/homeBanner`).then((res) => {
+            setHomeBannerSlide(res);
+        });
     }, [context.categoryData]);
     
 
@@ -58,7 +63,9 @@ const Home = () => {
 
     return (
         <>
-            <HomeBanner />
+        {
+            homeBannerSlide?.length !== 0 && <HomeBanner data={homeBannerSlide}/>
+        }
             {
                 context.categoryData?.length !== 0 && <HomeCat catData={context.categoryData} />
             }

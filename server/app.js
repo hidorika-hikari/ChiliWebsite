@@ -32,7 +32,9 @@ const productReviews = require('./routes/productReviews');
 const myListSchema = require('./routes/myList');
 const ordersSchema = require('./routes/orders');
 const paymentRoutes = require('./routes/payment');
+const homeBannerSchema = require('./routes/homeBanner');
 
+app.use('/api/homeBanner', homeBannerSchema);
 app.use('/api/payment', paymentRoutes);
 app.use('/api/orders', ordersSchema);
 app.use('/api/my-list', myListSchema);

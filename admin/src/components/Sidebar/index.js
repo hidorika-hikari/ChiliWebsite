@@ -7,6 +7,7 @@ import { MdDashboard } from "react-icons/md";
 import { TbCategoryFilled } from "react-icons/tb";
 import { useNavigate } from 'react-router-dom';
 import { useEffect, useState } from 'react';
+import { AiFillPicture } from "react-icons/ai";
 
 const Sidebar = () => {
 
@@ -51,7 +52,6 @@ const Sidebar = () => {
                         <div className={`submenuWrapper ${activeTab === 1 && isToggleSubmenu === true ? 'colapse' : 'colapsed'}`}>
                             <ul className="submenu">
                                 <li><Link to={'/products'}>Product List</Link></li>
-                                <li><Link to={'/product/details'}>Product View</Link></li>
                                 <li><Link to={'/product/add'}>Product Add</Link></li>
                                 <li><Link to={'/productContent/add'}>Product Content</Link></li>
                                 <li><Link to={'/productWeight/add'}>Product Weight</Link></li>
@@ -83,31 +83,21 @@ const Sidebar = () => {
                             </Button>
                         </Link>
                     </li>
-                    {/*
                     <li>
-                        <Link to="/">
-                        <Button className={`w-100 ${activeTab === 4 ? 'active' : ''}`} onClick={() => isOpenSubmenu(4)}>
-                                <span className="icon"><FaBell/></span>
-                                    Notifications
-                                <span className="arrow"><FaAngleRight/></span>
-                            </Button>
-                        </Link>
+                        <Button className={`w-100 ${activeTab === 4 && isToggleSubmenu === true ? 'active' : ''}`} onClick={() => isOpenSubmenu(4)}>
+                            <span className="icon"><AiFillPicture /></span>
+                                Banner
+                            <span className="arrow"><FaAngleRight/></span>
+                        </Button>
+                        <div className={`submenuWrapper ${activeTab === 4 && isToggleSubmenu === true ? 'colapse' : 'colapsed'}`}>
+                            <ul className="submenu">
+                                <li><Link to={'/homeBanner/add'}>HomeBanner</Link></li>
+                                <li><Link to={'/homeBannerList'}>HomeBanner List</Link></li>
+                            </ul>
+                        </div>
                     </li>
-                    
-                    <li>
-                        <Link to="/">
-                        <Button className={`w-100 ${activeTab === 5 ? 'active' : ''}`} onClick={() => isOpenSubmenu(5)}>
-                                <span className="icon"><IoIosSettings/></span>
-                                    Settings
-                                <span className="arrow"><FaAngleRight/></span>
-                            </Button>
-                        </Link>
-                    </li>
-                    */}
                 </ul>
-
                 <br/>
-
                 <div className="logoutWrapper">
                     <div className="logoutBox">
                         <Button variant="contained"><IoMdLogOut/>Logout</Button>

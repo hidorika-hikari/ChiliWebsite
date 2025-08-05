@@ -244,7 +244,6 @@ const CategoryList = () => {
                             <TextField
                                 autoFocus
                                 required
-                                margin="dense"
                                 id="name"
                                 name="name"
                                 label="Category Name"
@@ -258,7 +257,6 @@ const CategoryList = () => {
                             <TextField
                                 autoFocus
                                 required
-                                margin="dense"
                                 id="images"
                                 name="images"
                                 label="Category Image"
@@ -272,7 +270,6 @@ const CategoryList = () => {
                             <TextField
                                 autoFocus
                                 required
-                                margin="dense"
                                 id="color"
                                 name="color"
                                 label="Category Color"

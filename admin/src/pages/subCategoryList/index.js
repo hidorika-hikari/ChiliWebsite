@@ -227,7 +227,6 @@ const SubCategoryList = () => {
                             <TextField
                                 autoFocus
                                 required
-                                margin="dense"
                                 id="subCat"
                                 name="subCat"
                                 label="Sub Category"

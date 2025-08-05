@@ -23,6 +23,9 @@ import AddProductContent from './pages/ProductRamsAdd';
 import ProductAdd from './pages/ProductAdd';
 import Orders from './pages/Orders';
 import SubCategoryList from './pages/subCategoryList';
+import HomeBannerAdd from './pages/homeBannerAdd';
+import HomeBannerList from './pages/homeBannerList';
+
 
 const MyContext = createContext();
 
@@ -230,6 +233,16 @@ function App() {
                                 path="/orders"
                                 exact={true}
                                 element={<Orders />}
+                            />
+                            <Route
+                                path="/homeBanner/add"
+                                exact={true}
+                                element={<HomeBannerAdd/>}
+                            />
+                            <Route
+                                path="/homeBannerList"
+                                exact={true}
+                                element={<HomeBannerList/>}
                             />
                         </Routes>
                     </div>
