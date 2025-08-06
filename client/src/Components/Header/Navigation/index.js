@@ -9,21 +9,28 @@ import { Tabs, Tab } from '@mui/material';
 import { useNavigate } from 'react-router-dom';
 
 const Navigation = (props) => {
+
+    const context = useContext(MyContext)
     const navigate = useNavigate();
+
     const [value, setValue] = useState(0);
+    const [isOpenSidebarVal, setIsOpenSidebarVal] = useState(false);
+    
     const handleChange = (event, newValue) => {
         setValue(newValue);
-        if (newValue === 0) {
-            navigate('/');
-        } else {
-            const category = context.categoryData[newValue - 1];
-            if (category) {
-                navigate(`/category/${category._id}`);
+    
+        setTimeout(() => {
+            if (newValue === 0) {
+                navigate('/');
+            } else {
+                const category = context.categoryData[newValue - 1];
+                if (category) {
+                    navigate(`/products/category/${category._id}`);
+                }
             }
-        }
+        }, 300); // Delay in milliseconds
     };
-    const [isOpenSidebarVal, setIsOpenSidebarVal] = useState(false);
-    const context = useContext(MyContext)
+    
     return (
         <nav>
             <div className='container'>
@@ -35,54 +42,68 @@ const Navigation = (props) => {
                                 <span className='text'>ALL CATEGORIES</span>
                                 <span className='icon2 ms-2'><FaAngleDown /></span>
                             </Button>
-                            <div className={`sidebarNav ${isOpenSidebarVal === true ? 'open' : ''}`}>
+                            <div className={`sidebarNav ${isOpenSidebarVal ? 'open' : ''}`}>
                                 <ul>
-                                    <li><Link to="/"><Button>Men<FaAngleRight className='ms-auto' /></Button></Link>
-                                        <div className='submenu shadow'>
-                                            <Link to="/"><Button>Clothing</Button></Link>
-                                            <Link to="/"><Button>Footwear</Button></Link>
-                                            <Link to="/"><Button>Watches</Button></Link>
-                                        </div>
-                                    </li>
-                                    <li><Link to="/"><Button>Women<FaAngleRight className='ms-auto' /></Button></Link>
-                                        <div className='submenu shadow'>
-                                            <Link to="/"><Button>Clothing</Button></Link>
-                                            <Link to="/"><Button>Footwear</Button></Link>
-                                            <Link to="/"><Button>Watches</Button></Link>
-                                        </div>
-                                    </li>
-                                    <li><Link to="/"><Button>Beauty</Button></Link></li>
-                                    <li><Link to="/"><Button>Watches</Button></Link></li>
-                                    <li><Link to="/"><Button>Kids</Button></Link></li>
-                                    <li><Link to="/"><Button>Gift</Button></Link></li>
+                                    {props.navData.filter((item, idx) => idx < 6).map((item) => {
+                                        const subs = context.subCategoryData?.filter(
+                                            sub => sub.category === item._id || sub.category?._id === item._id
+                                        );
+                                        return (
+                                            <li key={item._id}>
+                                                <Button
+                                                    onClick={() => {
+                                                        setTimeout(() => {
+                                                            navigate(`/products/category/${item._id}`);
+                                                        }, 500);
+                                                    }}
+                                                >
+                                                    {item?.name}
+                                                    {subs?.length > 0 && <FaAngleRight className='ms-auto' />}
+                                                </Button>
+
+                                                {item?.children?.length !== 0 && subs?.length > 0 && (
+                                                    <div className='submenu shadow'>
+                                                        {subs.map(sub => (
+                                                            <Button
+                                                                key={sub._id}
+                                                                onClick={() => {
+                                                                    setTimeout(() => {
+                                                                        navigate(`/products/subCat/${sub._id}`);
+                                                                    }, 500);
+                                                                }}
+                                                            >
+                                                                {sub.subCat}
+                                                            </Button>
+                                                        ))}
+                                                    </div>
+                                                )}
+                                            </li>
+                                        );
+                                    })}
                                 </ul>
                             </div>
                         </div>
                     </div>
 
-                    <div className='col-sm-10 navPart2 d-flex align-items-center'>
-                        <ul className='list-inline ms-auto'>
-                            <li className='list-inline-item' >
-                                <Tabs
-                                    value={value}
-                                    onChange={handleChange}
-                                    variant="scrollable"
-                                    scrollButtons="auto"
-                                    aria-label="scrollable tabs"
-                                    className='w-75'
-                                    sx={{ color: 'black' }}
-                                >
-                                    <Tab key="home" label="Home"/>
-                                    {context.categoryData?.map((item, index) => (
-                                        <Tab
-                                            key={item._id || index}
-                                            className="item"
-                                            label={item.name}
-                                        />
-                                    ))}
-                                </Tabs>
-                            </li>
-                        </ul>
+                    <div className='col-sm-10 navPart2 d-flex justify-content-center'>
+                        <Tabs
+                            value={value}
+                            onChange={handleChange}
+                            variant="scrollable"
+                            scrollButtons="auto"
+                            aria-label="scrollable tabs"
+                            sx={{ color: 'black' }}
+                            className='w-100'
+                        >
+                            <Tab key="home" label="Home" />
+                            {context.categoryData?.map((item, index) => (
+                                <Tab
+                                    key={item._id || index}
+                                    className="item"
+                                    label={item.name}
+                                />
+                            ))}
+                        </Tabs>
                     </div>
                 </div>
             </div>

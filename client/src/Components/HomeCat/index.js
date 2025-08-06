@@ -3,6 +3,7 @@ import 'swiper/css/navigation';
 import React from "react";
 import { Swiper, SwiperSlide } from 'swiper/react';
 import { Navigation } from 'swiper/modules';
+import { Link } from 'react-router-dom';
 
 function getContrastTextColor(hexColor) {
     if (!hexColor) return '#000';
@@ -39,6 +40,7 @@ const HomeCat = (props) => {
                         props.catData?.length !== 0 && props.catData?.map((cat, index) => {
                             return (
                                 <SwiperSlide key={index}>
+                                    <Link to={`/products/category/${cat.id}`}>
                                     <div
                                         className="item text-center cursor"
                                         style={{
@@ -49,6 +51,7 @@ const HomeCat = (props) => {
                                         <img src={cat.images[0]} alt='' className='w-100 h-100 mb-1' />
                                         <h6 className='fw-500 mb-0'>{cat.name}</h6>
                                     </div>
+                                    </Link>
                                 </SwiperSlide>
                             )
                         })

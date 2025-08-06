@@ -47,6 +47,7 @@ const Listing = () => {
 
     const filterByPrice = (price, subCatId) => {
         fetchAndSetData(`/api/products?minPrice=${price[0]}&maxPrice=${price[1]}&subCat=${subCatId}`);
+        fetchAndSetData(`/api/products?minPrice=${price[0]}&maxPrice=${price[1]}&category=${id}`);
     };
 
     const filterByRating = (rating) => {

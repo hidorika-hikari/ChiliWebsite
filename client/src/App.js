@@ -180,7 +180,8 @@ function App() {
           </Snackbar>
           <Routes>
             <Route path="/" exact={true} element={<Home />} />
-            <Route path="/category/:id" exact={true} element={<Listing />} />
+            <Route path="/products/category/:id" exact={true} element={<Listing />} />
+            <Route path="/products/subCat/:id" exact={true} element={<Listing />} />
             <Route path="/search" exact={true} element={<SearchPage />} />
             <Route path="/product/:id" exact={true} element={<ProductDetails />} />
             <Route path="/cart" exact={true} element={<Cart />} />

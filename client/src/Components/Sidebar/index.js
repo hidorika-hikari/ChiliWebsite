@@ -11,7 +11,7 @@ import { Rating } from "@mui/material";
 const Sidebar = (props) => {
     const [value, setValue] = useState([1, 10000]);
     const context = useContext(MyContext);
-    const [filterSubCat, setFilterSubCat] = useState();
+    const [filterSubCat, setFilterSubCat] = useState(null);
     const [subCatId, setSubCatId] = useState('');
     const { id } = useParams();
 
@@ -23,7 +23,9 @@ const Sidebar = (props) => {
         const selectedId = event.target.value;
         setFilterSubCat(selectedId);
         setSubCatId(selectedId);
-        props.filterData(selectedId);
+        if (selectedId) {
+            props.filterData(selectedId);
+        }
     };
 
     const filterByRating = (rating) => {
@@ -31,10 +33,11 @@ const Sidebar = (props) => {
     }
 
     useEffect(() => {
-        if (subCatId) {
-            props.filterByPrice(value, subCatId);
+        const filterId = subCatId || id; // use subCatId if selected, else category id
+        if (filterId) {
+            props.filterByPrice(value, filterId);
         }
-    }, [value, subCatId]);
+    }, [value, subCatId, id]);
 
     return (
         <>
@@ -48,13 +51,14 @@ const Sidebar = (props) => {
                             value={filterSubCat}
                             onChange={handleChange}
                         >
-                            {
-                                context.subCategoryData?.length !== 0 && context.subCategoryData?.map((item, index) => {
-                                    return (
-                                        <FormControlLabel value={item?.id} control={<Radio />} label={item?.subCat} />
-                                    )
-                                })
-                            }
+                            {context.subCategoryData?.map((item, index) => (
+                                <FormControlLabel
+                                    key={item?.id}
+                                    value={item?.id}
+                                    control={<Radio />}
+                                    label={item?.subCat}
+                                />
+                            ))}
                         </RadioGroup>
                     </div>
                 </div>
