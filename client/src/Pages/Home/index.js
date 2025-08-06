@@ -7,6 +7,7 @@ import Button from '@mui/material/Button'
 import ProductItem from "../../Components/ProductItem";
 import HomeCat from "../../Components/HomeCat";
 import newsLetterImg from '../../assets/coupons.png'
+import { CircularProgress } from '@mui/material';
 import { IoIosArrowRoundForward } from "react-icons/io";
 import { IoMailOutline } from "react-icons/io5";
 import { Swiper, SwiperSlide } from 'swiper/react';
@@ -17,16 +18,21 @@ import { MyContext } from '../../App';
 
 const Home = () => {
 
+    const context = useContext(MyContext);
+    const [value, setValue] = useState(0);
+
     const [featuredProducts, setFeaturedProducts] = useState([]);
     const [productsData, setProductsData] = useState([]);
     const [selectedCat, setSelectedCat] = useState(null);
-    const [value, setValue] = useState(0);
     const [filterData, setFilterData] = useState([]);
+
     const [homeBannerSlide, setHomeBannerSlide] = useState([]);
+
+    const [isLoading, setIsLoading] = useState(false);
+    
     const handleChange = (event, newValue) => {
         setValue(newValue);
     };
-    const context = useContext(MyContext);
 
     useEffect(() => {
         window.scrollTo(0, 0);
@@ -36,11 +42,11 @@ const Home = () => {
                 setSelectedCat(hutaoCat._id);
             }
         }
-    
+
         fetchDataFromApi(`/api/products/featured`).then((res) => {
             setFeaturedProducts(res);
         });
-    
+
         fetchDataFromApi(`/api/products?perPage=8`).then((res) => {
             setProductsData(res);
         });
@@ -49,36 +55,38 @@ const Home = () => {
             setHomeBannerSlide(res);
         });
     }, [context.categoryData]);
-    
 
     const selectCat = (catId) => {
         setSelectedCat(catId);
     };
-    
+
     useEffect(() => {
+        if (!selectedCat) return;
+        setIsLoading(true);
         fetchDataFromApi(`/api/products?category=${selectedCat}`).then((res) => {
             setFilterData(res.products);
+            setIsLoading(false);
         });
     }, [selectedCat]);
 
     return (
         <>
-        {
-            homeBannerSlide?.length !== 0 && <HomeBanner data={homeBannerSlide}/>
-        }
+            {
+                homeBannerSlide?.length !== 0 && <HomeBanner data={homeBannerSlide} />
+            }
             {
                 context.categoryData?.length !== 0 && <HomeCat catData={context.categoryData} />
             }
             <section className="homeProducts">
                 <div className="container">
                     <div className="row">
+                        {/* SIDEBAR BANNER */}
                         <div className="col-md-3">
                             <div className="sticky">
                                 <div className="banner">
                                     <img src="https://klbtheme.com/bacola/wp-content/uploads/2021/04/banner-box.jpg" className="cursor" alt=''></img>
                                     {/* <img src={} className="cursor"></img> */}
                                 </div>
-
                                 <div className="banner mt-3">
                                     <img src="https://klbtheme.com/bacola/wp-content/uploads/2021/04/banner-box.jpg" className="cursor" alt=''></img>
                                     {/* <img src={} className="cursor"></img> */}
@@ -87,6 +95,7 @@ const Home = () => {
                         </div>
 
                         <div className="col-md-9 productRow">
+                            {/* //FEATURED PRODUCTS */}
                             <div className="d-flex align-items-center">
                                 <div className="info w-75">
                                     <h3 className="mb-0 hd">FEATURED PRODUCTS</h3>
@@ -116,6 +125,7 @@ const Home = () => {
                                     }
                                 </Swiper>
                             </div>
+                            {/* POPULAR PRODUCTS */}
                             <div className="d-flex align-items-center mt-3">
                                 <div className="info w-75">
                                     <h3 className="mb-0 hd">POPULAR PRODUCTS</h3>
@@ -138,28 +148,32 @@ const Home = () => {
                                     ))}
                                 </Tabs>
                             </div>
-
                             <div className="product_row w-100 mt-2">
-                                <Swiper
-                                    slidesPerView={4}
-                                    spaceBetween={10}
-                                    slidesPerGroup={3}
-                                    navigation={true}
-                                    pagination={{
-                                        clickable: true,
-                                    }}
-                                    modules={[Navigation]}
-                                    className="mySwiper">
-                                    {filterData?.length !== 0 && filterData?.map((item, index) => {
-                                        return (
+                                {isLoading ? (
+                                    <div className="d-flex justify-content-center w-100">
+                                        <CircularProgress size={30} />
+                                    </div>
+                                ) : (
+                                    <Swiper
+                                        slidesPerView={4}
+                                        spaceBetween={10}
+                                        slidesPerGroup={3}
+                                        navigation={true}
+                                        pagination={{
+                                            clickable: true,
+                                        }}
+                                        modules={[Navigation]}
+                                        className="mySwiper"
+                                    >
+                                        {filterData?.length !== 0 && filterData.map((item, index) => (
                                             <SwiperSlide key={index}>
                                                 <ProductItem item={item} />
                                             </SwiperSlide>
-                                        )
-                                    })}
-                                </Swiper>
+                                        ))}
+                                    </Swiper>
+                                )}
                             </div>
-
+                            {/* BANNER */}
                             <div className='d-flex mt-4 mb-5 bannerSec'>
                                 <div className='banner'>
                                     <img src="https://api.spicezgold.com/download/file_1734525653108_NewProject(20).jpg" alt='' className='cursor w-100' />
@@ -171,6 +185,7 @@ const Home = () => {
                                     <img src="https://api.spicezgold.com/download/file_1734525620831_NewProject(3).jpg" alt='' className='cursor w-100' />
                                 </div>
                             </div>
+                            {/* NEW PRODUCTS */}
                             <div className="d-flex align-items-center mt-4">
                                 <div className="info w-75">
                                     <h3 className="mb-0 hd">NEW PRODUCTS</h3>
@@ -186,6 +201,7 @@ const Home = () => {
                                     })
                                 }
                             </div>
+                            {/* BANNER */}
                             <div className="d-flex mt-4 mb-5 bannerSec">
                                 <div className="banner mt-4">
                                     <img src="https://cloudfront-eu-central-1.images.arcpublishing.com/williamreed/CA522QC2BZKZVIBSVPBDMNLML4.jpg"
@@ -200,6 +216,7 @@ const Home = () => {
                     </div>
                 </div>
             </section>
+            {/* newsLetter */}
             <section className="newsLetterSection mt-3 mb-3 d-flex align-items-center">
                 <div className="container">
                     <div className="row">

@@ -86,7 +86,7 @@ router.get('/recentlyViewed', async (req, res) => {
 router.post('/recentlyViewed', async (req, res) => {
     if (!Array.isArray(req.body.images)) {
         return res.status(400).json({
-            error: "Images must be an Array",
+            error: "Images must be an array",
             status: false
         });
     }

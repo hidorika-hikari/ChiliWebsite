@@ -1876,3 +1876,7 @@ a:hover{
 .product-info * {
   font-size: 18px !important;
 }
+
+.loading-indicator {
+  min-height: 300px;
+}

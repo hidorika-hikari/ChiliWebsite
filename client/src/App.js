@@ -20,6 +20,7 @@ import Checkout from "./Pages/Checkout";
 import Orders from "./Pages/Orders";
 import { Elements } from '@stripe/react-stripe-js';
 import { loadStripe } from '@stripe/stripe-js';
+import SearchPage from "./Pages/Search";
 const MyContext = createContext();
 const stripePromise = loadStripe('pk_test_51RqrM6E8TB46iepBZDHJ5lDzW863H6xzVR2FCfYojdiN2GYVy4YLCTqalEfr3iYMxXHiADzlRYYqIEypDEM6LHoo002nAJGi2I', {
   locale: 'en'
@@ -48,6 +49,7 @@ function App() {
   const [activeCat, setActiveCat] = useState('');
   const [addingInCart, setAddingInCart] = useState(false);
   const [cartData, setCartData] = useState([]);
+  const [searchData, setSearchData] = useState([]);
 
   const [alertBox, setAlertBox] = useState({
     msg: '',
@@ -155,7 +157,9 @@ function App() {
     setAddingInCart,
     cartData,
     setCartData,
-    getCartData
+    getCartData,
+    searchData,
+    setSearchData
   }
   return (
     <Elements stripe={stripePromise}>
@@ -177,6 +181,7 @@ function App() {
           <Routes>
             <Route path="/" exact={true} element={<Home />} />
             <Route path="/category/:id" exact={true} element={<Listing />} />
+            <Route path="/search" exact={true} element={<SearchPage />} />
             <Route path="/product/:id" exact={true} element={<ProductDetails />} />
             <Route path="/cart" exact={true} element={<Cart />} />
             <Route path="/signin" exact={true} element={<SignIn />} />

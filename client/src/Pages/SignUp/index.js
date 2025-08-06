@@ -1,9 +1,7 @@
 import { useContext, useEffect, useState } from "react";
 import { MyContext } from "../../App";
 import { Link } from "react-router-dom";
-import { FaFacebookF } from "react-icons/fa";
-import { FaTwitter } from "react-icons/fa";
-import { FaInstagram } from "react-icons/fa";
+import { FaFacebookF, FaTwitter, FaInstagram } from "react-icons/fa";
 import { Button, CircularProgress } from '@mui/material';
 import { postData } from "../../utils/api";
 import Logo from '../../assets/logo.png'
@@ -12,7 +10,6 @@ import TextField from "@mui/material/TextField";
 const SignUp = () => {
     //const history = useNavigate();
     const context = useContext(MyContext);
-    const [isLoading, setIsLoading] = useState(false);
     const [formFields, setFormFields] = useState({
         name: '',
         email: '',
@@ -20,6 +17,8 @@ const SignUp = () => {
         password: '',
         isAdmin: false
     })
+    
+    const [isLoading, setIsLoading] = useState(false);
 
     useEffect(() => {
         context.setIsHeaderFooterShow(false);
