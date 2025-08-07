@@ -90,27 +90,18 @@ function App() {
 
   useEffect(() => {
     const token = localStorage.getItem("token");
-    if (token !== "" && token !== undefined && token !== null) {
+    if (token) {
       const userData = JSON.parse(localStorage.getItem("user"));
-      if (userData && (userData.role === 'customer' || !userData.role)) {
+      if (userData) {
         setIsLogin(true);
         setUser(userData);
-      } else if (userData && userData.role === 'admin') {
-        localStorage.removeItem("token");
-        localStorage.removeItem("user");
+      } else {
         setIsLogin(false);
-        setUser({
-          name: '',
-          email: '',
-          userId: '',
-          role: ''
-        });
-        window.location.href = '/';
       }
     } else {
       setIsLogin(false);
     }
-  }, [isLogin])
+  }, []);
 
   useEffect(() => {
     isOpenProductModel.open === true &&
