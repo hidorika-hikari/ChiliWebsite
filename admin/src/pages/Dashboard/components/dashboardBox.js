@@ -34,8 +34,8 @@ const DashboardBox = (props) => {
 
                 <div className="d-flex w-100">
                     <div className="col1">
-                        <h4 className="text-white">Total User</h4>
-                        <span className="text-white">277</span>
+                        <h4 className="text-white">{props.title}</h4>
+                        <span className="text-white">{props.count}</span>
                     </div>
                     
                     <div className="ms-auto">

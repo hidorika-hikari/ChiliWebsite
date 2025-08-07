@@ -5,7 +5,6 @@ import { GiStarsStack } from "react-icons/gi";
 import { IoIosTimer } from "react-icons/io";
 import { HiDotsVertical } from "react-icons/hi";
 import { useContext, useEffect, useState } from 'react'
-import { Chart } from "react-google-charts";
 import { Link } from "react-router-dom";
 import { MyContext } from "../../App";
 import { deleteData, fetchDataFromApi } from '../../utils/api';
@@ -18,28 +17,20 @@ import FormControl from '@mui/material/FormControl';
 import Pagination from "@mui/material/Pagination";
 import Rating from "@mui/material/Rating";
 
-export const data = [
-  ["Year", "Sales", "Expense"],
-  ["2013", 1000, 400],
-  ["2014", 1170, 460],
-  ["2015", 660, 1120],
-  ["2016", 1030, 540],
-];
-
-export const options = {
-  'backgroundColor': 'transparent',
-  'chartArea': { 'width': '100%', 'height': '100%' },
-};
-
 const Dashboard = () => {
 
   const [productList, setProductList] = useState([]);
+  const [productCount, setProductCount] = useState(0);
+  const [categoryCount, setCategoryCount] = useState(0);
+  const [subCategoryCount, setSubCategoryCount] = useState(0);
+  const [userCount, setUserCount] = useState(0);
   const [showBy, setShowBy] = useState('');
   const [showBySetCateBy, setCateBy] = useState('');
   const [anchorEl, setAnchorEl] = useState(null);
   const open = Boolean(anchorEl);
   const context = useContext(MyContext);
   const ITEM_HEIGHT = 48;
+  const [stripeBalance, setStripeBalance] = useState(null);
 
   useEffect(() => {
     context.setProgress(40);
@@ -47,6 +38,21 @@ const Dashboard = () => {
     fetchDataFromApi("/api/products").then((res) => {
       setProductList(res);
       context.setProgress(100);
+    })
+    fetchDataFromApi("/api/products/count").then((res) => {
+      setProductCount(res?.count || 0);
+    })
+    fetchDataFromApi("/api/category").then((res) => {
+      setCategoryCount(res?.categoryList?.length || 0);
+    })
+    fetchDataFromApi("/api/subCat").then((res) => {
+      setSubCategoryCount(res?.subCategoryList?.length || 0);
+    })
+    fetchDataFromApi("/api/user/get/count").then((res) => {
+      setUserCount(res?.userCount || 0);
+    })
+    fetchDataFromApi("/api/payment/balance").then((res) => {
+      setStripeBalance(res);
     })
     window.scrollTo(0, 0);
   }, []);
@@ -87,62 +93,63 @@ const Dashboard = () => {
         <div className="row dashboardBoxWrapperRow">
           <div className="col-md-8">
             <div className="dashboardBoxWrapper d-flex">
-              <DashboardBox color={["#1da256", "#48d483"]} icon={<FaUserCircle />} grow={true} />
-              <DashboardBox color={["#c012e2", "#eb64fe"]} icon={<IoMdCart />} />
-              <DashboardBox color={["#2c78e5", "#60aff5"]} icon={<MdShoppingBag />} />
-              <DashboardBox color={["#e1950e", "#f3cd29"]} icon={<GiStarsStack />} />
+              <DashboardBox color={["#1da256", "#48d483"]} icon={<FaUserCircle />} grow={true} title="Users" count={userCount} />
+              <DashboardBox color={["#c012e2", "#eb64fe"]} icon={<IoMdCart />} title="Products" count={productCount} />
+              <DashboardBox color={["#2c78e5", "#60aff5"]} icon={<MdShoppingBag />} title="Categories" count={categoryCount} />
+              <DashboardBox color={["#e1950e", "#f3cd29"]} icon={<GiStarsStack />} title="Subcategories" count={subCategoryCount} />
             </div>
           </div>
 
           <div className="col-md-4 ps-0">
-            <div className="box graphBox">
-              <div className="d-flex align-items-center w-100 bottomEle">
-                <h5 className="text-white mb-0 mt-0">Last Month</h5>
-                <div className="ms-auto">
-                  <Button className="ms-auto toggleIcon" onClick={handleClick}><HiDotsVertical /></Button>
-                  <Menu className="dropdown_menu"
-                    id="long-menu"
-                    anchorEl={anchorEl}
-                    open={open}
-                    onClose={handleClose}
-                    slotProps={{
-                      paper: {
-                        style: {
-                          maxHeight: ITEM_HEIGHT * 4.5,
-                          width: '20ch',
+            {stripeBalance && stripeBalance.available && stripeBalance.available.length > 0 && (
+              <div className="box graphBox">
+                <div className="d-flex align-items-center w-100 bottomEle">
+                  <h5 className="text-white mb-0 mt-0">Stripe Balance</h5>
+                  <div className="ms-auto">
+                    <Button className="ms-auto toggleIcon" onClick={handleClick}><HiDotsVertical /></Button>
+                    <Menu
+                      className="dropdown_menu"
+                      id="long-menu"
+                      anchorEl={anchorEl}
+                      open={open}
+                      onClose={handleClose}
+                      slotProps={{
+                        paper: {
+                          style: {
+                            maxHeight: ITEM_HEIGHT * 4.5,
+                            width: '20ch',
+                          },
                         },
-                      },
-                      list: {
-                        'aria-labelledby': 'long-button',
-                      },
-                    }}
-                  >
-                    <MenuItem onClick={handleClose}>
-                      <IoIosTimer /> Last Day
-                    </MenuItem>
-                    <MenuItem onClick={handleClose}>
-                      <IoIosTimer /> Last Week
-                    </MenuItem>
-                    <MenuItem onClick={handleClose}>
-                      <IoIosTimer /> Last Month
-                    </MenuItem>
-                    <MenuItem onClick={handleClose}>
-                      <IoIosTimer /> Last Year
-                    </MenuItem>
-                  </Menu>
+                        list: {
+                          'aria-labelledby': 'long-button',
+                        },
+                      }}
+                    >
+                      <MenuItem onClick={handleClose}><IoIosTimer /> Last Day</MenuItem>
+                      <MenuItem onClick={handleClose}><IoIosTimer /> Last Week</MenuItem>
+                      <MenuItem onClick={handleClose}><IoIosTimer /> Last Month</MenuItem>
+                      <MenuItem onClick={handleClose}><IoIosTimer /> Last Year</MenuItem>
+                    </Menu>
+                  </div>
                 </div>
-              </div>
 
-              <h3 className="text-white fw-bold">$3787681.00</h3>
-              <p>3578.90 in last month</p>
-              <Chart
-                chartType="PieChart"
-                width="100%"
-                height="170px"
-                data={data}
-                options={options}
-              />
-            </div>
+                <div className="d-flex align-items-center gap-2 mt-2 mb-1">
+                  <MdShoppingBag size={24} color="#fff" />
+                  <h3 className="text-white fw-bold mb-0">
+                    {(stripeBalance.available[0].amount / 100).toLocaleString('en-US')} {stripeBalance.available[0].currency.toUpperCase()}
+                  </h3>
+                </div>
+                <p className="text-white mb-2">Available Stripe Balance</p>
+
+                <div className="d-flex align-items-center gap-2 mt-2 mb-1">
+                  <MdShoppingBag size={24} color="#fff" />
+                  <h3 className="text-white fw-bold mb-0">
+                    {(stripeBalance.pending[0].amount / 100).toLocaleString('en-US')} {stripeBalance.pending[0].currency.toUpperCase()}
+                  </h3>
+                </div>
+                <p className="text-white">Pending Stripe Balance</p>
+              </div>
+            )}
           </div>
         </div>
 
@@ -248,7 +255,7 @@ const Dashboard = () => {
                         </td>
                         <td>
                           <div className="actions d-flex align-items-center">
-                          <Link to={`/product/details/${item._id}`}>
+                            <Link to={`/product/details/${item._id}`}>
                               <Button className="secondary" color="secondary">
                                 <FaEye />
                               </Button>

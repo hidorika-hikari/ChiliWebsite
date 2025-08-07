@@ -20,13 +20,14 @@ const SignUp = () => {
     const [isShowPassword, setIsShowPassword] = useState(false);
     const [isShowConfirmPassword, setIsShowConfirmPassword] = useState(false);
     const context = useContext(MyContext);
+    const [isAdminSignup, setIsAdminSignup] = useState(false);
     const [formFields, setFormFields] = useState({
         name: '',
         email: '',
         phone: '',
         password: '',
         confirmPassword: '',
-        isAdmin: true
+        role: 'customer'
     })
 
     useEffect(() => {
@@ -37,11 +38,20 @@ const SignUp = () => {
         setInputIndex(index);
     };
     const onChangeInput = (e) => {
-        setFormFields(() => ({
-            ...formFields,
+        setFormFields((prev) => ({
+            ...prev,
             [e.target.name]: e.target.value
-        }))
-    }
+        }));
+    };
+
+    const handleAdminCheckbox = (e) => {
+        setIsAdminSignup(e.target.checked);
+        setFormFields((prev) => ({
+            ...prev,
+            role: e.target.checked ? 'admin' : 'customer'
+        }));
+    };
+
     const signUp = (e) => {
         e.preventDefault();
         setIsLoading(true);
@@ -257,7 +267,11 @@ const SignUp = () => {
                                         </span>
                                     </div>
 
-                                    <FormControlLabel className="mb-2" control={<Checkbox />} label="I agree to the all Terms & Conditions" />
+                                    <FormControlLabel
+                                        className="mb-2"
+                                        control={<Checkbox checked={isAdminSignup} onChange={handleAdminCheckbox} />}
+                                        label="Sign up as admin (only for trusted users)"
+                                    />
 
                                     <div className="form-group">
                                         <Button type="submit" className="btn-blue btn-lg w-100 btn-big">

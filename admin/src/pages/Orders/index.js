@@ -42,7 +42,7 @@ const Orders = () => {
     const [selectedProduct, setSelectedProduct] = useState(null);
     const [openDialog, setOpenDialog] = useState(false);
     const [orders, setOrders] = useState([]);
-    const [page, setPage] = useState(1);
+    const [setPage] = useState(1);
     const [selectedAddress, setSelectedAddress] = useState(null);
     const [updatingOrderId, setUpdatingOrderId] = useState(null);
     const [openAddressDialog, setOpenAddressDialog] = useState(false);

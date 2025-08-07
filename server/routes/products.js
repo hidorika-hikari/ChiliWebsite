@@ -65,6 +65,15 @@ router.get('/featured', async (req, res) => {
     return res.status(200).json(productList);
 });
 
+router.get('/count', async (req, res) => {
+    try {
+        const count = await Product.countDocuments();
+        res.status(200).json({ count });
+    } catch (error) {
+        res.status(500).json({ message: "Failed to get product count" });
+    }
+});
+
 router.get('/recentlyViewed', async (req, res) => {
     let productList = [];
     productList = await RecentlyView.find(req.query)

@@ -5,7 +5,7 @@ const router = express.Router();
 const { User } = require('../models/user');
 
 router.post('/signup', async (req, res) => {
-    const { name, phone, email, password } = req.body;
+    const { name, phone, email, password, role = 'customer' } = req.body;
     try {
         const existingUser = await User.findOne({ email });
         const existingByPhone = await User.findOne({ phone });
@@ -22,10 +22,11 @@ router.post('/signup', async (req, res) => {
             phone: phone,
             email: email,
             password: hashPassword,
+            role: role
         });
 
         const token = jwt.sign(
-            { email: result.email, id: result._id },
+            { email: result.email, id: result._id, role: result.role },
             process.env.JSON_WEB_TOKEN_SECRET_KEY
         );
 
@@ -54,7 +55,7 @@ router.post('/signin', async (req, res) => {
         }
 
         const token = jwt.sign(
-            { email: existingUser.email, id: existingUser._id },
+            { email: existingUser.email, id: existingUser._id, role: existingUser.role },
             process.env.JSON_WEB_TOKEN_SECRET_KEY
         );
 
@@ -66,6 +67,41 @@ router.post('/signin', async (req, res) => {
         });
     } catch (error) {
         console.error('Signin error:', error);
+        res.status(500).json({ status: false, msg: "Something went wrong" });
+    }
+});
+
+router.post('/admin/signin', async (req, res) => {
+    const { email, password } = req.body;
+    try {
+        const existingUser = await User.findOne({ email });
+        if (!existingUser) {
+            return res.status(400).json({ status: false, msg: "User not found!" });
+        }
+
+        // Check if user is admin
+        if (existingUser.role !== 'admin') {
+            return res.status(403).json({ status: false, msg: "Access denied. Admin privileges required." });
+        }
+
+        const matchPassword = await bcrypt.compare(password, existingUser.password);
+        if (!matchPassword) {
+            return res.status(400).json({ status: false, msg: "Invalid password" });
+        }
+
+        const token = jwt.sign(
+            { email: existingUser.email, id: existingUser._id, role: existingUser.role },
+            process.env.JSON_WEB_TOKEN_SECRET_KEY
+        );
+
+        res.status(200).json({
+            status: true,
+            user: existingUser,
+            token: token,
+            msg: "Admin authenticated successfully"
+        });
+    } catch (error) {
+        console.error('Admin signin error:', error);
         res.status(500).json({ status: false, msg: "Something went wrong" });
     }
 });

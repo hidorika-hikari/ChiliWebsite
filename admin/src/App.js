@@ -25,6 +25,7 @@ import Orders from './pages/Orders';
 import SubCategoryList from './pages/subCategoryList';
 import HomeBannerAdd from './pages/homeBannerAdd';
 import HomeBannerList from './pages/homeBannerList';
+import ProtectedRoute from './components/ProtectedRoute';
 
 
 const MyContext = createContext();
@@ -63,14 +64,41 @@ function App() {
 
     useEffect(() => {
         const token = localStorage.getItem("token");
+        const userStr = localStorage.getItem("user");
+        console.log("[DEBUG] token:", token);
+        console.log("[DEBUG] user (raw):", userStr);
+        let userData = null;
+        try {
+            userData = JSON.parse(userStr);
+        } catch (e) {
+            console.log("[DEBUG] Failed to parse user from localStorage");
+        }
+        console.log("[DEBUG] user (parsed):", userData);
         if (token !== "" && token !== undefined && token !== null){
-            setIsLogin(true);
-            const userData = JSON.parse(localStorage.getItem("user"));
-            setUser(userData);
+            // Check if user has admin role
+            if (userData && userData.role === 'admin') {
+                setIsLogin(true);
+                setUser(userData);
+                console.log("[DEBUG] User is admin, login success");
+            } else {
+                // If user is not admin, clear storage and redirect to login
+                console.log("[DEBUG] User is not admin or missing role, redirecting to /login");
+                localStorage.removeItem("token");
+                localStorage.removeItem("user");
+                setIsLogin(false);
+                setUser({
+                    name: '',
+                    email: '',
+                    userId: '',
+                    role: ''
+                });
+                window.location.href = '/login';
+            }
         } else {
             setIsLogin(false);
+            console.log("[DEBUG] No token found, not logged in");
         }
-    },[isLogin]);
+    }, []);
 
     const handleClose = (event, reason) => {
         if (reason === 'clickaway') {
@@ -157,12 +185,20 @@ function App() {
                             <Route
                                 path="/"
                                 exact={true}
-                                element={<Dashboard />}
+                                element={
+                                    <ProtectedRoute>
+                                        <Dashboard />
+                                    </ProtectedRoute>
+                                }
                             />
                             <Route
                                 path="/dashboard"
                                 exact={true}
-                                element={<Dashboard />}
+                                element={
+                                    <ProtectedRoute>
+                                        <Dashboard />
+                                    </ProtectedRoute>
+                                }
                             />
                             <Route
                                 path="/login"
@@ -177,72 +213,128 @@ function App() {
                             <Route
                                 path="/products"
                                 exact={true}
-                                element={<Product />}
+                                element={
+                                    <ProtectedRoute>
+                                        <Product />
+                                    </ProtectedRoute>
+                                }
                             />
                             <Route
                                 path="/product/details/:id"
                                 exact={true}
-                                element={<ProductDetails />}
+                                element={
+                                    <ProtectedRoute>
+                                        <ProductDetails />
+                                    </ProtectedRoute>
+                                }
                             />
                             <Route
                                 path="/product/add"
                                 exact={true}
-                                element={<ProductAdd />}
+                                element={
+                                    <ProtectedRoute>
+                                        <ProductAdd />
+                                    </ProtectedRoute>
+                                }
                             />
                             <Route
                                 path="/category/add"
                                 exact={true}
-                                element={<CategoryAdd />}
+                                element={
+                                    <ProtectedRoute>
+                                        <CategoryAdd />
+                                    </ProtectedRoute>
+                                }
                             />
                             <Route
                                 path="/category"
                                 exact={true}
-                                element={<CategoryList />}
+                                element={
+                                    <ProtectedRoute>
+                                        <CategoryList />
+                                    </ProtectedRoute>
+                                }
                             />
                             <Route
                                 path="/subCategory"
                                 exact={true}
-                                element={<SubCategoryList />}
+                                element={
+                                    <ProtectedRoute>
+                                        <SubCategoryList />
+                                    </ProtectedRoute>
+                                }
                             />
                             <Route
                                 path="/product/edit/:id"
                                 exact={true}
-                                element={<EditProduct />}
+                                element={
+                                    <ProtectedRoute>
+                                        <EditProduct />
+                                    </ProtectedRoute>
+                                }
                             />
                             <Route
                                 path="/subCategory/add"
                                 exact={true}
-                                element={<AddSubCat />}
+                                element={
+                                    <ProtectedRoute>
+                                        <AddSubCat />
+                                    </ProtectedRoute>
+                                }
                             />
                             <Route
                                 path="/productContent/add"
                                 exact={true}
-                                element={<AddProductContent />}
+                                element={
+                                    <ProtectedRoute>
+                                        <AddProductContent />
+                                    </ProtectedRoute>
+                                }
                             />
                             <Route
                                 path="/productWeight/add"
                                 exact={true}
-                                element={<AddProductWeight />}
+                                element={
+                                    <ProtectedRoute>
+                                        <AddProductWeight />
+                                    </ProtectedRoute>
+                                }
                             />
                             <Route
                                 path="/productSpicy/add"
                                 exact={true}
-                                element={<AddProductSpicy />}
+                                element={
+                                    <ProtectedRoute>
+                                        <AddProductSpicy />
+                                    </ProtectedRoute>
+                                }
                             />
                             <Route
                                 path="/orders"
                                 exact={true}
-                                element={<Orders />}
+                                element={
+                                    <ProtectedRoute>
+                                        <Orders />
+                                    </ProtectedRoute>
+                                }
                             />
                             <Route
                                 path="/homeBanner/add"
                                 exact={true}
-                                element={<HomeBannerAdd/>}
+                                element={
+                                    <ProtectedRoute>
+                                        <HomeBannerAdd/>
+                                    </ProtectedRoute>
+                                }
                             />
                             <Route
                                 path="/homeBannerList"
                                 exact={true}
-                                element={<HomeBannerList/>}
+                                element={
+                                    <ProtectedRoute>
+                                        <HomeBannerList/>
+                                    </ProtectedRoute>
+                                }
                             />
                         </Routes>
                     </div>

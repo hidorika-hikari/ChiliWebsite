@@ -55,7 +55,8 @@ const SignIn = () => {
                     const user = {
                         name: res.user?.name,
                         email: res.user?.email,
-                        userId: res.user?.id
+                        userId: res.user?.id,
+                        role: res.user?.role
                     }
                     localStorage.setItem("user", JSON.stringify(user));
                     context.setAlertBox({

@@ -94,8 +94,6 @@ const ProductAdd = () => {
     const [productWeightData, setProductWeightData] = useState([]);
     const [productSizeData, setProductSizeData] = useState([]);
 
-    const [catData, setCatData] = useState([]);
-    const [subCatData, setSubCatData] = useState([]);
     const context = useContext(MyContext);
 
     const [formFields, setFormFields] = useState({
@@ -118,9 +116,6 @@ const ProductAdd = () => {
 
     useEffect(() => {
         window.scrollTo(0, 0);
-        setCatData(context.catData);
-        setSubCatData(context.subCatData);
-
         fetchDataFromApi("/api/productWeight").then((res) => {
             setProductWeightData(res);
         })

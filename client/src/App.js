@@ -91,9 +91,22 @@ function App() {
   useEffect(() => {
     const token = localStorage.getItem("token");
     if (token !== "" && token !== undefined && token !== null) {
-      setIsLogin(true);
       const userData = JSON.parse(localStorage.getItem("user"));
-      setUser(userData);
+      if (userData && (userData.role === 'customer' || !userData.role)) {
+        setIsLogin(true);
+        setUser(userData);
+      } else if (userData && userData.role === 'admin') {
+        localStorage.removeItem("token");
+        localStorage.removeItem("user");
+        setIsLogin(false);
+        setUser({
+          name: '',
+          email: '',
+          userId: '',
+          role: ''
+        });
+        window.location.href = '/';
+      }
     } else {
       setIsLogin(false);
     }

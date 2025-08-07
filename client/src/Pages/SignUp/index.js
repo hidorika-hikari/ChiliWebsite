@@ -15,7 +15,7 @@ const SignUp = () => {
         email: '',
         phone: '',
         password: '',
-        isAdmin: false
+        role: 'customer'
     })
     
     const [isLoading, setIsLoading] = useState(false);

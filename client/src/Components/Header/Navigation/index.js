@@ -1,7 +1,6 @@
 import Button from '@mui/material/Button'
 import { IoIosMenu } from 'react-icons/io';
 import { FaAngleDown } from 'react-icons/fa';
-import { Link } from 'react-router-dom';
 import { useContext, useState } from 'react';
 import { FaAngleRight } from "react-icons/fa";
 import { MyContext } from '../../../App';
@@ -15,7 +14,7 @@ const Navigation = (props) => {
 
     const [value, setValue] = useState(0);
     const [isOpenSidebarVal, setIsOpenSidebarVal] = useState(false);
-    
+
     const handleChange = (event, newValue) => {
         setValue(newValue);
     
@@ -28,7 +27,7 @@ const Navigation = (props) => {
                     navigate(`/products/category/${category._id}`);
                 }
             }
-        }, 300); // Delay in milliseconds
+        }, 500);
     };
     
     return (

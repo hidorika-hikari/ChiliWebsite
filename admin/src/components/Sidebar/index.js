@@ -13,22 +13,21 @@ const Sidebar = () => {
 
     const [activeTab, setActiveTab] = useState(0);
     const [isToggleSubmenu, setIsToggleSubmenu] = useState(false);
-    const [isLogin, setIsLogin] = useState(null);
+    
+    const history = useNavigate();
 
     const isOpenSubmenu = (index) => {
         setActiveTab(index);
         setIsToggleSubmenu(!isToggleSubmenu);
     }
 
-    const history = useNavigate();
     useEffect(() => {
         const token = localStorage.getItem("token");
         if (token !== "" && token !== undefined && token !== null){
-            setIsLogin(true);
         } else {
             history('/login')
         }
-    },[]);
+    }, [history]);
 
     return (
         <>
