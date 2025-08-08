@@ -5,21 +5,6 @@ import { Swiper, SwiperSlide } from 'swiper/react';
 import { Navigation } from 'swiper/modules';
 import { Link } from 'react-router-dom';
 
-function getContrastTextColor(hexColor) {
-    if (!hexColor) return '#000';
-    hexColor = hexColor.replace('#', '');
-    if (hexColor.length === 3) {
-        hexColor = hexColor.split('').map(c => c + c).join('');
-    }
-
-    const r = parseInt(hexColor.substr(0, 2), 16);
-    const g = parseInt(hexColor.substr(2, 2), 16);
-    const b = parseInt(hexColor.substr(4, 2), 16);
-
-    const luminance = (0.299 * r + 0.587 * g + 0.114 * b) / 255;
-    return luminance > 0.5 ? '#000' : '#fff';
-}
-
 const HomeCat = (props) => {
     return (
         <section className="homeCat">
@@ -41,16 +26,18 @@ const HomeCat = (props) => {
                             return (
                                 <SwiperSlide key={index}>
                                     <Link to={`/products/category/${cat.id}`}>
-                                    <div
-                                        className="item text-center cursor"
-                                        style={{
-                                            background: cat.color,
-                                            color: getContrastTextColor(cat.color),
-                                        }}
-                                    >
-                                        <img src={cat.images[0]} alt='' className='w-100 h-100 mb-1' />
-                                        <h6 className='fw-500 mb-0'>{cat.name}</h6>
-                                    </div>
+                                        <div
+                                            className="item text-center cursor"
+                                            style={{ background: cat.color }}
+                                        >
+                                            <img src={cat.images[0]} alt='' className='w-100 h-100 mb-1' />
+                                        </div>
+                                        <h6
+                                            className="cat-title"
+                                            style={{ color: cat.color, textAlign: "center" }}
+                                        >
+                                            {cat.name}
+                                        </h6>
                                     </Link>
                                 </SwiperSlide>
                             )

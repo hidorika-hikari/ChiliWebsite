@@ -21,6 +21,7 @@ import Orders from "./Pages/Orders";
 import { Elements } from '@stripe/react-stripe-js';
 import { loadStripe } from '@stripe/stripe-js';
 import SearchPage from "./Pages/Search";
+import MyAccount from "./Pages/MyAccount";
 const MyContext = createContext();
 const stripePromise = loadStripe('pk_test_51RqrM6E8TB46iepBZDHJ5lDzW863H6xzVR2FCfYojdiN2GYVy4YLCTqalEfr3iYMxXHiADzlRYYqIEypDEM6LHoo002nAJGi2I', {
   locale: 'en'
@@ -42,8 +43,8 @@ function App() {
   //const [cartFields, setCartFields] = useState({});
   const [isHeaderFooterShow, setIsHeaderFooterShow] = useState(true);
   const [isLogin, setIsLogin] = useState(false);
+  
   const [productData, setProductData] = useState();
-
   const [categoryData, setCategoryData] = useState([]);
   const [subCategoryData, setSubCategoryData] = useState([]);
   const [activeCat, setActiveCat] = useState('');
@@ -194,6 +195,7 @@ function App() {
             <Route path="/my-list" exact={true} element={<MyList />} />
             <Route path="/checkout" exact={true} element={<Checkout />} />
             <Route path="/orders" exact={true} element={<Orders />} />
+            <Route path="/my-account" exact={true} element={<MyAccount/>} />
           </Routes>
           {
             isHeaderFooterShow === true && <Footer />

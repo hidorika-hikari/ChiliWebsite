@@ -8,7 +8,6 @@ import ProductItem from "../../Components/ProductItem";
 import HomeCat from "../../Components/HomeCat";
 import newsLetterImg from '../../assets/coupons.png'
 import { CircularProgress } from '@mui/material';
-import { IoIosArrowRoundForward } from "react-icons/io";
 import { IoMailOutline } from "react-icons/io5";
 import { Swiper, SwiperSlide } from 'swiper/react';
 import { Navigation } from 'swiper/modules';
@@ -29,7 +28,7 @@ const Home = () => {
     const [homeBannerSlide, setHomeBannerSlide] = useState([]);
 
     const [isLoading, setIsLoading] = useState(false);
-    
+
     const handleChange = (event, newValue) => {
         setValue(newValue);
     };
@@ -47,7 +46,7 @@ const Home = () => {
             setFeaturedProducts(res);
         });
 
-        fetchDataFromApi(`/api/products?perPage=8`).then((res) => {
+        fetchDataFromApi(`/api/products?perPage=16`).then((res) => { // /api/products?perPage=8
             setProductsData(res);
         });
 
@@ -84,49 +83,16 @@ const Home = () => {
                         <div className="col-md-3">
                             <div className="sticky">
                                 <div className="banner">
-                                    <img src="https://klbtheme.com/bacola/wp-content/uploads/2021/04/banner-box.jpg" className="cursor" alt=''></img>
-                                    {/* <img src={} className="cursor"></img> */}
+                                    <img src="https://i.redd.it/official-shorekeeper-wallpapers-v0-rl7hchtuaosd1.jpg?width=2160&format=pjpg&auto=webp&s=9369c8dcd9f1f9853debe9682c4c3a09a8935ef7" className="cursor" alt=''></img>
                                 </div>
                                 <div className="banner mt-3">
-                                    <img src="https://klbtheme.com/bacola/wp-content/uploads/2021/04/banner-box.jpg" className="cursor" alt=''></img>
-                                    {/* <img src={} className="cursor"></img> */}
+                                    <img src="https://wiki.hoyolab.com/_ipx/f_webp/https://bbs.hoyolab.com/hoyowiki/picture/character/%25E8%2583%25A1%25E6%25A1%2583/avatar_header.jpg" className="cursor" alt=''></img>
                                 </div>
                             </div>
                         </div>
-
                         <div className="col-md-9 productRow">
-                            {/* //FEATURED PRODUCTS */}
-                            <div className="d-flex align-items-center">
-                                <div className="info w-75">
-                                    <h3 className="mb-0 hd">FEATURED PRODUCTS</h3>
-                                    <p className="text-light text-sml mb-0">Do not miss the current offers until the end of March.</p>
-                                </div>
-                                <Button className="viewAllBtn ms-auto">View All<IoIosArrowRoundForward /></Button>
-                            </div>
-                            <div className="product_row w-100 mt-2">
-                                <Swiper
-                                    slidesPerView={4}
-                                    spaceBetween={10}
-                                    slidesPerGroup={3}
-                                    navigation={true}
-                                    pagination={{
-                                        clickable: true,
-                                    }}
-                                    modules={[Navigation]}
-                                    className="mySwiper">
-                                    {
-                                        featuredProducts?.length !== 0 && featuredProducts?.map((item, index) => {
-                                            return (
-                                                <SwiperSlide key={index}>
-                                                    <ProductItem item={item} />
-                                                </SwiperSlide>
-                                            )
-                                        })
-                                    }
-                                </Swiper>
-                            </div>
                             {/* POPULAR PRODUCTS */}
-                            <div className="d-flex align-items-center mt-3">
+                            <div className="d-flex align-items-center mb-3">
                                 <div className="info w-75">
                                     <h3 className="mb-0 hd">POPULAR PRODUCTS</h3>
                                     <p className="text-light text-sml mb-0">Do not miss the current offers until the end of March.</p>
@@ -148,7 +114,7 @@ const Home = () => {
                                     ))}
                                 </Tabs>
                             </div>
-                            <div className="product_row w-100 mt-2">
+                            <div className="product_row w-100 ms-0 mt-3 mb-3">
                                 {isLoading ? (
                                     <div className="d-flex justify-content-center w-100">
                                         <CircularProgress size={30} />
@@ -174,15 +140,15 @@ const Home = () => {
                                 )}
                             </div>
                             {/* BANNER */}
-                            <div className='d-flex mt-4 mb-5 bannerSec'>
+                            <div className='d-flex mt-3 mb-3 bannerSec'>
                                 <div className='banner'>
-                                    <img src="https://api.spicezgold.com/download/file_1734525653108_NewProject(20).jpg" alt='' className='cursor w-100' />
+                                    <img src="https://upload-os-bbs.hoyolab.com/upload/2025/02/19/17138284/27ba89c413438ab2ebf9dbe2ba2f4a1b_4605514812593865506.jpeg?x-oss-process=image%2Fauto-orient%2C0%2Finterlace%2C1%2Fformat%2Cwebp%2Fquality%2Cq_70" alt='' className='cursor w-100' />
                                 </div>
                                 <div className='banner'>
-                                    <img src="https://api.spicezgold.com/download/file_1734525634299_NewProject(2).jpg" alt='' className='cursor w-100' />
+                                    <img src="https://preview.redd.it/wuthering-waves-2-4-official-art-v0-qe8eaxiwgh3f1.jpeg?width=1659&format=pjpg&auto=webp&s=8f392ed3c953037debf495659bc227be23930b95" alt='' className='cursor w-100' />
                                 </div>
                                 <div className='banner'>
-                                    <img src="https://api.spicezgold.com/download/file_1734525620831_NewProject(3).jpg" alt='' className='cursor w-100' />
+                                    <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSF3WG7oxTsCW5tGlih5uay4ao6kOgSGIQIqg&s" alt='' className='cursor w-100' />
                                 </div>
                             </div>
                             {/* NEW PRODUCTS */}
@@ -192,7 +158,7 @@ const Home = () => {
                                     <p className="text-light text-sml mb-0">New products with updated stocks.</p>
                                 </div>
                             </div>
-                            <div className="product_row productRow2 w-100 mt-4 d-flex">
+                            <div className="product_row productRow2 w-100 mt-4 d-flex ms-0">
                                 {
                                     productsData?.products?.length !== 0 && productsData?.products?.map((item, index) => {
                                         return (
@@ -202,16 +168,49 @@ const Home = () => {
                                 }
                             </div>
                             {/* BANNER */}
-                            <div className="d-flex mt-4 mb-5 bannerSec">
-                                <div className="banner mt-4">
-                                    <img src="https://cloudfront-eu-central-1.images.arcpublishing.com/williamreed/CA522QC2BZKZVIBSVPBDMNLML4.jpg"
+                            <div className="d-flex pe-3 ps-3 bannerSec">
+                                <div className="banner mt-3">
+                                    <img src="https://pbs.twimg.com/media/GwH6ExUaQAA64Pr?format=jpg&name=4096x4096"
                                         className="cursor w-100" alt='' />
                                 </div>
-                                <div className="banner mt-4">
-                                    <img src="https://www.thespruceeats.com/thmb/rljsggiCQFN3WvoCebr7XHwo9a8=/1500x0/filters:no_upscale():max_bytes(150000):strip_icc()/GettyImages-930279012-e1d17f3f2e14473db877437ce57b8f5f.jpg"
+                                <div className="banner mt-3">
+                                    <img src="https://upload-os-bbs.hoyolab.com/upload/2024/02/08/17138284/adbec135e8e1ff907990690cbb111b1a_5240529329033004651.jpg"
+                                        className="cursor w-100" alt='' />
+                                </div>
+                                <div className="banner mt-3">
+                                    <img src="https://upload-os-bbs.hoyolab.com/upload/2021/05/22/21867498/19fb8c0ff0e27428841a05ddbfc0851d_3933469727756591456.jpg?x-oss-process=image%2Fresize%2Cs_1000%2Fauto-orient%2C0%2Finterlace%2C1%2Fformat%2Cwebp%2Fquality%2Cq_70"
                                         className="cursor w-100" alt='' />
                                 </div>
                             </div>
+                        </div>
+                        {/* //FEATURED PRODUCTS */}
+                        <div className="d-flex align-items-center mt-4 mb-2">
+                            <div className="info w-75">
+                                <h3 className="mb-0 hd">FEATURED PRODUCTS</h3>
+                                <p className="text-light text-sml mb-0">Do not miss the current offers until the end of March.</p>
+                            </div>
+                        </div>
+                        <div className="product_row w-100 mt-2">
+                            <Swiper
+                                slidesPerView={4}
+                                spaceBetween={10}
+                                slidesPerGroup={3}
+                                navigation={true}
+                                pagination={{
+                                    clickable: true,
+                                }}
+                                modules={[Navigation]}
+                                className="mySwiper">
+                                {
+                                    featuredProducts?.length !== 0 && featuredProducts?.map((item, index) => {
+                                        return (
+                                            <SwiperSlide key={index}>
+                                                <ProductItem item={item} />
+                                            </SwiperSlide>
+                                        )
+                                    })
+                                }
+                            </Swiper>
                         </div>
                     </div>
                 </div>

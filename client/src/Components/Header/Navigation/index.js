@@ -36,7 +36,7 @@ const Navigation = (props) => {
                 <div className='row'>
                     <div className='col-sm-2 navPart1'>
                         <div className='catWrapper'>
-                            <Button className='allCartTab align-items-center' onClick={() => setIsOpenSidebarVal(!isOpenSidebarVal)}>
+                            <Button className='btn-blue allCartTab align-items-center' onClick={() => setIsOpenSidebarVal(!isOpenSidebarVal)}>
                                 <span className='icon1 me-2'><IoIosMenu /></span>
                                 <span className='text'>ALL CATEGORIES</span>
                                 <span className='icon2 ms-2'><FaAngleDown /></span>

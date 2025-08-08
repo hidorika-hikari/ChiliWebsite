@@ -1,22 +1,34 @@
 import FormControlLabel from "@mui/material/FormControlLabel";
 import 'range-slider-input/dist/style.css';
 import Slider from '@mui/material/Slider';
+import ProductItem from "../../Components/ProductItem";
 import Radio from '@mui/material/Radio';
 import RadioGroup from '@mui/material/RadioGroup';
+import 'swiper/css';
+import 'swiper/css/navigation';
+import { Navigation, Autoplay } from 'swiper/modules';
+import { Swiper, SwiperSlide } from 'swiper/react';
 import { useContext, useEffect, useState } from "react";
 import { Link, useParams } from "react-router-dom";
 import { MyContext } from "../../App";
 import { Rating } from "@mui/material";
+import { fetchDataFromApi } from "../../utils/api";
 
 const Sidebar = (props) => {
     const [value, setValue] = useState([1, 10000]);
+
+    const { id } = useParams();
     const context = useContext(MyContext);
+
     const [filterSubCat, setFilterSubCat] = useState(null);
     const [subCatId, setSubCatId] = useState('');
-    const { id } = useParams();
+    const [featuredProducts, setFeaturedProducts] = useState([]);
 
     useEffect(() => {
         setSubCatId(id)
+        fetchDataFromApi(`/api/products/featured`).then((res) => {
+            setFeaturedProducts(res);
+        });
     }, [id])
 
     const handleChange = (event) => {
@@ -33,7 +45,7 @@ const Sidebar = (props) => {
     }
 
     useEffect(() => {
-        const filterId = subCatId || id; // use subCatId if selected, else category id
+        const filterId = subCatId || id;
         if (filterId) {
             props.filterByPrice(value, filterId);
         }
@@ -64,7 +76,7 @@ const Sidebar = (props) => {
                 </div>
 
                 <div className="filterBox">
-                    <h6>FILTER BY SUBCATEGORY PRICE</h6>
+                    <h6>FILTER BY PRICE</h6>
                     <Slider
                         value={value}
                         onChange={(e, newValue) => setValue(newValue)}
@@ -92,23 +104,33 @@ const Sidebar = (props) => {
                         </ul>
                     </div>
                 </div>
-                <Link to="#"><img src="https://muybuenoblog.com/wp-content/uploads/2020/09/chiles-740x920.jpg" className="w-100" alt="" /></Link>
-
-                { /* <div className="filterBox">
-                    <h6>PRODUCT STATUS</h6>
-                    <div className="scroll">
-                        <ul style={{ paddingLeft: 0 }}>
-                            <li>
-                                <FormControlLabel className="w-100" control={<Checkbox />}
-                                    label="In Stock" />
-                            </li>
-                            <li>
-                                <FormControlLabel className="w-100" control={<Checkbox />}
-                                    label="On Sales" />
-                            </li>
-                        </ul>
+                <div>
+                    <div className="w-100 res-hide">
+                        <h6 className="mb-0 hd">FEATURED PRODUCTS</h6>
+                        <Swiper
+                            pagination={{
+                                clickable: true,
+                            }}
+                            autoplay={{
+                                delay: 3000,
+                                disableOnInteraction: false,
+                            }}
+                            modules={[Navigation, Autoplay]}
+                            className="mySwiper"
+                        >
+                            {
+                                featuredProducts?.length !== 0 && featuredProducts?.map((item, index) => {
+                                    return (
+                                        <SwiperSlide key={index}>
+                                            <ProductItem item={item} />
+                                        </SwiperSlide>
+                                    )
+                                })
+                            }
+                        </Swiper>
                     </div>
-                </div> */}
+                </div>
+                <Link to="#"><img src="https://muybuenoblog.com/wp-content/uploads/2020/09/chiles-740x920.jpg" className="w-100" alt="" /></Link>
             </div>
         </>
     );

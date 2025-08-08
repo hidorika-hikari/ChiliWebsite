@@ -2,11 +2,9 @@ import { CircularProgress, Rating } from "@mui/material";
 import { FaHeart, FaRegHeart } from "react-icons/fa6";
 import { BsCartFill } from "react-icons/bs";
 import { useContext, useEffect, useState } from "react";
-import { MdOutlineCompareArrows } from "react-icons/md";
 import { useParams } from "react-router-dom";
 import { fetchDataFromApi, postData } from "../../utils/api";
 import { MyContext } from "../../App";
-import { FaExclamationTriangle } from "react-icons/fa";
 import Tooltip from "@mui/material/Tooltip";
 import RelatedProducts from "../../Pages/ProductDetails/RelatedProducts";
 import ProductZoom from "../../Components/ProductZoom";
@@ -15,6 +13,7 @@ import Button from '@mui/material/Button';
 import dayjs from 'dayjs'
 import utc from 'dayjs/plugin/utc'
 import timezone from 'dayjs/plugin/timezone'
+import Alert from '@mui/material/Alert';
 
 dayjs.extend(utc)
 dayjs.extend(timezone)
@@ -209,7 +208,7 @@ const ProductDetails = () => {
                                             productData.productSize.map((item, index) => (
                                                 <li key={item._id} className="list-inline-item">
                                                     <Button
-                                                        className={`tag ${activeSpicy === index ? 'active' : ''}`}
+                                                        className={`btn-big ${activeSpicy === index ? 'active' : ''}`}
                                                         onClick={() => setActiveSpicy(index)}
                                                     >
                                                         {item.productSize}
@@ -230,7 +229,7 @@ const ProductDetails = () => {
                                             productData.productWeight.map((item, index) => (
                                                 <li key={item._id} className="list-inline-item">
                                                     <Button
-                                                        className={`tag ${activeWeight === index ? 'active' : ''}`}
+                                                        className={`btn-big ${activeWeight === index ? 'active' : ''}`}
                                                         onClick={() => setActiveWeight(index)}
                                                     >
                                                         {item.productWeight}
@@ -251,7 +250,7 @@ const ProductDetails = () => {
                                             productData.productRams.map((item, index) => (
                                                 <li key={item._id} className="list-inline-item">
                                                     <Button
-                                                        className={`tag ${activeContent === index ? 'active' : ''}`}
+                                                        className={`btn-big ${activeContent === index ? 'active' : ''}`}
                                                         onClick={() => setActiveContent(index)}
                                                     >
                                                         {item.productRams}
@@ -265,15 +264,12 @@ const ProductDetails = () => {
                             <div className="d-flex align-items-center mt-4">
                                 { /* <QuantityBox item={productData} onQuantityChange={handleSelectedItem}/> */}
                                 <Button
-                                    className={`btn-lg btn-big btn-round ${isAddToCartDisabled ? 'btn-danger' : 'btn-blue'}`}
+                                    className={`btn-red btn-lg btn-big btn-round text-white ${isAddToCartDisabled ? 'btn-danger' : 'btn-blue'}`}
                                     onClick={() => !isAddToCartDisabled && addToCart()}
                                     disabled={isAddToCartDisabled}
                                 >
                                     <BsCartFill /> &nbsp;
                                     {context.addingInCart ? "adding..." : "Add to Cart"}
-                                </Button>
-                                <Button className="btn-blue btn-lg btn-big btn-circle ms-4">
-                                    <BsCartFill />
                                 </Button>
                                 <Tooltip title={`${isAddedtoMyList ? 'Added to Wishlist' : 'Add to Wishlist'}`} placement="top">
                                     <Button
@@ -287,19 +283,11 @@ const ProductDetails = () => {
                                         }
                                     </Button>
                                 </Tooltip>
-                                <Tooltip title="Add to Compare" placement="top">
-                                    <Button className="btn-blue btn-lg btn-big btn-circle ms-4">
-                                        <MdOutlineCompareArrows />
-                                    </Button>
-                                </Tooltip>
                             </div>
                             {isAddToCartDisabled && (
-                                <div className="alert alert-danger d-flex align-items-center gap-2 mt-4 p-3 rounded shadow-sm">
-                                    <FaExclamationTriangle className="me-2" />
-                                    <div>
-                                        <strong>Please select:</strong> Spicy level, Weight, and Content before adding to cart.
-                                    </div>
-                                </div>
+                                <Alert severity="error" className="mt-4">
+                                    Please select: Spicy level, Weight, and Content before adding to cart.
+                                </Alert>
                             )}
                         </div>
                     </div>
@@ -308,19 +296,19 @@ const ProductDetails = () => {
                         <div className="customTabs">
                             <ul className="list list-inline">
                                 <li className="list-inline-item">
-                                    <Button className={`tag ${activeTabs === 0 && 'active'}`}
+                                    <Button className={`btn-big ${activeTabs === 0 && 'active'}`}
                                         onClick={() => {
                                             setActiveTabs(0)
                                         }}>Description</Button>
                                 </li>
                                 <li className="list-inline-item">
-                                    <Button className={`tag ${activeTabs === 1 && 'active'}`}
+                                    <Button className={`btn-big ${activeTabs === 1 && 'active'}`}
                                         onClick={() => {
                                             setActiveTabs(1)
                                         }}>Additional Info</Button>
                                 </li>
                                 <li className="list-inline-item">
-                                    <Button className={`tag ${activeTabs === 2 && 'active'}`}
+                                    <Button className={`btn-big ${activeTabs === 2 && 'active'}`}
                                         onClick={() => {
                                             setActiveTabs(2)
                                         }}>Review ({reviewsData.length})</Button>
@@ -424,69 +412,52 @@ const ProductDetails = () => {
                             }
                             {
                                 activeTabs === 2 &&
-                                <div className="tabContents">
-                                    <div className="row">
-                                        <div className="col-md-8">
-                                            <h3>Customer Question & Answers</h3>
-                                            <br />
-                                            {
-                                                reviewsData?.length > 0 && reviewsData?.map((item, index) => {
-                                                    return (
-                                                        <div className="card p-4 reviewsCard flex-row shadow" key={index}>
-                                                            <div className="reviewCard">
-                                                                { /* <div className="rounded-circle">
-                                                                    <img src="https://i.scdn.co/image/ab67616d00001e026f157409ae8578b9695be2b3" alt="" />
-                                                                </div> */}
-                                                            </div>
-                                                            <div className="info">
-                                                                <div className="d-flex align-items-center w-100 gap-3">
-                                                                    <h5>{item?.customerName}</h5>
-                                                                    <h5 className="text-light">{dayjs(item?.dateCreated).tz('Asia/Bangkok').format('DD/MM/YY HH:mm')}</h5>
-                                                                    <div className="ms-auto mb-1">
-                                                                        <Rating name="half-rating-read" value={item?.customerRating} readOnly size="small" />
-                                                                    </div>
-                                                                </div>
-                                                                <p>{item?.review}</p>
-                                                            </div>
-                                                        </div>
-                                                    )
-                                                })
-                                            }
+                                <>
+                                    <h3>Customer Questions & Answers</h3>
+                                    <div className="reviewsList">
+                                        {reviewsData.length ? (
+                                            reviewsData.map((item, i) => (
+                                                <div className="card p-3 mb-3 shadow-sm" key={i}>
+                                                    <div className="d-flex justify-content-between align-items-center mb-2">
+                                                        <h5>{item.customerName}</h5>
+                                                        <small className="text-muted">{dayjs(item.dateCreated).tz('Asia/Bangkok').format('DD/MM/YY HH:mm')}</small>
+                                                    </div>
+                                                    <Rating name="read-only" value={item.customerRating} readOnly size="small" />
+                                                    <p className="mt-2">{item.review}</p>
+                                                </div>
+                                            ))
+                                        ) : (
+                                            <p>No reviews yet.</p>
+                                        )}
 
-                                            <br className="res-hide" />
-                                            <br className="res-hide" />
-                                            <form className="reviewForm" onSubmit={addReview}>
-                                                <h4>Add a review</h4>
-                                                <div className="form-group">
-                                                    <textarea className="form-control"
-                                                        placeholder="Write a Review"
-                                                        name="review"
-                                                        value={reviews.review}
-                                                        onChange={onChangeInput}>
-                                                    </textarea>
-                                                </div>
-                                                <div className="row">
-                                                    <div className="col-md-6 mt-0">
-                                                        <div className="form-group">
-                                                            <Rating
-                                                                name="rating"
-                                                                value={rating}
-                                                                size="medium"
-                                                                onChange={changeRating} />
-                                                        </div>
-                                                    </div>
-                                                    <br />
-                                                    <div className="form-group">
-                                                        <Button type="submit"
-                                                            className="btn-blue btn-lg btn-big btn-round">
-                                                            {isLoading === true ? <CircularProgress color="inherit" className="loader" /> : 'Submit Review'}
-                                                        </Button>
+                                        <form className="reviewForm" onSubmit={addReview}>
+                                            <h4>Add a review</h4>
+                                            <div className="form-group">
+                                                <textarea
+                                                    className="form-control mb-3"
+                                                    placeholder="Write a Review"
+                                                    name="review"
+                                                    value={reviews.review}
+                                                    onChange={onChangeInput}
+                                                    rows={4}
+                                                />
+                                            </div>
+                                            <div className="row">
+                                                <div className="col-md-6">
+                                                    <div className="d-flex align-items-center gap-3 mb-3">
+                                                        <Rating name="rating" value={rating} size="medium" onChange={changeRating} />
                                                     </div>
                                                 </div>
-                                            </form>
-                                        </div>
+                                            </div>
+                                            <br/>
+                                            <div className="form-group">
+                                                <Button type="submit" className="btn-blue btn-lg btn-big btn-round">
+                                                    {isLoading ? <CircularProgress size={20} color="inherit" /> : 'Submit Review'}
+                                                </Button>
+                                            </div>
+                                        </form>
                                     </div>
-                                </div>
+                                </>
                             }
                         </div>
                     </div>

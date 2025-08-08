@@ -60,7 +60,7 @@ const ProductItem = (props) => {
         const productId = props.itemView === 'recentlyView'
             ? props.item?.prodId || props.item?.proId
             : props.item?.id;
-    
+
         if (user && productId) {
             postData('/api/my-list/check', {
                 productId,
@@ -72,7 +72,6 @@ const ProductItem = (props) => {
             });
         }
     }, [props.itemView, props.item]);
-    
 
     return (
         <>
@@ -85,27 +84,27 @@ const ProductItem = (props) => {
                         <div className="actions">
                             <Button onClick={() => viewProductDetails(props.item?.id)}><TfiFullscreen /></Button>
                             <Button className={isAddedtoMyList ? 'active' : ''}
-                            onClick={() => addToMyList(props?.itemView === 'recentlyView' ? props.item?.proId : props.item?.id)}>
+                                onClick={() => addToMyList(props?.itemView === 'recentlyView' ? props.item?.proId : props.item?.id)}>
                                 {
                                     isAddedtoMyList === true ? <FaHeart className="wishlist-icon" style={{ fontSize: '20px' }} /> : <CiHeart style={{ fontSize: '20px' }} />
                                 }
                             </Button>
                         </div>
                     </div>
-                </Link>
 
-                <div className="info">
-                    <h4>{props?.item?.name}</h4>
-                    <span className="text-success d-block">
-                        {props.item?.countInStock ? 'In Stock' : 'Out of Stock'}
-                    </span>
-                    <Rating className="mt-2 mb-2" name="read-only" value={props?.item?.rating} readOnly size="small" precision={0.5} />
+                    <div className="info">
+                        <h4>{props?.item?.name}</h4>
+                        <span className={`d-block ${props.item?.countInStock ? 'text-success' : 'text-danger'}`}>
+                            {props.item?.countInStock ? 'In Stock' : 'Out of Stock'}
+                        </span>
+                        <Rating className="mt-2 mb-2" name="read-only" value={props?.item?.rating} readOnly size="small" precision={0.5} />
 
-                    <div className="d-flex">
-                        <span className="oldPrice">{props?.item?.oldPrice}฿</span>
-                        <span className="newPrice text-danger ms-2">{props?.item?.price}฿</span>
+                        <div className="d-flex">
+                            <span className="oldPrice">{props?.item?.oldPrice}฿</span>
+                            <span className="newPrice text-danger ms-2">{props?.item?.price}฿</span>
+                        </div>
                     </div>
-                </div>
+                </Link>
             </div>
         </>
     )

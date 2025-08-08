@@ -21,12 +21,15 @@ const Header = () => {
     const [anchorEl, setAnchorEl] = useState(null);
     const open = Boolean(anchorEl);
     const context = useContext(MyContext);
+    
     const handleClick = (event) => {
         setAnchorEl(event.currentTarget);
     };
+
     const handleClose = () => {
         setAnchorEl(null);
     };
+
     const logout = () => {
         localStorage.clear();
         setAnchorEl(null);
@@ -54,7 +57,9 @@ const Header = () => {
                     <div className="container">
                         <div className="row">
                             <div className="logoWrapper d-flex align-items-center col-sm-2">
+                                <Link to='/'>
                                 <img src={Logo} alt="Logo" />
+                                </Link>
                             </div>
 
                             <div className='col-sm-10 d-flex align-items-center part2'>
@@ -77,12 +82,14 @@ const Header = () => {
                                                     transformOrigin={{ horizontal: 'right', vertical: 'top' }}
                                                     anchorOrigin={{ horizontal: 'right', vertical: 'bottom' }}
                                                 >
+                                                    <Link to="/my-account">
                                                     <MenuItem onClick={handleClose}>
                                                         <ListItemIcon>
                                                             <MdAccountCircle fontSize="small" />
                                                         </ListItemIcon>
                                                         My Account
                                                     </MenuItem>
+                                                    </Link>
                                                     <Link to="/orders">
                                                     <MenuItem onClick={handleClose}>
                                                         <ListItemIcon>

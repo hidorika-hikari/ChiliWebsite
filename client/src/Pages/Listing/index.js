@@ -106,7 +106,12 @@ const Listing = () => {
                             <>
                                 <div className='productListing'>
                                     {productData?.map((item, index) => (
-                                        <ProductItem key={index} itemView={productView} item={item} />
+                                        <ProductItem
+                                        key={index}
+                                        itemView={productView}
+                                        className={productView}
+                                        item={item}
+                                    />
                                     ))}
                                 </div>
 
