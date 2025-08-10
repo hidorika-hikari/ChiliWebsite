@@ -216,7 +216,7 @@ const Home = () => {
                 </div>
             </section>
             {/* newsLetter */}
-            <section className="newsLetterSection mt-3 mb-3 d-flex align-items-center">
+            <section className="newsLetterSection mt-3 d-flex align-items-center">
                 <div className="container">
                     <div className="row">
                         <div className="col-md-6">

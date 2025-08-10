@@ -6,6 +6,7 @@ import { FaHome } from "react-icons/fa";
 import { useContext, useEffect, useState } from "react";
 import { MyContext } from "../../App";
 import { deleteData, fetchDataFromApi } from "../../utils/api";
+import { FaListCheck } from "react-icons/fa6";
 
 const MyList = () => {
     const [myListData, setMyListData] = useState([]);
@@ -87,7 +88,7 @@ const MyList = () => {
                                 </div>
                                 :
                                 <div className="empty d-flex align-items-center justify-content-center flex-column">
-                                    <img src="https://www.freeiconspng.com/thumbs/list-icon/to-do-list-icon-buy-this-icon-for--0-48-1.png" width="200" alt="" />
+                                    <FaListCheck size={150}/>
                                     <h3 className="mt-3">My list is currently empty</h3>
                                     <br />
                                     <Link to="/"><Button className="btn-blue bg-red btn-lg btn-big btn-round"><FaHome /> &nbsp; Continue Shopping</Button></Link>

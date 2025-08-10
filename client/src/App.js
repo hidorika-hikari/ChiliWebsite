@@ -22,6 +22,7 @@ import { Elements } from '@stripe/react-stripe-js';
 import { loadStripe } from '@stripe/stripe-js';
 import SearchPage from "./Pages/Search";
 import MyAccount from "./Pages/MyAccount";
+import ContactUs from "./Pages/ContactUs";
 const MyContext = createContext();
 const stripePromise = loadStripe('pk_test_51RqrM6E8TB46iepBZDHJ5lDzW863H6xzVR2FCfYojdiN2GYVy4YLCTqalEfr3iYMxXHiADzlRYYqIEypDEM6LHoo002nAJGi2I', {
   locale: 'en'
@@ -185,6 +186,7 @@ function App() {
           </Snackbar>
           <Routes>
             <Route path="/" exact={true} element={<Home />} />
+            <Route path="/contact-us" exact={true} element={<ContactUs />} />
             <Route path="/products/category/:id" exact={true} element={<Listing />} />
             <Route path="/products/subCat/:id" exact={true} element={<Listing />} />
             <Route path="/search" exact={true} element={<SearchPage />} />

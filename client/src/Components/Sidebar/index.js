@@ -58,7 +58,6 @@ const Sidebar = (props) => {
                     <h6>PRODUCT SUBCATEGORIES</h6>
                     <div className="scroll">
                         <RadioGroup
-                            aria-labelledby="demo-controlled-radio-buttons-group"
                             name="controlled-radio-buttons-group"
                             value={filterSubCat}
                             onChange={handleChange}
@@ -130,7 +129,7 @@ const Sidebar = (props) => {
                         </Swiper>
                     </div>
                 </div>
-                <Link to="#"><img src="https://muybuenoblog.com/wp-content/uploads/2020/09/chiles-740x920.jpg" className="w-100" alt="" /></Link>
+                <Link to="#"><img src="https://upload-os-bbs.hoyolab.com/upload/2023/03/01/70666504/86c82c999ffab3f3705e45212a45f18d_955076272047390176.jpg?x-oss-process=image%2Fresize%2Cs_1000%2Fauto-orient%2C0%2Finterlace%2C1%2Fformat%2Cwebp%2Fquality%2Cq_70" className="w-100" alt="" /></Link>
             </div>
         </>
     );
