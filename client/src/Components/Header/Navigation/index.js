@@ -43,7 +43,7 @@ const Navigation = (props) => {
                             </Button>
                             <div className={`sidebarNav ${isOpenSidebarVal ? 'open' : ''}`}>
                                 <ul>
-                                    {props.navData.filter((item, idx) => idx < 6).map((item) => {
+                                    {props.navData.filter((item, idx) => idx < 10).map((item) => {
                                         const subs = context.subCategoryData?.filter(
                                             sub => sub.category === item._id || sub.category?._id === item._id
                                         );

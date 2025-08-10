@@ -6,19 +6,34 @@ import { Link } from "react-router-dom";
 import { MdDashboard } from "react-icons/md";
 import { TbCategoryFilled } from "react-icons/tb";
 import { useNavigate } from 'react-router-dom';
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useContext } from 'react';
 import { AiFillPicture } from "react-icons/ai";
+import { MyContext } from "../../App";
 
 const Sidebar = () => {
+
+    const context = useContext(MyContext);
+    const history = useNavigate();
 
     const [activeTab, setActiveTab] = useState(0);
     const [isToggleSubmenu, setIsToggleSubmenu] = useState(false);
     
-    const history = useNavigate();
-
     const isOpenSubmenu = (index) => {
         setActiveTab(index);
         setIsToggleSubmenu(!isToggleSubmenu);
+    }
+
+    const logout = () => {
+        localStorage.clear();
+        context.setAlertBox({
+            open: true,
+            error: false,
+            msg: "Logout Successfully"
+        })
+        setTimeout(() => {
+            //history('/login');
+            window.location.href = '/login';
+        },1500);
     }
 
     useEffect(() => {
@@ -69,7 +84,7 @@ const Sidebar = () => {
                                 <li><Link to={'/category'}>Category List</Link></li>
                                 <li><Link to={'/category/add'}>Add Category</Link></li>
                                 <li><Link to={'/subCategory'}>Subcategory List</Link></li>
-                                <li><Link to={'/subCategory/add'}>Add A Subcategory</Link></li>
+                                <li><Link to={'/subCategory/add'}>Add Subcategory</Link></li>
                             </ul>
                         </div>
                     </li>
@@ -99,7 +114,7 @@ const Sidebar = () => {
                 <br/>
                 <div className="logoutWrapper">
                     <div className="logoutBox">
-                        <Button variant="contained"><IoMdLogOut/>Logout</Button>
+                        <Button variant="contained" onClick={logout}><IoMdLogOut/>Logout</Button>
                     </div>
                 </div>
             </div>

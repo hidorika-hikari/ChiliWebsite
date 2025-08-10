@@ -26,7 +26,7 @@ const StyleBreadcrumb = styled(Chip)(({ theme }) => {
     };
 });
 
-const HomeBannerAdd = () => {
+const AddHomeBanner = () => {
 
     const context = useContext(MyContext);
     const history = useNavigate();
@@ -139,4 +139,4 @@ const HomeBannerAdd = () => {
     );
 };
 
-export default HomeBannerAdd;
+export default AddHomeBanner;

@@ -7,9 +7,6 @@ import { FaHome } from 'react-icons/fa';
 import { Link } from 'react-router-dom';
 import { deleteData, fetchDataFromApi } from '../../utils/api';
 import Button from '@mui/material/Button';
-import MenuItem from '@mui/material/MenuItem';
-import Select from '@mui/material/Select';
-import FormControl from '@mui/material/FormControl';
 import Pagination from '@mui/material/Pagination';
 import Rating from '@mui/material/Rating';
 
@@ -34,8 +31,7 @@ const StyleBreadcrumb = styled(Chip)(({ theme }) => {
 });
 
 const Products = () => {
-    const [showBy, setShowBy] = useState('');
-    const [showBySetCateBy, setCateBy] = useState('');
+
     const [productList, setProductList] = useState([]);
     const context = useContext(MyContext);
 
@@ -97,53 +93,6 @@ const Products = () => {
                 </div>
 
                 <div className="card shadow border-0 p-3 mt-4">
-                    <h3 className="hd">Best Selling Products</h3>
-                    <div className="row cardFilters mt-3">
-                        <div className="col-md-3">
-                            <h4>Show By</h4>
-                            <FormControl size="small" className="w-100">
-                                <Select
-                                    value={showBy}
-                                    onChange={(e) => setShowBy(e.target.value)}
-                                    displayEmpty
-                                    labelId="demo-select-small-label"
-                                    className="w-100"
-                                >
-                                    <MenuItem value="">
-                                        <em>None</em>
-                                    </MenuItem>
-                                    <MenuItem value={10}>Ten</MenuItem>
-                                    <MenuItem value={20}>Twenty</MenuItem>
-                                    <MenuItem value={30}>Thirty</MenuItem>
-                                </Select>
-                            </FormControl>
-                        </div>
-                        <div className="col-md-3">
-                            <h4>Category By</h4>
-                            <FormControl size="small" className="w-100">
-                                <Select
-                                    value={showBySetCateBy}
-                                    onChange={(e) => setCateBy(e.target.value)}
-                                    displayEmpty
-                                    labelId="demo-select-small-label"
-                                    className="w-100"
-                                >
-                                    <MenuItem value="">
-                                        <em value={null}>None</em>
-                                    </MenuItem>
-                                    {
-                                        context.catData?.categoryList?.length > 0 && context.catData.categoryList.map((cat, index) => {
-                                            return (
-                                                <MenuItem className="text-capitalize" value={cat.id} key={index}>
-                                                    {cat.name}
-                                                </MenuItem>
-                                            )
-                                        })
-                                    }
-                                </Select>
-                            </FormControl>
-                        </div>
-                    </div>
                     <div className="table-responsive mt-3">
                         <table className="table table-bordered table-striped v-align">
                             <thead className="table-dark">

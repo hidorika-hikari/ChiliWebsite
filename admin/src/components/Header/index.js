@@ -1,6 +1,6 @@
 import { MdMenuOpen, MdOutlineLightMode, MdOutlineMailOutline, MdOutlineMenu } from "react-icons/md";
 import { Link } from "react-router-dom";
-import { IoCartOutline, IoShieldHalfSharp } from "react-icons/io5";
+import { IoShieldHalfSharp } from "react-icons/io5";
 import { FaRegBell } from "react-icons/fa";
 import { useContext, useState } from "react";
 import logo from "../../assets/images/logo.png";
@@ -78,7 +78,6 @@ const Header = () => {
                     <div className="col-sm-7 d-flex align-items-center justify-content-end part3">
                         <Button className="rounded-circle me-3" onClick={()=>context.setThemeMode(!context.themeMode)}>
                             <MdOutlineLightMode/></Button>
-                        <Button className="rounded-circle me-3"><IoCartOutline/></Button>
                         <Button className="rounded-circle me-3"><MdOutlineMailOutline/></Button>
                         
                         <div className="dropDownWrapper">

@@ -26,7 +26,7 @@ const StyleBreadcrumb = styled(Chip)(({ theme }) => {
     };
 });
 
-const CategoryAdd = () => {
+const AddCategory = () => {
 
     const context = useContext(MyContext);
     const history = useNavigate();
@@ -145,4 +145,4 @@ const CategoryAdd = () => {
     );
 };
 
-export default CategoryAdd;
+export default AddCategory;

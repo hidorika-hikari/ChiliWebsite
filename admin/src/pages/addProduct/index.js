@@ -44,7 +44,7 @@ const StyleBreadcrumb = styled(Chip)(({ theme }) => {
     };
 });
 
-const ProductAdd = () => {
+const AddProduct = () => {
     const [imagePreviews, setImagePreviews] = useState([]);
     const [newImageUrl, setNewImageUrl] = useState('');
     const [isLoading, setIsLoading] = useState(false);
@@ -636,4 +636,4 @@ const ProductAdd = () => {
     );
 };
 
-export default ProductAdd;
+export default AddProduct;

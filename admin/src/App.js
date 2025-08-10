@@ -11,19 +11,19 @@ import SignUp from './pages/SignUp';
 import LoadingBar from "react-top-loading-bar";
 import ProductDetails from './pages/ProductDetails';
 import Product from './pages/Product'
-import CategoryAdd from './pages/CategoryAdd'
+import AddCategory from './pages/addCategory'
 import Snackbar from '@mui/material/Snackbar';
 import Alert from '@mui/material/Alert';
-import EditProduct from './pages/EditProduct';
-import AddSubCat from './pages/SubCategoryAdd';
+import EditProduct from './pages/editProduct';
+import AddSubCat from './pages/addSubCategory';
 import CategoryList from './pages/CategoryList';
-import AddProductWeight from './pages/ProductWeightAdd';
-import AddProductSpicy from './pages/ProductSizeAdd';
-import AddProductContent from './pages/ProductRamsAdd';
-import ProductAdd from './pages/ProductAdd';
+import AddProductWeight from './pages/addProductWeight';
+import AddProductSpicy from './pages/addProductSize';
+import AddProductContent from './pages/addProductContent';
+import AddProduct from './pages/addProduct';
 import Orders from './pages/Orders';
 import SubCategoryList from './pages/subCategoryList';
-import HomeBannerAdd from './pages/homeBannerAdd';
+import AddHomeBanner from './pages/addHomeBanner';
 import HomeBannerList from './pages/homeBannerList';
 import ProtectedRoute from './components/ProtectedRoute';
 
@@ -233,7 +233,7 @@ function App() {
                                 exact={true}
                                 element={
                                     <ProtectedRoute>
-                                        <ProductAdd />
+                                        <AddProduct />
                                     </ProtectedRoute>
                                 }
                             />
@@ -242,7 +242,7 @@ function App() {
                                 exact={true}
                                 element={
                                     <ProtectedRoute>
-                                        <CategoryAdd />
+                                        <AddCategory />
                                     </ProtectedRoute>
                                 }
                             />
@@ -323,7 +323,7 @@ function App() {
                                 exact={true}
                                 element={
                                     <ProtectedRoute>
-                                        <HomeBannerAdd/>
+                                        <AddHomeBanner/>
                                     </ProtectedRoute>
                                 }
                             />
