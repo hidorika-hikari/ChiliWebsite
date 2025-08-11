@@ -126,16 +126,37 @@ const MyAccount = () => {
             return;
         }
         try {
-            const res = await editData(`/api/user/${userId}`, userData);
-            context.setAlertBox({
-                open: true,
-                error: false,
-                msg: "Profile updated successfully!",
-            });
+            const updatedData = {
+                ...userData,
+                images: userData.profileImage ? [userData.profileImage] : [],
+            };
+            delete updatedData.profileImage;
+
+            const res = await editData(`/api/user/${userId}`, updatedData);
+
+            if (res.status === true) {
+                context.setAlertBox({
+                    open: true,
+                    error: false,
+                    msg: "Profile updated successfully!",
+                });
+            } else {
+                context.setAlertBox({
+                    open: true,
+                    error: true,
+                    msg: res.msg || "Failed to update profile",
+                });
+            }
         } catch (error) {
             console.error(error);
+            context.setAlertBox({
+                open: true,
+                error: true,
+                msg: "Something went wrong",
+            });
         }
     };
+
 
     return (
         <section className="section">
