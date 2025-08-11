@@ -27,27 +27,39 @@ import AddHomeBanner from './pages/addHomeBanner';
 import HomeBannerList from './pages/homeBannerList';
 import ProtectedRoute from './components/ProtectedRoute';
 
-
 const MyContext = createContext();
 
 function App() {
-    const [isToggleSidebar, setIsToggleSidebar] = useState(false);
-    const [isLogin, setIsLogin] = useState(false);
-    const [isHideSidebarAndHeader, setIsHideSidebarAndHeader] = useState(false);
     const [themeMode, setThemeMode] = useState(true);
+    const [isLogin, setIsLogin] = useState(false);
+    const [isToggleSidebar, setIsToggleSidebar] = useState(false);
+    const [isHideSidebarAndHeader, setIsHideSidebarAndHeader] = useState(false);
+    
     const [catData, setCatData] = useState([]);
     const [subCatData, setSubCatData] = useState([]);
     const [progress, setProgress] = useState(0);
+
     const [user,setUser] = useState({
         name: '',
         email: '',
         userId: ''
     })
+
     const [alertBox, setAlertBox] = useState({
         msg: '',
         error: false,
         open: false
     });
+
+    const handleClose = (event, reason) => {
+        if (reason === 'clickaway') {
+            return;
+        }
+        setAlertBox({
+            open: false,
+            msg: ''
+        });
+    };
 
     useEffect(() => {
         if (themeMode === true) {
@@ -65,8 +77,6 @@ function App() {
     useEffect(() => {
         const token = localStorage.getItem("token");
         const userStr = localStorage.getItem("user");
-        console.log("[DEBUG] token:", token);
-        console.log("[DEBUG] user (raw):", userStr);
         let userData = null;
         try {
             userData = JSON.parse(userStr);
@@ -75,14 +85,10 @@ function App() {
         }
         console.log("[DEBUG] user (parsed):", userData);
         if (token !== "" && token !== undefined && token !== null){
-            // Check if user has admin role
             if (userData && userData.role === 'admin') {
                 setIsLogin(true);
                 setUser(userData);
-                console.log("[DEBUG] User is admin, login success");
             } else {
-                // If user is not admin, clear storage and redirect to login
-                console.log("[DEBUG] User is not admin or missing role, redirecting to /login");
                 localStorage.removeItem("token");
                 localStorage.removeItem("user");
                 setIsLogin(false);
@@ -96,19 +102,8 @@ function App() {
             }
         } else {
             setIsLogin(false);
-            console.log("[DEBUG] No token found, not logged in");
         }
     }, []);
-
-    const handleClose = (event, reason) => {
-        if (reason === 'clickaway') {
-            return;
-        }
-        setAlertBox({
-            open: false,
-            msg: ''
-        });
-    };
 
     useEffect(() => {
         setProgress(20)

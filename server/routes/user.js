@@ -4,6 +4,15 @@ const jwt = require('jsonwebtoken');
 const router = express.Router();
 const { User } = require('../models/user');
 
+const cloudinary = require('cloudinary').v2;
+const pLimit = require('p-limit');
+
+cloudinary.config({
+    cloud_name: process.env.cloudinary_Config_Cloud_Name,
+    api_key: process.env.cloudinary_Config_api_key,
+    api_secret: process.env.cloudinary_Config_api_secret,
+});
+
 router.post('/signup', async (req, res) => {
     const { name, phone, email, password, role = 'customer' } = req.body;
     try {
@@ -130,7 +139,7 @@ router.get('/', async (req, res) => {
 router.get('/:id', async (req, res) => {
     try {
         const user = await User.findById(req.params.id);
-        if(!user) {
+        if (!user) {
             return res.status(404).json({ message: "User with the given ID wasn't found" });
         }
         res.status(200).send(user);
@@ -140,28 +149,96 @@ router.get('/:id', async (req, res) => {
 });
 
 router.put('/:id', async (req, res) => {
-    const { name, phone, email, password } = req.body;
-
     try {
         const userExist = await User.findById(req.params.id);
         if (!userExist) {
-            return res.status(404).json({ msg: "User not found" });
+            return res.status(404).json({ status: false, msg: "User not found" });
         }
 
-        const newPassword = password ? await bcrypt.hash(password, 10) : userExist.password;
+        // Prepare images array
+        let images = [];
+        if (Array.isArray(req.body.images)) {
+            images = req.body.images;
+        } else if (typeof req.body.images === 'string' && req.body.images.trim() !== '') {
+            images = [req.body.images];
+        }
+
+        // Upload new images if any
+        let imgurl = [];
+        if (images.length > 0) {
+            const limit = pLimit(2);
+            const imagesToUpload = images.map((image) =>
+                limit(async () => {
+                    const result = await cloudinary.uploader.upload(image);
+                    return result;
+                })
+            );
+            const uploadStatus = await Promise.all(imagesToUpload);
+            imgurl = uploadStatus.map((item) => item.secure_url);
+        } else {
+            console.log("No images to upload, using existing images");
+            imgurl = userExist.images || [];
+        }
+
+        const { name, phone, email, password } = req.body;
+
+        const updatedData = {
+            name: name ?? userExist.name,
+            phone: phone ?? userExist.phone,
+            email: email ?? userExist.email,
+            password: password ? await bcrypt.hash(password, 10) : userExist.password,
+            images: imgurl.length > 0 ? imgurl : userExist.images,
+        };
+
         const updatedUser = await User.findByIdAndUpdate(
             req.params.id,
-            { name, phone, email, password: newPassword },
+            updatedData,
             { new: true }
         );
 
+        if (!updatedUser) {
+            return res.status(404).json({ status: false, msg: "Failed to update user" });
+        }
+
         res.status(200).json({
+            status: true,
             msg: "User updated successfully",
-            user: updatedUser
+            user: updatedUser,
         });
     } catch (error) {
         console.error("Update user error:", error);
-        res.status(500).json({ msg: "Something went wrong", error: error.message });
+        res.status(500).json({ status: false, msg: "Something went wrong", error: error.message });
+    }
+});
+
+router.put('/:id/change-password', async (req, res) => {
+    const { oldPassword, newPassword, confirmPassword } = req.body;
+    const userId = req.params.id;
+
+    if (!oldPassword || !newPassword || !confirmPassword) {
+        return res.status(400).json({ status: false, msg: "All fields are required" });
+    }
+    if (newPassword !== confirmPassword) {
+        return res.status(400).json({ status: false, msg: "New passwords do not match" });
+    }
+
+    try {
+        const user = await User.findById(userId);
+        if (!user) return res.status(404).json({ status: false, msg: "User not found" });
+
+        const isMatch = await bcrypt.compare(oldPassword, user.password);
+        if (!isMatch) {
+            return res.status(400).json({ status: false, msg: "Old password is incorrect" });
+        }
+
+        const hashedPassword = await bcrypt.hash(newPassword, 10);
+        user.password = hashedPassword;
+        await user.save();
+
+        res.status(200).json({ status: true, msg: "Password updated successfully" });
+    } catch (error) {
+        console.error("Change password error:", error);
+        res.status(500).json({ status: false, msg: "Something went wrong" });
     }
 });
 
