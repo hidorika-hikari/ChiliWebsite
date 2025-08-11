@@ -5,14 +5,19 @@ const router = express.Router();
 router.get('/', async (req, res) => {
     const page = parseInt(req.query.page) || 1;
     const perPage = 20;
-    const totalPosts = await Orders.countDocuments();
+    const userId = req.query.userId;
+
+    // Only count/filter orders for this user
+    const filter = userId ? { "user.userId": userId } : {};
+
+    const totalPosts = await Orders.countDocuments(filter);
     const totalPages = Math.ceil(totalPosts / perPage);
 
-    if (page > totalPages) {
+    if (page > totalPages && totalPages !== 0) {
         return res.status(404).json({ message: "Page not found" })
     }
 
-    const ordersList = await Orders.find()
+    const ordersList = await Orders.find(filter)
         .skip((page - 1) * perPage)
         .limit(perPage)
         .exec();

@@ -6,7 +6,6 @@ import QuantityBox from '../QuantityDrop';
 import { IoIosHeartEmpty } from "react-icons/io";
 import { useContext, useEffect, useState } from 'react';
 import { MdClose } from "react-icons/md";
-import { MdCompareArrows } from "react-icons/md";
 import { MyContext } from '../../App';
 import { IoCartSharp } from 'react-icons/io5';
 import { FaHeart } from "react-icons/fa6";
@@ -117,8 +116,6 @@ const ProductModel = (props) => {
                                         </>
                                 }
                             </Button>
-                            <Button className='btn-round btn-sml' variant='outlined'>
-                                <MdCompareArrows /> &nbsp; COMPARE</Button>
                         </div>
                     </div>
                 </div>

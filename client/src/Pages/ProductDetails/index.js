@@ -76,19 +76,21 @@ const ProductDetails = () => {
         (productData?.productRams?.length > 0 && activeContent === null)
     );
 
-    const addToCart = (data) => {
+    const addToCart = async (data) => {
         const user = JSON.parse(localStorage.getItem("user"));
-        cartFields.productTitle = productData?.name
-        cartFields.images = productData?.images[0]
-        cartFields.rating = productData?.rating
-        cartFields.price = productData?.price
-        cartFields.quantity = quantityVal
-        cartFields.subTotal = parseInt(productData?.price * quantityVal)
-        cartFields.productId = productData?.id
-        cartFields.userId = user?.userId
-        context.addToCart(cartFields);
+        const cartFields = {
+            productTitle: productData?.name,
+            images: productData?.images[0],
+            rating: productData?.rating,
+            price: productData?.price,
+            quantity: quantityVal,
+            subTotal: parseInt(productData?.price * quantityVal),
+            productId: productData?.id,
+            userId: user?.userId,
+        };
+        await context.addToCart(cartFields); // make sure this returns a promise if async
         context.getCartData();
-    }
+    };
 
     const [rating, setRating] = useState(0);
     const [reviews, setReviews] = useState({
@@ -449,7 +451,7 @@ const ProductDetails = () => {
                                                     </div>
                                                 </div>
                                             </div>
-                                            <br/>
+                                            <br />
                                             <div className="form-group">
                                                 <Button type="submit" className="btn-blue btn-lg btn-big btn-round">
                                                     {isLoading ? <CircularProgress size={20} color="inherit" /> : 'Submit Review'}

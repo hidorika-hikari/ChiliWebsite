@@ -39,12 +39,17 @@ const Orders = () => {
         }
     };
 
+    const user = JSON.parse(localStorage.getItem("user"));
+    const userId = user?.userId;
+
     const handleChange = (event, value) => {
         setPage(value);
-        fetchDataFromApi(`/api/orders?page=${value}&perPage=8`).then((res) => {
-            setOrders(res);
-            context.setProgress(100);
-        })
+        if (userId) {
+            fetchDataFromApi(`/api/orders?page=${value}&perPage=8&userId=${userId}`).then((res) => {
+                setOrders(res);
+                context.setProgress(100);
+            });
+        }
     };
 
     const getStatusBadgeClass = (status) => {
@@ -68,10 +73,14 @@ const Orders = () => {
 
     useEffect(() => {
         window.scrollTo(0, 0);
-        fetchDataFromApi("/api/orders?page=1&perPage=8").then(res => {
-            setOrders(res);
-        })
-    }, []);
+        if (userId) {
+            fetchDataFromApi(`/api/orders?page=1&perPage=8&userId=${userId}`).then(res => {
+                setOrders(res);
+            });
+        } else {
+            setOrders([]);
+        }
+    }, [userId]);
 
     return (
         <section className='section'>

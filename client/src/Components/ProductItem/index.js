@@ -20,13 +20,14 @@ const ProductItem = (props) => {
     }
 
     const addToMyList = (id) => {
-        const user = JSON.parse(localStorage.getItem("user"));
+    const user = JSON.parse(localStorage.getItem("user"));
         if (user !== undefined && user !== null && user !== '') {
+            const item = props.item;
             const data = {
-                productTitle: props?.data?.name,
-                images: props.data?.images[0],
-                rating: props?.data?.rating,
-                price: props?.data?.price,
+                productTitle: item?.name,
+                images: item?.images?.[0],
+                rating: item?.rating,
+                price: item?.price,
                 productId: id,
                 userId: user?.userId
             }

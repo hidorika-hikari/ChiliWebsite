@@ -79,9 +79,14 @@ function App() {
     fetchDataFromApi("/api/subCat").then((res) => {
       setSubCategoryData(res.subCategoryList);
     })
-    fetchDataFromApi("/api/cart").then((res) => {
-      setCartData(res);
-    })
+    const user = JSON.parse(localStorage.getItem("user"));
+    if (user?.userId) {
+        fetchDataFromApi(`/api/cart?userId=${user.userId}`).then((res) => {
+            setCartData(res);
+        });
+    } else {
+        setCartData([]);
+    }
   }, []);
 
   const getCartData = () => {

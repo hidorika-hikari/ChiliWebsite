@@ -1,6 +1,6 @@
 import React, { useEffect, useState, useContext } from "react";
 import PropTypes from "prop-types";
-import { Tabs, Tab, Box, Button, TextField, Grid } from "@mui/material";
+import { Tabs, Tab, Box, Button, TextField } from "@mui/material";
 import { MyContext } from "../../App";
 import { RiImageAddLine } from "react-icons/ri";
 import { editData, fetchDataFromApi } from "../../utils/api";
