@@ -11,7 +11,7 @@ import { postData } from "../../utils/api";
 const ProductItem = (props) => {
 
     const context = useContext(MyContext);
-    const [isAddedtoMyList, setAddedToMyList] = useState(false);
+    const [isAddedToMyList, setAddedToMyList] = useState(false);
     const viewProductDetails = (id) => {
         context.setIsOpenProductModel({
             id: id,
@@ -84,10 +84,10 @@ const ProductItem = (props) => {
                         <span className="badge badge-primary">{props.item?.discount} 🌶️</span>
                         <div className="actions">
                             <Button onClick={() => viewProductDetails(props.item?.id)}><TfiFullscreen /></Button>
-                            <Button className={isAddedtoMyList ? 'active' : ''}
+                            <Button className={isAddedToMyList ? 'active' : ''}
                                 onClick={() => addToMyList(props?.itemView === 'recentlyView' ? props.item?.proId : props.item?.id)}>
                                 {
-                                    isAddedtoMyList === true ? <FaHeart className="wishlist-icon" style={{ fontSize: '20px' }} /> : <CiHeart style={{ fontSize: '20px' }} />
+                                    isAddedToMyList === true ? <FaHeart className="wishlist-icon" style={{ fontSize: '20px' }} /> : <CiHeart style={{ fontSize: '20px' }} />
                                 }
                             </Button>
                         </div>

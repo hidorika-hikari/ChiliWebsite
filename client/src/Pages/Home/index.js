@@ -167,8 +167,7 @@ const Home = () => {
                                     })
                                 }
                             </div>
-                            {/* BANNER */}
-                            <div className="d-flex pe-3 ps-3 bannerSec">
+                            <div className="d-flex bannerSec">
                                 <div className="banner mt-3">
                                     <img src="https://pbs.twimg.com/media/GwH6ExUaQAA64Pr?format=jpg&name=4096x4096"
                                         className="cursor w-100" alt='' />
@@ -182,6 +181,7 @@ const Home = () => {
                                         className="cursor w-100" alt='' />
                                 </div>
                             </div>
+                            {/* BANNER */}
                         </div>
                         {/* //FEATURED PRODUCTS */}
                         <div className="d-flex align-items-center mt-4 mb-2">
@@ -212,8 +212,23 @@ const Home = () => {
                                 }
                             </Swiper>
                         </div>
+                        <div className="d-flex bannerSec">
+                            <div className="banner mt-3">
+                                <img src="https://pbs.twimg.com/media/GwH6ExUaQAA64Pr?format=jpg&name=4096x4096"
+                                    className="cursor w-100" alt='' />
+                            </div>
+                            <div className="banner mt-3">
+                                <img src="https://upload-os-bbs.hoyolab.com/upload/2024/02/08/17138284/adbec135e8e1ff907990690cbb111b1a_5240529329033004651.jpg"
+                                    className="cursor w-100" alt='' />
+                            </div>
+                            <div className="banner mt-3">
+                                <img src="https://upload-os-bbs.hoyolab.com/upload/2021/05/22/21867498/19fb8c0ff0e27428841a05ddbfc0851d_3933469727756591456.jpg?x-oss-process=image%2Fresize%2Cs_1000%2Fauto-orient%2C0%2Finterlace%2C1%2Fformat%2Cwebp%2Fquality%2Cq_70"
+                                    className="cursor w-100" alt='' />
+                            </div>
+                        </div>
                     </div>
                 </div>
+
             </section>
             {/* newsLetter */}
             <section className="newsLetterSection mt-3 d-flex align-items-center">
@@ -222,20 +237,21 @@ const Home = () => {
                         <div className="col-md-6">
                             <p className="text-white mb-1">$20 discount for your first order</p>
                             <h3 className="text-white">Join our newsletter and get...</h3>
-                            <p className="text-light">Join our email subscription now to get
-                                updates on <br /> promotions and coupons.</p>
-                            <form>
-                                <IoMailOutline />
-                                <input type="text" placeholder="Your email address" />
-                                <Button>Subscription</Button>
-                            </form>
-                        </div>
-                        <div className="col-md-6">
-                            <img src={newsLetterImg} alt='' />
-                        </div>
+                            <p className="text-white" style={{ fontSize: '16px' }}>
+                                Join our email subscription now to get
+                            updates on <br /> promotions and coupons.</p>
+                        <form>
+                            <IoMailOutline />
+                            <input type="text" placeholder="Your email address" />
+                            <Button className='btn-red btn-lg btn-big'>Subscription</Button>
+                        </form>
+                    </div>
+                    <div className="col-md-6">
+                        <img src={newsLetterImg} alt='' />
                     </div>
                 </div>
-            </section>
+            </div>
+        </section >
         </>
     )
 }

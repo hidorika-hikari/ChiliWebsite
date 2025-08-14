@@ -15,41 +15,62 @@ const ProductModel = (props) => {
 
     const context = useContext(MyContext);
     const [isAddedtoMyList, setAddedToMyList] = useState(false);
-    const addToMyList = (id) => {
+    const [loading] = useState(false);
+
+    const addToMyList = async () => {
         const user = JSON.parse(localStorage.getItem("user"));
-        if (user !== undefined && user !== null && user !== '') {
-            const data = {
-                productTitle: props?.item?.name,
-                images: props.item?.images[0],
-                rating: props?.item?.rating,
-                price: props?.item?.price,
-                productId: id,
-                userId: user?.userId
-            }
-            postData(`/api/my-list/add/`, data).then((res) => {
-                if (res.status !== false) {
-                    setAddedToMyList(true);
-                    context.setAlertBox({
-                        open: true,
-                        error: false,
-                        msg: "The product added in my list"
-                    })
-                } else {
-                    context.setAlertBox({
-                        open: true,
-                        error: true,
-                        msg: res.msg
-                    })
-                }
-            })
-        } else {
+        if (!user) {
             context.setAlertBox({
                 open: true,
                 error: true,
-                msg: "Please Login to Continue"
-            })
+                msg: "Please login to continue"
+            });
+            return;
         }
-    }
+
+        if (isAddedtoMyList) {
+            context.setAlertBox({
+                open: true,
+                error: false,
+                msg: "Already in wishlist"
+            });
+            return;
+        }
+        setAddedToMyList(true);
+
+        try {
+            const res = await postData("/api/my-list/add/", {
+                productTitle: props?.data?.name,
+                images: props?.data?.images?.[0],
+                rating: props?.data?.rating,
+                price: props?.data?.price,
+                productId: props?.data?.id,
+                userId: user?.userId
+            });
+
+            if (res.status) {
+                context.setAlertBox({
+                    open: true,
+                    error: false,
+                    msg: "The product was added to your wishlist"
+                });
+            } else {
+                setAddedToMyList(false);
+                context.setAlertBox({
+                    open: true,
+                    error: true,
+                    msg: res.msg || "Something went wrong"
+                });
+            }
+        } catch (err) {
+            setAddedToMyList(false);
+            context.setAlertBox({
+                open: true,
+                error: true,
+                msg: "Network error, please try again"
+            });
+        }
+    };
 
     useEffect(() => {
         const user = JSON.parse(localStorage.getItem("user"));
@@ -64,7 +85,7 @@ const ProductModel = (props) => {
             });
         }
     }, [props.data?.id]);
-    
+
     return (
         <>
             <Dialog open={true} className="productModel" onClose={() => context.setIsOpenProductModel(false)}>
@@ -90,32 +111,36 @@ const ProductModel = (props) => {
                         </div>
 
                         <span className={`badge ${props?.data?.countInStock > 0 ? 'bg-success' : 'bg-danger'}`}>
-                        {props?.data?.countInStock > 0 ? 'IN STOCK' : 'OUT OF STOCK'}
+                            {props?.data?.countInStock > 0 ? 'IN STOCK' : 'OUT OF STOCK'}
                         </span>
                         <p className='mt-2'>{props?.data?.description}</p>
                         <div className='d-flex align-items-center'>
-                            <QuantityBox />
+                            {/* <QuantityBox /> */}
                             <Button className='btn-blue btn-lg btn-big bth-round me-3'>
                                 <IoCartSharp />Add to Cart</Button>
                         </div>
-                        <div className='d-flex align-items-center mt-5 actions'>
+                        <div className='d-flex align-items-center mt-3 actions'>
                             <Button
                                 className='btn-round btn-sml'
                                 variant='outlined'
-                                onClick={() => addToMyList(props?.data?.id)}
+                                onClick={addToMyList}
+                                disabled={loading}
                             >
-                                {
-                                    isAddedtoMyList === true
-                                        ? <>
-                                            <FaHeart className='text-danger'/>
-                                            &nbsp; ADDED TO WISHLIST
-                                        </>
-                                        : <>
-                                            <IoIosHeartEmpty />
-                                            &nbsp; ADD TO WISHLIST
-                                        </>
-                                }
+                                {loading ? (
+                                    <>⏳ Adding...</>
+                                ) : isAddedtoMyList ? (
+                                    <>
+                                        <FaHeart className='text-danger' />
+                                        &nbsp; ADDED TO WISHLIST
+                                    </>
+                                ) : (
+                                    <>
+                                        <IoIosHeartEmpty />
+                                        &nbsp; ADD TO WISHLIST
+                                    </>
+                                )}
                             </Button>
+
                         </div>
                     </div>
                 </div>

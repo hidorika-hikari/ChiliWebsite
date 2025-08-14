@@ -91,7 +91,7 @@ const Orders = () => {
                         <thead className='table-dark'>
                             <tr>
                                 <th>Order Id</th>
-                                <th>Paymant Id</th>
+                                <th>Payment Id</th>
                                 <th>Products</th>
                                 <th>Customer Details</th>
                                 <th>Total Amount</th>

@@ -16,7 +16,7 @@ body {
 }
 
 .bg-blue{
-  background-image: linear-gradient(to bottom right, #2bbef9, #7a55c1);
+  background: linear-gradient(135deg, #d23f57, #b91c1c) !important;
 }
 
 @media (min-width: 1300px) {
@@ -51,7 +51,7 @@ body {
 }
 
 .MuiTabs-root {
-  background: #fafafa;
+  background: #f7f7f7;
   border-radius: 12px 12px 0 0;
 }
 
@@ -688,19 +688,6 @@ nav .navPart2 ul li .submenu a button:hover{
   opacity: 1;
 }
 
-.product_row{
-  margin-left: -10px;
-  margin-right: -10px;
-}
-
-.product_row .swiper{
-  padding-right: 80px !important;
-}
-
-.product_row .productItem{
-  border-right: 1px solid transparent !important;
-}
-
 .product_row .swiper-slide:last-child .productItem{
   border: 1px solid rgba(0, 0, 0, 0.1) !important;
 }
@@ -711,17 +698,6 @@ nav .navPart2 ul li .submenu a button:hover{
 
 .product_row .swiper-button-next{
   right: 0px !important;
-}
-
-.swiper {
-  display: block;
-  list-style: none;
-  margin-left: auto;
-  margin-right: auto;
-  overflow: hidden;
-  padding: 0;
-  position: relative;
-  z-index: 1;
 }
 
 .productItem .badge{
@@ -840,7 +816,7 @@ nav .navPart2 ul li .submenu a button:hover{
 
 .productRow2{
   flex-wrap: wrap;
-  gap: 10px;
+  gap: 13px;
 }
 
 .productRow2 .productItem{
@@ -863,8 +839,7 @@ nav .navPart2 ul li .submenu a button:hover{
 .newsLetterSection{
   width: 100%;
   height: auto;
-  background-image: linear-gradient(to bottom right, #2bbef9, #7a55c1);
-
+  background: linear-gradient(135deg, #d23f57, #b91c1c) !important;
   position: relative;
   overflow: hidden;
   padding: 60px 0px;
@@ -926,7 +901,7 @@ nav .navPart2 ul li .submenu a button:hover{
   position: absolute;
   top: 5.5px;
   right: 7px;
-  background: #2bbef9!important;
+  background: linear-gradient(135deg, #d23f57, #b91c1c) !important;
   font-size: 14px !important;
   padding: 12px 25px !important;
   color: #fff !important;
@@ -1126,8 +1101,8 @@ footer .copyright {
 }
 
 .btn-red {
-  background: linear-gradient(135deg, #d23f57, #b91c1c);
-  color: white !important;
+  background: linear-gradient(135deg, #d23f57, #b91c1c) !important;
+  color: #fff !important;
   padding: 0.8rem 2rem;
   border-radius: 8px;
   text-transform: none;
@@ -2207,7 +2182,7 @@ a:visited {
 }
 
 .cardService .mb-3 {
-  background: #e0f2ff;
+  background: linear-gradient(135deg, #d23f57, #b91c1c) !important;
   border-radius: 50%;
   width: 72px;
   height: 72px;
@@ -2215,12 +2190,17 @@ a:visited {
   align-items: center;
   justify-content: center;
   margin: 0 auto 20px auto;
-  color: #0d6efd;
+  color: white;;
   font-size: 36px;
 }
 
 .footerSection {
-  background: linear-gradient(to bottom right, #2bbef9, #7a55c1);
+  background: linear-gradient(
+  to bottom right,
+  #e44d65,
+  #d23f57 35%,
+  #b91c1c 70%,
+  #8b0f0f);
   color: white;
 }
 
@@ -2261,6 +2241,6 @@ a:visited {
 }
 
 .infoCard a:hover {
-  color: #2bbef9;
+  color: #000;
   text-decoration: underline;
 }

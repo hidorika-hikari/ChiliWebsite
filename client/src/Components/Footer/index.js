@@ -11,22 +11,22 @@ import { useNavigate } from "react-router-dom";
 
 const services = [
     {
-        icon: <GiSkirt size={36} className="text-primary" />,
+        icon: <GiSkirt size={36}/>,
         title: "Everyday fresh products",
         description: "Quality you can trust every day.",
     },
     {
-        icon: <TbTruckDelivery size={36} className="text-primary" />,
+        icon: <TbTruckDelivery size={36}/>,
         title: "Free delivery",
         description: "On orders over $70, fast & reliable.",
     },
     {
-        icon: <BiSolidDiscount size={36} className="text-primary" />,
+        icon: <BiSolidDiscount size={36}/>,
         title: "Daily Mega Discount",
         description: "Unbeatable prices on your favorites.",
     },
     {
-        icon: <CiBadgeDollar size={36} className="text-primary" />,
+        icon: <CiBadgeDollar size={36}/>,
         title: "Best market price",
         description: "Value without compromise.",
     },
