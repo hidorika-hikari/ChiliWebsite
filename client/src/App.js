@@ -90,10 +90,15 @@ function App() {
   }, []);
 
   const getCartData = () => {
-    fetchDataFromApi("/api/cart").then((res) => {
-      setCartData(res);
-    })
-  }
+    const user = JSON.parse(localStorage.getItem("user"));
+    if (user?.userId) {
+        fetchDataFromApi(`/api/cart?userId=${user.userId}`).then((res) => {
+            setCartData(res);
+        });
+    } else {
+        setCartData([]);
+    }
+  };
 
   useEffect(() => {
     const token = localStorage.getItem("token");

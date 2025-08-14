@@ -4,13 +4,14 @@ const router = express.Router();
 
 router.get('/', async (req, res) => {
     try {
-        const cartList = await Cart.find(req.query);
-        if (!cartList) {
-            return res.status(500).json({ success: false });
+        const { userId } = req.query;
+        if (!userId) {
+            return res.status(400).json({ success: false, message: "userId is required" });
         }
+        const cartList = await Cart.find({ userId });
         return res.status(200).json(cartList);
     } catch (error) {
-        res.status(500).json({ success: false })
+        res.status(500).json({ success: false });
     }
 });
 

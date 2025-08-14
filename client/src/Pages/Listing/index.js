@@ -1,15 +1,11 @@
 import React, { useEffect, useState } from 'react';
-import Button from '@mui/material/Button';
 import Sidebar from '../../Components/Sidebar';
-import Menu from '@mui/material/Menu';
-import MenuItem from '@mui/material/MenuItem';
 import ProductItem from '../../Components/ProductItem';
-import Pagination from '@mui/material/Pagination';
+import { Button, FormControl, Select, MenuItem, InputLabel } from '@mui/material';
 import { IoIosMenu } from 'react-icons/io';
 import { CgMenuGridR } from 'react-icons/cg';
 import { HiViewGrid } from 'react-icons/hi';
 import { TfiLayoutGrid4Alt } from 'react-icons/tfi';
-import { FaAngleDown } from 'react-icons/fa';
 import { fetchDataFromApi } from '../../utils/api';
 import { useParams } from 'react-router-dom';
 import { CircularProgress } from '@mui/material';
@@ -19,20 +15,18 @@ const Listing = () => {
     const [productView, setProductView] = useState('four');
     const [productData, setProductData] = useState([]);
     const [isLoading, setIsLoading] = useState(false);
+    const [perPage, setPerPage] = useState(10);
     const openDropdown = Boolean(anchorEl);
     const { id } = useParams();
 
-    const handleClick = (event) => {
-        setAnchorEl(event.currentTarget);
-    };
-    const handleClose = () => {
-        setAnchorEl(null);
-    };
+    const handleClick = (event) => setAnchorEl(event.currentTarget);
+    const handleClose = () => setAnchorEl(null);
 
     const fetchAndSetData = async (url) => {
         setIsLoading(true);
         try {
-            const res = await fetchDataFromApi(url);
+            const fullUrl = `${url}${url.includes('?') ? '&' : '?'}perPage=${perPage}`;
+            const res = await fetchDataFromApi(fullUrl);
             setProductData(res.products);
         } catch (error) {
             console.error("Fetch error:", error);
@@ -47,7 +41,7 @@ const Listing = () => {
 
     const filterByPrice = (price, subCatId) => {
         fetchAndSetData(`/api/products?minPrice=${price[0]}&maxPrice=${price[1]}&subCat=${subCatId}`);
-        fetchAndSetData(`/api/products?minPrice=${price[0]}&maxPrice=${price[1]}&category=${id}`);
+        if (id) fetchAndSetData(`/api/products?minPrice=${price[0]}&maxPrice=${price[1]}&category=${id}`);
     };
 
     const filterByRating = (rating) => {
@@ -56,10 +50,14 @@ const Listing = () => {
     };
 
     useEffect(() => {
-        if (id) {
-            fetchAndSetData(`/api/products?category=${id}`);
-        }
-    }, [id]);
+        if (id) fetchAndSetData(`/api/products?category=${id}`);
+        else fetchAndSetData(`/api/products`);
+    }, [id, perPage]);
+
+    const handlePerPageChange = (num) => {
+        setPerPage(num);
+        handleClose();
+    };
 
     return (
         <section className='product_Listing_Page'>
@@ -80,21 +78,20 @@ const Listing = () => {
                                 <Button onClick={() => setProductView('four')} className={`view-toggle ${productView === 'four' && 'act'}`}><TfiLayoutGrid4Alt /></Button>
                             </div>
 
-                            <div className='ms-auto showByFilter'>
-                                <Button onClick={handleClick}>Show 9 <FaAngleDown /></Button>
-                                <Menu
-                                    className='w-100 showPerPageDropdown'
-                                    id="basic-menu"
-                                    anchorEl={anchorEl}
-                                    open={openDropdown}
-                                    onClose={handleClose}
-                                >
-                                    <MenuItem onClick={handleClose}>10</MenuItem>
-                                    <MenuItem onClick={handleClose}>20</MenuItem>
-                                    <MenuItem onClick={handleClose}>30</MenuItem>
-                                    <MenuItem onClick={handleClose}>40</MenuItem>
-                                    <MenuItem onClick={handleClose}>50</MenuItem>
-                                </Menu>
+                            <div className='ms-auto showByFilter' style={{ minWidth: 120 }}>
+                                <FormControl fullWidth size="small">
+                                    <InputLabel id="per-page-label">Show</InputLabel>
+                                    <Select
+                                        labelId="per-page-label"
+                                        value={perPage}
+                                        label="Show"
+                                        onChange={(e) => handlePerPageChange(e.target.value)}
+                                    >
+                                        {[5, 10, 15, 20, 25].map(num => (
+                                            <MenuItem key={num} value={num}>{num}</MenuItem>
+                                        ))}
+                                    </Select>
+                                </FormControl>
                             </div>
                         </div>
 
@@ -107,16 +104,12 @@ const Listing = () => {
                                 <div className='productListing'>
                                     {productData?.map((item, index) => (
                                         <ProductItem
-                                        key={index}
-                                        itemView={productView}
-                                        className={productView}
-                                        item={item}
-                                    />
+                                            key={index}
+                                            itemView={productView}
+                                            className={productView}
+                                            item={item}
+                                        />
                                     ))}
-                                </div>
-
-                                <div className='d-flex align-items-center justify-content-center mt-5'>
-                                    <Pagination count={5} color="primary" size='large' />
                                 </div>
                             </>
                         )}

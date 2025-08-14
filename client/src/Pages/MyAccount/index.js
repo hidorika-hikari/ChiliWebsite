@@ -131,9 +131,7 @@ const MyAccount = () => {
                 images: userData.profileImage ? [userData.profileImage] : [],
             };
             delete updatedData.profileImage;
-
             const res = await editData(`/api/user/${userId}`, updatedData);
-
             if (res.status === true) {
                 context.setAlertBox({
                     open: true,
@@ -157,7 +155,6 @@ const MyAccount = () => {
         }
     };
 
-
     return (
         <section className="section">
             <div className="container">
@@ -173,31 +170,25 @@ const MyAccount = () => {
                     <CustomTabPanel value={value} index={0}>
                         <form onSubmit={handleSubmit}>
                             <div className="row align-items-center">
-                                <div className="col-md-4 d-flex justify-content-center">
-                                    <div className="userImage position-relative">
+                                <div className="col-12 col-md-4 d-flex justify-content-center mb-3 mb-md-0">
+                                    <div className="userImage">
                                         {userData.profileImage ? (
-                                            <img
-                                                src={userData.profileImage}
-                                                alt="profile"
-                                            />
+                                        <img
+                                            src={userData.profileImage}
+                                            alt="profile"
+                                            className="img-fluid rounded-circle"
+                                            style={{ maxWidth: '200px', width: '100%' }}
+                                        />
                                         ) : (
-                                            <div
-                                                style={{
-                                                    width: 200,
-                                                    height: 200,
-                                                    display: 'flex',
-                                                    justifyContent: 'center',
-                                                    alignItems: 'center',
-                                                    borderRadius: '50%',
-                                                    backgroundColor: '#fff',
-                                                    cursor: 'pointer',
-                                                }}
-                                            >
-                                                <RiImageAddLine size={48} color="#888" />
-                                            </div>
+                                        <div
+                                            className="d-flex justify-content-center align-items-center rounded-circle bg-light"
+                                            style={{ width: '100%', aspectRatio: '1/1' }}
+                                        >
+                                            <RiImageAddLine size={48} color="#888" />
+                                        </div>
                                         )}
                                     </div>
-                                </div>
+                                    </div>
 
                                 <div className="col-md-8">
                                     <div className="row g-3">
@@ -255,42 +246,42 @@ const MyAccount = () => {
 
                     <CustomTabPanel value={value} index={1}>
                         <form onSubmit={handlePasswordSubmit} style={{ width: "100%" }}>
-                            <div className="row" >
-                                <div className="col-md-3">
+                            <div className="row">
+                                <div className="col-12 col-md-3 mb-3 mb-md-0">
                                     <TextField
-                                        label="Old Password"
-                                        name="oldPassword"
-                                        type="password"
-                                        value={passwordData.oldPassword}
-                                        onChange={handlePasswordChange}
-                                        fullWidth
-                                        required
+                                    label="Old Password"
+                                    name="oldPassword"
+                                    type="password"
+                                    value={passwordData.oldPassword}
+                                    onChange={handlePasswordChange}
+                                    fullWidth
+                                    required
                                     />
                                 </div>
-                                <div className="col-md-3">
+                                <div className="col-12 col-md-3 mb-3 mb-md-0">
                                     <TextField
-                                        label="New Password"
-                                        name="newPassword"
-                                        type="password"
-                                        value={passwordData.newPassword}
-                                        onChange={handlePasswordChange}
-                                        fullWidth
-                                        required
+                                    label="New Password"
+                                    name="newPassword"
+                                    type="password"
+                                    value={passwordData.newPassword}
+                                    onChange={handlePasswordChange}
+                                    fullWidth
+                                    required
                                     />
                                 </div>
-                                <div className="col-md-3">
+                                <div className="col-12 col-md-3 mb-3 mb-md-0">
                                     <TextField
-                                        label="Confirm Password"
-                                        name="confirmPassword"
-                                        type="password"
-                                        value={passwordData.confirmPassword}
-                                        onChange={handlePasswordChange}
-                                        fullWidth
-                                        required
+                                    label="Confirm Password"
+                                    name="confirmPassword"
+                                    type="password"
+                                    value={passwordData.confirmPassword}
+                                    onChange={handlePasswordChange}
+                                    fullWidth
+                                    required
                                     />
                                 </div>
                             </div>
-                            <Button type="submit" className="btn-red btn-lg btn-big mt-3">
+                            <Button type="submit" className="btn-red btn-lg btn-big mt-md-3">
                                 Change Password
                             </Button>
                         </form>

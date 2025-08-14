@@ -106,5 +106,7 @@ ordersSchema.set('toJSON', {
     virtuals: true,
 });
 
+ordersSchema.index({ "user.userId": 1 });
+
 exports.Orders = mongoose.model('Orders', ordersSchema)
 exports.ordersSchema = ordersSchema;

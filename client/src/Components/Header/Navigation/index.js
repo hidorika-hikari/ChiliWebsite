@@ -17,7 +17,7 @@ const Navigation = (props) => {
 
     const handleChange = (event, newValue) => {
         setValue(newValue);
-    
+
         setTimeout(() => {
             if (newValue === 0) {
                 navigate('/');
@@ -29,27 +29,36 @@ const Navigation = (props) => {
             }
         }, 500);
     };
-    
+
     return (
-        <nav>
-            <div className='container'>
-                <div className='row'>
-                    <div className='col-sm-2 navPart1'>
-                        <div className='catWrapper'>
-                            <Button className='btn-red allCartTab align-items-center' onClick={() => setIsOpenSidebarVal(!isOpenSidebarVal)}>
-                                <span className='icon1 me-2'><IoIosMenu /></span>
-                                <span className='text'>ALL CATEGORIES</span>
-                                <span className='icon2 ms-2'><FaAngleDown /></span>
+        <nav className="py-2">
+            <div className="container">
+                <div className="row align-items-center">
+                    <div className="col-12 col-sm-3 col-md-2 navPart1 mb-2 mb-sm-0">
+                        <div className="catWrapper">
+                            <Button
+                                className="btn-red allCartTab d-flex align-items-center w-100 justify-content-between mt-0 mt-sm-0 mt-md-0 mt-4"
+                                onClick={() => setIsOpenSidebarVal(!isOpenSidebarVal)}
+                            >
+                                <span className="d-flex align-items-center">
+                                    <IoIosMenu className="me-2" />
+                                    <span className="d-none d-md-inline">ALL CATEGORIES</span>
+                                </span>
+                                <FaAngleDown />
                             </Button>
-                            <div className={`sidebarNav ${isOpenSidebarVal ? 'open' : ''}`}>
-                                <ul>
+
+                            <div className={`sidebarNav position-absolute bg-white shadow ${isOpenSidebarVal ? 'open' : ''}`}
+                                style={{ zIndex: 1000, minWidth: '200px' }}
+                            >
+                                <ul className="list-unstyled mb-0 p-2">
                                     {props.navData.filter((item, idx) => idx < 10).map((item) => {
                                         const subs = context.subCategoryData?.filter(
                                             sub => sub.category === item._id || sub.category?._id === item._id
                                         );
                                         return (
-                                            <li key={item._id}>
+                                            <li key={item._id} className="mb-1">
                                                 <Button
+                                                    className="w-100 d-flex justify-content-between align-items-center"
                                                     onClick={() => {
                                                         setTimeout(() => {
                                                             navigate(`/products/category/${item._id}`);
@@ -57,14 +66,15 @@ const Navigation = (props) => {
                                                     }}
                                                 >
                                                     {item?.name}
-                                                    {subs?.length > 0 && <FaAngleRight className='ms-auto' />}
+                                                    {subs?.length > 0 && <FaAngleRight />}
                                                 </Button>
 
-                                                {item?.children?.length !== 0 && subs?.length > 0 && (
-                                                    <div className='submenu shadow'>
+                                                {subs?.length > 0 && (
+                                                    <div className="submenu ps-3 mt-1">
                                                         {subs.map(sub => (
                                                             <Button
                                                                 key={sub._id}
+                                                                className="w-100 text-start mb-1"
                                                                 onClick={() => {
                                                                     setTimeout(() => {
                                                                         navigate(`/products/subCat/${sub._id}`);
@@ -84,21 +94,20 @@ const Navigation = (props) => {
                         </div>
                     </div>
 
-                    <div className='col-sm-10 navPart2 d-flex justify-content-center'>
+                    <div className="col-12 col-sm-9 col-md-10 navPart2">
                         <Tabs
                             value={value}
                             onChange={handleChange}
                             variant="scrollable"
                             scrollButtons="auto"
                             aria-label="scrollable tabs"
-                            sx={{ color: 'black' }}
-                            className='w-100'
+                            sx={{ color: 'black', width: '100%' }}
                         >
                             <Tab key="home" label="Home" />
                             {context.categoryData?.map((item, index) => (
                                 <Tab
                                     key={item._id || index}
-                                    className="item"
+                                    className="item text-truncate"
                                     label={item.name}
                                 />
                             ))}
@@ -106,6 +115,10 @@ const Navigation = (props) => {
                     </div>
                 </div>
             </div>
+
+            {isOpenSidebarVal && <div
+                onClick={() => setIsOpenSidebarVal(false)}
+            />}
         </nav>
     )
 }

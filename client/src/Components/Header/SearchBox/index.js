@@ -3,7 +3,7 @@ import { IoIosSearch } from 'react-icons/io';
 import { fetchDataFromApi } from '../../../utils/api';
 import { MyContext } from '../../../App';
 import { useNavigate } from 'react-router-dom';
-import { Button, CircularProgress } from '@mui/material';
+import { CircularProgress } from '@mui/material';
 
 const SearchBox = () => {
     const context = useContext(MyContext);
@@ -28,17 +28,23 @@ const SearchBox = () => {
     };
 
     return (
-        <div className='headerSearch ms-3 me-3'>
+        <div className="position-relative w-100" style={{ maxWidth: 800, margin: '0 auto' }}>
             <input
-                type='text'
-                placeholder='Search for products...'
+                type="text"
+                placeholder="Search for products..."
                 onChange={onChangeValue}
                 onKeyDown={(e) => e.key === 'Enter' && searchProduct()}
                 disabled={isLoading}
+                className="form-control rounded-pill ps-5"
+                style={{ height: 50, fontSize: 16 }}
             />
-            <Button onClick={searchProduct} disabled={isLoading}>
-                {isLoading ? <CircularProgress /> : <IoIosSearch />}
-            </Button>
+            <span
+                className="position-absolute top-50 start-0 translate-middle-y ms-3 text-muted"
+                style={{ cursor: 'pointer' }}
+                onClick={searchProduct}
+            >
+                {isLoading ? <CircularProgress size={20} /> : <IoIosSearch size={20} />}
+            </span>
         </div>
     );
 };

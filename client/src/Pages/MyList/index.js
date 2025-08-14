@@ -7,10 +7,14 @@ import { useContext, useEffect, useState } from "react";
 import { MyContext } from "../../App";
 import { deleteData, fetchDataFromApi } from "../../utils/api";
 import { FaListCheck } from "react-icons/fa6";
+import { Swiper, SwiperSlide } from "swiper/react";
+import { Navigation, Pagination } from "swiper/modules";
+import "swiper/css";
+import "swiper/css/navigation";
+import "swiper/css/pagination";
 
 const MyList = () => {
     const [myListData, setMyListData] = useState([]);
-    //let [cartFields, setCartFields] = useState({});
     const context = useContext(MyContext);
 
     useEffect(() => {
@@ -21,83 +25,94 @@ const MyList = () => {
     }, []);
 
     const removeItem = (id) => {
-        deleteData(`/api/my-list/${id}`).then((res) => {
+        deleteData(`/api/my-list/${id}`).then(() => {
             context.setAlertBox({
                 open: true,
                 error: true,
-                msg: "Item remove form my list"
-            })
+                msg: "Item removed from my list",
+            });
             const user = JSON.parse(localStorage.getItem("user"));
             fetchDataFromApi(`/api/my-list?userId=${user?.userId}`).then((res) => {
                 setMyListData(res);
-            })
-            //context.getCartData();
-        })
-    }
+            });
+        });
+    };
+
     return (
-        <>
-            <section className="section cartPage">
-                <div className="container">
-                    <h2 className="hd mb-2">My List</h2>
-                    <p>There are <b className="text-red">{myListData?.length}</b> My List</p>
-                    <div className="myListTableWrapper">
-                        {
-                            myListData?.length !== 0 ?
-                                <div className="row">
-                                    <div className="col-md-12 pe-5">
-                                        <div className="table-responsive myListTable">
-                                            <table className="table table-striped">
-                                                <thead className="table-dark text-white">
-                                                    <tr>
-                                                        <th width="35%" style={{ paddingLeft: '20px' }}>Product</th>
-                                                        <th width="15%">Unit Price</th>
-                                                        <th width="10%">Remove</th>
-                                                    </tr>
-                                                </thead>
-                                                <tbody>
-                                                    {
-                                                        myListData.length !== 0 && myListData.map((item) => (
-                                                            <tr key={item.id}>
-                                                                <td width="35%">
-                                                                    <Link to={`/product/${item.id}`} style={{ textDecoration: 'none', color: 'inherit' }}>
-                                                                        <div className="d-flex align-items-center cartItemImgWrapper">
-                                                                            <div className="imgWrapper">
-                                                                                <img
-                                                                                    src={item.images}
-                                                                                    className="w-100"
-                                                                                    alt={item.productTitle}
-                                                                                    style={{ objectFit: 'contain' }}
-                                                                                />
-                                                                            </div>
-                                                                            <div className="info pe-3">
-                                                                                <h6>{item.productTitle}</h6>
-                                                                                <Rating name="read-only" value={item.rating} readOnly precision={0.5} size="small" />
-                                                                            </div>
-                                                                        </div>
-                                                                    </Link>
-                                                                </td>
-                                                                <td width="15%">{item.price} ฿</td>
-                                                                <td width="10%"><span className="remove" onClick={() => removeItem(item?._id)}><IoIosClose /></span></td>
-                                                            </tr>
-                                                        ))
-                                                    }
-                                                </tbody>
-                                            </table>
+        <section className="section cartPage">
+            <div className="container">
+                <h2 className="hd mb-3">My List</h2>
+                <p> You have <b className="text-red">{myListData?.length}</b> items in your list </p>
+                {myListData?.length > 0 ? (
+                    <Swiper
+                        slidesPerView={1}
+                        spaceBetween={16}
+                        navigation={true}
+                        pagination={{ clickable: true }}
+                        modules={[Navigation, Pagination]}
+                        breakpoints={{
+                            576: { slidesPerView: 2 },
+                            768: { slidesPerView: 3 },
+                            1200: { slidesPerView: 4 },
+                        }}
+                        className="mySwiper"
+                    >
+                        {myListData.map((item) => (
+                            <SwiperSlide key={item.id}>
+                                <div className="productItem position-relative">
+                                    <div className="imgWrapper position-relative">
+                                        <img
+                                            src={item.images}
+                                            alt={item.productTitle}
+                                            className="w-100"
+                                            style={{ objectFit: "cover", height: 250 }}
+                                        />
+                                        <span
+                                            className="position-absolute top-0 end-0 m-2 text-danger cursor-pointer d-flex align-items-center justify-content-center"
+                                            style={{
+                                                width: 24,
+                                                height: 24,
+                                                borderRadius: '50%',
+                                                border: '1px solid #fff',
+                                                backgroundColor: 'white',
+                                                zIndex: 10,
+                                            }}
+                                            onClick={() => removeItem(item?._id)}
+                                        >
+                                            <IoIosClose size={20} />
+                                        </span>
+                                    </div>
+                                    <div className="info mt-2">
+                                        <h4 className="mb-1">{item.name || item.productTitle}</h4>
+                                        <Rating
+                                            className="mt-2 mb-2"
+                                            name="read-only"
+                                            value={item.rating}
+                                            readOnly
+                                            size="small"
+                                            precision={0.5}
+                                        />
+                                        <div className="d-flex align-items-center">
+                                            <span className="newPrice text-danger ms-2">{item.price}฿</span>
                                         </div>
                                     </div>
                                 </div>
-                                :
-                                <div className="empty d-flex align-items-center justify-content-center flex-column">
-                                    <FaListCheck size={150}/>
-                                    <h3 className="mt-3">My list is currently empty</h3>
-                                    <br />
-                                    <Link to="/"><Button className="btn-blue bg-red btn-lg btn-big btn-round"><FaHome /> &nbsp; Continue Shopping</Button></Link>
-                                </div>
-                        }
+                            </SwiperSlide>
+                        ))}
+                    </Swiper>
+                ) : (
+                    <div className="empty d-flex flex-column align-items-center justify-content-center text-center py-5">
+                        <FaListCheck size={120} className="mb-3 text-muted" />
+                        <h3 className="mb-3">Your list is currently empty</h3>
+                        <Link to="/">
+                            <Button className="btn-blue bg-red btn-lg btn-big btn-round">
+                                <FaHome /> &nbsp; Continue Shopping
+                            </Button>
+                        </Link>
                     </div>
-                </div>
-            </section>
-        </>
+                )}
+            </div>
+        </section>
     );
 };
 

@@ -7,7 +7,6 @@ router.get('/', async (req, res) => {
     const perPage = 20;
     const userId = req.query.userId;
 
-    // Only count/filter orders for this user
     const filter = userId ? { "user.userId": userId } : {};
 
     const totalPosts = await Orders.countDocuments(filter);
@@ -18,6 +17,7 @@ router.get('/', async (req, res) => {
     }
 
     const ordersList = await Orders.find(filter)
+        .select('_id user totalAmount paymentDetails createdAt cartItems billingDetails')
         .skip((page - 1) * perPage)
         .limit(perPage)
         .exec();
