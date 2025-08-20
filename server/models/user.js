@@ -1,24 +1,24 @@
 const mongoose = require('mongoose');
 
 const userSchema = mongoose.Schema({
-    name:{
+    name: {
         type: String,
         required: true
     },
-    phone:{
+    phone: {
         type: String,
         required: true
     },
-    email:{
+    email: {
         type: String,
         required: true,
         unique: true
     },
-    password:{
+    password: {
         type: String,
         required: true
     },
-    images:[
+    images: [
         {
             type: String,
             required: true
@@ -28,10 +28,16 @@ const userSchema = mongoose.Schema({
         type: String,
         enum: ['admin', 'customer'],
         default: 'customer'
+    },
+    resetPasswordToken: {
+        type: String
+    },
+    resetPasswordExpires: {
+        type: Date
     }
-})
+});
 
-userSchema.virtual('id').get(function (){
+userSchema.virtual('id').get(function () {
     return this._id.toHexString();
 });
 
@@ -39,5 +45,5 @@ userSchema.set('toJSON', {
     virtuals: true,
 });
 
-exports.User = mongoose.model('User',userSchema)
+exports.User = mongoose.model('User', userSchema);
 exports.userSchema = userSchema;

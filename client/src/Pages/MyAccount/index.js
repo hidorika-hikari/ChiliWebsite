@@ -173,22 +173,22 @@ const MyAccount = () => {
                                 <div className="col-12 col-md-4 d-flex justify-content-center mb-3 mb-md-0">
                                     <div className="userImage">
                                         {userData.profileImage ? (
-                                        <img
-                                            src={userData.profileImage}
-                                            alt="profile"
-                                            className="img-fluid rounded-circle"
-                                            style={{ maxWidth: '200px', width: '100%' }}
-                                        />
+                                            <img
+                                                src={userData.profileImage}
+                                                alt="profile"
+                                                className="img-fluid rounded-circle"
+                                                style={{ maxWidth: '200px', width: '100%' }}
+                                            />
                                         ) : (
-                                        <div
-                                            className="d-flex justify-content-center align-items-center rounded-circle bg-light"
-                                            style={{ width: '100%', aspectRatio: '1/1' }}
-                                        >
-                                            <RiImageAddLine size={48} color="#888" />
-                                        </div>
+                                            <div
+                                                className="d-flex justify-content-center align-items-center rounded-circle bg-light"
+                                                style={{ width: '100%', aspectRatio: '1/1' }}
+                                            >
+                                                <RiImageAddLine size={48} color="#888" />
+                                            </div>
                                         )}
                                     </div>
-                                    </div>
+                                </div>
 
                                 <div className="col-md-8">
                                     <div className="row g-3">
@@ -249,35 +249,35 @@ const MyAccount = () => {
                             <div className="row">
                                 <div className="col-12 col-md-3 mb-3 mb-md-0">
                                     <TextField
-                                    label="Old Password"
-                                    name="oldPassword"
-                                    type="password"
-                                    value={passwordData.oldPassword}
-                                    onChange={handlePasswordChange}
-                                    fullWidth
-                                    required
+                                        label="Old Password"
+                                        name="oldPassword"
+                                        type="password"
+                                        value={passwordData.oldPassword}
+                                        onChange={handlePasswordChange}
+                                        fullWidth
+                                        required
                                     />
                                 </div>
                                 <div className="col-12 col-md-3 mb-3 mb-md-0">
                                     <TextField
-                                    label="New Password"
-                                    name="newPassword"
-                                    type="password"
-                                    value={passwordData.newPassword}
-                                    onChange={handlePasswordChange}
-                                    fullWidth
-                                    required
+                                        label="New Password"
+                                        name="newPassword"
+                                        type="password"
+                                        value={passwordData.newPassword}
+                                        onChange={handlePasswordChange}
+                                        fullWidth
+                                        required
                                     />
                                 </div>
                                 <div className="col-12 col-md-3 mb-3 mb-md-0">
                                     <TextField
-                                    label="Confirm Password"
-                                    name="confirmPassword"
-                                    type="password"
-                                    value={passwordData.confirmPassword}
-                                    onChange={handlePasswordChange}
-                                    fullWidth
-                                    required
+                                        label="Confirm Password"
+                                        name="confirmPassword"
+                                        type="password"
+                                        value={passwordData.confirmPassword}
+                                        onChange={handlePasswordChange}
+                                        fullWidth
+                                        required
                                     />
                                 </div>
                             </div>

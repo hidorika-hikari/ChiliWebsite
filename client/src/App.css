@@ -95,8 +95,20 @@ button{
       overflow-x: auto;
       -webkit-overflow-scrolling: touch;
   }
-  nav .allCartTab .text{
-    display: none;
+}
+
+@media (max-width: 768px) {
+  .headerWrapper .header .flex-grow-1 {
+      flex-basis: 100%;
+      margin-bottom: 8px;
+  }
+
+  .headerWrapper .cartTab .price {
+      display: none;
+  }
+
+  .searchWrapper {
+    max-width: 100%;
   }
 }
 
@@ -115,6 +127,7 @@ button{
 .css-tfyxfu-MuiTabs-root{
   background: none !important;
 }
+
 
 .MuiTabs-root {
   background: #f7f7f7;
@@ -136,10 +149,6 @@ button{
   background-color: #d23f57 !important;
   height: 4px;
   border-radius: 2px;
-}
-
-.MuiTextField-root {
-  margin-bottom: 1rem;
 }
 
 .headerWrapper .top-strip{
@@ -185,22 +194,7 @@ button{
 .searchWrapper {
   flex: 1 1 auto;
   max-width: 800px;
-  min-width: 400px;
-}
-
-@media (max-width: 768px) {
-  .headerWrapper .header .flex-grow-1 {
-      flex-basis: 100%;
-      margin-bottom: 8px;
-  }
-
-  .headerWrapper .cartTab .price {
-      display: none;
-  }
-
-  .searchWrapper {
-    max-width: 100%;
-}
+  min-width: 200px;
 }
 
 .logoWrapper img{

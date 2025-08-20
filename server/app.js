@@ -53,7 +53,7 @@ app.use('/api/productSize', productSizeRoutes);
 app.get('/', (req, res) => {
     res.json({ message: 'Server is running!' });
 });
-console.log('Basic route registered');
+console.log('Basic Route Registered');
 
 mongoose.connect(process.env.CONNECTION_STRING, {
     useNewUrlParser: true,

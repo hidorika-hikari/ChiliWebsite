@@ -42,7 +42,6 @@ const MyList = () => {
         <section className="section cartPage">
             <div className="container">
                 <h2 className="hd mb-3">My List</h2>
-                <p> You have <b className="text-red">{myListData?.length}</b> items in your list </p>
                 {myListData?.length > 0 ? (
                     <Swiper
                         slidesPerView={1}

@@ -65,7 +65,7 @@ const Header = () => {
                             <div className="d-flex align-items-center mt-3 mt-sm-0">
                                 {context.isLogin !== true ? (
                                     <Link to="/signIn">
-                                        <Button className="btn-blue btn-round me-2">Sign In</Button>
+                                        <Button className="btn-blue btn-big btn-sml btn-round me-2">Sign In</Button>
                                     </Link>
                                 ) : (
                                     <>

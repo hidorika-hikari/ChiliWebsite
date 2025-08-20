@@ -78,6 +78,15 @@ const ProductDetails = () => {
 
     const addToCart = async (data) => {
         const user = JSON.parse(localStorage.getItem("user"));
+        if (!user) {
+            context.setAlertBox({
+                open: true,
+                error: true,
+                msg: "Please login to add items to cart"
+            });
+            return; // stop function here
+        }
+
         const cartFields = {
             productTitle: productData?.name,
             images: productData?.images[0],
@@ -88,8 +97,14 @@ const ProductDetails = () => {
             productId: productData?.id,
             userId: user?.userId,
         };
-        await context.addToCart(cartFields); // make sure this returns a promise if async
+        await context.addToCart(cartFields);
         context.getCartData();
+
+        context.setAlertBox({
+            open: true,
+            error: false,
+            msg: "Product added to cart successfully!"
+        });
     };
 
     const [rating, setRating] = useState(0);
@@ -119,6 +134,16 @@ const ProductDetails = () => {
     const addReview = (e) => {
         e.preventDefault();
         const user = JSON.parse(localStorage.getItem("user"));
+
+        if (!user) {
+            context.setAlertBox({
+                open: true,
+                error: true,
+                msg: "Please login to submit a review"
+            });
+            return;
+        }
+
         reviews.customerName = user?.name;
         reviews.customerId = user?.userId;
         reviews.productId = id;
@@ -133,6 +158,12 @@ const ProductDetails = () => {
             fetchDataFromApi(`/api/productReviews?productId=${id}`).then((res) => {
                 setReviewsData(res);
             })
+
+            context.setAlertBox({
+                open: true,
+                error: false,
+                msg: "Thank you! Your review has been submitted."
+            });
         })
     }
 
@@ -303,12 +334,7 @@ const ProductDetails = () => {
                                             setActiveTabs(0)
                                         }}>Description</Button>
                                 </li>
-                                <li className="list-inline-item">
-                                    <Button className={`btn-big ${activeTabs === 1 && 'active'}`}
-                                        onClick={() => {
-                                            setActiveTabs(1)
-                                        }}>Additional Info</Button>
-                                </li>
+
                                 <li className="list-inline-item">
                                     <Button className={`btn-big ${activeTabs === 2 && 'active'}`}
                                         onClick={() => {
@@ -324,94 +350,7 @@ const ProductDetails = () => {
                                     <p>{productData?.description}</p>
                                 </div>
                             }
-                            {
-                                activeTabs === 1 &&
-                                <div className="tabContent">
-                                    <table className="table table-bordered">
-                                        <tbody>
-                                            <tr className="stand-up">
-                                                <th>Stand up</th>
-                                                <td>
-                                                    <p>35"L x 24"W x 37-45"H
-                                                        (front to back wheel)</p>
-                                                </td>
-                                            </tr>
-                                            <tr className="folded-wo-wheels">
-                                                <th>Folded (w/0 wheels)</th>
-                                                <td>
-                                                    <p>32.5"L x 18.5"W x 16.5"H</p>
-                                                </td>
-                                            </tr>
-                                            <tr className="folded-w-wheels">
-                                                <th>Folded (w/ wheels)</th>
-                                                <td>
-                                                    <p>32.5"L x 24"W x 18.5"H</p>
-                                                </td>
-                                            </tr>
-                                            <tr className="door-pass-through">
-                                                <th>Door Pass Through</th>
-                                                <td>
-                                                    <p>24</p>
-                                                </td>
-                                            </tr>
-                                            <tr className="frame">
-                                                <th>Frame</th>
-                                                <td>
-                                                    <p>Aluminum</p>
-                                                </td>
-                                            </tr>
-                                            <tr className="weight-wo-wheels">
-                                                <th>Weight (w/o wheels)</th>
-                                                <td>
-                                                    <p>20 LBS</p>
-                                                </td>
-                                            </tr>
-                                            <tr className="weight-capacity">
-                                                <th>Weight Capacity</th>
-                                                <td>
-                                                    <p>60 LBS</p>
-                                                </td>
-                                            </tr>
-                                            <tr className="width">
-                                                <th>Width</th>
-                                                <td>
-                                                    <p>24"</p>
-                                                </td>
-                                            </tr>
-                                            <tr className="handle-height-ground-to-handle">
-                                                <th>Handle height (ground to handle)</th>
-                                                <td>
-                                                    <p>37-45"</p>
-                                                </td>
-                                            </tr>
-                                            <tr className="wheels">
-                                                <th>Wheels</th>
-                                                <td>
-                                                    <p>12" air / wide track slick tread</p>
-                                                </td>
-                                            </tr>
-                                            <tr className="seat-back-height">
-                                                <th>Seat back height</th>
-                                                <td>
-                                                    <p>21.5"</p>
-                                                </td>
-                                            </tr>
-                                            <tr className="head-room-inside-canopy">
-                                                <th>Head room (inside canopy)</th>
-                                                <td>
-                                                    <p>25"</p>
-                                                </td>
-                                            </tr>
-                                            <tr className="pa_color">
-                                                <th>Color</th>
-                                                <td>
-                                                    <p>Black, Blue, Red, White</p>
-                                                </td>
-                                            </tr>
-                                        </tbody>
-                                    </table>
-                                </div>
-                            }
+
                             {
                                 activeTabs === 2 &&
                                 <>

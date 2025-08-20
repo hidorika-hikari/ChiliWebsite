@@ -18,11 +18,13 @@ import Alert from '@mui/material/Alert';
 import MyList from "./Pages/MyList";
 import Checkout from "./Pages/Checkout";
 import Orders from "./Pages/Orders";
+import ResetPassword from "./Pages/ResetPassword";
 import { Elements } from '@stripe/react-stripe-js';
 import { loadStripe } from '@stripe/stripe-js';
 import SearchPage from "./Pages/Search";
 import MyAccount from "./Pages/MyAccount";
 import ContactUs from "./Pages/ContactUs";
+import ProtectedRoute from "./Components/ProtectedRoute";
 const MyContext = createContext();
 const stripePromise = loadStripe('pk_test_51RqrM6E8TB46iepBZDHJ5lDzW863H6xzVR2FCfYojdiN2GYVy4YLCTqalEfr3iYMxXHiADzlRYYqIEypDEM6LHoo002nAJGi2I', {
   locale: 'en'
@@ -44,7 +46,7 @@ function App() {
   //const [cartFields, setCartFields] = useState({});
   const [isHeaderFooterShow, setIsHeaderFooterShow] = useState(true);
   const [isLogin, setIsLogin] = useState(false);
-  
+
   const [productData, setProductData] = useState();
   const [categoryData, setCategoryData] = useState([]);
   const [subCategoryData, setSubCategoryData] = useState([]);
@@ -81,22 +83,22 @@ function App() {
     })
     const user = JSON.parse(localStorage.getItem("user"));
     if (user?.userId) {
-        fetchDataFromApi(`/api/cart?userId=${user.userId}`).then((res) => {
-            setCartData(res);
-        });
+      fetchDataFromApi(`/api/cart?userId=${user.userId}`).then((res) => {
+        setCartData(res);
+      });
     } else {
-        setCartData([]);
+      setCartData([]);
     }
   }, []);
 
   const getCartData = () => {
     const user = JSON.parse(localStorage.getItem("user"));
     if (user?.userId) {
-        fetchDataFromApi(`/api/cart?userId=${user.userId}`).then((res) => {
-            setCartData(res);
-        });
+      fetchDataFromApi(`/api/cart?userId=${user.userId}`).then((res) => {
+        setCartData(res);
+      });
     } else {
-        setCartData([]);
+      setCartData([]);
     }
   };
 
@@ -201,23 +203,52 @@ function App() {
             <Route path="/products/subCat/:id" exact={true} element={<Listing />} />
             <Route path="/search" exact={true} element={<SearchPage />} />
             <Route path="/product/:id" exact={true} element={<ProductDetails />} />
-            <Route path="/cart" exact={true} element={<Cart />} />
             <Route path="/signin" exact={true} element={<SignIn />} />
             <Route path="/signUp" exact={true} element={<SignUp />} />
-            <Route path="/my-list" exact={true} element={<MyList />} />
-            <Route path="/checkout" exact={true} element={<Checkout />} />
-            <Route path="/orders" exact={true} element={<Orders />} />
-            <Route path="/my-account" exact={true} element={<MyAccount/>} />
-          </Routes>
-          {
-            isHeaderFooterShow === true && <Footer />
-          }
-          {
-            isOpenProductModel.open === true && <ProductModel data={productData} />
-          }
-        </MyContext.Provider>
-      </BrowserRouter>
-    </Elements>
+            <Route path="/cart" exact={true} element={
+              <ProtectedRoute>
+                <Cart />
+              </ProtectedRoute>
+            } />
+            <Route path="/my-list" exact={true}
+              element={
+                <ProtectedRoute>
+                  <MyList />
+                </ProtectedRoute>
+              }
+            />
+            <Route path="/checkout" exact={true}
+              element={
+                <ProtectedRoute>
+                  <Checkout />
+                </ProtectedRoute>
+              }
+            />
+            <Route path="/orders" exact={true}
+              element={
+                <ProtectedRoute>
+                  <Orders />
+                </ProtectedRoute>
+              }
+            />
+            <Route path="/my-account" exact={true}
+              element={
+                <ProtectedRoute>
+                  <MyAccount />
+                </ProtectedRoute>
+              }
+            />
+          <Route path="/reset-password/:token" element={<ResetPassword />} />
+        </Routes>
+        {
+          isHeaderFooterShow === true && <Footer />
+        }
+        {
+          isOpenProductModel.open === true && <ProductModel data={productData} />
+        }
+      </MyContext.Provider>
+    </BrowserRouter>
+    </Elements >
   );
 }
 

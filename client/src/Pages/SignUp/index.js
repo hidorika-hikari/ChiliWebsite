@@ -149,8 +149,6 @@ const SignUp = () => {
                                 type="password"
                                 required variant="standard" className="w-100" />
                         </div>
-
-                        <button className="border-effect cursor">Forgot Password?</button>
                         <div className="d-flex align-items-center mt-3 mb-3">
                             <div className="row w-100">
                                 <div className="col-md-6">

@@ -37,7 +37,7 @@ const Navigation = (props) => {
                     <div className="col-12 col-sm-3 col-md-2 navPart1 mb-2 mb-sm-0">
                         <div className="catWrapper">
                             <Button
-                                className="btn-red allCartTab d-flex align-items-center w-100 justify-content-between mt-0 mt-sm-0 mt-md-0 mt-4"
+                                className="btn-red allCartTab d-flex align-items-center w-100 justify-content-between mt-0 mt-sm-0 mt-md-0 mt-3"
                                 onClick={() => setIsOpenSidebarVal(!isOpenSidebarVal)}
                             >
                                 <span className="d-flex align-items-center">
@@ -94,14 +94,15 @@ const Navigation = (props) => {
                         </div>
                     </div>
 
-                    <div className="col-12 col-sm-9 col-md-10 navPart2">
+                    <div className="col-12 col-sm-9 col-md-10 navPart2" style={{ overflow: 'hidden' }}>
                         <Tabs
                             value={value}
                             onChange={handleChange}
                             variant="scrollable"
                             scrollButtons="auto"
+                            allowScrollButtonsMobile
                             aria-label="scrollable tabs"
-                            sx={{ color: 'black', width: '100%' }}
+
                         >
                             <Tab key="home" label="Home" />
                             {context.categoryData?.map((item, index) => (

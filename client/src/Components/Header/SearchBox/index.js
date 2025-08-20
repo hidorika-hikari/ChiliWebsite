@@ -7,8 +7,8 @@ import { CircularProgress } from '@mui/material';
 
 const SearchBox = () => {
     const context = useContext(MyContext);
-    const history = useNavigate();
-    const [searchBox, setSearchBox] = useState('');
+    const navigate = useNavigate();
+    const [searchBox, setSearchBox] = useState("");
     const [isLoading, setIsLoading] = useState(false);
 
     const onChangeValue = (e) => {
@@ -16,31 +16,49 @@ const SearchBox = () => {
     };
 
     const searchProduct = () => {
-        if (!searchBox.trim()) return;
+        if (!searchBox.trim()) {
+            context.setAlertBox({
+                open: true,
+                error: true,
+                msg: "Please enter a search term!",
+            });
+            return;
+        }
+
         setIsLoading(true);
-        fetchDataFromApi(`/api/search?q=${searchBox.trim()}`).then((res) => {
-            context.setSearchData(res);
-            setIsLoading(false);
-            history('/search');
-        }).catch(() => {
-            setIsLoading(false);
-        });
+        fetchDataFromApi(`/api/search?q=${searchBox.trim()}`)
+            .then((res) => {
+                context.setSearchData(res);
+                setIsLoading(false);
+                navigate("/search");
+            })
+            .catch(() => {
+                setIsLoading(false);
+                context.setAlertBox({
+                    open: true,
+                    error: true,
+                    msg: "Cannot search products, please try again later",
+                });
+            });
     };
 
     return (
-        <div className="position-relative w-100" style={{ maxWidth: 800, margin: '0 auto' }}>
+        <div
+            className="position-relative w-100"
+            style={{ maxWidth: 800, margin: "0 auto" }}
+        >
             <input
                 type="text"
                 placeholder="Search for products..."
                 onChange={onChangeValue}
-                onKeyDown={(e) => e.key === 'Enter' && searchProduct()}
+                onKeyDown={(e) => e.key === "Enter" && searchProduct()}
                 disabled={isLoading}
                 className="form-control rounded-pill ps-5"
                 style={{ height: 50, fontSize: 16 }}
             />
             <span
                 className="position-absolute top-50 start-0 translate-middle-y ms-3 text-muted"
-                style={{ cursor: 'pointer' }}
+                style={{ cursor: "pointer" }}
                 onClick={searchProduct}
             >
                 {isLoading ? <CircularProgress size={20} /> : <IoIosSearch size={20} />}
