@@ -83,10 +83,13 @@ const Home = () => {
                         <div className="col-md-3">
                             <div className="sticky">
                                 <div className="banner">
-                                    <img src="https://i.redd.it/official-shorekeeper-wallpapers-v0-rl7hchtuaosd1.jpg?width=2160&format=pjpg&auto=webp&s=9369c8dcd9f1f9853debe9682c4c3a09a8935ef7" className="cursor" alt=''></img>
+                                    {/* <img src="https://i.redd.it/official-shorekeeper-wallpapers-v0-rl7hchtuaosd1.jpg?width=2160&format=pjpg&auto=webp&s=9369c8dcd9f1f9853debe9682c4c3a09a8935ef7"
+                                    className="cursor" alt=''></img> */}
+                                    <img src="https://i.pinimg.com/736x/3c/07/cb/3c07cb03a68c78e6c8bea549218e509c.jpg" className="cursor" alt=''></img>
                                 </div>
                                 <div className="banner mt-3">
-                                    <img src="https://wiki.hoyolab.com/_ipx/f_webp/https://bbs.hoyolab.com/hoyowiki/picture/character/%25E8%2583%25A1%25E6%25A1%2583/avatar_header.jpg" className="cursor" alt=''></img>
+                                    {/* <img src="https://wiki.hoyolab.com/_ipx/f_webp/https://bbs.hoyolab.com/hoyowiki/picture/character/%25E8%2583%25A1%25E6%25A1%2583/avatar_header.jpg" className="cursor" alt=''></img> */}
+                                    <img src="https://cdn.vectorstock.com/i/1000v/57/03/fiery-chili-pepper-hot-sauce-poster-vector-21825703.jpg" className="cursor" alt=''></img>
                                 </div>
                             </div>
                         </div>
@@ -142,13 +145,20 @@ const Home = () => {
                             {/* BANNER */}
                             <div className='d-flex mt-3 mb-3 bannerSec'>
                                 <div className='banner'>
-                                    <img src="https://upload-os-bbs.hoyolab.com/upload/2025/02/19/17138284/27ba89c413438ab2ebf9dbe2ba2f4a1b_4605514812593865506.jpeg?x-oss-process=image%2Fauto-orient%2C0%2Finterlace%2C1%2Fformat%2Cwebp%2Fquality%2Cq_70" alt='' className='cursor w-100' />
+                                    {/* <img src="https://upload-os-bbs.hoyolab.com/upload/2025/02/19/17138284/27ba89c413438ab2ebf9dbe2ba2f4a1b_4605514812593865506.jpeg?x-oss-process=image%2Fauto-orient%2C0%2Finterlace%2C1%2Fformat%2Cwebp%2Fquality%2Cq_70"
+                                    alt='' className='cursor w-100' /> */}
+                                    <img src="https://img.freepik.com/premium-vector/hot-sauce-ads-with-chilli-burning-fire-effect-3d-illustration_317442-1468.jpg"
+                                    alt='' className='cursor w-100' />
                                 </div>
                                 <div className='banner'>
-                                    <img src="https://preview.redd.it/wuthering-waves-2-4-official-art-v0-qe8eaxiwgh3f1.jpeg?width=1659&format=pjpg&auto=webp&s=8f392ed3c953037debf495659bc227be23930b95" alt='' className='cursor w-100' />
+                                    {/* <img src="https://preview.redd.it/wuthering-waves-2-4-official-art-v0-qe8eaxiwgh3f1.jpeg?width=1659&format=pjpg&auto=webp&s=8f392ed3c953037debf495659bc227be23930b95"
+                                    alt='' className='cursor w-100' /> */}
+                                    <img src="https://img.freepik.com/premium-vector/hot-sauce-horizontal-banner-template_98292-9543.jpg"
+                                    alt='' className='cursor w-100' />
                                 </div>
                                 <div className='banner'>
-                                    <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSF3WG7oxTsCW5tGlih5uay4ao6kOgSGIQIqg&s" alt='' className='cursor w-100' />
+                                    {/* <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSF3WG7oxTsCW5tGlih5uay4ao6kOgSGIQIqg&s" alt='' className='cursor w-100' /> */}
+                                    <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSjZBY8qA4XTvJAJF21cMd2W_5OAWDqKRAYANRsdKmKo5GaPZi3cI8m1SN2xgfx8ZtF0jA&usqp=CAU" alt='' className='cursor w-100' />
                                 </div>
                             </div>
                             {/* NEW PRODUCTS */}

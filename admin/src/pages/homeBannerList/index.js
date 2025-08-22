@@ -41,7 +41,6 @@ const HomeBannerList = () => {
     useEffect(() => {
         window.scrollTo(0, 0);
         fetchDataFromApi('/api/homeBanner').then((res) => {
-            console.log('Fetched banners:', res);
             setBannerData(res);
         });
     }, []);

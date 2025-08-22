@@ -164,21 +164,18 @@ router.post('/reset-password/:token', async (req, res) => {
     }
 
     try {
-        // Find user with valid token
         const user = await User.findOne({
             resetPasswordToken: token,
-            resetPasswordExpires: { $gt: Date.now() } // not expired
+            resetPasswordExpires: { $gt: Date.now() }
         });
 
         if (!user) {
             return res.json({ status: false, msg: "Invalid or expired token." });
         }
 
-        // Hash password
         const salt = await bcrypt.genSalt(10);
         user.password = await bcrypt.hash(password, salt);
 
-        // Clear reset fields
         user.resetPasswordToken = undefined;
         user.resetPasswordExpires = undefined;
 
@@ -252,7 +249,6 @@ router.put('/:id', async (req, res) => {
             const uploadStatus = await Promise.all(imagesToUpload);
             imgurl = uploadStatus.map((item) => item.secure_url);
         } else {
-            console.log("No images to upload, using existing images");
             imgurl = userExist.images || [];
         }
 

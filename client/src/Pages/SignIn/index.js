@@ -59,7 +59,6 @@ const SignIn = () => {
         postData("/api/user/signin", formFields).then((res) => {
             try {
                 if (res.status === true) {
-                    console.log(res);
                     localStorage.setItem("token", res.token);
                     const user = {
                         name: res.user?.name,
@@ -87,7 +86,6 @@ const SignIn = () => {
                     setIsLoading(false);
                 }
             } catch (error) {
-                console.log(error);
                 setIsLoading(false);
                 context.setAlertBox({
                     open: true,

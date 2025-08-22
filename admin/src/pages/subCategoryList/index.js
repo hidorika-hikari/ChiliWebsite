@@ -46,7 +46,6 @@ const SubCategoryList = () => {
         context.setProgress(20)
         fetchDataFromApi('/api/subCat').then((res) => {
             setSubCatData(res);
-            console.log(res);
             context.setProgress(100);
         })
     }, []);

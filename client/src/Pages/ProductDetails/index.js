@@ -25,6 +25,7 @@ const ProductDetails = () => {
     const [activeContent, setActiveContent] = useState(null);
     const [activeTabs, setActiveTabs] = useState(0);
     const [isLoading, setIsLoading] = useState(false);
+    const [errors, setErrors] = useState({});
 
     let [cartFields] = useState({});
     const [quantityVal] = useState(1); //const [quantityVal, setQuantityVal] = useState(1);
@@ -84,7 +85,7 @@ const ProductDetails = () => {
                 error: true,
                 msg: "Please login to add items to cart"
             });
-            return; // stop function here
+            return;
         }
 
         const cartFields = {
@@ -144,28 +145,56 @@ const ProductDetails = () => {
             return;
         }
 
+        let newErrors = {};
+        if (!reviews.review.trim()) {
+            newErrors.review = "Please write a review before submitting.";
+        }
+        if (!rating || rating < 1) {
+            newErrors.rating = "Please select a rating.";
+        }
+
+        if (Object.keys(newErrors).length > 0) {
+            setErrors(newErrors);
+            return;
+        }
+
         reviews.customerName = user?.name;
         reviews.customerId = user?.userId;
         reviews.productId = id;
-        setIsLoading(true);
-        postData("/api/productReviews/add", reviews).then((res) => {
-            setIsLoading(false);
-            reviews.customerRating = 1;
-            setReviews({
-                review: '',
-                customerRating: 1
-            })
-            fetchDataFromApi(`/api/productReviews?productId=${id}`).then((res) => {
-                setReviewsData(res);
-            })
 
-            context.setAlertBox({
-                open: true,
-                error: false,
-                msg: "Thank you! Your review has been submitted."
+        setIsLoading(true);
+
+        postData("/api/productReviews/add", reviews)
+            .then((res) => {
+                setIsLoading(false);
+                reviews.customerRating = 1;
+                setReviews({
+                    review: '',
+                    customerRating: 1
+                });
+                setRating(0);
+                setErrors({});
+
+                fetchDataFromApi(`/api/productReviews?productId=${id}`).then((res) => {
+                    setReviewsData(res);
+                });
+
+                context.setAlertBox({
+                    open: true,
+                    error: false,
+                    msg: "Thank you! Your review has been submitted."
+                });
+            })
+            .catch((err) => {
+                setIsLoading(false);
+                console.error("Error submitting review:", err);
+                context.setAlertBox({
+                    open: true,
+                    error: true,
+                    msg: "Something went wrong. Please try again later."
+                });
             });
-        })
-    }
+    };
 
     const addToMyList = (id) => {
         const user = JSON.parse(localStorage.getItem("user"));
@@ -183,7 +212,7 @@ const ProductDetails = () => {
                     context.setAlertBox({
                         open: true,
                         error: false,
-                        msg: "The product added in my list"
+                        msg: "Product added in my list"
                     })
                 } else {
                     context.setAlertBox({
@@ -375,19 +404,26 @@ const ProductDetails = () => {
                                             <h4>Add a review</h4>
                                             <div className="form-group">
                                                 <textarea
-                                                    className="form-control mb-3"
+                                                    className="form-control mb-1"
                                                     placeholder="Write a Review"
                                                     name="review"
                                                     value={reviews.review}
                                                     onChange={onChangeInput}
                                                     rows={4}
                                                 />
+                                                {errors.review && <small className="text-danger">{errors.review}</small>}
                                             </div>
                                             <div className="row">
                                                 <div className="col-md-6">
-                                                    <div className="d-flex align-items-center gap-3 mb-3">
-                                                        <Rating name="rating" value={rating} size="medium" onChange={changeRating} />
+                                                    <div className="d-flex align-items-center gap-3 mb-1">
+                                                        <Rating
+                                                            name="rating"
+                                                            value={rating}
+                                                            size="medium"
+                                                            onChange={changeRating}
+                                                        />
                                                     </div>
+                                                    {errors.rating && <small className="text-danger">{errors.rating}</small>}
                                                 </div>
                                             </div>
                                             <br />
@@ -397,6 +433,7 @@ const ProductDetails = () => {
                                                 </Button>
                                             </div>
                                         </form>
+
                                     </div>
                                 </>
                             }

@@ -56,22 +56,17 @@ const Login = () => {
         setIsLoading(true);
         postData("/api/user/admin/signin", formFields).then((res) => {
             try {
-                console.log("[DEBUG] Backend response:", res);
-                console.log("[DEBUG] res.user:", res.user);
                 if (res.status === true) {
                     let role = res.user?.role;
                     if (!role && res.user?._doc) role = res.user._doc.role;
-                    console.log("[DEBUG] Extracted role:", role);
                     const user = {
                         name: res.user?.name || res.user?._doc?.name,
                         email: res.user?.email || res.user?._doc?.email,
                         userId: res.user?.id || res.user?._doc?.id || res.user?._id || res.user?._doc?._id,
                         role: role
                     }
-                    console.log("[DEBUG] User object to store:", user);
                     localStorage.setItem("token", res.token);
                     localStorage.setItem("user", JSON.stringify(user));
-                    console.log("[DEBUG] localStorage user after set:", localStorage.getItem("user"));
                     context.setAlertBox({
                         open: true,
                         error: false,
@@ -90,7 +85,6 @@ const Login = () => {
                     setIsLoading(false);
                 }
             } catch (error) {
-                console.log(error);
                 setIsLoading(false);
                 context.setAlertBox({
                     open: true,

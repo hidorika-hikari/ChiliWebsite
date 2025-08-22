@@ -81,10 +81,10 @@ function App() {
         try {
             userData = JSON.parse(userStr);
         } catch (e) {
-            console.log("[DEBUG] Failed to parse user from localStorage");
+            alert("Failed to parse user from localStorage");
         }
-        console.log("[DEBUG] user (parsed):", userData);
-        if (token !== "" && token !== undefined && token !== null){
+    
+        if (token !== "" && token !== undefined && token !== null) {
             if (userData && userData.role === 'admin') {
                 setIsLogin(true);
                 setUser(userData);

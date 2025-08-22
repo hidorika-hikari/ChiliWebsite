@@ -33,7 +33,6 @@ const SignUp = () => {
 
     const signUp = (e) => {
         e.preventDefault();
-        console.log(formFields)
         if (formFields.name === "") {
             context.setAlertBox({
                 open: true,

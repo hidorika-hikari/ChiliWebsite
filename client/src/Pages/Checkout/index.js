@@ -104,7 +104,6 @@ const Checkout = () => {
             },
             createdAt: new Date().toISOString()
         };
-        console.log(payload);
         postData(`/api/orders/create`,payload).then(res => {
             history('/');
         })
