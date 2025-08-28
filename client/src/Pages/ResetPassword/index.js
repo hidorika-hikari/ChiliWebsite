@@ -25,20 +25,12 @@ const ResetPassword = () => {
         e.preventDefault();
 
         if (!formFields.password || !formFields.confirmPassword) {
-            context.setAlertBox({
-                open: true,
-                error: true,
-                msg: 'All fields are required!',
-            });
+            context.setAlertBox({ open: true, error: true, msg: 'All fields are required!', });
             return;
         }
 
         if (formFields.password !== formFields.confirmPassword) {
-            context.setAlertBox({
-                open: true,
-                error: true,
-                msg: 'Passwords do not match!',
-            });
+            context.setAlertBox({ open: true, error: true, msg: 'Passwords do not match!', });
             return;
         }
 
@@ -49,27 +41,15 @@ const ResetPassword = () => {
             });
 
             if (res.status === true) {
-                context.setAlertBox({
-                    open: true,
-                    error: false,
-                    msg: 'Password has been reset successfully!',
-                });
+                context.setAlertBox({ open: true, error: false, msg: 'Password has been reset successfully!' });
                 setTimeout(() => {
                     window.location.href = '/signin';
                 }, 1500);
             } else {
-                context.setAlertBox({
-                    open: true,
-                    error: true,
-                    msg: res.msg || 'Invalid or expired token.',
-                });
+                context.setAlertBox({ open: true, error: true, msg: 'Invalid or expired token.' });
             }
         } catch (err) {
-            context.setAlertBox({
-                open: true,
-                error: true,
-                msg: 'Server error. Please try again later.',
-            });
+            context.setAlertBox({ open: true, error: true, msg: 'Server error. Please try again later.' });
         } finally {
             setIsLoading(false);
         }
@@ -85,7 +65,6 @@ const ResetPassword = () => {
 
                     <form className="mt-3" onSubmit={handleSubmit}>
                         <h2 className="mb-4">Set New Password</h2>
-
                         <div className="form-group mb-3">
                             <TextField
                                 label="New Password"

@@ -25,7 +25,9 @@ import SearchPage from "./Pages/Search";
 import MyAccount from "./Pages/MyAccount";
 import ContactUs from "./Pages/ContactUs";
 import ProtectedRoute from "./Components/ProtectedRoute";
+
 const MyContext = createContext();
+
 const stripePromise = loadStripe('pk_test_51RqrM6E8TB46iepBZDHJ5lDzW863H6xzVR2FCfYojdiN2GYVy4YLCTqalEfr3iYMxXHiADzlRYYqIEypDEM6LHoo002nAJGi2I', {
   locale: 'en'
 });
@@ -38,12 +40,13 @@ function App() {
     id: '',
     open: false
   });
+
   const [user, setUser] = useState({
     name: '',
     email: '',
     userId: ''
   });
-  //const [cartFields, setCartFields] = useState({});
+
   const [isHeaderFooterShow, setIsHeaderFooterShow] = useState(true);
   const [isLogin, setIsLogin] = useState(false);
 
@@ -78,9 +81,11 @@ function App() {
     fetchDataFromApi("/api/subCat").then((res) => {
       setSubCategoryData(res.subCategoryList);
     })
-    const user = JSON.parse(localStorage.getItem("user"));
-    if (user?.userId) {
-      fetchDataFromApi(`/api/cart?userId=${user.userId}`).then((res) => {
+
+    const localUser = JSON.parse(localStorage.getItem("user"));
+    if (localUser?.userId) {
+      setUser(localUser); // ✅ set user state
+      fetchDataFromApi(`/api/cart?userId=${localUser.userId}`).then((res) => {
         setCartData(res);
       });
     } else {
@@ -89,9 +94,9 @@ function App() {
   }, []);
 
   const getCartData = () => {
-    const user = JSON.parse(localStorage.getItem("user"));
-    if (user?.userId) {
-      fetchDataFromApi(`/api/cart?userId=${user.userId}`).then((res) => {
+    const localUser = JSON.parse(localStorage.getItem("user"));
+    if (localUser?.userId) {
+      fetchDataFromApi(`/api/cart?userId=${localUser.userId}`).then((res) => {
         setCartData(res);
       });
     } else {
@@ -112,13 +117,14 @@ function App() {
     } else {
       setIsLogin(false);
     }
-  }, []);
+  }, [setUser]);
 
   useEffect(() => {
-    isOpenProductModel.open === true &&
+    if (isOpenProductModel.open === true) {
       fetchDataFromApi(`/api/products/${isOpenProductModel.id}`).then((res) => {
         setProductData(res);
       })
+    }
   }, [isOpenProductModel]);
 
   const getCountry = async (url) => {
@@ -166,8 +172,11 @@ function App() {
     setCartData,
     getCartData,
     searchData,
-    setSearchData
+    setSearchData,
+    user,       // ✅ added user in context
+    setUser     // ✅ added setUser in context
   }
+
   return (
     <Elements stripe={stripePromise}>
       <BrowserRouter>
@@ -227,16 +236,16 @@ function App() {
                 </ProtectedRoute>
               }
             />
-          <Route path="/reset-password/:token" element={<ResetPassword />} />
-        </Routes>
-        {
-          isHeaderFooterShow === true && <Footer />
-        }
-        {
-          isOpenProductModel.open === true && <ProductModel data={productData} />
-        }
-      </MyContext.Provider>
-    </BrowserRouter>
+            <Route path="/reset-password/:token" element={<ResetPassword />} />
+          </Routes>
+          {
+            isHeaderFooterShow === true && <Footer />
+          }
+          {
+            isOpenProductModel.open === true && <ProductModel data={productData} />
+          }
+        </MyContext.Provider>
+      </BrowserRouter>
     </Elements >
   );
 }

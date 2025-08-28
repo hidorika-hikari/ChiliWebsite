@@ -1,15 +1,10 @@
 import { useContext, useEffect, useState } from "react";
 import { Link } from "react-router-dom";
-import { Button, CircularProgress } from '@mui/material';
+import { Button, CircularProgress, Dialog, DialogTitle, DialogContent, DialogActions, TextField } from '@mui/material';
 import { MyContext } from "../../App";
 import { postData } from "../../utils/api";
 //import { useNavigate } from 'react-router-dom';
-import Dialog from '@mui/material/Dialog';
-import DialogTitle from '@mui/material/DialogTitle';
-import DialogContent from '@mui/material/DialogContent';
-import DialogActions from '@mui/material/DialogActions';
 import Logo from '../../assets/logo.png';
-import TextField from "@mui/material/TextField";
 
 const SignIn = () => {
 
@@ -39,19 +34,11 @@ const SignIn = () => {
     const login = (e) => {
         e.preventDefault();
         if (formFields.email === "") {
-            context.setAlertBox({
-                open: true,
-                error: true,
-                msg: "email can not be blank!"
-            })
+            context.setAlertBox({ open: true, error: true, msg: "email can not be blank!" })
             return false;
         }
         if (formFields.password === "") {
-            context.setAlertBox({
-                open: true,
-                error: true,
-                msg: "password can not be blank!"
-            })
+            context.setAlertBox({ open: true, error: true, msg: "password can not be blank!" })
             return false;
         }
         setIsLoading(true);
@@ -66,31 +53,19 @@ const SignIn = () => {
                         role: res.user?.role
                     }
                     localStorage.setItem("user", JSON.stringify(user));
-                    context.setAlertBox({
-                        open: true,
-                        error: false,
-                        msg: "Login Successfully!"
-                    });
+                    context.setAlertBox({ open: true, error: false, msg: "Login Successfully!" });
                     setTimeout(() => {
                         setIsLoading(false);
                         window.location.href = '/';
                         //history('/');
                     }, 1000);
                 } else {
-                    context.setAlertBox({
-                        open: true,
-                        error: true,
-                        msg: res.msg
-                    });
+                    context.setAlertBox({ open: true, error: true, msg: res.msg });
                     setIsLoading(false);
                 }
             } catch (error) {
                 setIsLoading(false);
-                context.setAlertBox({
-                    open: true,
-                    error: true,
-                    msg: "Something went wrong. Please try again."
-                });
+                context.setAlertBox({  open: true, error: true, msg: "Something went wrong. Please try again." });
             }
         })
     }
@@ -101,19 +76,13 @@ const SignIn = () => {
         postData("/api/user/forgot-password", { email: forgotEmail }).then((res) => {
             setForgotLoading(false);
             setForgotOpen(false);
-            context.setAlertBox({
-                open: true,
-                error: !res.status,
+            context.setAlertBox({ open: true, error: !res.status,
                 msg: res.msg || (res.status ? "Reset link sent to your email." : "Failed to send reset link.")
             });
         }).catch(() => {
             setForgotLoading(false);
             setForgotOpen(false);
-            context.setAlertBox({
-                open: true,
-                error: true,
-                msg: "Something went wrong. Please try again."
-            });
+            context.setAlertBox({ open: true, error: true, msg: "Something went wrong. Please try again." });
         });
     };
 

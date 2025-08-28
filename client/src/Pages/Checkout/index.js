@@ -74,17 +74,9 @@ const Checkout = () => {
         });
         setProcessing(false);
         if (paymentResult.error) {
-            context.setAlertBox({
-                open: true,
-                error: true,
-                msg: paymentResult.error.message,
-            });
+            context.setAlertBox({ open: true, error: true, msg: paymentResult.error.message });
         } else if (paymentResult.paymentIntent.status === 'succeeded') {
-            context.setAlertBox({
-                open: true,
-                error: false,
-                msg: 'Payment successful!',
-            });
+            context.setAlertBox({ open: true, error: false, msg: 'Payment successfully!' });
         }
         const payload = {
             user: JSON.parse(localStorage.getItem("user")),

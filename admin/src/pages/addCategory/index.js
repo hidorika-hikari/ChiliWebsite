@@ -1,9 +1,8 @@
-import { Breadcrumbs, Chip, CircularProgress, emphasize, styled } from '@mui/material';
+import { Breadcrumbs, Chip, CircularProgress, emphasize, styled, Button } from '@mui/material';
 import { FaCloudUploadAlt, FaHome } from 'react-icons/fa';
 import { postData } from '../../utils/api';
 import { useNavigate } from 'react-router-dom';
 import React, { useContext, useState } from 'react';
-import Button from '@mui/material/Button';
 import { MyContext } from '../../App';
 
 const StyleBreadcrumb = styled(Chip)(({ theme }) => {
@@ -61,11 +60,7 @@ const AddCategory = () => {
     const addCategory = (e) => {
         e.preventDefault();
         if (formFields.name.trim() === "" || formFields.images.length === 0 || formFields.color.trim() === "") {
-            context.setAlertBox({
-                open: true,
-                error: true,
-                msg: 'Please fill in all details before submitting.'
-            });
+            context.setAlertBox({ open: true, error: true, msg: 'Please fill in all details.' });
             return;
         }
 
@@ -76,23 +71,14 @@ const AddCategory = () => {
             .then((res) => {
                 setIsLoading(false);
                 context.setProgress(100);
-                context.setAlertBox({
-                    open: true,
-                    error: false,
-                    msg: 'Category added successfully!'
-                });
-
+                context.setAlertBox({ open: true, error: false, msg: 'Category added successfully!' });
                 context.fetchCategory();
                 history('/category');
             })
             .catch((err) => {
                 setIsLoading(false);
                 context.setProgress(100);
-                context.setAlertBox({
-                    open: true,
-                    error: true,
-                    msg: 'Failed to add category. Please try again later.'
-                });
+                context.setAlertBox({ open: true, error: true, msg: 'Failed to add category. Please try again later.' });
                 console.error("Add Category error:", err);
             });
     };

@@ -1,17 +1,11 @@
-import { Breadcrumbs, Chip, CircularProgress, emphasize, styled } from '@mui/material';
-import { FaCloudUploadAlt, FaHome } from 'react-icons/fa';
+import { Breadcrumbs, Chip, CircularProgress, emphasize, styled, MenuItem, Select, Rating, Button } from '@mui/material';
+import { FaCloudUploadAlt, FaHome, FaImages} from 'react-icons/fa';
 import React, { useContext, useEffect, useState } from 'react';
 import { IoCloseSharp } from "react-icons/io5";
 import { LazyLoadImage } from 'react-lazy-load-image-component';
-import { FaImages } from "react-icons/fa";
 import { fetchDataFromApi, postData } from '../../utils/api';
 import { useNavigate } from 'react-router-dom';
 import { MyContext } from '../../App';
-import MenuItem from '@mui/material/MenuItem';
-import Select from '@mui/material/Select';
-import Rating from '@mui/material/Rating';
-import Button from '@mui/material/Button';
-
 const ITEM_HEIGHT = 48;
 const ITEM_PADDING_TOP = 8;
 
@@ -176,92 +170,52 @@ const AddProduct = () => {
     const addProduct = (e) => {
         e.preventDefault();
         if (formFields.name === "") {
-            context.setAlertBox({
-                open: true,
-                msg: 'Please add product name',
-                error: true
-            });
+            context.setAlertBox({ open: true, msg: 'Please add product name', error: true });
             return false;
         }
 
         if (formFields.description === "") {
-            context.setAlertBox({
-                open: true,
-                msg: 'Please add product descriptions',
-                error: true
-            });
+            context.setAlertBox({ open: true, msg: 'Please add product descriptions', error: true });
             return false;
         }
 
         if (!formFields.category) {
-            context.setAlertBox({
-                open: true,
-                msg: 'Please select a category',
-                error: true
-            });
+            context.setAlertBox({ open: true, msg: 'Please select a category', error: true });
             return false;
         }
 
         if (!formFields.price) {
-            context.setAlertBox({
-                open: true,
-                msg: 'Please add product price',
-                error: true
-            });
+            context.setAlertBox({ open: true, msg: 'Please add product price', error: true });
             return false;
         }
 
         if (!formFields.oldPrice) {
-            context.setAlertBox({
-                open: true,
-                msg: 'Please add product old price',
-                error: true
-            });
+            context.setAlertBox({ open: true, msg: 'Please add product old price', error: true });
             return false;
         }
 
         if (formFields.isFeatured === "") {
-            context.setAlertBox({
-                open: true,
-                msg: 'Please select if product is organic or not',
-                error: true
-            });
+            context.setAlertBox({ open: true, msg: 'Please select if product is organic or not', error: true });
             return false;
         }
 
         if (!formFields.countInStock) {
-            context.setAlertBox({
-                open: true,
-                msg: 'Please add product stock',
-                error: true
-            });
+            context.setAlertBox({ open: true, msg: 'Please add product stock', error: true });
             return false;
         }
 
         if (formFields.brand === "") {
-            context.setAlertBox({
-                open: true,
-                msg: 'Please add product brand',
-                error: true
-            });
+            context.setAlertBox({ open: true, msg: 'Please add product brand', error: true });
             return false;
         }
 
         if (!formFields.rating || formFields.rating === 0) {
-            context.setAlertBox({
-                open: true,
-                msg: 'Please add product rating',
-                error: true
-            });
+            context.setAlertBox({ open: true, msg: 'Please add product rating', error: true });
             return false;
         }
 
         if (formFields.images.length === 0) {
-            context.setAlertBox({
-                open: true,
-                msg: 'Please add product images',
-                error: true
-            });
+            context.setAlertBox({ open: true, msg: 'Please add product images', error: true });
             return false;
         }
 
@@ -269,11 +223,7 @@ const AddProduct = () => {
         postData('api/products/create', formFields)
             .then((res) => {
                 setIsLoading(false);
-                context.setAlertBox({
-                    open: true,
-                    msg: 'Product is created!',
-                    error: false
-                });
+                context.setAlertBox({ open: true, msg: 'Product is created!', error: false });
                 setFormFields({
                     name: '',
                     description: '',
@@ -296,11 +246,7 @@ const AddProduct = () => {
             .catch((err) => {
                 setIsLoading(false);
                 console.error("Create product error:", err);
-                context.setAlertBox({
-                    open: true,
-                    msg: err?.response?.data?.message || 'Failed to create product. Please try again later.',
-                    error: true
-                });
+                context.setAlertBox({ open: true, msg: 'Failed to create product. Please try again later.', error: true });
             });
     }
 

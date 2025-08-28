@@ -1,11 +1,10 @@
 import React, { useEffect, useState, useContext } from 'react';
 import { fetchDataFromApi } from '../../utils/api';
 import { MyContext } from '../../App';
-import { Dialog, DialogTitle, DialogContent, DialogActions, Button, Typography, Grid, Divider } from '@mui/material';
+import { Dialog, DialogTitle, DialogContent, DialogActions, Button, Typography, Grid, Divider, Pagination } from '@mui/material';
 import { FaListCheck } from "react-icons/fa6";
 import { FaHome } from "react-icons/fa";
 import { Link } from "react-router-dom";
-import Pagination from '@mui/material/Pagination';
 import dayjs from 'dayjs';
 import utc from 'dayjs/plugin/utc';
 import timezone from 'dayjs/plugin/timezone';
@@ -16,7 +15,7 @@ dayjs.extend(timezone);
 const Orders = () => {
   const [selectedProduct, setSelectedProduct] = useState(null);
   const [openDialog, setOpenDialog] = useState(false);
-  const [orders, setOrders] = useState([]);
+  const [orders, setOrders] = useState({ ordersList: [], totalPages: 0 });
   const [page, setPage] = useState(1);
   const [selectedAddress, setSelectedAddress] = useState(null);
   const [openAddressDialog, setOpenAddressDialog] = useState(false);
@@ -77,13 +76,13 @@ const Orders = () => {
   useEffect(() => {
     window.scrollTo(0, 0);
     if (userId) {
-      fetchDataFromApi(`/api/orders?page=1&perPage=8&userId=${userId}`).then(res => {
+      fetchDataFromApi(`/api/orders?page=${page}&perPage=8&userId=${userId}`).then(res => {
         setOrders(res);
       });
     } else {
-      setOrders([]);
+      setOrders({ ordersList: [], totalPages: 0 });
     }
-  }, [userId]);
+  }, [userId, page]);
 
   return (
     <section className="section">
@@ -112,11 +111,7 @@ const Orders = () => {
                         <button
                           className="btn btn-sm btn-outline-primary"
                           onClick={() =>
-                            context.setAlertBox({
-                              open: true,
-                              error: false,
-                              msg: `Order ID: ${order._id}`,
-                            })
+                            context.setAlertBox({ open: true, error: false, msg: `Order ID: ${order._id}` })
                           }
                         >
                           {order._id.slice(0, 8)}...
@@ -127,11 +122,7 @@ const Orders = () => {
                           className="btn btn-sm btn-outline-dark"
                           style={{ display: "block", width: "100%", textAlign: "left" }}
                           onClick={() =>
-                            context.setAlertBox({
-                              open: true,
-                              error: false,
-                              msg: `Payment ID: ${order.paymentDetails.paymentIntentId}`,
-                            })
+                            context.setAlertBox({  open: true, error: false, msg: `Payment ID: ${order.paymentDetails.paymentIntentId}` })
                           }
                         >
                           {order.paymentDetails.paymentIntentId.slice(0, 10)}...
@@ -182,10 +173,11 @@ const Orders = () => {
               </table>
             </div>
 
-            {orders?.orderList?.totalPages > 1 && (
+            {orders?.totalPages > 1 && (
               <div className="d-flex tableFooter">
                 <Pagination
-                  count={orders?.orderList?.totalPages}
+                  count={orders?.totalPages}
+                  page={page}
                   color="primary"
                   className="pagination"
                   showFirstButton
@@ -207,7 +199,6 @@ const Orders = () => {
           </div>
         )}
 
-        {/* Product Dialog */}
         <Dialog
           open={openDialog}
           onClose={() => handleCloseDialog("product")}
@@ -278,7 +269,6 @@ const Orders = () => {
           </DialogActions>
         </Dialog>
 
-        {/* Address Dialog */}
         <Dialog
           open={openAddressDialog}
           onClose={() => handleCloseDialog("address")}

@@ -60,7 +60,7 @@ const ProductDetails = () => {
         fetchDataFromApi(`/api/productReviews?productId=${id}`).then((res) => {
             setReviewsData(res);
         })
-    }, []);
+    }, [id]);
 
     return (
         <>

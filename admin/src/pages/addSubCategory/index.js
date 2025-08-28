@@ -1,12 +1,9 @@
-import { Breadcrumbs, Chip, CircularProgress, emphasize, styled } from '@mui/material';
+import { Breadcrumbs, Chip, CircularProgress, emphasize, styled, MenuItem, Select, Button } from '@mui/material';
 import { FaCloudUploadAlt, FaHome } from 'react-icons/fa';
 import { MyContext } from '../../App';
 import { useNavigate } from 'react-router-dom';
 import { postData } from '../../utils/api';
 import React, { useContext, useState } from 'react';
-import MenuItem from '@mui/material/MenuItem';
-import Select from '@mui/material/Select';
-import Button from '@mui/material/Button';
 
 const ITEM_HEIGHT = 48;
 const ITEM_PADDING_TOP = 8;
@@ -72,20 +69,12 @@ const AddSubCat = () => {
         e.preventDefault();
 
         if (formFields.category === "") {
-            context.setAlertBox({
-                open: true,
-                msg: 'Please select a category',
-                error: true
-            });
+            context.setAlertBox({ open: true, msg: 'Please select a category', error: true });
             return;
         }
 
         if (formFields.subCat.trim() === "") {
-            context.setAlertBox({
-                open: true,
-                msg: 'Please enter a subcategory name',
-                error: true
-            });
+            context.setAlertBox({ open: true, msg: 'Please enter a subcategory name', error: true });
             return;
         }
 
@@ -96,25 +85,13 @@ const AddSubCat = () => {
             .then((res) => {
                 setIsLoading(false);
                 context.setProgress(100);
-
-                context.setAlertBox({
-                    open: true,
-                    msg: 'Subcategory added successfully!',
-                    error: false
-                });
-
+                context.setAlertBox({ open: true, msg: 'Subcategory added successfully!', error: false });
                 history('/subCategory');
             })
             .catch((err) => {
                 setIsLoading(false);
                 context.setProgress(100);
-
-                context.setAlertBox({
-                    open: true,
-                    msg: 'Failed to add subcategory. Please try again later.',
-                    error: true
-                });
-
+                context.setAlertBox({ open: true, msg: 'Failed to add subcategory. Please try again later.', error: true });
                 console.error("Add Subcategory error:", err);
             });
     };

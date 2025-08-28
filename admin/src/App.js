@@ -9,7 +9,7 @@ import Sidebar from './components/Sidebar';
 import SignUp from './pages/SignUp';
 import LoadingBar from "react-top-loading-bar";
 import ProductDetails from './pages/ProductDetails';
-import Product from './pages/Product'
+import Product from './pages/ProductList'
 import AddCategory from './pages/addCategory'
 import Snackbar from '@mui/material/Snackbar';
 import Alert from '@mui/material/Alert';
@@ -46,20 +46,13 @@ function App() {
         userId: ''
     })
 
-    const [alertBox, setAlertBox] = useState({
-        msg: '',
-        error: false,
-        open: false
-    });
+    const [alertBox, setAlertBox] = useState({ msg: '', error: false, open: false });
 
     const handleClose = (event, reason) => {
         if (reason === 'clickaway') {
             return;
         }
-        setAlertBox({
-            open: false,
-            msg: ''
-        });
+        setAlertBox({ open: false, msg: '' });
     };
 
     useEffect(() => {

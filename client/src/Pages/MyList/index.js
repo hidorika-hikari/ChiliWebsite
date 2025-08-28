@@ -26,11 +26,7 @@ const MyList = () => {
 
     const removeItem = (id) => {
         deleteData(`/api/my-list/${id}`).then(() => {
-            context.setAlertBox({
-                open: true,
-                error: true,
-                msg: "Item removed from my list",
-            });
+            context.setAlertBox({ open: true, error: true, msg: "Item removed from my list", });
             const user = JSON.parse(localStorage.getItem("user"));
             fetchDataFromApi(`/api/my-list?userId=${user?.userId}`).then((res) => {
                 setMyListData(res);

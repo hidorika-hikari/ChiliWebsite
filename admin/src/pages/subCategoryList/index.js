@@ -1,17 +1,10 @@
 import { FaPencilAlt } from 'react-icons/fa';
 import { MdDelete } from 'react-icons/md';
 import { useContext, useEffect, useState } from 'react';
-import { Breadcrumbs, Chip, CircularProgress, emphasize, styled } from '@mui/material';
+import { Breadcrumbs, Chip, CircularProgress, emphasize, styled ,Button, TextField, Dialog, DialogActions, DialogContent, DialogTitle, Pagination} from '@mui/material';
 import { FaHome } from 'react-icons/fa';
 import { deleteData, editData, fetchDataFromApi } from '../../utils/api';
 import { Link } from 'react-router-dom';
-import Button from '@mui/material/Button';
-import TextField from '@mui/material/TextField';
-import Dialog from '@mui/material/Dialog';
-import DialogActions from '@mui/material/DialogActions';
-import DialogContent from '@mui/material/DialogContent';
-import DialogTitle from '@mui/material/DialogTitle';
-import Pagination from '@mui/material/Pagination';
 import { MyContext } from '../../App';
 
 const StyleBreadcrumb = styled(Chip)(({ theme }) => {
@@ -35,6 +28,11 @@ const StyleBreadcrumb = styled(Chip)(({ theme }) => {
 });
 
 const SubCategoryList = () => {
+
+    const context = useContext(MyContext);
+    const [open, setOpen] = useState(false);
+    const [editId, setEditId] = useState(null);
+    const [isLoading, setIsLoading] = useState(false);
     const [subCatData, setSubCatData] = useState([]);
 
     const [deleteId, setDeleteId] = useState(null);
@@ -50,19 +48,12 @@ const SubCategoryList = () => {
         setOpenDelete(false);
     };
 
-    const [open, setOpen] = useState(false);
-    const [editId, setEditId] = useState(null);
-    const [isLoading, setIsLoading] = useState(false);
-    const context = useContext(MyContext);
-
     useEffect(() => {
         window.scrollTo(0, 0);
-        context.setProgress(20)
         fetchDataFromApi('/api/subCat').then((res) => {
             setSubCatData(res);
-            context.setProgress(100);
         })
-    }, []);
+    }, [context]);
 
     const handleClose = () => {
         setOpen(false);
@@ -96,28 +87,16 @@ const SubCategoryList = () => {
                     })
                     .catch(() => {
                         setIsLoading(false);
-                        context.setAlertBox({
-                            open: true,
-                            error: true,
-                            msg: 'Failed to fetch updated subcategories.'
-                        });
+                        context.setAlertBox({ open: true, error: true, msg: 'Failed to fetch updated subcategories.' });
                     });
 
-                context.setAlertBox({
-                    open: true,
-                    error: false,
-                    msg: 'Subcategory updated!'
-                });
+                context.setAlertBox({ open: true, error: false, msg: 'Subcategory updated!' });
                 context.setProgress(100);
             })
             .catch((err) => {
                 setIsLoading(false);
                 context.setProgress(100);
-                context.setAlertBox({
-                    open: true,
-                    error: true,
-                    msg: 'Error: Failed to update subcategory. Please try again later.'
-                });
+                context.setAlertBox({ open: true, error: true, msg: 'Error: Failed to update subcategory. Please try again later.' });
                 console.error("Subcategory update error:", err);
             });
     };
@@ -140,20 +119,12 @@ const SubCategoryList = () => {
             .then(res => {
                 fetchDataFromApi(`/api/subCat`).then((res) => {
                     setSubCatData(res);
-                    context.setAlertBox({
-                        open: true,
-                        error: false,
-                        msg: 'Subcategory deleted successfully!'
-                    });
+                    context.setAlertBox({ open: true, error: false, msg: 'Subcategory deleted successfully!' });
                     handleCloseDelete();
                 })
             })
             .catch((err) => {
-                context.setAlertBox({
-                    open: true,
-                    error: true,
-                    msg: 'Error: Failed to delete subcategory.'
-                });
+                context.setAlertBox({ open: true, error: true, msg: 'Error: Failed to delete subcategory.' });
                 console.error("Delete Subcategory error:", err);
                 handleCloseDelete();
             });
@@ -311,7 +282,6 @@ const SubCategoryList = () => {
                     <Button onClick={deleteSubCat} color="error" variant="contained">Delete</Button>
                 </DialogActions>
             </Dialog>
-
         </>
     );
 };

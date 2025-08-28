@@ -35,6 +35,8 @@ const StyleBreadcrumb = styled(Chip)(({ theme }) => {
 });
 
 const CategoryList = () => {
+    const context = useContext(MyContext);
+    const [isLoading, setIsLoading] = useState(false);
     const [catData, setCatData] = useState([]);
     const [editId, setEditId] = useState(null);
 
@@ -52,17 +54,12 @@ const CategoryList = () => {
         setOpenDelete(false);
     };
 
-    const [isLoading, setIsLoading] = useState(false);
-    const context = useContext(MyContext);
-
     useEffect(() => {
         window.scrollTo(0, 0);
-        context.setProgress(20)
         fetchDataFromApi('/api/category').then((res) => {
             setCatData(res);
-            context.setProgress(100);
         })
-    }, []);
+    }, [context]);
 
     const handleClose = () => {
         setOpen(false);

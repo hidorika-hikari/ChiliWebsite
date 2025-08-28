@@ -2,15 +2,11 @@ import { FaEye, FaPencilAlt, FaUserCircle } from "react-icons/fa";
 import { IoMdCart } from "react-icons/io";
 import { MdDelete, MdShoppingBag } from "react-icons/md";
 import { GiStarsStack } from "react-icons/gi";
-import { IoIosTimer } from "react-icons/io";
-import { HiDotsVertical } from "react-icons/hi";
 import { useContext, useEffect, useState } from 'react'
 import { Link } from "react-router-dom";
 import { MyContext } from "../../App";
 import { deleteData, fetchDataFromApi } from '../../utils/api';
-import Menu from '@mui/material/Menu';
 import Button from "@mui/material/Button";
-import MenuItem from '@mui/material/MenuItem';
 import DashboardBox from "./components/dashboardBox";
 import Pagination from "@mui/material/Pagination";
 import Rating from "@mui/material/Rating";
@@ -21,33 +17,25 @@ import DialogActions from '@mui/material/DialogActions';
 import CircularProgress from '@mui/material/CircularProgress';
 
 const Dashboard = () => {
+  const context = useContext(MyContext);
 
   const [productList, setProductList] = useState([]);
   const [productCount, setProductCount] = useState(0);
   const [categoryCount, setCategoryCount] = useState(0);
   const [subCategoryCount, setSubCategoryCount] = useState(0);
   const [userCount, setUserCount] = useState(0);
-  const [anchorEl, setAnchorEl] = useState(null);
-  const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
-  const [productToDelete, setProductToDelete] = useState(null);
-  const open = Boolean(anchorEl);
-  const context = useContext(MyContext);
-  const ITEM_HEIGHT = 48;
   const [stripeBalance, setStripeBalance] = useState(null);
 
+  const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
+  const [productToDelete, setProductToDelete] = useState(null);
+
   useEffect(() => {
-    context.setProgress(40);
     context.setIsHideSidebarAndHeader(false);
 
     fetchDataFromApi("/api/products").then((res) => {
       setProductList(res);
-      context.setProgress(100);
     }).catch((err) => {
-      context.setAlertBox({
-        open: true,
-        error: true,
-        msg: "Failed to fetch products."
-      });
+      context.setAlertBox({ open: true, error: true, msg: "Failed to fetch products." });
       console.error("Fetch products error:", err);
     });
 
@@ -73,16 +61,12 @@ const Dashboard = () => {
       })
       .catch((err) => {
         setStripeBalance(null);
-        context.setAlertBox({
-          open: true,
-          error: true,
-          msg: "Failed to fetch Stripe balance."
-        });
+        context.setAlertBox({ open: true, error: true, msg: "Failed to fetch Stripe balance." });
         console.error("Stripe fetch error:", err);
       });
 
     window.scrollTo(0, 0);
-  }, []);
+  }, [context]);
 
   const confirmDelete = (product) => {
     setProductToDelete(product);
@@ -94,11 +78,7 @@ const Dashboard = () => {
     context.setProgress(40);
     deleteData(`/api/products/${productToDelete.id}`)
       .then(() => {
-        context.setAlertBox({
-          open: true,
-          error: false,
-          msg: 'Product deleted!'
-        });
+        context.setAlertBox({ open: true, error: false, msg: 'Product deleted!' });
         setProductList(prev => ({
           ...prev,
           products: prev.products.filter(p => p.id !== productToDelete.id)
@@ -132,17 +112,9 @@ const Dashboard = () => {
     })
   };
 
-  const handleClick = (event) => {
-    setAnchorEl(event.currentTarget);
-  };
-  const handleClose = () => {
-    setAnchorEl(null);
-  };
-
   return (
     <>
       <div className="right-content w-100">
-        {/* Dashboard Boxes */}
         <div className="row dashboardBoxWrapperRow">
           <div className="col-md-8">
             <div className="dashboardBoxWrapper d-flex">
@@ -153,31 +125,11 @@ const Dashboard = () => {
             </div>
           </div>
 
-          {/* Stripe Balance */}
           <div className="col-md-4 ps-0">
             {stripeBalance && stripeBalance.available && stripeBalance.available.length > 0 && (
               <div className="box graphBox">
                 <div className="d-flex align-items-center w-100 bottomEle">
                   <h5 className="text-white mb-0 mt-0">Stripe Balance</h5>
-                  <div className="ms-auto">
-                    <Button className="ms-auto toggleIcon" onClick={handleClick}><HiDotsVertical /></Button>
-                    <Menu
-                      className="dropdown_menu"
-                      id="long-menu"
-                      anchorEl={anchorEl}
-                      open={open}
-                      onClose={handleClose}
-                      slotProps={{
-                        paper: { style: { maxHeight: ITEM_HEIGHT * 4.5, width: '20ch' } },
-                        list: { 'aria-labelledby': 'long-button' }
-                      }}
-                    >
-                      <MenuItem onClick={handleClose}><IoIosTimer /> Last Day</MenuItem>
-                      <MenuItem onClick={handleClose}><IoIosTimer /> Last Week</MenuItem>
-                      <MenuItem onClick={handleClose}><IoIosTimer /> Last Month</MenuItem>
-                      <MenuItem onClick={handleClose}><IoIosTimer /> Last Year</MenuItem>
-                    </Menu>
-                  </div>
                 </div>
 
                 <div className="d-flex align-items-center gap-2 mt-2 mb-1">
@@ -200,7 +152,6 @@ const Dashboard = () => {
           </div>
         </div>
 
-        {/* Products Table */}
         <div className="card shadow border-0 p-3 mt-4">
           <h3 className="hd">Best Selling Products</h3>
           <div className="table-responsive mt-3">

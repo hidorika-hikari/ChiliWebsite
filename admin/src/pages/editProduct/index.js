@@ -129,7 +129,6 @@ const ProductEdit = () => {
                     msg: 'Invalid Product ID format',
                     error: true
                 });
-                //history('/products');
                 window.location.href = '/products';
                 return;
             }
@@ -175,16 +174,14 @@ const ProductEdit = () => {
                 setProductSizeData(res);
             })
         }
-    }, [id]);
+    }, [context, id]);
 
     useEffect(() => {
         window.scrollTo(0, 0);
-        context.setProgress(20);
         fetchDataFromApi('/api/category').then((res) => {
             setCatData(res);
-            context.setProgress(100);
         })
-    }, []);
+    }, [context]);
 
     const handleChangeCategory = (event) => {
         setCategoryVal(event.target.value);
@@ -234,108 +231,60 @@ const ProductEdit = () => {
     const updateProduct = (e) => {
         e.preventDefault();
         if (formFields.name === "") {
-            context.setAlertBox({
-                open: true,
-                msg: 'Please add product name',
-                error: true
-            });
+            context.setAlertBox({ open: true, msg: 'Please add product name', error: true });
         }
 
         if (formFields.description === "") {
-            context.setAlertBox({
-                open: true,
-                msg: 'Please add product descriptions',
-                error: true
-            });
+            context.setAlertBox({ open: true, msg: 'Please add product descriptions', error: true });
         }
 
         if (!formFields.category) {
-            context.setAlertBox({
-                open: true,
-                msg: 'Please select a category',
-                error: true
-            });
+            context.setAlertBox({ open: true, msg: 'Please select a category', error: true });
             return;
         }
 
         if (!formFields.price) {
-            context.setAlertBox({
-                open: true,
-                msg: 'Please add product price',
-                error: true
-            });
+            context.setAlertBox({ open: true, msg: 'Please add product price', error: true });
             return;
         }
 
         if (!formFields.oldPrice) {
-            context.setAlertBox({
-                open: true,
-                msg: 'Please add Product old price',
-                error: true
-            });
+            context.setAlertBox({ open: true, msg: 'Please add Product old price', error: true });
             return;
         }
 
         if (formFields.isFeatured === "") {
-            context.setAlertBox({
-                open: true,
-                msg: 'Please select if product is organic or not',
-                error: true
-            });
+            context.setAlertBox({ open: true, msg: 'Please select if product is organic or not', error: true });
             return;
         }
 
         if (!formFields.countInStock) {
-            context.setAlertBox({
-                open: true,
-                msg: 'Please add product stock',
-                error: true
-            });
+            context.setAlertBox({ open: true, msg: 'Please add product stock', error: true });
             return;
         }
 
         if (formFields.brand === "") {
-            context.setAlertBox({
-                open: true,
-                msg: 'Please add product brand',
-                error: true
-            });
+            context.setAlertBox({ open: true, msg: 'Please add product brand', error: true });
         }
 
         if (!formFields.rating || formFields.rating === 0) {
-            context.setAlertBox({
-                open: true,
-                msg: 'Please add product rating',
-                error: true
-            });
+            context.setAlertBox({ open: true, msg: 'Please add product rating', error: true });
             return;
         }
 
         if (formFields.images.length === 0) {
-            context.setAlertBox({
-                open: true,
-                msg: 'Please add product images',
-                error: true
-            });
+            context.setAlertBox({ open: true, msg: 'Please add product images', error: true });
         }
 
         setIsLoading(true);
         editData(`/api/products/${id}`, formFields).then((res) => {
             setIsLoading(false);
-            context.setAlertBox({
-                open: true,
-                msg: 'Product has been updated successfully!',
-                error: false
-            });
+            context.setAlertBox({ open: true, msg: 'Product has been updated successfully!', error: false });
             history('/products');
         })
             .catch((error) => {
                 setIsLoading(false);
-                context.setAlertBox({
-                    open: true,
-                    msg: 'Error updating product',
-                    error: true
-                });
+                context.setAlertBox({ open: true, msg: 'Error updating product', error: true });
             });
     }
 

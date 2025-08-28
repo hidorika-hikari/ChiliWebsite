@@ -55,14 +55,12 @@ const Products = () => {
     };
 
     useEffect(() => {
-        context.setProgress(40);
         context.setIsHideSidebarAndHeader(false);
         fetchDataFromApi("/api/products").then((res) => {
             setProductList(res);
-            context.setProgress(100);
         })
         window.scrollTo(0, 0);
-    }, []);
+    }, [context]);
 
     const deleteProduct = () => {
         setIsDeleting(true);
@@ -72,23 +70,14 @@ const Products = () => {
                 fetchDataFromApi("/api/products")
                     .then((res) => setProductList(res))
                     .catch((err) => console.error("Fetch products error:", err));
-
-                context.setAlertBox({
-                    open: true,
-                    error: false,
-                    msg: 'Product deleted successfully!'
-                });
+                context.setAlertBox({ open: true, error: false, msg: 'Product deleted successfully!'});
                 setIsDeleting(false);
                 handleCloseDelete();
                 context.setProgress(100);
             })
             .catch((err) => {
                 console.error("Delete product error:", err);
-                context.setAlertBox({
-                    open: true,
-                    error: true,
-                    msg: 'Failed to delete product.'
-                });
+                context.setAlertBox({ open: true, error: true, msg: 'Failed to delete product.' });
                 setIsDeleting(false);
                 handleCloseDelete();
                 context.setProgress(100);

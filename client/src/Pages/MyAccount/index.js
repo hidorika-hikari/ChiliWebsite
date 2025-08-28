@@ -133,25 +133,13 @@ const MyAccount = () => {
             delete updatedData.profileImage;
             const res = await editData(`/api/user/${userId}`, updatedData);
             if (res.status === true) {
-                context.setAlertBox({
-                    open: true,
-                    error: false,
-                    msg: "Profile updated successfully!",
-                });
+                context.setAlertBox({ open: true, error: false, msg: "Profile updated successfully!" });
             } else {
-                context.setAlertBox({
-                    open: true,
-                    error: true,
-                    msg: res.msg || "Failed to update profile",
-                });
+                context.setAlertBox({ open: true, error: true, msg: "Failed to update profile" });
             }
         } catch (error) {
             console.error(error);
-            context.setAlertBox({
-                open: true,
-                error: true,
-                msg: "Something went wrong",
-            });
+            context.setAlertBox({ open: true, error: true, msg: "Something went wrong" });
         }
     };
 

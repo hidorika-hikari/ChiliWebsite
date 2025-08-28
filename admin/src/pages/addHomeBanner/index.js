@@ -1,9 +1,8 @@
-import { Breadcrumbs, Chip, CircularProgress, emphasize, styled } from '@mui/material';
+import { Breadcrumbs, Chip, CircularProgress, emphasize, styled, Button } from '@mui/material';
 import { FaCloudUploadAlt, FaHome } from 'react-icons/fa';
 import { postData } from '../../utils/api';
 import { useNavigate } from 'react-router-dom';
 import React, { useContext, useState } from 'react';
-import Button from '@mui/material/Button';
 import { MyContext } from '../../App';
 
 const StyleBreadcrumb = styled(Chip)(({ theme }) => {
@@ -53,28 +52,16 @@ const AddHomeBanner = () => {
             postData('api/homeBanner/create', formFields)
                 .then(res => {
                     setIsLoading(false);
-                    context.setAlertBox({
-                        open: true,
-                        error: false,
-                        msg: 'Home banner added successfully!'
-                    });
+                    context.setAlertBox({ open: true, error: false, msg: 'Home banner added successfully!' });
                     history('/homeBannerList');
                 })
                 .catch(err => {
                     setIsLoading(false);
-                    context.setAlertBox({
-                        open: true,
-                        error: true,
-                        msg: 'Failed to add home banner. Please try again.'
-                    });
+                    context.setAlertBox({ open: true, error: true, msg: 'Failed to add home banner. Please try again.' });
                 });
         }
         else {
-            context.setAlertBox({
-                open: true,
-                error: true,
-                msg: 'Image URL is required.'
-            });
+            context.setAlertBox({ open: true, error: true, msg: 'Image URL is required.' });
             return false;
         }
     }

@@ -1,14 +1,14 @@
 import { useContext, useEffect, useState } from "react";
 import { MyContext } from "../../App";
 import { Link } from "react-router-dom";
-import { Button, CircularProgress } from '@mui/material';
+import { Button, CircularProgress, TextField  } from '@mui/material';
 import { postData } from "../../utils/api";
 import Logo from '../../assets/logo.png'
-import TextField from "@mui/material/TextField";
 
 const SignUp = () => {
     //const history = useNavigate();
     const context = useContext(MyContext);
+    const [isLoading, setIsLoading] = useState(false);
     const [formFields, setFormFields] = useState({
         name: '',
         email: '',
@@ -16,8 +16,6 @@ const SignUp = () => {
         password: '',
         role: 'customer'
     })
-    
-    const [isLoading, setIsLoading] = useState(false);
 
     useEffect(() => {
         context.setIsHeaderFooterShow(false);
@@ -37,60 +35,32 @@ const SignUp = () => {
         const passwordRegex = /^(?=.*[!@#$%^&*(),.?":{}|<>]).{8,}$/;
     
         if (formFields.name === "") {
-            context.setAlertBox({
-                open: true,
-                error: true,
-                msg: "Name cannot be blank!"
-            });
+            context.setAlertBox({ open: true, error: true, msg: "Name cannot be blank!" });
             return false;
         }
         if (formFields.email === "") {
-            context.setAlertBox({
-                open: true,
-                error: true,
-                msg: "Email cannot be blank!"
-            });
+            context.setAlertBox({ open: true, error: true, msg: "Email cannot be blank!" });
             return false;
         }
         if (!emailRegex.test(formFields.email)) {
-            context.setAlertBox({
-                open: true,
-                error: true,
-                msg: "Please enter a valid email address."
-            });
+            context.setAlertBox({ open: true, error: true, msg: "Please enter a valid email address." });
             return false;
         }
         
         if (formFields.phone === "") {
-            context.setAlertBox({
-                open: true,
-                error: true,
-                msg: "Phone cannot be blank!"
-            });
+            context.setAlertBox({ open: true, error: true, msg: "Phone cannot be blank!" });
             return false;
         }
         if (!phoneRegex.test(formFields.phone)) {
-            context.setAlertBox({
-                open: true,
-                error: true,
-                msg: "Phone number must be 10–15 digits (numbers only)."
-            });
+            context.setAlertBox({ open: true, error: true, msg: "Phone number must be 10–15 digits"});
             return false;
         }
         if (formFields.password === "") {
-            context.setAlertBox({
-                open: true,
-                error: true,
-                msg: "Password cannot be blank!"
-            });
+            context.setAlertBox({ open: true, error: true, msg: "Password cannot be blank!" });
             return false;
         }
         if (!passwordRegex.test(formFields.password)) {
-            context.setAlertBox({
-                open: true,
-                error: true,
-                msg: "Password must be at least 8 characters and include at least 1 symbol."
-            });
+            context.setAlertBox({ open: true, error: true, msg: "Password must be at least 8 characters and include at least 1 symbol" });
             return false;
         }
     
@@ -98,30 +68,18 @@ const SignUp = () => {
         postData('/api/user/signup', formFields)
             .then((res) => {
                 if (res.status === true) {
-                    context.setAlertBox({
-                        open: true,
-                        error: false,
-                        msg: "Register Successfully!"
-                    });
+                    context.setAlertBox({ open: true, error: false, msg: "Sign Up Successfully!" });
                     setTimeout(() => {
                         setIsLoading(true);
                         window.location.href = '/signin';
                     }, 2000);
                 } else {
-                    context.setAlertBox({
-                        open: true,
-                        error: true,
-                        msg: res.msg
-                    });
+                    context.setAlertBox({ open: true, error: true, msg: res.msg });
                 }
             })
             .catch((error) => {
                 console.error('Signup error:', error);
-                context.setAlertBox({
-                    open: true,
-                    error: true,
-                    msg: "Something went wrong. Please try again."
-                });
+                context.setAlertBox({ open: true, error: true, msg: "Something went wrong. Please try again" });
             });
     };
 
@@ -194,7 +152,7 @@ const SignUp = () => {
                                 </div>
                             </div>
                         </div>
-                        <p className="txt">Not Registered?<Link to="/signin" className="border-effect"> Sign In</Link></p>
+                        <p className="txt">have account? <Link to="/signin" className="border-effect"> Sign In</Link></p>
                     </form>
                 </div>
             </div>
