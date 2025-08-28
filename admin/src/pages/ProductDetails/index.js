@@ -153,7 +153,7 @@ const ProductDetails = () => {
                                             <div className="row">
                                                 <div className="col-sm-3 d-flex align-items-center">
                                                     <span className="icon"><SlSizeFullscreen /></span>
-                                                    <span className="name">Size</span>
+                                                    <span className="name">Spicy Level</span>
                                                 </div>
                                                 <div className="col-sm-9">
                                                     <span>
@@ -274,77 +274,6 @@ const ProductDetails = () => {
                         </p>
 
                         <br />
-
-                        {/* test */}
-                        {/* <h6 className="mt-4 mb-4">Rating Analytics</h6>
-                        <div className="ratingSection">
-                            <div className="ratingrow d-flex align-items-center">
-                                <span className="col1">5 Star</span>
-                                <div className="col2">
-                                    <div className="progress">
-                                        <div
-                                            className="progress-bar"
-                                            style={{ width: '70%' }}
-                                        ></div>
-                                    </div>
-                                </div>
-                                <span className="col3">(22)</span>
-                            </div>
-
-                            <div className="ratingrow d-flex align-items-center">
-                                <span className="col1">4 Star</span>
-                                <div className="col2">
-                                    <div className="progress">
-                                        <div
-                                            className="progress-bar"
-                                            style={{ width: '50%' }}
-                                        ></div>
-                                    </div>
-                                </div>
-                                <span className="col3">(22)</span>
-                            </div>
-
-                            <div className="ratingrow d-flex align-items-center">
-                                <span className="col1">3 Star</span>
-                                <div className="col2">
-                                    <div className="progress">
-                                        <div
-                                            className="progress-bar"
-                                            style={{ width: '50%' }}
-                                        ></div>
-                                    </div>
-                                </div>
-                                <span className="col3">(2)</span>
-                            </div>
-
-                            <div className="ratingrow d-flex align-items-center">
-                                <span className="col1">2 Star</span>
-                                <div className="col2">
-                                    <div className="progress">
-                                        <div
-                                            className="progress-bar"
-                                            style={{ width: '20%' }}
-                                        ></div>
-                                    </div>
-                                </div>
-                                <span className="col3">(2)</span>
-                            </div>
-
-                            <div className="ratingrow d-flex align-items-center">
-                                <span className="col1">1 Star</span>
-                                <div className="col2">
-                                    <div className="progress">
-                                        <div
-                                            className="progress-bar"
-                                            style={{ width: '50%' }}
-                                        ></div>
-                                    </div>
-                                </div>
-                                <span className="col3">(2)</span>
-                            </div>
-                        </div> */}
-
-                        <br />
                         <h6 className="mt-4 mb-4">Customer Reviews</h6>
                         <div className="reviewsSection">
                             {
@@ -387,108 +316,7 @@ const ProductDetails = () => {
                                     )
                                 })
                             }
-                            
-                            {/* <div className="reviewsRow reply">
-                                <div className="row">
-                                    <div className="col-sm-7 d-flex">
-                                        <div className="d-flex flex-column">
-                                            <div className="userInfo d-flex align-items-center mb-3">
-                                                <div className="userInfo lg">
-                                                    <UserAvatarImgComponent
-                                                        img="https://i.scdn.co/image/ab67616d00001e026f157409ae8578b9695be2b3"
-                                                        lg={true}
-                                                    />
-                                                </div>
-
-                                                <div className="info ps-3">
-                                                    <h6>hidorika</h6>
-                                                    <span>25 minutes ago</span>
-                                                </div>
-                                            </div>
-                                            <Rating
-                                                name="read-only"
-                                                value={4.5}
-                                                precision={0.5}
-                                                readOnly
-                                            />
-                                        </div>
-                                    </div>
-
-                                    <div className="col-md-5 d-flex align-items-center">
-                                        <div className="ms-auto">
-                                            <Button className="btn-blue btn-lg ms-auto">
-                                                <FaReply /> &nbsp; Reply
-                                            </Button>
-                                        </div>
-                                    </div>
-                                    <p className="mt-3">
-                                        Lorem ipsum dolor sit amet consectetur
-                                        adipisicing elit. Omnis quo nostrum
-                                        dolore fugiat ducimus labore debitis
-                                        unde autem recusandae? Eius harum
-                                        tempora quis minima, adipisci natus quod
-                                        magni omnis quas.
-                                    </p>
-                                </div>
-                            </div>
-                            <div className="reviewsRow reply">
-                                <div className="row">
-                                    <div className="col-sm-7 d-flex">
-                                        <div className="d-flex flex-column">
-                                            <div className="userInfo d-flex align-items-center mb-3">
-                                                <div className="userInfo lg">
-                                                    <UserAvatarImgComponent
-                                                        img="https://i.scdn.co/image/ab67616d00001e026f157409ae8578b9695be2b3"
-                                                        lg={true}
-                                                    />
-                                                </div>
-
-                                                <div className="info ps-3">
-                                                    <h6>hidorika</h6>
-                                                    <span>25 minutes ago</span>
-                                                </div>
-                                            </div>
-                                            <Rating
-                                                name="read-only"
-                                                value={4.5}
-                                                precision={0.5}
-                                                readOnly
-                                            />
-                                        </div>
-                                    </div>
-
-                                    <div className="col-md-5 d-flex align-items-center">
-                                        <div className="ms-auto">
-                                            <Button className="btn-blue btn-lg ms-auto">
-                                                <FaReply /> &nbsp; Reply
-                                            </Button>
-                                        </div>
-                                    </div>
-                                    <p className="mt-3">
-                                        Lorem ipsum dolor sit amet consectetur
-                                        adipisicing elit. Omnis quo nostrum
-                                        dolore fugiat ducimus labore debitis
-                                        unde autem recusandae? Eius harum
-                                        tempora quis minima, adipisci natus quod
-                                        magni omnis quas.
-                                    </p>
-                                </div>
-                            </div> */}
                         </div>
-
-                        <h6 className="mt-4 mb-4">Review Reply Form</h6>
-                        <form className="reviewForm">
-                            <textarea placeholder="Write here..."></textarea>
-                            <Button
-                                variant="text"
-                                color="primary"
-                                className="btn-blue btn-big btn-lg w-100 mt-4"
-                                fullWidth
-                                type="button"
-                            >
-                                drop your replies
-                            </Button>
-                        </form>
                     </div>
                 </div>
             </div>

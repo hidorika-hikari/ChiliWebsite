@@ -65,10 +65,7 @@ function App() {
     if (reason === 'clickaway') {
       return;
     }
-    setAlertBox({
-      open: false,
-      msg: ''
-    });
+    setAlertBox({ open: false, msg: '' });
   };
 
   useEffect(() => {
@@ -133,21 +130,13 @@ function App() {
     setAddingInCart(true);
     postData(`/api/cart/add`, data).then((res) => {
       if (res.status !== false) {
-        setAlertBox({
-          open: true,
-          error: false,
-          msg: 'Item is add to cart'
-        })
+        setAlertBox({ open: true, error: false, msg: 'Item is added to cart' })
         getCartData();
         setTimeout(() => {
           setAddingInCart(false);
         }, 1000);
       } else {
-        setAlertBox({
-          open: true,
-          error: true,
-          msg: res.msg
-        })
+        setAlertBox({ open: true, error: true, msg: res.msg })
         setAddingInCart(false);
       }
     })

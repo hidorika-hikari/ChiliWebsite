@@ -44,54 +44,57 @@ const SignUp = () => {
         e.preventDefault();
         setIsLoading(true);
 
+        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        const passwordRegex = /^(?=.*[!@#$%^&*(),.?":{}|<>])[A-Za-z\d!@#$%^&*(),.?":{}|<>]{8,}$/;
+        const phoneRegex = /^[0-9]{10,15}$/;
+    
         if (formFields.name === "") {
             context.setAlertBox({ open: true, error: true, msg: "Name can not be blank!" });
             return false;
         }
         if (formFields.email === "") {
-            context.setAlertBox({ open: true, error: true, msg: "Email can not be blank!" });
+            context.setAlertBox({ open: true, error: true, msg: "Email cannot be blank!" });
+            return false;
+        }
+        if (!emailRegex.test(formFields.email)) {
+            context.setAlertBox({ open: true, error: true, msg: "Please enter a valid email address." });
             return false;
         }
         if (formFields.phone === "") {
             context.setAlertBox({ open: true, error: true, msg: "Phone can not be blank!" });
             return false;
         }
+        if (!phoneRegex.test(formFields.phone)) {
+            context.setAlertBox({ open: true, error: true, msg: "Phone number must be 10–15 digits (numbers only)." });
+            return false;
+        }
         if (formFields.password === "") {
             context.setAlertBox({ open: true, error: true, msg: "Password can not be blank!" });
+            return false;
+        }
+        if (!passwordRegex.test(formFields.password)) {
+            context.setAlertBox({ open: true, error: true, msg: "Password must be at least 8 characters and include at least 1 symbol." });
             return false;
         }
         if (formFields.confirmPassword !== formFields.password) {
             context.setAlertBox({ open: true, error: true, msg: "Password not match" });
             return false;
         }
-
         postData('/api/user/signup', formFields)
             .then((res) => {
                 if (res.status === true) {
-                    context.setAlertBox({
-                        open: true,
-                        error: false,
-                        msg: "Register successfully!"
-                    });
+                    context.setAlertBox({ open: true, error: false, msg: "Register successfully!" });
                     setTimeout(() => {
                         setIsLoading(true);
                         window.location.href = '/signIn';
                     }, 2000);
                 } else {
-                    context.setAlertBox({
-                        open: true,
-                        error: true,
-                        msg: res.msg
-                    });
+                    context.setAlertBox({ open: true, error: true, msg: res.msg });
                 }
             })
             .catch((error) => {
                 console.error('Signup error:', error);
-                context.setAlertBox({
-                    open: true,
-                    error: true,
-                    msg: "Something went wrong. Please try again."
-                });
+                context.setAlertBox({ open: true, error: true, msg: "Something went wrong. Please try again." });
             });
     };
 
@@ -99,8 +102,7 @@ const SignUp = () => {
         <>
             <img
                 src="https://dashboard-ecommerce-react.netlify.app/static/media/pattern.df9a7a28fc13484d1013.webp"
-                alt=""
-                className="loginPattern"
+                alt="" className="loginPattern"
             />
             <section className="loginSection signUpSection">
                 <div className="row">
@@ -116,7 +118,7 @@ const SignUp = () => {
                         <div className="loginBox">
                             <div className="logo text-center">
                                 <img src={Logo} width="70px" alt="" />
-                                <h5 className="fw-bold">Login to Home</h5>
+                                <h5 className="fw-bold">SignIn to Home</h5>
                             </div>
 
                             <div className="wrapper mt-3 card border">
@@ -201,25 +203,6 @@ const SignUp = () => {
                                     <div className="form-group">
                                         <Button type="submit" className="btn-blue btn-lg w-100 btn-big">
                                             {isLoading ? <CircularProgress style={{ width: 30, height: 27 }} /> : 'Sign Up'}
-                                        </Button>
-                                    </div>
-
-                                    <div className="form-group text-center mb-0">
-                                        <div className="d-flex align-items-center justify-content-center or mt-3 mb-3">
-                                            <span className="line"></span>
-                                            <span className="txt">or</span>
-                                            <span className="line"></span>
-                                        </div>
-                                        <Button
-                                            variant="outlined"
-                                            className="w-100 btn-lg loginWithGoogle"
-                                        >
-                                            <img
-                                                alt=""
-                                                src="https://cdn1.iconfinder.com/data/icons/google-s-logo/150/Google_Icons-09-1024.png"
-                                                width="25px"
-                                            />{' '}
-                                            Sign In with Google
                                         </Button>
                                     </div>
                                 </form>

@@ -89,7 +89,6 @@ const CategoryList = () => {
         e.preventDefault();
         setIsLoading(true);
         context.setProgress(40);
-
         editData(`/api/category/${editId}`, formFields)
             .then((res) => {
                 fetchDataFromApi('/api/category').then((res) => {
@@ -97,20 +96,12 @@ const CategoryList = () => {
                     setOpen(false);
                     setIsLoading(false);
                 });
-                context.setAlertBox({
-                    open: true,
-                    error: false,
-                    msg: 'Category updated!'
-                });
+                context.setAlertBox({ open: true, error: false, msg: 'Category updated!' });
                 context.setProgress(100);
             })
             .catch((err) => {
                 console.error("Category update error:", err);
-                context.setAlertBox({
-                    open: true,
-                    error: true,
-                    msg: err?.response?.data?.message || 'Failed to update category.'
-                });
+                context.setAlertBox({ open: true, error: true, msg: 'Failed to update category.' });
                 setIsLoading(false);
                 context.setProgress(100);
             });
@@ -148,21 +139,13 @@ const CategoryList = () => {
             .then(res => {
                 fetchDataFromApi(`/api/category`).then((res) => {
                     setCatData(res);
-                    context.setAlertBox({
-                        open: true,
-                        error: false,
-                        msg: 'Category deleted successfully!'
-                    });
+                    context.setAlertBox({ open: true, error: false, msg: 'Category deleted successfully!' });
                     handleCloseDelete();
                     setIsLoading(false);
                 });
             })
             .catch((err) => {
-                context.setAlertBox({
-                    open: true,
-                    error: true,
-                    msg: 'Failed to delete category.'
-                });
+                context.setAlertBox({ open: true, error: true, msg: 'Failed to delete category.' });
                 console.error("Delete Category error:", err);
                 handleCloseDelete();
                 setIsLoading(false);

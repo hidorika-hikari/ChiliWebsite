@@ -1,6 +1,5 @@
 import { useContext, useEffect, useState } from "react";
 import { Link } from "react-router-dom";
-import { FaFacebookF, FaTwitter, FaInstagram } from "react-icons/fa";
 import { Button, CircularProgress } from '@mui/material';
 import { MyContext } from "../../App";
 import { postData } from "../../utils/api";
@@ -167,22 +166,7 @@ const SignIn = () => {
                             <Link to="/"><Button className="btn-lg btn-big col me-3" variant="outlined"
                                 onClick={() => context.setIsHeaderFooterShow(true)}>Cancel</Button></Link>
                         </div>
-
                         <p className="txt">Not Registered?<Link to="/signUp" className="border-effect"> Sign Up</Link></p>
-
-                        <h6 className="mt-3 text-center fw-bold">Or continue with social account</h6>
-
-                        <ul className="list list-inline mt-3 mb-1 text-center socials">
-                            <li className="list-inline-item">
-                                <Link to="#" className="social-icon"><FaFacebookF /></Link>
-                            </li>
-                            <li className="list-inline-item">
-                                <Link to="#" className="social-icon"><FaTwitter /></Link>
-                            </li>
-                            <li className="list-inline-item">
-                                <Link to="#" className="social-icon"><FaInstagram /></Link>
-                            </li>
-                        </ul>
                     </form>
                     <Dialog
                         open={forgotOpen}
@@ -204,7 +188,6 @@ const SignIn = () => {
                                 <p className="text-sm text-gray-500 text-center">
                                     Enter your registered email address and we’ll send you a link to reset your password.
                                 </p>
-
                                 <TextField
                                     autoFocus
                                     margin="dense"

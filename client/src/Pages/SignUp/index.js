@@ -1,7 +1,6 @@
 import { useContext, useEffect, useState } from "react";
 import { MyContext } from "../../App";
 import { Link } from "react-router-dom";
-import { FaFacebookF, FaTwitter, FaInstagram } from "react-icons/fa";
 import { Button, CircularProgress } from '@mui/material';
 import { postData } from "../../utils/api";
 import Logo from '../../assets/logo.png'
@@ -33,38 +32,68 @@ const SignUp = () => {
 
     const signUp = (e) => {
         e.preventDefault();
+        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        const phoneRegex = /^[0-9]{10,15}$/;
+        const passwordRegex = /^(?=.*[!@#$%^&*(),.?":{}|<>]).{8,}$/;
+    
         if (formFields.name === "") {
             context.setAlertBox({
                 open: true,
                 error: true,
-                msg: "name can not be blank!"
-            })
+                msg: "Name cannot be blank!"
+            });
             return false;
         }
         if (formFields.email === "") {
             context.setAlertBox({
                 open: true,
                 error: true,
-                msg: "email can not be blank!"
-            })
+                msg: "Email cannot be blank!"
+            });
             return false;
         }
+        if (!emailRegex.test(formFields.email)) {
+            context.setAlertBox({
+                open: true,
+                error: true,
+                msg: "Please enter a valid email address."
+            });
+            return false;
+        }
+        
         if (formFields.phone === "") {
             context.setAlertBox({
                 open: true,
                 error: true,
-                msg: "phone can not be blank!"
-            })
+                msg: "Phone cannot be blank!"
+            });
+            return false;
+        }
+        if (!phoneRegex.test(formFields.phone)) {
+            context.setAlertBox({
+                open: true,
+                error: true,
+                msg: "Phone number must be 10–15 digits (numbers only)."
+            });
             return false;
         }
         if (formFields.password === "") {
             context.setAlertBox({
                 open: true,
                 error: true,
-                msg: "password can not be blank!"
-            })
+                msg: "Password cannot be blank!"
+            });
             return false;
         }
+        if (!passwordRegex.test(formFields.password)) {
+            context.setAlertBox({
+                open: true,
+                error: true,
+                msg: "Password must be at least 8 characters and include at least 1 symbol."
+            });
+            return false;
+        }
+    
         setIsLoading(true);
         postData('/api/user/signup', formFields)
             .then((res) => {
@@ -76,7 +105,6 @@ const SignUp = () => {
                     });
                     setTimeout(() => {
                         setIsLoading(true);
-                        //history('/signin');
                         window.location.href = '/signin';
                     }, 2000);
                 } else {
@@ -95,7 +123,7 @@ const SignUp = () => {
                     msg: "Something went wrong. Please try again."
                 });
             });
-    }
+    };
 
     return (
         <section className="section signInPage signUpPage">
@@ -167,19 +195,6 @@ const SignUp = () => {
                             </div>
                         </div>
                         <p className="txt">Not Registered?<Link to="/signin" className="border-effect"> Sign In</Link></p>
-                        <h6 className="mt-3 text-center fw-bold">Or continue with social account</h6>
-
-                        <ul className="list list-inline mt-3 mb-1 text-center socials">
-                            <li className="list-inline-item">
-                                <Link to="#" className="social-icon"><FaFacebookF /></Link>
-                            </li>
-                            <li className="list-inline-item">
-                                <Link to="#" className="social-icon"><FaTwitter /></Link>
-                            </li>
-                            <li className="list-inline-item">
-                                <Link to="#" className="social-icon"><FaInstagram /></Link>
-                            </li>
-                        </ul>
                     </form>
                 </div>
             </div>

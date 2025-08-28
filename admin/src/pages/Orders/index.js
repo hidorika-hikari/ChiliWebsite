@@ -1,9 +1,8 @@
-import { Breadcrumbs, Chip, emphasize, styled } from '@mui/material';
 import { FaHome } from 'react-icons/fa';
 import React, { useEffect, useState, useContext } from 'react';
 import { editData, fetchDataFromApi } from '../../utils/api';
 import { MyContext } from '../../App';
-import { Dialog, DialogTitle, DialogContent, DialogActions, Button, Typography, Grid, Divider } from '@mui/material';
+import { Breadcrumbs, Chip, emphasize, styled, Dialog, DialogTitle, DialogContent, DialogActions, Button, Typography, Grid, Divider } from '@mui/material';
 import Pagination from '@mui/material/Pagination';
 import { FormControl, Select, MenuItem } from '@mui/material';
 import dayjs from 'dayjs';
@@ -39,14 +38,16 @@ const menuProps = {
 };
 
 const Orders = () => {
+
+    const context = useContext(MyContext);
     const [selectedProduct, setSelectedProduct] = useState(null);
+    const [selectedAddress, setSelectedAddress] = useState(null);
+    const [updatingOrderId, setUpdatingOrderId] = useState(null);
+
+    const [openAddressDialog, setOpenAddressDialog] = useState(false);
     const [openDialog, setOpenDialog] = useState(false);
     const [orders, setOrders] = useState([]);
     const [setPage] = useState(1);
-    const [selectedAddress, setSelectedAddress] = useState(null);
-    const [updatingOrderId, setUpdatingOrderId] = useState(null);
-    const [openAddressDialog, setOpenAddressDialog] = useState(false);
-    const context = useContext(MyContext);
 
     const handleOpenDialog = (type, data) => {
         if (type === 'product') {
@@ -89,25 +90,12 @@ const Orders = () => {
                     );
                     return { ...prevOrders, ordersList: updatedList };
                 });
-
-                context.setAlertBox({
-                    open: true,
-                    error: false,
-                    msg: 'Order status updated successfully!'
-                });
+                context.setAlertBox({ open: true,  error: false, msg: 'Order status updated successfully!' });
             } else {
-                context.setAlertBox({
-                    open: true,
-                    error: true,
-                    msg: res.message || 'Failed to update status.'
-                });
+                context.setAlertBox({ open: true, error: true, msg: res.message || 'Failed to update status.' });
             }
         } catch (err) {
-            context.setAlertBox({
-                open: true,
-                error: true,
-                msg: 'Error while updating status.'
-            });
+            context.setAlertBox({ open: true, error: true, msg: 'Error while updating status.' });
         } finally {
             setUpdatingOrderId(null);
         }
@@ -165,11 +153,7 @@ const Orders = () => {
                                     <td>
                                         <button
                                             className="btn btn-sm btn-outline-primary"
-                                            onClick={() => context.setAlertBox({
-                                                open: true,
-                                                error: false,
-                                                msg: `Order ID: ${order._id}`
-                                            })}
+                                            onClick={() => context.setAlertBox({ open: true, error: false, msg: `Order ID: ${order._id}` })}
                                         >
                                             {order._id.slice(0, 8)}...
                                         </button>

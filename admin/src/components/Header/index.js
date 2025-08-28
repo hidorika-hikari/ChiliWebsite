@@ -1,6 +1,5 @@
 import { MdMenuOpen, MdOutlineLightMode, MdOutlineMenu } from "react-icons/md";
 import { Link } from "react-router-dom";
-import { IoShieldHalfSharp } from "react-icons/io5";
 import { useContext, useState } from "react";
 import logo from "../../assets/images/logo.png";
 import Button from '@mui/material/Button';
@@ -8,7 +7,6 @@ import React from "react";
 import Menu from '@mui/material/Menu';
 import MenuItem from '@mui/material/MenuItem';
 import ListItemIcon from '@mui/material/ListItemIcon';
-import PersonAdd from '@mui/icons-material/PersonAdd';
 import Logout from '@mui/icons-material/Logout';
 import { MyContext } from "../../App";
 
@@ -91,18 +89,6 @@ const Header = () => {
                                             transformOrigin={{ horizontal: 'right', vertical: 'top' }}
                                             anchorOrigin={{ horizontal: 'right', vertical: 'bottom' }}
                                         >
-                                            <MenuItem onClick={handleCloseMyAccDrop}>
-                                                <ListItemIcon>
-                                                    <PersonAdd fontSize="small" />
-                                                </ListItemIcon>
-                                                Add another account
-                                            </MenuItem>
-                                            <MenuItem onClick={handleCloseMyAccDrop}>
-                                                <ListItemIcon>
-                                                    <IoShieldHalfSharp />
-                                                </ListItemIcon>
-                                                Reset Password
-                                            </MenuItem>
                                             <MenuItem onClick={logout}>
                                                 <ListItemIcon>
                                                     <Logout fontSize="small" />
