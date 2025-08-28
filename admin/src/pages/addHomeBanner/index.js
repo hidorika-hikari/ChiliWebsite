@@ -73,7 +73,7 @@ const AddHomeBanner = () => {
             context.setAlertBox({
                 open: true,
                 error: true,
-                msg: 'Please fill all a details'
+                msg: 'Image URL is required.'
             });
             return false;
         }

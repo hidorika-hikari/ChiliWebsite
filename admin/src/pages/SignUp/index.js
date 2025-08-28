@@ -9,34 +9,30 @@ import { FaUserCircle } from 'react-icons/fa';
 import { IoShieldCheckmarkSharp } from 'react-icons/io5';
 import { postData } from '../../utils/api';
 import { FaPhoneAlt } from "react-icons/fa";
-import FormControlLabel from '@mui/material/FormControlLabel';
-import Checkbox from '@mui/material/Checkbox';
 import Logo from '../../assets/images/logo.png';
 
 const SignUp = () => {
-    //const history = useNavigate();
     const [isLoading, setIsLoading] = useState(false);
     const [inputIndex, setInputIndex] = useState(null);
     const [isShowPassword, setIsShowPassword] = useState(false);
     const [isShowConfirmPassword, setIsShowConfirmPassword] = useState(false);
     const context = useContext(MyContext);
-    const [isAdminSignup, setIsAdminSignup] = useState(false);
+
     const [formFields, setFormFields] = useState({
         name: '',
         email: '',
         phone: '',
         password: '',
         confirmPassword: '',
-        role: 'customer'
-    })
+        role: 'admin'
+    });
 
     useEffect(() => {
         context.setIsHideSidebarAndHeader(true);
     }, [context]);
 
-    const focusInput = (index) => {
-        setInputIndex(index);
-    };
+    const focusInput = (index) => setInputIndex(index);
+
     const onChangeInput = (e) => {
         setFormFields((prev) => ({
             ...prev,
@@ -44,57 +40,31 @@ const SignUp = () => {
         }));
     };
 
-    const handleAdminCheckbox = (e) => {
-        setIsAdminSignup(e.target.checked);
-        setFormFields((prev) => ({
-            ...prev,
-            role: e.target.checked ? 'admin' : 'customer'
-        }));
-    };
-
     const signUp = (e) => {
         e.preventDefault();
         setIsLoading(true);
-        if(formFields.name === ""){
-            context.setAlertBox({
-                open: true,
-                error: true,
-                msg: "Name can not be blank!"
-            })
+
+        if (formFields.name === "") {
+            context.setAlertBox({ open: true, error: true, msg: "Name can not be blank!" });
             return false;
         }
-        if(formFields.email === ""){
-            context.setAlertBox({
-                open: true,
-                error: true,
-                msg: "Email can not be blank!"
-            })
+        if (formFields.email === "") {
+            context.setAlertBox({ open: true, error: true, msg: "Email can not be blank!" });
             return false;
         }
-        if(formFields.phone === ""){
-            context.setAlertBox({
-                open: true,
-                error: true,
-                msg: "Phone can not be blank!"
-            })
+        if (formFields.phone === "") {
+            context.setAlertBox({ open: true, error: true, msg: "Phone can not be blank!" });
             return false;
         }
-        if(formFields.password === ""){
-            context.setAlertBox({
-                open: true,
-                error: true,
-                msg: "Password can not be blank!"
-            })
+        if (formFields.password === "") {
+            context.setAlertBox({ open: true, error: true, msg: "Password can not be blank!" });
             return false;
         }
-        if(formFields.confirmPassword !== formFields.password){
-            context.setAlertBox({
-                open: true,
-                error: true,
-                msg: "Password not match"
-            })
+        if (formFields.confirmPassword !== formFields.password) {
+            context.setAlertBox({ open: true, error: true, msg: "Password not match" });
             return false;
         }
+
         postData('/api/user/signup', formFields)
             .then((res) => {
                 if (res.status === true) {
@@ -105,8 +75,7 @@ const SignUp = () => {
                     });
                     setTimeout(() => {
                         setIsLoading(true);
-                        window.location.href = '/login';
-                        //history('/login');
+                        window.location.href = '/signIn';
                     }, 2000);
                 } else {
                     context.setAlertBox({
@@ -124,7 +93,7 @@ const SignUp = () => {
                     msg: "Something went wrong. Please try again."
                 });
             });
-    }
+    };
 
     return (
         <>
@@ -137,7 +106,7 @@ const SignUp = () => {
                 <div className="row">
                     <div className="col-md-8 d-flex align-items-center flex-column part1 justify-content-center">
                         <h1>BEST UX/UI FASHION <span className="text-sky">ECOMMERCE DASHBOARD</span> & ADMIN PANEL</h1>
-                        <p>Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries</p>
+                        <p>Lorem Ipsum is simply dummy text...</p>
                         <div className='w-100 mt-4'>
                             <Link to={'/'}><Button className='btn-blue btn-lg btn-big'><IoMdHome />Go To Home</Button></Link>
                         </div>
@@ -152,12 +121,8 @@ const SignUp = () => {
 
                             <div className="wrapper mt-3 card border">
                                 <form onSubmit={signUp}>
-                                    <div
-                                        className={`form-group position-relative ${inputIndex === 0 && 'focus'}`}
-                                    >
-                                        <span className="icon">
-                                            <FaUserCircle />
-                                        </span>
+                                    <div className={`form-group position-relative ${inputIndex === 0 && 'focus'}`}>
+                                        <span className="icon"><FaUserCircle /></span>
                                         <input
                                             type="text"
                                             className="form-control"
@@ -169,12 +134,8 @@ const SignUp = () => {
                                         />
                                     </div>
 
-                                    <div
-                                        className={`form-group position-relative ${inputIndex === 1 && 'focus'}`}
-                                    >
-                                        <span className="icon">
-                                            <MdEmail />
-                                        </span>
+                                    <div className={`form-group position-relative ${inputIndex === 1 && 'focus'}`}>
+                                        <span className="icon"><MdEmail /></span>
                                         <input
                                             type="text"
                                             className="form-control"
@@ -186,12 +147,8 @@ const SignUp = () => {
                                         />
                                     </div>
 
-                                    <div
-                                        className={`form-group position-relative ${inputIndex === 2 && 'focus'}`}
-                                    >
-                                        <span className="icon">
-                                            <FaPhoneAlt />
-                                        </span>
+                                    <div className={`form-group position-relative ${inputIndex === 2 && 'focus'}`}>
+                                        <span className="icon"><FaPhoneAlt /></span>
                                         <input
                                             type="text"
                                             className="form-control"
@@ -203,14 +160,10 @@ const SignUp = () => {
                                         />
                                     </div>
 
-                                    <div
-                                        className={`form-group position-relative ${inputIndex === 3 && 'focus'}`}
-                                    >
-                                        <span className="icon">
-                                            <RiLockPasswordFill />
-                                        </span>
+                                    <div className={`form-group position-relative ${inputIndex === 3 && 'focus'}`}>
+                                        <span className="icon"><RiLockPasswordFill /></span>
                                         <input
-                                            type={`${isShowPassword === true ? 'text' : 'password'}`}
+                                            type={isShowPassword ? 'text' : 'password'}
                                             className="form-control"
                                             placeholder="enter your password"
                                             onFocus={() => focusInput(3)}
@@ -218,31 +171,18 @@ const SignUp = () => {
                                             name='password'
                                             onChange={onChangeInput}
                                         />
-
                                         <span
                                             className="toggleShowPassword"
-                                            onClick={() =>
-                                                setIsShowPassword(
-                                                    !isShowPassword
-                                                )
-                                            }
+                                            onClick={() => setIsShowPassword(!isShowPassword)}
                                         >
-                                            {isShowPassword === true ? (
-                                                <IoMdEyeOff />
-                                            ) : (
-                                                <IoMdEye />
-                                            )}
+                                            {isShowPassword ? <IoMdEyeOff /> : <IoMdEye />}
                                         </span>
                                     </div>
 
-                                    <div
-                                        className={`form-group position-relative ${inputIndex === 4 && 'focus'}`}
-                                    >
-                                        <span className="icon">
-                                            <IoShieldCheckmarkSharp />
-                                        </span>
+                                    <div className={`form-group position-relative ${inputIndex === 4 && 'focus'}`}>
+                                        <span className="icon"><IoShieldCheckmarkSharp /></span>
                                         <input
-                                            type={`${isShowConfirmPassword === true ? 'text' : 'password'}`}
+                                            type={isShowConfirmPassword ? 'text' : 'password'}
                                             className="form-control"
                                             placeholder="confirm your password"
                                             onFocus={() => focusInput(4)}
@@ -250,34 +190,17 @@ const SignUp = () => {
                                             name='confirmPassword'
                                             onChange={onChangeInput}
                                         />
-
                                         <span
                                             className="toggleShowPassword"
-                                            onClick={() =>
-                                                setIsShowConfirmPassword(
-                                                    !isShowConfirmPassword
-                                                )
-                                            }
+                                            onClick={() => setIsShowConfirmPassword(!isShowConfirmPassword)}
                                         >
-                                            {isShowConfirmPassword === true ? (
-                                                <IoMdEyeOff />
-                                            ) : (
-                                                <IoMdEye />
-                                            )}
+                                            {isShowConfirmPassword ? <IoMdEyeOff /> : <IoMdEye />}
                                         </span>
                                     </div>
 
-                                    <FormControlLabel
-                                        className="mb-2"
-                                        control={<Checkbox checked={isAdminSignup} onChange={handleAdminCheckbox} />}
-                                        label="Sign up as admin (only for trusted users)"
-                                    />
-
                                     <div className="form-group">
                                         <Button type="submit" className="btn-blue btn-lg w-100 btn-big">
-                                            {
-                                                isLoading === true ? <CircularProgress style={{ width: 30, height: 27 }} /> : 'Sign Up'
-                                            }
+                                            {isLoading ? <CircularProgress style={{ width: 30, height: 27 }} /> : 'Sign Up'}
                                         </Button>
                                     </div>
 
@@ -303,10 +226,7 @@ const SignUp = () => {
 
                                 <span className="auth-note text-center d-block mt-3">
                                     Don't have an account?
-                                    <Link to={'/login'} className="link color">
-                                        {' '}
-                                        Sign In
-                                    </Link>
+                                    <Link to={'/signIn'} className="link color"> Sign In </Link>
                                 </span>
                             </div>
                         </div>

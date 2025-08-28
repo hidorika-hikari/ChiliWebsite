@@ -8,7 +8,7 @@ import { Link } from 'react-router-dom';
 import { postData } from '../../utils/api';
 import Logo from '../../assets/images/logo.png';
 
-const Login = () => {
+const SignIn = () => {
     const [isLoading, setIsLoading] = useState(false);
     const [inputIndex, setInputIndex] = useState(null);
     const [isShowPassword, setIsShowPassword] = useState(false);
@@ -120,7 +120,7 @@ const Login = () => {
                                 <input
                                     type="text"
                                     className="form-control"
-                                    placeholder="enter your email"
+                                    placeholder="Enter your email"
                                     onFocus={() => focusInput(0)}
                                     onBlur={() => setInputIndex(null)}
                                     name='email'
@@ -137,7 +137,7 @@ const Login = () => {
                                 <input
                                     type={`${isShowPassword === true ? 'text' : 'password'}`}
                                     className="form-control"
-                                    placeholder="enter your password"
+                                    placeholder="Enter your password"
                                     onFocus={() => focusInput(1)}
                                     onBlur={() => setInputIndex(null)}
                                     name='password'
@@ -167,9 +167,6 @@ const Login = () => {
                             </div>
 
                             <div className="form-group text-center mb-0">
-                                <Link to={'/forgot-password'} className="link text-decoration-none">
-                                    FORGOT PASSWORD
-                                </Link>
                                 <div className="d-flex align-items-center justify-content-center or mt-3 mb-3">
                                     <span className="line"></span>
                                     <span className="txt">or</span>
@@ -194,7 +191,7 @@ const Login = () => {
                         <span className="auth-note text-center">
                             Don't have an account?
                             <Link to={'/signUp'} className="link color">
-                                {''} Register
+                                {''} Sign Up
                             </Link>
                         </span>
                     </div>
@@ -204,4 +201,4 @@ const Login = () => {
     );
 };
 
-export default Login;
+export default SignIn;

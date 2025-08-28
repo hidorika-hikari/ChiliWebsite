@@ -41,9 +41,10 @@ const StyleBreadcrumb = styled(Chip)(({ theme }) => {
 });
 
 const AddSubCat = () => {
-    
+
     const history = useNavigate();
     const [isLoading, setIsLoading] = useState(false);
+
     const [categoryVal, setCategoryVal] = useState('');
     const [formFields, setFormFields] = useState({
         category: '',
@@ -69,18 +70,54 @@ const AddSubCat = () => {
 
     const addSubCat = (e) => {
         e.preventDefault();
+
         if (formFields.category === "") {
             context.setAlertBox({
                 open: true,
                 msg: 'Please select a category',
                 error: true
             });
+            return;
         }
-        postData(`/api/subCat/create`, formFields).then(res => {
-            setIsLoading(false);
-            history('/subCategory')
-        });
-    }
+
+        if (formFields.subCat.trim() === "") {
+            context.setAlertBox({
+                open: true,
+                msg: 'Please enter a subcategory name',
+                error: true
+            });
+            return;
+        }
+
+        setIsLoading(true);
+        context.setProgress(40);
+
+        postData(`/api/subCat/create`, formFields)
+            .then((res) => {
+                setIsLoading(false);
+                context.setProgress(100);
+
+                context.setAlertBox({
+                    open: true,
+                    msg: 'Subcategory added successfully!',
+                    error: false
+                });
+
+                history('/subCategory');
+            })
+            .catch((err) => {
+                setIsLoading(false);
+                context.setProgress(100);
+
+                context.setAlertBox({
+                    open: true,
+                    msg: 'Failed to add subcategory. Please try again later.',
+                    error: true
+                });
+
+                console.error("Add Subcategory error:", err);
+            });
+    };
 
     return (
         <div className="right-content w-100">

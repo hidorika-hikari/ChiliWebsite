@@ -45,10 +45,14 @@ const StyleBreadcrumb = styled(Chip)(({ theme }) => {
 });
 
 const ProductEdit = () => {
-    const [imagePreviews, setImagePreviews] = useState([]);
-    const [newImageUrl, setNewImageUrl] = useState('');
+
+    const context = useContext(MyContext);
     const [isLoading, setIsLoading] = useState(false);
     const [productLoading, setProductLoading] = useState(true);
+
+    const [imagePreviews, setImagePreviews] = useState([]);
+    const [newImageUrl, setNewImageUrl] = useState('');
+    
     const history = useNavigate();
     const { id } = useParams();
 
@@ -97,8 +101,6 @@ const ProductEdit = () => {
     const [productSizeData, setProductSizeData] = useState([]);
 
     const [catData, setCatData] = useState([]);
-    const context = useContext(MyContext);
-
     const [formFields, setFormFields] = useState({
         name: '',
         subCat: null,
@@ -231,7 +233,6 @@ const ProductEdit = () => {
 
     const updateProduct = (e) => {
         e.preventDefault();
-
         if (formFields.name === "") {
             context.setAlertBox({
                 open: true,
@@ -663,7 +664,7 @@ const ProductEdit = () => {
                                 ))}
                                 <div className='uploadBox'>
                                     <input
-                                        name="images"
+                                        name=""
                                         onChange={handleImageChange}
                                     />
                                     <div className='info'>

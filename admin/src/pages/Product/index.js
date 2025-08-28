@@ -9,6 +9,11 @@ import { deleteData, fetchDataFromApi } from '../../utils/api';
 import Button from '@mui/material/Button';
 import Pagination from '@mui/material/Pagination';
 import Rating from '@mui/material/Rating';
+import Dialog from '@mui/material/Dialog';
+import DialogTitle from '@mui/material/DialogTitle';
+import DialogContent from '@mui/material/DialogContent';
+import DialogActions from '@mui/material/DialogActions';
+import CircularProgress from '@mui/material/CircularProgress';
 
 const StyleBreadcrumb = styled(Chip)(({ theme }) => {
     const backgroundColor =
@@ -35,6 +40,20 @@ const Products = () => {
     const [productList, setProductList] = useState([]);
     const context = useContext(MyContext);
 
+    const [deleteId, setDeleteId] = useState(null);
+    const [openDelete, setOpenDelete] = useState(false);
+    const [isDeleting, setIsDeleting] = useState(false);
+
+    const handleOpenDelete = (id) => {
+        setDeleteId(id);
+        setOpenDelete(true);
+    };
+
+    const handleCloseDelete = () => {
+        setDeleteId(null);
+        setOpenDelete(false);
+    };
+
     useEffect(() => {
         context.setProgress(40);
         context.setIsHideSidebarAndHeader(false);
@@ -45,20 +64,36 @@ const Products = () => {
         window.scrollTo(0, 0);
     }, []);
 
-    const deleteProduct = (id) => {
+    const deleteProduct = () => {
+        setIsDeleting(true);
         context.setProgress(40);
-        deleteData(`/api/products/${id}`).then((res) => {
-            context.setProgress(100);
-            context.setAlertBox({
-                open: true,
-                error: true,
-                msg: 'Product deleted!'
-            });
-            fetchDataFromApi("/api/products").then((res) => {
-                setProductList(res);
+        deleteData(`/api/products/${deleteId}`)
+            .then(() => {
+                fetchDataFromApi("/api/products")
+                    .then((res) => setProductList(res))
+                    .catch((err) => console.error("Fetch products error:", err));
+
+                context.setAlertBox({
+                    open: true,
+                    error: false,
+                    msg: 'Product deleted successfully!'
+                });
+                setIsDeleting(false);
+                handleCloseDelete();
+                context.setProgress(100);
             })
-        })
-    }
+            .catch((err) => {
+                console.error("Delete product error:", err);
+                context.setAlertBox({
+                    open: true,
+                    error: true,
+                    msg: 'Failed to delete product.'
+                });
+                setIsDeleting(false);
+                handleCloseDelete();
+                context.setProgress(100);
+            });
+    };
 
     const handleChange = (event, value) => {
         context.setProgress(40);
@@ -162,8 +197,9 @@ const Products = () => {
                                                         <Button
                                                             className="error"
                                                             color="error"
-                                                            onClick={() => deleteProduct(item.id)}
-                                                        ><MdDelete />
+                                                            onClick={() => handleOpenDelete(item.id)}
+                                                        >
+                                                            <MdDelete />
                                                         </Button>
                                                     </div>
                                                 </td>
@@ -173,6 +209,22 @@ const Products = () => {
                                 }
                             </tbody>
                         </table>
+                        <Dialog open={openDelete} onClose={handleCloseDelete}>
+                            <DialogTitle>Confirm Delete</DialogTitle>
+                            <DialogContent>
+                                <p>Are you sure you want to delete this product?</p>
+                            </DialogContent>
+                            <DialogActions>
+                                <Button onClick={handleCloseDelete} variant="outlined">Cancel</Button>
+                                <Button
+                                    onClick={deleteProduct}
+                                    color="error"
+                                    variant="contained"
+                                >
+                                    {isDeleting ? <CircularProgress size={20} color="inherit" /> : 'Delete'}
+                                </Button>
+                            </DialogActions>
+                        </Dialog>
                         {
                             productList?.totalPages > 1 &&
                             <div className="d-flex tableFooter">

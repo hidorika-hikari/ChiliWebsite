@@ -6,7 +6,6 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import Dashboard from './pages/Dashboard';
 import Header from './components/Header';
 import Sidebar from './components/Sidebar';
-import Login from './pages/Login';
 import SignUp from './pages/SignUp';
 import LoadingBar from "react-top-loading-bar";
 import ProductDetails from './pages/ProductDetails';
@@ -18,7 +17,7 @@ import EditProduct from './pages/editProduct';
 import AddSubCat from './pages/addSubCategory';
 import CategoryList from './pages/CategoryList';
 import AddProductWeight from './pages/addProductWeight';
-import AddProductSpicy from './pages/addProductSize';
+import AddProductSpicy from './pages/addProductSpicy';
 import AddProductContent from './pages/addProductContent';
 import AddProduct from './pages/addProduct';
 import Orders from './pages/Orders';
@@ -26,18 +25,20 @@ import SubCategoryList from './pages/subCategoryList';
 import AddHomeBanner from './pages/addHomeBanner';
 import HomeBannerList from './pages/homeBannerList';
 import ProtectedRoute from './components/ProtectedRoute';
+import SignIn from './pages/SignIn';
 
 const MyContext = createContext();
 
 function App() {
     const [themeMode, setThemeMode] = useState(true);
     const [isLogin, setIsLogin] = useState(false);
+
+    const [progress, setProgress] = useState(0);
     const [isToggleSidebar, setIsToggleSidebar] = useState(false);
     const [isHideSidebarAndHeader, setIsHideSidebarAndHeader] = useState(false);
     
     const [catData, setCatData] = useState([]);
     const [subCatData, setSubCatData] = useState([]);
-    const [progress, setProgress] = useState(0);
 
     const [user,setUser] = useState({
         name: '',
@@ -98,7 +99,7 @@ function App() {
                     userId: '',
                     role: ''
                 });
-                window.location.href = '/login';
+                window.location.href = '/signIn';
             }
         } else {
             setIsLogin(false);
@@ -196,9 +197,9 @@ function App() {
                                 }
                             />
                             <Route
-                                path="/login"
+                                path="/signIn"
                                 exact={true}
-                                element={<Login />}
+                                element={<SignIn />}
                             />
                             <Route
                                 path="/signUp"

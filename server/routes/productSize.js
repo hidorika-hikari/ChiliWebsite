@@ -65,6 +65,7 @@ router.put('/:id',async (req, res) => {
             success: false
         })
     }
+    return res.status(200).json(item);
 });
 
 module.exports = router;

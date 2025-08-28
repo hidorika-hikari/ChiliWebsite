@@ -45,10 +45,13 @@ const StyleBreadcrumb = styled(Chip)(({ theme }) => {
 });
 
 const AddProduct = () => {
+
+    const context = useContext(MyContext);
+    const history = useNavigate();
+    const [isLoading, setIsLoading] = useState(false);
+
     const [imagePreviews, setImagePreviews] = useState([]);
     const [newImageUrl, setNewImageUrl] = useState('');
-    const [isLoading, setIsLoading] = useState(false);
-    const history = useNavigate();
 
     const handleImageChange = (event) => {
         const files = Array.from(event.target.files);
@@ -93,8 +96,6 @@ const AddProduct = () => {
     const [productRamsData, setProductRamsData] = useState([]);
     const [productWeightData, setProductWeightData] = useState([]);
     const [productSizeData, setProductSizeData] = useState([]);
-
-    const context = useContext(MyContext);
 
     const [formFields, setFormFields] = useState({
         name: '',
@@ -174,7 +175,6 @@ const AddProduct = () => {
 
     const addProduct = (e) => {
         e.preventDefault();
-
         if (formFields.name === "") {
             context.setAlertBox({
                 open: true,
@@ -266,32 +266,42 @@ const AddProduct = () => {
         }
 
         setIsLoading(true);
-        postData('api/products/create', formFields).then((res) => {
-            setIsLoading(false);
-            context.setAlertBox({
-                open: true,
-                msg: 'Product is created!',
-                error: false
+        postData('api/products/create', formFields)
+            .then((res) => {
+                setIsLoading(false);
+                context.setAlertBox({
+                    open: true,
+                    msg: 'Product is created!',
+                    error: false
+                });
+                setFormFields({
+                    name: '',
+                    description: '',
+                    subCat: '',
+                    images: [],
+                    brand: '',
+                    price: 0,
+                    oldPrice: 0,
+                    category: '',
+                    countInStock: 0,
+                    rating: 0,
+                    isFeatured: false,
+                    discount: 0,
+                    productRams: '',
+                    productSize: '',
+                    productWeight: ''
+                });
+                history('/products');
+            })
+            .catch((err) => {
+                setIsLoading(false);
+                console.error("Create product error:", err);
+                context.setAlertBox({
+                    open: true,
+                    msg: err?.response?.data?.message || 'Failed to create product. Please try again later.',
+                    error: true
+                });
             });
-            setFormFields({
-                name: '',
-                description: '',
-                subCat: '',
-                images: [],
-                brand: '',
-                price: 0,
-                oldPrice: 0,
-                category: '',
-                countInStock: 0,
-                rating: 0,
-                isFeatured: false,
-                discount: 0,
-                productRams: '',
-                productSize: '',
-                productWeight: ''
-            });
-            history('/products');
-        })
     }
 
     return (
@@ -613,7 +623,7 @@ const AddProduct = () => {
                                 <div className='uploadBox'>
                                     <input
                                         type=""
-                                        name="images"
+                                        name=""
                                         onChange={handleImageChange}
                                     />
                                     <div className='info'>

@@ -6,62 +6,91 @@ router.get('/', async (req, res) => {
     try {
         const productWeightList = await ProductWeight.find();
         if (!productWeightList) {
-            res.status(500).json({ success: false })
+            return res.status(500).json({ success: false })
         }
         return res.status(200).json(productWeightList);
     }
     catch(error) {
-        res.status(500).json({ success: false })
+        console.error('Error fetching product weights:', error);
+        return res.status(500).json({ success: false, message: error.message })
     }
 });
 
 router.get('/:id', async (req, res) => {
-    const item = await ProductWeight.findById(req.params.id);
-    if(!item) {
-        res.status(500).json({ message: "ProductWeight with the given ID wasn't found" })
+    try {
+        const item = await ProductWeight.findById(req.params.id);
+        if(!item) {
+            return res.status(404).json({ message: "ProductWeight with the given ID wasn't found" })
+        }
+        return res.status(200).json(item);
+    } catch(error) {
+        console.error('Error fetching product weight:', error);
+        return res.status(500).json({ message: error.message })
     }
-    return res.status(200).send(item);
 })
 
 router.post('/create', async (req,res) => {
-    let productWeight = new ProductWeight({
-        productWeight: req.body.productWeight
-    });
-    if (!productWeight) {
-        res.status(500).json({
-            error: err,
+    try {
+        let productWeight = new ProductWeight({
+            productWeight: req.body.productWeight
+        });
+        
+        productWeight = await productWeight.save();
+        return res.status(201).json(productWeight);
+    } catch(error) {
+        console.error('Error creating product weight:', error);
+        return res.status(500).json({
+            error: error.message,
             success: false
         })
     }
-    productWeight = await productWeight.save();
-    res.status(201).json(productWeight);
 });
 
 router.delete('/:id', async (req,res) => {
-    const deleteItem = await ProductWeight.findByIdAndDelete(req.params.id);
-    if (!deleteItem){
-        res.status(404).json({
-            message: 'Item not Found',
+    try {
+        const deleteItem = await ProductWeight.findByIdAndDelete(req.params.id);
+        if (!deleteItem){
+            return res.status(404).json({
+                message: 'Item not Found',
+                success: false
+            })
+        }
+        return res.status(200).json({
+            success: true,
+            message: 'Item deleted'
+        })
+    } catch(error) {
+        console.error('Error deleting product weight:', error);
+        return res.status(500).json({
+            message: error.message,
             success: false
         })
     }
-    res.status(200).json({
-        success: true,
-        message: 'Item deleted'
-    })
 });
 
-router.put('/:id',async (req, res) => {
-    const item = await ProductWeight.findByIdAndUpdate(
-        req.params.id,
-        {
-            productWeight: req.body.productWeight,
-        },
-        { new: true }
-    )
-    if (!item) {
+router.put('/:id', async (req, res) => {
+    try {
+        const item = await ProductWeight.findByIdAndUpdate(
+            req.params.id,
+            {
+                productWeight: req.body.productWeight,
+            },
+            { new: true }
+        )
+        
+        if (!item) {
+            return res.status(404).json({
+                message: "Item not found or can't be updated",
+                success: false
+            })
+        }
+
+        return res.status(200).json(item);
+        
+    } catch(error) {
+        console.error('Error updating product weight:', error);
         return res.status(500).json({
-            message: "Item can't be updated",
+            message: error.message,
             success: false
         })
     }

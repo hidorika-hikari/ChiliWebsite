@@ -37,7 +37,6 @@ const Header = () => {
             msg: "Logout Successfully"
         })
         setTimeout(() => {
-            //history('/login');
             window.location.href = '/signIn';
         }, 1500);
     }

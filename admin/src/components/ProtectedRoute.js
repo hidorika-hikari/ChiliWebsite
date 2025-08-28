@@ -8,7 +8,7 @@ const ProtectedRoute = ({ children }) => {
     if (!token || userData.role !== 'admin') {
         localStorage.removeItem("token");
         localStorage.removeItem("user");
-        return <Navigate to="/login" replace />;
+        return <Navigate to="/signIn" replace />;
     }
     return children;
 };

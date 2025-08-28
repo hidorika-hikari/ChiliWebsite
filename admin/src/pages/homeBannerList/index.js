@@ -1,17 +1,13 @@
 import React, { useState, useEffect, useContext } from 'react';
-import { Button, Dialog, DialogTitle, DialogContent, DialogActions, TextField } from '@mui/material';
-import { Breadcrumbs, Chip, CircularProgress, emphasize, styled } from '@mui/material';
+import { Link } from 'react-router-dom';
+import { Breadcrumbs, Chip, Button, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, CircularProgress, TextField, emphasize, styled } from '@mui/material';
 import { FaHome, FaPencilAlt } from 'react-icons/fa';
 import { MdDelete } from 'react-icons/md';
-import { Link } from 'react-router-dom';
+import { fetchDataFromApi, deleteData, editData } from '../../utils/api';
 import { MyContext } from '../../App';
-import { fetchDataFromApi, editData, deleteData } from '../../utils/api';
 
 const StyleBreadcrumb = styled(Chip)(({ theme }) => {
-    const backgroundColor =
-        theme.palette.mode === 'light'
-            ? theme.palette.grey[100]
-            : theme.palette.grey[800];
+    const backgroundColor = theme.palette.mode === 'light' ? theme.palette.grey[100] : theme.palette.grey[800];
     return {
         backgroundColor,
         height: theme.spacing(3),
@@ -28,84 +24,78 @@ const StyleBreadcrumb = styled(Chip)(({ theme }) => {
 });
 
 const HomeBannerList = () => {
-    const [bannerData, setBannerData] = useState([]);
-    const [open, setOpen] = useState(false);
-    const [editId, setEditId] = useState(null);
-    const [isLoading, setIsLoading] = useState(false);
-    const context = useContext(MyContext);
 
-    const [formFields, setFromFields] = useState({
-        images: ['']
-    });
+    const context = useContext(MyContext);
+    const [isLoading, setIsLoading] = useState(false);
+    const [bannerData, setBannerData] = useState([]);
+
+    const [editOpen, setEditOpen] = useState(false);
+    const [deleteOpen, setDeleteOpen] = useState(false);
+
+    const [editId, setEditId] = useState(null);
+    const [deleteId, setDeleteId] = useState(null);
+
+    const [formFields, setFormFields] = useState({ images: [''] });
 
     useEffect(() => {
         window.scrollTo(0, 0);
-        fetchDataFromApi('/api/homeBanner').then((res) => {
-            setBannerData(res);
-        });
+        fetchDataFromApi('/api/homeBanner').then((res) => setBannerData(res));
     }, []);
 
-    const handleClose = () => {
-        setOpen(false);
-    };
-
-    const editBanner = (id) => {
-        setFromFields({ images: [''] });
-        setOpen(true);
+    const handleEditOpen = (id) => {
+        setEditOpen(true);
         setEditId(id);
         fetchDataFromApi(`/api/homeBanner/${id}`).then((res) => {
-            setFromFields({
-                images: Array.isArray(res.images) ? res.images : ['']
-            });
+            setFormFields({ images: Array.isArray(res.images) ? res.images : [''] });
         });
     };
+    const handleEditClose = () => setEditOpen(false);
 
-    const updateBanner = (e) => {
+    const handleUpdateBanner = async (e) => {
         e.preventDefault();
         setIsLoading(true);
-        editData(`/api/homeBanner/${editId}`, formFields).then((res) => {
-            fetchDataFromApi('/api/homeBanner').then((res) => {
-                setBannerData(res);
-                setOpen(false);
-                setIsLoading(false);
-            });
-            context.setAlertBox({
-                open: true,
-                error: false,
-                msg: 'Banner updated!'
-            });
-        });
+        try {
+            await editData(`/api/homeBanner/${editId}`, formFields);
+            const updatedData = await fetchDataFromApi('/api/homeBanner');
+            setBannerData(updatedData);
+            setEditOpen(false);
+            setIsLoading(false);
+            context.setAlertBox({ open: true, error: false, msg: 'Banner updated successfully!' });
+        } catch {
+            setIsLoading(false);
+            context.setAlertBox({ open: true, error: true, msg: 'Failed to update banner.' });
+        }
     };
 
-    const addImgUrl = (e) => {
-        const arr = [e.target.value];
-        setFromFields({
-            ...formFields,
-            [e.target.name]: arr
-        });
+    const handleImgChange = (e) => {
+        setFormFields({ ...formFields, [e.target.name]: [e.target.value] });
     };
 
-    const deleteBanner = (id) => {
-        deleteData(`/api/homeBanner/${id}`).then(() => {
-            fetchDataFromApi('/api/homeBanner').then((res) => {
-                setBannerData(res);
-            });
-        });
+    const handleDeleteClick = (id) => {
+        setDeleteId(id);
+        setDeleteOpen(true);
+    };
+    const handleDeleteCancel = () => setDeleteOpen(false);
+    const handleDeleteConfirm = async () => {
+        try {
+            await deleteData(`/api/homeBanner/${deleteId}`);
+            const updatedData = await fetchDataFromApi('/api/homeBanner');
+            setBannerData(updatedData);
+            setDeleteOpen(false);
+            context.setAlertBox({ open: true, error: false, msg: 'Banner deleted successfully!' });
+        } catch {
+            setDeleteOpen(false);
+            context.setAlertBox({ open: true, error: true, msg: 'Failed to delete banner.' });
+        }
     };
 
     return (
-        <>
         <div className="right-content w-100">
             <div className="card shadow border-0 w-100 flex-row p-4 align-items-center">
                 <h5 className="mb-0">Home Banner List</h5>
                 <div className='ms-auto d-flex align-items-center'>
                     <Breadcrumbs aria-label="breadcrumb" className="ms-auto breadcrumb_">
-                        <StyleBreadcrumb
-                            component="a"
-                            href={'/'}
-                            label="Dashboard"
-                            icon={<FaHome fontSize="small" />}
-                        />
+                        <StyleBreadcrumb component="a" href="/" label="Dashboard" icon={<FaHome fontSize="small" />} />
                         <StyleBreadcrumb label="HomeBanner" component="a" href="#" />
                     </Breadcrumbs>
                     <Link to="/homeBanner/add">
@@ -124,80 +114,77 @@ const HomeBannerList = () => {
                             </tr>
                         </thead>
                         <tbody>
-                            {bannerData?.length > 0 && bannerData.map((item, index) => (
+                            {bannerData?.length > 0 ? bannerData.map((item) => (
                                 <tr key={item._id}>
                                     <td>
                                         <div className="img card shadow" style={{ width: '500px', height: 'auto' }}>
                                             <img
                                                 src={item.images[0]}
                                                 alt=""
-                                                style={{
-                                                    width: '100%',
-                                                    height: '100%',
-                                                    objectFit: 'cover'
-                                                }}
+                                                style={{ width: '100%', height: '100%', objectFit: 'cover' }}
                                             />
                                         </div>
                                     </td>
                                     <td>
                                         <div className="actions d-flex align-items-center">
-                                            <Button className="success" color="success" onClick={() => editBanner(item._id)}>
-                                                <FaPencilAlt />
-                                            </Button>
-                                            <Button className="error" color="error" onClick={() => deleteBanner(item._id)}>
-                                                <MdDelete />
-                                            </Button>
+                                            <Button className="success" color="success" onClick={() => handleEditOpen(item._id)}><FaPencilAlt /></Button>
+                                            <Button className="error" color="error" onClick={() => handleDeleteClick(item._id)}><MdDelete /></Button>
                                         </div>
                                     </td>
                                 </tr>
-                            ))}
+                            )) : (
+                                <tr>
+                                    <td colSpan={2} className="text-center">No banners found</td>
+                                </tr>
+                            )}
                         </tbody>
                     </table>
                 </div>
             </div>
-        </div>
 
-        <Dialog open={open} onClose={handleClose} className='editModel'>
-            <DialogTitle>Edit Banner</DialogTitle>
-            <form>
-                <DialogContent>
-                    <div className='form-group mb-3'>
+            <Dialog open={editOpen} onClose={handleEditClose} className='editModel'>
+                <DialogTitle>Edit Banner</DialogTitle>
+                <form>
+                    <DialogContent>
                         <TextField
                             required
                             autoFocus
-                            id="images"
                             name="images"
                             label="Image URL"
                             type="text"
                             fullWidth
                             value={formFields.images[0] || ''}
-                            onChange={addImgUrl}
+                            onChange={handleImgChange}
                         />
                         {formFields.images[0] && (
                             <img
                                 src={formFields.images[0]}
                                 alt="Preview"
-                                style={{
-                                    maxHeight: '300px',
-                                    marginTop: '10px',
-                                    borderRadius: '8px',
-                                    border: '1px solid #ccc'
-                                }}
+                                style={{ maxHeight: '300px', marginTop: '10px', borderRadius: '8px', border: '1px solid #ccc' }}
                                 onError={(e) => (e.target.style.display = 'none')}
                             />
                         )}
-                    </div>
+                    </DialogContent>
+                    <DialogActions>
+                        <Button onClick={handleEditClose} className='btn-red btn-lg'>Cancel</Button>
+                        <Button type="button" onClick={handleUpdateBanner} className='btn-blue btn-lg'>
+                            {isLoading ? <CircularProgress color='inherit' className='ms-3 loader' /> : 'Submit'}
+                        </Button>
+                    </DialogActions>
+                </form>
+            </Dialog>
+
+            <Dialog open={deleteOpen} onClose={handleDeleteCancel}>
+                <DialogTitle>Confirm Delete</DialogTitle>
+                <DialogContent>
+                    <DialogContentText>Are you sure you want to delete this banner?</DialogContentText>
                 </DialogContent>
                 <DialogActions>
-                    <Button onClick={handleClose} className='btn-red btn-lg'>Cancel</Button>
-                    <Button type="button" onClick={updateBanner} className='btn-blue btn-lg'>
-                        {isLoading ? <CircularProgress color='inherit' className='ms-3 loader' /> : 'Submit'}
-                    </Button>
+                    <Button onClick={handleDeleteCancel} color="primary" variant="outlined" >Cancel</Button>
+                    <Button onClick={handleDeleteConfirm} color="error" variant="contained" >Delete</Button>
                 </DialogActions>
-            </form>
-            <br />
-        </Dialog>
-    </>
+            </Dialog>
+        </div>
     );
 };
 

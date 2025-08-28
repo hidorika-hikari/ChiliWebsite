@@ -23,7 +23,6 @@ import 'swiper/css/navigation';
 import 'swiper/css/thumbs';
 import 'react-inner-image-zoom/lib/styles.min.css';
 
-
 dayjs.extend(utc)
 dayjs.extend(timezone)
 
@@ -52,6 +51,7 @@ const ProductDetails = () => {
     const [productData, setProductData] = useState([]);
     const [reviewsData, setReviewsData] = useState([]);
     const { id } = useParams();
+
     useEffect(() => {
         window.scrollTo(0,0);
         fetchDataFromApi(`/api/products/${id}`).then((res) => {
@@ -275,7 +275,8 @@ const ProductDetails = () => {
 
                         <br />
 
-                        <h6 className="mt-4 mb-4">Rating Analytics</h6>
+                        {/* test */}
+                        {/* <h6 className="mt-4 mb-4">Rating Analytics</h6>
                         <div className="ratingSection">
                             <div className="ratingrow d-flex align-items-center">
                                 <span className="col1">5 Star</span>
@@ -341,7 +342,7 @@ const ProductDetails = () => {
                                 </div>
                                 <span className="col3">(2)</span>
                             </div>
-                        </div>
+                        </div> */}
 
                         <br />
                         <h6 className="mt-4 mb-4">Customer Reviews</h6>

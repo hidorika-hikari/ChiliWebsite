@@ -11,14 +11,15 @@ router.get('/', async (req, res) => {
         return res.status(200).json(productRamsList);
     }
     catch(error) {
-        res.status(500).json({ success: false })
+        console.error('Error fetching product content:', error);
+        return res.status(500).json({ success: false, message: error.message })
     }
 });
 
 router.get('/:id', async (req, res) => {
     const item = await ProductRams.findById(req.params.id);
     if(!item) {
-        res.status(500).json({ message: "Content with the given ID wasn't found" })
+        res.status(500).json({ message: "Product content with the given ID wasn't found" })
     }
     return res.status(200).send(item);
 })
@@ -65,6 +66,7 @@ router.put('/:id',async (req, res) => {
             success: false
         })
     }
+    return res.status(200).json(item);
 });
 
 module.exports = router;

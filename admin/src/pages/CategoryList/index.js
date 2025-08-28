@@ -36,8 +36,22 @@ const StyleBreadcrumb = styled(Chip)(({ theme }) => {
 
 const CategoryList = () => {
     const [catData, setCatData] = useState([]);
-    const [open, setOpen] = useState(false);
     const [editId, setEditId] = useState(null);
+
+    const [open, setOpen] = useState(false);
+    const [deleteId, setDeleteId] = useState(null);
+    const [openDelete, setOpenDelete] = useState(false);
+
+    const handleOpenDelete = (id) => {
+        setDeleteId(id);
+        setOpenDelete(true);
+    };
+
+    const handleCloseDelete = () => {
+        setDeleteId(null);
+        setOpenDelete(false);
+    };
+
     const [isLoading, setIsLoading] = useState(false);
     const context = useContext(MyContext);
 
@@ -75,20 +89,32 @@ const CategoryList = () => {
         e.preventDefault();
         setIsLoading(true);
         context.setProgress(40);
-        editData(`/api/category/${editId}`, formFields).then((res) => {
-            fetchDataFromApi('/api/category').then((res) => {
-                setCatData(res);
-                setOpen(false);
+
+        editData(`/api/category/${editId}`, formFields)
+            .then((res) => {
+                fetchDataFromApi('/api/category').then((res) => {
+                    setCatData(res);
+                    setOpen(false);
+                    setIsLoading(false);
+                });
+                context.setAlertBox({
+                    open: true,
+                    error: false,
+                    msg: 'Category updated!'
+                });
+                context.setProgress(100);
+            })
+            .catch((err) => {
+                console.error("Category update error:", err);
+                context.setAlertBox({
+                    open: true,
+                    error: true,
+                    msg: err?.response?.data?.message || 'Failed to update category.'
+                });
                 setIsLoading(false);
+                context.setProgress(100);
             });
-            context.setAlertBox({
-                open: true,
-                error: false,
-                msg: 'Category updated!'
-            });
-            context.setProgress(100);
-        })
-    }
+    };
 
     const [formFields, setFromFields] = useState({
         name: '',
@@ -116,13 +142,32 @@ const CategoryList = () => {
         ))
     }
 
-    const deleteCat = (id) => {
-        deleteData(`/api/category/${id}`).then(res => {
-            fetchDataFromApi(`/api/category`).then((res) => {
-                setCatData(res);
+    const deleteCat = () => {
+        setIsLoading(true);
+        deleteData(`/api/category/${deleteId}`)
+            .then(res => {
+                fetchDataFromApi(`/api/category`).then((res) => {
+                    setCatData(res);
+                    context.setAlertBox({
+                        open: true,
+                        error: false,
+                        msg: 'Category deleted successfully!'
+                    });
+                    handleCloseDelete();
+                    setIsLoading(false);
+                });
             })
-        })
-    }
+            .catch((err) => {
+                context.setAlertBox({
+                    open: true,
+                    error: true,
+                    msg: 'Failed to delete category.'
+                });
+                console.error("Delete Category error:", err);
+                handleCloseDelete();
+                setIsLoading(false);
+            });
+    };
 
     const handleChange = (event, value) => {
         context.setProgress(40);
@@ -204,7 +249,7 @@ const CategoryList = () => {
                                                         <Button
                                                             className="error"
                                                             color="error"
-                                                            onClick={() => deleteCat(item.id)}
+                                                            onClick={() => handleOpenDelete(item.id)}
                                                         >
                                                             <MdDelete />
                                                         </Button>
@@ -290,6 +335,25 @@ const CategoryList = () => {
                     </DialogActions>
                 </form>
                 <br />
+            </Dialog>
+            <Dialog
+                open={openDelete}
+                onClose={handleCloseDelete}
+            >
+                <DialogTitle>Confirm Delete</DialogTitle>
+                <DialogContent>
+                    <p>Are you sure you want to delete this category?</p>
+                </DialogContent>
+                <DialogActions>
+                    <Button onClick={handleCloseDelete} variant="outlined">Cancel</Button>
+                    <Button
+                        onClick={deleteCat}
+                        color="error"
+                        variant="contained"
+                    >
+                        {isLoading ? <CircularProgress size={20} color="inherit" /> : 'Delete'}
+                    </Button>
+                </DialogActions>
             </Dialog>
         </>
     );

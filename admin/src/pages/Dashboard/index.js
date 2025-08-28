@@ -12,10 +12,13 @@ import Menu from '@mui/material/Menu';
 import Button from "@mui/material/Button";
 import MenuItem from '@mui/material/MenuItem';
 import DashboardBox from "./components/dashboardBox";
-import Select from '@mui/material/Select';
-import FormControl from '@mui/material/FormControl';
 import Pagination from "@mui/material/Pagination";
 import Rating from "@mui/material/Rating";
+import Dialog from '@mui/material/Dialog';
+import DialogTitle from '@mui/material/DialogTitle';
+import DialogContent from '@mui/material/DialogContent';
+import DialogActions from '@mui/material/DialogActions';
+import CircularProgress from '@mui/material/CircularProgress';
 
 const Dashboard = () => {
 
@@ -24,9 +27,9 @@ const Dashboard = () => {
   const [categoryCount, setCategoryCount] = useState(0);
   const [subCategoryCount, setSubCategoryCount] = useState(0);
   const [userCount, setUserCount] = useState(0);
-  const [showBy, setShowBy] = useState('');
-  const [showBySetCateBy, setCateBy] = useState('');
   const [anchorEl, setAnchorEl] = useState(null);
+  const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
+  const [productToDelete, setProductToDelete] = useState(null);
   const open = Boolean(anchorEl);
   const context = useContext(MyContext);
   const ITEM_HEIGHT = 48;
@@ -35,42 +38,91 @@ const Dashboard = () => {
   useEffect(() => {
     context.setProgress(40);
     context.setIsHideSidebarAndHeader(false);
+
     fetchDataFromApi("/api/products").then((res) => {
       setProductList(res);
       context.setProgress(100);
-    })
-    fetchDataFromApi("/api/products/count").then((res) => {
-      setProductCount(res?.count || 0);
-    })
-    fetchDataFromApi("/api/category").then((res) => {
-      setCategoryCount(res?.categoryList?.length || 0);
-    })
-    fetchDataFromApi("/api/subCat").then((res) => {
-      setSubCategoryCount(res?.subCategoryList?.length || 0);
-    })
-    fetchDataFromApi("/api/user/get/count").then((res) => {
-      setUserCount(res?.userCount || 0);
-    })
-    fetchDataFromApi("/api/payment/balance").then((res) => {
-      setStripeBalance(res);
-    })
-    window.scrollTo(0, 0);
-  }, []);
-
-  const deleteProduct = (id) => {
-    context.setProgress(40);
-    deleteData(`/api/products/${id}`).then((res) => {
-      context.setProgress(100);
+    }).catch((err) => {
       context.setAlertBox({
         open: true,
         error: true,
-        msg: 'Product deleted!'
+        msg: "Failed to fetch products."
       });
-      fetchDataFromApi("/api/products").then((res) => {
-        setProductList(res);
+      console.error("Fetch products error:", err);
+    });
+
+    fetchDataFromApi("/api/products/count").then((res) => {
+      setProductCount(res?.count || 0);
+    }).catch(() => setProductCount(0));
+
+    fetchDataFromApi("/api/category").then((res) => {
+      setCategoryCount(res?.categoryList?.length || 0);
+    }).catch(() => setCategoryCount(0));
+
+    fetchDataFromApi("/api/subCat").then((res) => {
+      setSubCategoryCount(res?.subCategoryList?.length || 0);
+    }).catch(() => setSubCategoryCount(0));
+
+    fetchDataFromApi("/api/user/get/count").then((res) => {
+      setUserCount(res?.userCount || 0);
+    }).catch(() => setUserCount(0));
+
+    fetchDataFromApi("/api/payment/balance")
+      .then((res) => {
+        setStripeBalance(res);
       })
-    })
-  }
+      .catch((err) => {
+        setStripeBalance(null);
+        context.setAlertBox({
+          open: true,
+          error: true,
+          msg: "Failed to fetch Stripe balance."
+        });
+        console.error("Stripe fetch error:", err);
+      });
+
+    window.scrollTo(0, 0);
+  }, []);
+
+  const confirmDelete = (product) => {
+    setProductToDelete(product);
+    setDeleteDialogOpen(true);
+  };
+
+  const handleDelete = () => {
+    if (!productToDelete) return;
+    context.setProgress(40);
+    deleteData(`/api/products/${productToDelete.id}`)
+      .then(() => {
+        context.setAlertBox({
+          open: true,
+          error: false,
+          msg: 'Product deleted!'
+        });
+        setProductList(prev => ({
+          ...prev,
+          products: prev.products.filter(p => p.id !== productToDelete.id)
+        }));
+        setDeleteDialogOpen(false);
+        setProductToDelete(null);
+        context.setProgress(100);
+      })
+      .catch(err => {
+        context.setAlertBox({ open: true, error: true, msg: "Failed to delete product." });
+        console.error(err);
+        setDeleteDialogOpen(false);
+      });
+  };
+
+  const handleCancelDelete = () => {
+    setDeleteDialogOpen(false);
+    setProductToDelete(null);
+  };
+
+  const deleteProduct = (id) => {
+    const product = productList.products.find(p => p.id === id);
+    confirmDelete(product);
+  };
 
   const handleChange = (event, value) => {
     context.setProgress(40);
@@ -90,6 +142,7 @@ const Dashboard = () => {
   return (
     <>
       <div className="right-content w-100">
+        {/* Dashboard Boxes */}
         <div className="row dashboardBoxWrapperRow">
           <div className="col-md-8">
             <div className="dashboardBoxWrapper d-flex">
@@ -100,6 +153,7 @@ const Dashboard = () => {
             </div>
           </div>
 
+          {/* Stripe Balance */}
           <div className="col-md-4 ps-0">
             {stripeBalance && stripeBalance.available && stripeBalance.available.length > 0 && (
               <div className="box graphBox">
@@ -114,15 +168,8 @@ const Dashboard = () => {
                       open={open}
                       onClose={handleClose}
                       slotProps={{
-                        paper: {
-                          style: {
-                            maxHeight: ITEM_HEIGHT * 4.5,
-                            width: '20ch',
-                          },
-                        },
-                        list: {
-                          'aria-labelledby': 'long-button',
-                        },
+                        paper: { style: { maxHeight: ITEM_HEIGHT * 4.5, width: '20ch' } },
+                        list: { 'aria-labelledby': 'long-button' }
                       }}
                     >
                       <MenuItem onClick={handleClose}><IoIosTimer /> Last Day</MenuItem>
@@ -153,55 +200,9 @@ const Dashboard = () => {
           </div>
         </div>
 
+        {/* Products Table */}
         <div className="card shadow border-0 p-3 mt-4">
           <h3 className="hd">Best Selling Products</h3>
-          <div className="row cardFilters mt-3">
-            <div className="col-md-3">
-              <h4>SHOW BY</h4>
-              <FormControl size="small" className="w-100">
-                <Select
-                  value={showBy}
-                  onChange={(e) => setShowBy(e.target.value)}
-                  displayEmpty
-                  labelId="demo-select-small-label"
-                  className="w-100"
-                >
-                  <MenuItem value="">
-                    <em>None</em>
-                  </MenuItem>
-                  <MenuItem value={10}>Ten</MenuItem>
-                  <MenuItem value={20}>Twenty</MenuItem>
-                  <MenuItem value={30}>Thirty</MenuItem>
-                </Select>
-              </FormControl>
-            </div>
-            <div className="col-md-3">
-              <h4>CATEGORY BY</h4>
-              <FormControl size="small" className="w-100">
-                <Select
-                  value={showBySetCateBy}
-                  onChange={(e) => setCateBy(e.target.value)}
-                  displayEmpty
-                  labelId="demo-select-small-label"
-                  className="w-100"
-                >
-                  <MenuItem value="">
-                    <em value={null}>None</em>
-                  </MenuItem>
-                  {
-                    context.catData?.categoryList?.length > 0 && context.catData.categoryList.map((cat, index) => {
-                      return (
-                        <MenuItem className="text-capitalize" value={cat.id} key={index}>
-                          {cat.name}
-                        </MenuItem>
-                      )
-                    })
-                  }
-                </Select>
-              </FormControl>
-            </div>
-          </div>
-
           <div className="table-responsive mt-3">
             <table className="table table-bordered table-striped v-align">
               <thead className="table-dark">
@@ -217,69 +218,47 @@ const Dashboard = () => {
                 </tr>
               </thead>
               <tbody>
-                {
-                  productList?.products?.length !== 0 && productList?.products?.map((item, index) => {
-                    return (
-                      <tr>
-                        <td>
-                          <div className="d-flex align-items-center productBox">
-                            <div className="imgWrapper">
-                              <div className="img card shadow m-0">
-                                <img
-                                  src={item.images[0]}
-                                  alt=""
-                                  className="w-100"
-                                />
-                              </div>
-                            </div>
-                            <div className="info ps-3">
-                              <h6>{item.name}</h6>
-                              <p>{item.description}</p>
-                            </div>
+                {productList?.products?.map(item => (
+                  <tr key={item.id}>
+                    <td>
+                      <div className="d-flex align-items-center productBox">
+                        <div className="imgWrapper">
+                          <div className="img card shadow m-0">
+                            <img src={item.images[0]} alt="" className="w-100" />
                           </div>
-                        </td>
-                        <td>{item.category.name}</td>
-                        <td>{item.subCat?.subCat}</td>
-                        <td>{item.brand}</td>
-                        <td>
-                          <del className="old">{item.oldPrice} ฿</del>
-                          <span className="new text-danger">{item.price} ฿</span>
-                        </td>
-                        <td>{item.countInStock}</td>
-                        <td>
-                          <Rating
-                            name="size-small"
-                            defaultValue={item.rating}
-                            size="small"
-                          />
-                        </td>
-                        <td>
-                          <div className="actions d-flex align-items-center">
-                            <Link to={`/product/details/${item._id}`}>
-                              <Button className="secondary" color="secondary">
-                                <FaEye />
-                              </Button>
-                            </Link>
-                            <Link to={`/product/edit/${item.id}`}>
-                              <Button
-                                className="success"
-                                color="success"
-                              >
-                                <FaPencilAlt />
-                              </Button>
-                            </Link>
-                            <Button
-                              className="error"
-                              color="error"
-                              onClick={() => deleteProduct(item.id)}
-                            ><MdDelete />
-                            </Button>
-                          </div>
-                        </td>
-                      </tr>
-                    )
-                  })
-                }
+                        </div>
+                        <div className="info ps-3">
+                          <h6>{item.name}</h6>
+                          <p>{item.description}</p>
+                        </div>
+                      </div>
+                    </td>
+                    <td>{item.category?.name}</td>
+                    <td>{item.subCat?.subCat}</td>
+                    <td>{item.brand}</td>
+                    <td>
+                      <del className="old">{item.oldPrice} ฿</del>
+                      <span className="new text-danger">{item.price} ฿</span>
+                    </td>
+                    <td>{item.countInStock}</td>
+                    <td>
+                      <Rating name="size-small" defaultValue={item.rating} size="small" />
+                    </td>
+                    <td>
+                      <div className="actions d-flex align-items-center">
+                        <Link to={`/product/details/${item._id}`}>
+                          <Button className="secondary" color="secondary"><FaEye /></Button>
+                        </Link>
+                        <Link to={`/product/edit/${item.id}`}>
+                          <Button className="success" color="success"><FaPencilAlt /></Button>
+                        </Link>
+                        <Button className="error" color="error" onClick={() => deleteProduct(item.id)}>
+                          <MdDelete />
+                        </Button>
+                      </div>
+                    </td>
+                  </tr>
+                ))}
               </tbody>
             </table>
 
@@ -296,6 +275,19 @@ const Dashboard = () => {
           </div>
         </div>
       </div>
+
+      <Dialog open={deleteDialogOpen} onClose={handleCancelDelete}>
+        <DialogTitle>Confirm Delete</DialogTitle>
+        <DialogContent>
+          <p>Are you sure you want to delete this product?</p>
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={handleCancelDelete} variant="outlined">Cancel</Button>
+          <Button onClick={handleDelete} variant="contained" color="error">
+            {context.isLoading ? <CircularProgress size={24} /> : 'Delete'}
+          </Button>
+        </DialogActions>
+      </Dialog>
     </>
   )
 };

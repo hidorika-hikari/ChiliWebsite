@@ -36,6 +36,20 @@ const StyleBreadcrumb = styled(Chip)(({ theme }) => {
 
 const SubCategoryList = () => {
     const [subCatData, setSubCatData] = useState([]);
+
+    const [deleteId, setDeleteId] = useState(null);
+    const [openDelete, setOpenDelete] = useState(false);
+
+    const handleOpenDelete = (id) => {
+        setDeleteId(id);
+        setOpenDelete(true);
+    };
+
+    const handleCloseDelete = () => {
+        setDeleteId(null);
+        setOpenDelete(false);
+    };
+
     const [open, setOpen] = useState(false);
     const [editId, setEditId] = useState(null);
     const [isLoading, setIsLoading] = useState(false);
@@ -56,39 +70,60 @@ const SubCategoryList = () => {
 
     const editSubCategory = (id) => {
         setFromFields({
-            subCat:'',
+            subCat: '',
         });
         setOpen(true);
         setEditId(id);
         fetchDataFromApi(`/api/subCat/${id}`).then((res) => {
             setFromFields({
-                subCat:res.subCat
+                subCat: res.subCat
             });
         })
     }
 
-    const categoryEditFunc = (e) => {
+    const SubcategoryEditFunc = (e) => {
         e.preventDefault();
         setIsLoading(true);
         context.setProgress(40);
-        editData(`/api/subCat/${editId}`, formFields).then((res) => {
-            fetchDataFromApi('/api/subCat').then((res) => {
-                setSubCatData(res);
-                setOpen(false);
-                setIsLoading(false);
-            });
 
-            context.setAlertBox({
-                open: true,
-                error: false,
-                msg: 'Category updated!'
+        editData(`/api/subCat/${editId}`, formFields)
+            .then((res) => {
+                fetchDataFromApi('/api/subCat')
+                    .then((res) => {
+                        setSubCatData(res);
+                        setOpen(false);
+                        setIsLoading(false);
+                    })
+                    .catch(() => {
+                        setIsLoading(false);
+                        context.setAlertBox({
+                            open: true,
+                            error: true,
+                            msg: 'Failed to fetch updated subcategories.'
+                        });
+                    });
+
+                context.setAlertBox({
+                    open: true,
+                    error: false,
+                    msg: 'Subcategory updated!'
+                });
+                context.setProgress(100);
+            })
+            .catch((err) => {
+                setIsLoading(false);
+                context.setProgress(100);
+                context.setAlertBox({
+                    open: true,
+                    error: true,
+                    msg: 'Error: Failed to update subcategory. Please try again later.'
+                });
+                console.error("Subcategory update error:", err);
             });
-            context.setProgress(100);
-        })
-    }
+    };
 
     const [formFields, setFromFields] = useState({
-        subCat:'',
+        subCat: '',
     });
 
     const changeInput = (e) => {
@@ -100,13 +135,29 @@ const SubCategoryList = () => {
         ))
     }
 
-    const deleteSubCat = (id) => {
-        deleteData(`/api/subCat/${id}`).then(res => {
-            fetchDataFromApi(`/api/subCat`).then((res) => {
-                setSubCatData(res);
+    const deleteSubCat = () => {
+        deleteData(`/api/subCat/${deleteId}`)
+            .then(res => {
+                fetchDataFromApi(`/api/subCat`).then((res) => {
+                    setSubCatData(res);
+                    context.setAlertBox({
+                        open: true,
+                        error: false,
+                        msg: 'Subcategory deleted successfully!'
+                    });
+                    handleCloseDelete();
+                })
             })
-        })
-    }
+            .catch((err) => {
+                context.setAlertBox({
+                    open: true,
+                    error: true,
+                    msg: 'Error: Failed to delete subcategory.'
+                });
+                console.error("Delete Subcategory error:", err);
+                handleCloseDelete();
+            });
+    };
 
     const handleChange = (event, value) => {
         context.setProgress(40);
@@ -186,7 +237,7 @@ const SubCategoryList = () => {
                                                         <Button
                                                             className="error"
                                                             color="error"
-                                                            onClick={() => deleteSubCat(item.id)}
+                                                            onClick={() => handleOpenDelete(item.id)}
                                                         >
                                                             <MdDelete />
                                                         </Button>
@@ -238,7 +289,7 @@ const SubCategoryList = () => {
                     </DialogContent>
                     <DialogActions>
                         <Button onClick={handleClose} variant='outlined'>Cancel</Button>
-                        <Button type="button" onClick={categoryEditFunc}
+                        <Button type="button" onClick={SubcategoryEditFunc}
                             variant='contained'>
                             {isLoading === true ? <CircularProgress color='inherit'
                                 className='ms-3 loader' /> : 'Submit'}
@@ -247,6 +298,20 @@ const SubCategoryList = () => {
                 </form>
                 <br />
             </Dialog>
+            <Dialog
+                open={openDelete}
+                onClose={handleCloseDelete}
+            >
+                <DialogTitle>Confirm Delete</DialogTitle>
+                <DialogContent>
+                    <p>Are you sure you want to delete this subcategory?</p>
+                </DialogContent>
+                <DialogActions>
+                    <Button onClick={handleCloseDelete} variant="outlined">Cancel</Button>
+                    <Button onClick={deleteSubCat} color="error" variant="contained">Delete</Button>
+                </DialogActions>
+            </Dialog>
+
         </>
     );
 };

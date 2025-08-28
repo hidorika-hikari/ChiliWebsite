@@ -31,8 +31,7 @@ const Sidebar = () => {
             msg: "Logout Successfully"
         })
         setTimeout(() => {
-            //history('/login');
-            window.location.href = '/login';
+            window.location.href = '/signIn';
         },1500);
     }
 
@@ -40,7 +39,7 @@ const Sidebar = () => {
         const token = localStorage.getItem("token");
         if (token !== "" && token !== undefined && token !== null){
         } else {
-            history('/login')
+            history('/signIn')
         }
     }, [history]);
 

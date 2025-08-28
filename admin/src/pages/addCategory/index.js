@@ -31,6 +31,7 @@ const AddCategory = () => {
     const context = useContext(MyContext);
     const history = useNavigate();
     const [isLoading, setIsLoading] = useState(false);
+
     const [formFields, setFromFields] = useState({
         name: '',
         images: [],
@@ -59,23 +60,42 @@ const AddCategory = () => {
 
     const addCategory = (e) => {
         e.preventDefault();
-        if (formFields.name !== "" && formFields.images.length !== 0 && formFields.color !== "") {
-            setIsLoading(true);
-            postData('api/category/create', formFields).then(res => {
-                setIsLoading(false);
-                history('/category');
-            });
-            context.fetchCategory();
-        }
-        else {
+        if (formFields.name.trim() === "" || formFields.images.length === 0 || formFields.color.trim() === "") {
             context.setAlertBox({
                 open: true,
                 error: true,
-                msg: 'Please fill all a details'
+                msg: 'Please fill in all details before submitting.'
             });
-            return false;
+            return;
         }
-    }
+
+        setIsLoading(true);
+        context.setProgress(40);
+
+        postData('/api/category/create', formFields)
+            .then((res) => {
+                setIsLoading(false);
+                context.setProgress(100);
+                context.setAlertBox({
+                    open: true,
+                    error: false,
+                    msg: 'Category added successfully!'
+                });
+
+                context.fetchCategory();
+                history('/category');
+            })
+            .catch((err) => {
+                setIsLoading(false);
+                context.setProgress(100);
+                context.setAlertBox({
+                    open: true,
+                    error: true,
+                    msg: 'Failed to add category. Please try again later.'
+                });
+                console.error("Add Category error:", err);
+            });
+    };
 
     return (
         <>

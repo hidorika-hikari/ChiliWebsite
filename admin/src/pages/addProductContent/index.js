@@ -1,4 +1,4 @@
-import { Breadcrumbs, Chip, CircularProgress, emphasize, styled } from '@mui/material';
+import { Breadcrumbs, Chip, CircularProgress, emphasize, styled, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle } from '@mui/material';
 import { FaCloudUploadAlt, FaHome } from 'react-icons/fa';
 import { MyContext } from '../../App';
 import { fetchDataFromApi, postData, deleteData, editData } from '../../utils/api';
@@ -32,62 +32,64 @@ const AddProductContent = () => {
     const [editId, setEditId] = useState(null);
     const [isLoading, setIsLoading] = useState(false);
     const [productRamData, setProductRamData] = useState([]);
-    const [formFields, setFormFields] = useState({
-        productRams: ''
-    });
+    const [formFields, setFormFields] = useState({ productRams: '' });
+    const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
+    const [deleteId, setDeleteId] = useState(null);
 
     const context = useContext(MyContext);
+
     const inputChange = (e) => {
-        setFormFields(() => ({
-            ...formFields,
-            [e.target.name]: e.target.value
-        }))
+        setFormFields({ ...formFields, [e.target.name]: e.target.value });
     }
 
     useEffect(() => {
-        fetchDataFromApi("/api/productRams").then((res) => {
-            setProductRamData(res);
-        })
+        fetchDataFromApi("/api/productRams").then(res => setProductRamData(res));
     }, []);
+
+    const showAlert = (msg, error = false) => {
+        context.setAlertBox({ open: true, msg, error });
+    }
 
     const addProductRams = (e) => {
         e.preventDefault();
-
         if (formFields.productRams === "") {
-            context.setAlertBox({
-                open: true,
-                msg: 'Please add product content',
-                error: true
-            });
-            return false;
+            showAlert('Please add product content', true);
+            return;
         }
-
         setIsLoading(true);
-        if (!editId) {
-            postData(`/api/productRams/create`, formFields).then(res => {
-                setIsLoading(false);
-                window.location.reload();
-            })
-        } else {
-            editData(`/api/productRams/${editId}`, formFields).then((res) => {
-                setIsLoading(false);
-                window.location.reload();
-            })
-        }
+        const action = !editId ? postData : editData;
+        const url = !editId ? '/api/productRams/create' : `/api/productRams/${editId}`;
+
+        action(url, formFields).then(res => {
+            setIsLoading(false);
+            showAlert(editId ? 'Product content updated successfully' : 'Product content added successfully');
+            fetchDataFromApi("/api/productRams").then(res => setProductRamData(res));
+            setEditId(null);
+            setFormFields({ productRams: '' });
+        }).catch(() => {
+            setIsLoading(false);
+            showAlert('Operation failed', true);
+        });
     }
 
-    const deleteItem = (id) => {
-        deleteData(`/api/productRams/${id}`).then((res) => {
-            window.location.reload();
-        })
+    const confirmDelete = (id) => {
+        setDeleteId(id);
+        setDeleteDialogOpen(true);
+    }
+
+    const handleDelete = () => {
+        deleteData(`/api/productRams/${deleteId}`).then(() => {
+            showAlert('Product content deleted successfully');
+            fetchDataFromApi("/api/productRams").then(res => setProductRamData(res));
+        }).catch(() => showAlert('Delete failed', true));
+        setDeleteDialogOpen(false);
+        setDeleteId(null);
     }
 
     const updataData = (id) => {
-        fetchDataFromApi(`/api/productRams/${id}`).then((res) => {
+        fetchDataFromApi(`/api/productRams/${id}`).then(res => {
             setEditId(id);
-            setFormFields({
-                productRams: res.productRams
-            });
+            setFormFields({ productRams: res.productRams });
         })
     }
 
@@ -95,20 +97,9 @@ const AddProductContent = () => {
         <div className="right-content w-100">
             <div className="card shadow border-0 w-100 flex-row p-4 res-col">
                 <h5 className="mb-0">Add Product Content</h5>
-                <Breadcrumbs
-                    aria-label="breadcrumb"
-                    className="ms-auto breadcrumb_"
-                >
-                    <StyleBreadcrumb
-                        component="a"
-                        href={'/'}
-                        label="Dashboard"
-                        icon={<FaHome fontSize="small" />}
-                    />
-                    <StyleBreadcrumb
-                        label="Product Rams"
-                        component="a"
-                    />
+                <Breadcrumbs aria-label="breadcrumb" className="ms-auto breadcrumb_">
+                    <StyleBreadcrumb component="a" href={'/'} label="Dashboard" icon={<FaHome fontSize="small" />} />
+                    <StyleBreadcrumb label="Product Content" component="a" />
                 </Breadcrumbs>
             </div>
             <form className='form'>
@@ -118,43 +109,21 @@ const AddProductContent = () => {
                             <div className="col">
                                 <div className="form-group">
                                     <h6>Product Content {editId ? '(Editing)' : ''}</h6>
-                                    <input
-                                        type="text"
-                                        name="productRams"
-                                        value={formFields.productRams}
-                                        onChange={inputChange}
-                                    />
+                                    <input type="text" name="productRams" value={formFields.productRams} onChange={inputChange} placeholder="Enter product content" />
                                 </div>
                             </div>
-                            <Button
-                                type='submit'
-                                onClick={(e) => {
-                                    window.location.reload();
-                                    addProductRams(e);
-                                }}
-                                className='btn-blue btn-lg btn-big w-100'
-                            >
-                                <FaCloudUploadAlt /> &nbsp; {isLoading === true ?
-                                    <CircularProgress color='inherit'
-                                        className='ms-3 loader' /> : editId ? 'UPDATE' : 'PUBLISH AND VIEW'}
+                            <Button type='submit' onClick={addProductRams} className='btn-blue btn-lg btn-big w-100'>
+                                <FaCloudUploadAlt /> &nbsp; {isLoading ? <CircularProgress color='inherit' className='ms-3 loader' /> : editId ? 'UPDATE' : 'PUBLISH AND VIEW'}
                             </Button>
                             {editId && (
-                                <Button
-                                    type='button'
-                                    onClick={() => {
-                                        setEditId(null);
-                                        setFormFields({ productRams: '' });
-                                    }}
-                                    className='btn-blue btn-lg btn-big w-100 mt-3'
-                                >
+                                <Button type='button' onClick={() => { setEditId(null); setFormFields({ productRams: '' }) }} className='btn-blue btn-lg btn-big w-100 mt-3'>
                                     <FaPencilAlt /> &nbsp; CANCEL EDIT
                                 </Button>
                             )}
                         </div>
                     </div>
                 </div>
-                {
-                    productRamData.length !== 0 &&
+                {productRamData.length !== 0 &&
                     <div className='row'>
                         <div className='col-sm-9'>
                             <div className='card p-4 mt-0'>
@@ -167,34 +136,17 @@ const AddProductContent = () => {
                                             </tr>
                                         </thead>
                                         <tbody>
-                                            {
-                                                productRamData?.map((item, index) => {
-                                                    return (
-                                                        <tr>
-                                                            <td>
-                                                                {item.productRams}
-                                                            </td>
-                                                            <td>
-                                                                <div className="actions d-flex align-items-center">
-                                                                    <Button
-                                                                        className="success"
-                                                                        color="success"
-                                                                        onClick={() => updataData(item.id)}
-                                                                    >
-                                                                        <FaPencilAlt />
-                                                                    </Button>
-                                                                    <Button
-                                                                        className="error"
-                                                                        color="error"
-                                                                        onClick={() => deleteItem(item.id)}
-                                                                    ><MdDelete />
-                                                                    </Button>
-                                                                </div>
-                                                            </td>
-                                                        </tr>
-                                                    )
-                                                })
-                                            }
+                                            {productRamData.map(item => (
+                                                <tr key={item.id}>
+                                                    <td>{item.productRams}</td>
+                                                    <td>
+                                                        <div className="actions d-flex align-items-center">
+                                                            <Button className="success" color="success" onClick={() => updataData(item.id)}><FaPencilAlt /></Button>
+                                                            <Button className="error" color="error" onClick={() => confirmDelete(item.id)}><MdDelete /></Button>
+                                                        </div>
+                                                    </td>
+                                                </tr>
+                                            ))}
                                         </tbody>
                                     </table>
                                 </div>
@@ -203,6 +155,17 @@ const AddProductContent = () => {
                     </div>
                 }
             </form>
+
+            <Dialog open={deleteDialogOpen} onClose={() => setDeleteDialogOpen(false)}>
+                <DialogTitle>Confirm Delete</DialogTitle>
+                <DialogContent>
+                    <DialogContentText>Are you sure you want to delete this product content?</DialogContentText>
+                </DialogContent>
+                <DialogActions>
+                    <Button variant="outlined" onClick={() => setDeleteDialogOpen(false)}>Cancel</Button>
+                    <Button color="error" variant="contained" onClick={handleDelete}>Delete</Button>
+                </DialogActions>
+            </Dialog>
         </div>
     )
 }
