@@ -1,6 +1,9 @@
 import Rating from "@mui/material/Rating";
 import QuantityBox from "../../Components/QuantityDrop";
 import Button from "@mui/material/Button";
+import { Card, CardContent, Stack, Typography } from "@mui/material";
+import useMediaQuery from "@mui/material/useMediaQuery";
+import { useTheme } from "@mui/material/styles";
 import { Link } from "react-router-dom";
 import { IoIosClose } from "react-icons/io";
 import { IoBagCheckOutline } from "react-icons/io5";
@@ -12,6 +15,8 @@ import { deleteData, editData, fetchDataFromApi } from "../../utils/api";
 const Cart = () => {
   const [cartData, setCartData] = useState([]);
   const context = useContext(MyContext);
+  const theme = useTheme();
+  const isSmallScreen = useMediaQuery(theme.breakpoints.down('sm'));
 
   useEffect(() => {
     const user = JSON.parse(localStorage.getItem("user"));
@@ -81,27 +86,16 @@ const Cart = () => {
               </p>
 
               <div className="row">
-                <div className="col-md-9 pe-5">
-                  <div className="table-responsive">
-                    <table className="table table-striped">
-                      <thead className="table-dark text-white">
-                        <tr>
-                          <th width="35%">Product</th>
-                          <th width="15%">Unit Price</th>
-                          <th width="25%" style={{ paddingLeft: "35px" }}>
-                            Quantity
-                          </th>
-                          <th width="15%">Subtotal</th>
-                          <th width="10%">Remove</th>
-                        </tr>
-                      </thead>
-                      <tbody>
-                        {cartData.map((item) => (
-                          <tr key={item.id}>
-                            <td width="35%">
+                <div className="col-md-9 mb-3">
+                  {isSmallScreen ? (
+                    <Stack spacing={2}>
+                      {cartData.map((item) => (
+                        <Card key={item.id} variant="outlined">
+                          <CardContent>
+                            <Stack spacing={1.25}>
                               <Link to={`/product/${item.id}`}>
                                 <div className="d-flex align-items-center cartItemImgWrapper">
-                                  <div className="imgWrapper">
+                                  <div className="imgWrapper" style={{ width: 80 }}>
                                     <img
                                       src={item.images}
                                       className="w-100"
@@ -109,8 +103,8 @@ const Cart = () => {
                                     />
                                   </div>
                                   <div className="info px-3">
-                                    <h6>
-                                      {item.productTitle?.substr(0, 30) + "..."}
+                                    <h6 style={{ marginBottom: 4 }}>
+                                      {item.productTitle?.substr(0, 40) + "..."}
                                     </h6>
                                     <Rating
                                       name="read-only"
@@ -122,30 +116,91 @@ const Cart = () => {
                                   </div>
                                 </div>
                               </Link>
-                            </td>
-                            <td width="15%">{item.price} ฿</td>
-                            <td width="25%">
-                              <QuantityBox
-                                quantity={item.quantity}
-                                onQuantityChange={(qty) =>
-                                  handleQuantityChange(item.id, qty)
-                                }
-                              />
-                            </td>
-                            <td width="15%">{item.subTotal} ฿</td>
-                            <td width="10%">
-                              <span
-                                className="remove"
-                                onClick={() => removeItem(item?._id)}
-                              >
-                                <IoIosClose />
-                              </span>
-                            </td>
+                              <Stack direction="row" spacing={2} alignItems="center" justifyContent="space-between">
+                                <Typography variant="body2">{item.price} ฿</Typography>
+                                <QuantityBox
+                                  quantity={item.quantity}
+                                  onQuantityChange={(qty) => handleQuantityChange(item.id, qty)}
+                                />
+                              </Stack>
+                              <Stack direction="row" alignItems="center" justifyContent="space-between">
+                                <Typography variant="subtitle2">Subtotal</Typography>
+                                <Typography variant="subtitle2">{item.subTotal} ฿</Typography>
+                              </Stack>
+                              <Button variant="outlined" color="error" onClick={() => removeItem(item?._id)} fullWidth>
+                                Remove
+                              </Button>
+                            </Stack>
+                          </CardContent>
+                        </Card>
+                      ))}
+                    </Stack>
+                  ) : (
+                    <div className="table-responsive">
+                      <table className="table table-striped">
+                        <thead className="table-dark text-white">
+                          <tr>
+                            <th width="35%">Product</th>
+                            <th width="15%">Unit Price</th>
+                            <th width="25%" style={{ paddingLeft: "35px" }}>
+                              Quantity
+                            </th>
+                            <th width="15%">Subtotal</th>
+                            <th width="10%">Remove</th>
                           </tr>
-                        ))}
-                      </tbody>
-                    </table>
-                  </div>
+                        </thead>
+                        <tbody>
+                          {cartData.map((item) => (
+                            <tr key={item.id}>
+                              <td width="35%">
+                                <Link to={`/product/${item.id}`}>
+                                  <div className="d-flex align-items-center cartItemImgWrapper">
+                                    <div className="imgWrapper">
+                                      <img
+                                        src={item.images}
+                                        className="w-100"
+                                        alt={item.productTitle}
+                                      />
+                                    </div>
+                                    <div className="info px-3">
+                                      <h6>
+                                        {item.productTitle?.substr(0, 30) + "..."}
+                                      </h6>
+                                      <Rating
+                                        name="read-only"
+                                        value={item.rating}
+                                        readOnly
+                                        precision={0.5}
+                                        size="small"
+                                      />
+                                    </div>
+                                  </div>
+                                </Link>
+                              </td>
+                              <td width="15%">{item.price} ฿</td>
+                              <td width="25%">
+                                <QuantityBox
+                                  quantity={item.quantity}
+                                  onQuantityChange={(qty) =>
+                                    handleQuantityChange(item.id, qty)
+                                  }
+                                />
+                              </td>
+                              <td width="15%">{item.subTotal} ฿</td>
+                              <td width="10%">
+                                <span
+                                  className="remove"
+                                  onClick={() => removeItem(item?._id)}
+                                >
+                                  <IoIosClose />
+                                </span>
+                              </td>
+                            </tr>
+                          ))}
+                        </tbody>
+                      </table>
+                    </div>
+                  )}
                 </div>
 
                 <div className="col-md-3">

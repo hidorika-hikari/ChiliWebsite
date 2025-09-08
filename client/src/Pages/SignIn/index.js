@@ -1,6 +1,7 @@
 import { useContext, useEffect, useState } from "react";
 import { Link } from "react-router-dom";
-import { Button, CircularProgress, Dialog, DialogTitle, DialogContent, DialogActions, TextField } from '@mui/material';
+import { Box, Button, CircularProgress, Dialog, DialogTitle, DialogContent, DialogActions, TextField, useMediaQuery } from '@mui/material';
+import { useTheme } from '@mui/material/styles';
 import { MyContext } from "../../App";
 import { postData } from "../../utils/api";
 //import { useNavigate } from 'react-router-dom';
@@ -14,6 +15,8 @@ const SignIn = () => {
 
     const [isLoading, setIsLoading] = useState(false);
     const context = useContext(MyContext);
+    const theme = useTheme();
+    const isSmallScreen = useMediaQuery(theme.breakpoints.down('sm'));
     //const history = useNavigate();
     const [formFields, setFormFields] = useState({
         email: '',
@@ -65,7 +68,7 @@ const SignIn = () => {
                 }
             } catch (error) {
                 setIsLoading(false);
-                context.setAlertBox({  open: true, error: true, msg: "Something went wrong. Please try again." });
+                context.setAlertBox({ open: true, error: true, msg: "Something went wrong. Please try again." });
             }
         })
     }
@@ -76,7 +79,8 @@ const SignIn = () => {
         postData("/api/user/forgot-password", { email: forgotEmail }).then((res) => {
             setForgotLoading(false);
             setForgotOpen(false);
-            context.setAlertBox({ open: true, error: !res.status,
+            context.setAlertBox({
+                open: true, error: !res.status,
                 msg: res.msg || (res.status ? "Reset link sent to your email." : "Failed to send reset link.")
             });
         }).catch(() => {
@@ -99,7 +103,7 @@ const SignIn = () => {
                     </div>
 
                     <form className="mt-3" onSubmit={login}>
-                        <h2 className="mb-4">Sign In</h2>
+                        <h2 className="mb-3 text-center">Sign In</h2>
                         <div className="form-group">
                             <TextField id="standard-basic"
                                 label="Email"
@@ -109,15 +113,19 @@ const SignIn = () => {
                                 required variant="standard"
                                 className="w-100" />
                         </div>
-                        <div className="form-group">
-                            <TextField id="standard-basic"
+                        <div className="form-group mb-3">
+                            <TextField
                                 label="Password"
                                 type="password"
                                 name="password"
+                                value={formFields.password}
                                 onChange={onChangeInput}
-                                required variant="standard"
-                                className="w-100" />
+                                required
+                                variant="standard"
+                                className="w-100"
+                            />
                         </div>
+
                         <button
                             type="button"
                             className="border-effect cursor"
@@ -126,16 +134,55 @@ const SignIn = () => {
                         >
                             Forgot Password?
                         </button>
-                        <div className="d-flex align-items-center mt-3 mb-3 gap-4">
-                            <Button type="submit" className="btn-blue col btn-lg btn-big">
-                                {
-                                    isLoading === true ? <CircularProgress style={{ width: 30, height: 27 }} /> : 'Sign In'
-                                }
+                        <Box
+                            sx={{
+                                display: "flex",
+                                gap: 2,
+                                flexDirection: { xs: "column", sm: "row" },
+                                mt: 3,
+                                mb: 3,
+                            }}
+                        >
+                            <Button
+                                type="submit"
+                                variant="contained"
+                                color="primary"
+                                fullWidth
+                                sx={{
+                                    borderRadius: 3,
+                                    py: 1.5,
+                                    fontWeight: "bold",
+                                    textTransform: "none",
+                                }}
+                            >
+                                {isLoading ? <CircularProgress size={27} color="inherit" /> : "Sign In"}
                             </Button>
-                            <Link to="/"><Button className="btn-lg btn-big col me-3" variant="outlined"
-                                onClick={() => context.setIsHeaderFooterShow(true)}>Cancel</Button></Link>
-                        </div>
-                        <p className="txt">Not Registered?<Link to="/signUp" className="border-effect"> Sign Up</Link></p>
+
+                            {/* Cancel Button */}
+                            <Link to="/" style={{ textDecoration: "none", flex: 1 }}>
+                                <Button
+                                    variant="outlined"
+                                    color="primary"
+                                    fullWidth
+                                    sx={{
+                                        borderRadius: 3,
+                                        py: 1.5,
+                                        fontWeight: "bold",
+                                        textTransform: "none",
+                                        borderColor: "#1976d2",
+                                        color: "#1976d2",
+                                        "&:hover": {
+                                            borderColor: "#1565c0",
+                                            backgroundColor: "rgba(25, 118, 210, 0.08)",
+                                        },
+                                    }}
+                                    onClick={() => context.setIsHeaderFooterShow(true)}
+                                >
+                                    Cancel
+                                </Button>
+                            </Link>
+                        </Box>
+                        <p className="txt text-center">Not Registered?<Link to="/signUp" className="border-effect"> Sign Up</Link></p>
                     </form>
                     <Dialog
                         open={forgotOpen}
@@ -144,7 +191,8 @@ const SignIn = () => {
                             style: {
                                 borderRadius: "16px",
                                 padding: "20px",
-                                minWidth: "400px",
+                                minWidth: isSmallScreen ? "90vw" : "400px",
+                                maxWidth: isSmallScreen ? "90vw" : "480px",
                             },
                         }}
                     >

@@ -1,4 +1,6 @@
 import { CircularProgress, Rating, Button, Tooltip, Alert } from "@mui/material";
+import useMediaQuery from "@mui/material/useMediaQuery";
+import { useTheme } from "@mui/material/styles";
 import { FaHeart, FaRegHeart } from "react-icons/fa6";
 import { BsCartFill } from "react-icons/bs";
 import { useContext, useEffect, useState } from "react";
@@ -36,6 +38,8 @@ const ProductDetails = () => {
     });
 
     const context = useContext(MyContext);
+    const theme = useTheme();
+    const isSmallScreen = useMediaQuery(theme.breakpoints.down('md'));
     const { id } = useParams();
     const quantityVal = 1;
 
@@ -190,10 +194,10 @@ const ProductDetails = () => {
         <section className="productDetails section">
             <div className="container">
                 <div className="row">
-                    <div className="col-md-4 ps-5">
+                    <div className={`col-md-4 ${isSmallScreen ? 'ps-3 pe-3' : 'ps-5'}`}>
                         <ProductZoom images={productData?.images} discount={productData?.discount} />
                     </div>
-                    <div className="col-md-7 ps-5 pe-5">
+                    <div className={`col-md-7 ${isSmallScreen ? 'ps-3 pe-3 mt-4' : 'ps-5 pe-5'}`}>
                         <h2 className="hd text-capitalize">{productData?.name}</h2>
 
                         <ul className="list list-inline d-flex align-items-center">
@@ -285,7 +289,7 @@ const ProductDetails = () => {
                     </div>
                 </div>
 
-                <div className="card mt-5 p-5 detailsPageTabs">
+                <div className={`card mt-5 ${isSmallScreen ? 'p-3' : 'p-5'} detailsPageTabs`}>
                     <div className="customTabs">
                         <ul className="list list-inline">
                             <li className="list-inline-item">

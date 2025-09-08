@@ -1,6 +1,8 @@
 import React, { useEffect, useState, useContext } from 'react';
 import { useParams, useLocation } from 'react-router-dom';
-import { Button, MenuItem, Pagination, CircularProgress, FormControl, Select, InputLabel } from '@mui/material';
+import { Button, MenuItem, Pagination, CircularProgress, FormControl, Select, InputLabel, Drawer } from '@mui/material';
+import useMediaQuery from '@mui/material/useMediaQuery';
+import { useTheme } from '@mui/material/styles';
 import { IoIosMenu } from 'react-icons/io';
 import { CgMenuGridR } from 'react-icons/cg';
 import { HiViewGrid } from 'react-icons/hi';
@@ -22,6 +24,9 @@ const SearchPage = () => {
     const [perPage, setPerPage] = useState(10);
     const [page, setPage] = useState(1);
     const [totalPages, setTotalPages] = useState(1);
+    const theme = useTheme();
+    const isSmallScreen = useMediaQuery(theme.breakpoints.down('md'));
+    const [filtersOpen, setFiltersOpen] = useState(false);
 
     const handlePerPageChange = (num) => {
         setPerPage(num);
@@ -75,10 +80,40 @@ const SearchPage = () => {
         <section className="product_Listing_Page">
             <div className="container">
                 <div className="productListing d-flex">
-                    <Sidebar filterByPrice={filterByPrice} filterData={filterData} filterByRating={filterByRating} />
+                    {isSmallScreen ? (
+                        <Drawer
+                            anchor="left"
+                            open={filtersOpen}
+                            onClose={() => setFiltersOpen(false)}
+                            PaperProps={{ sx: { width: '85vw', maxWidth: 360, padding: 2 } }}
+                        >
+                            <Sidebar filterByPrice={filterByPrice} filterData={filterData} filterByRating={filterByRating} />
+                        </Drawer>
+                    ) : (
+                        <Sidebar filterByPrice={filterByPrice} filterData={filterData} filterByRating={filterByRating} />
+                    )}
 
                     <div className="content_right">
-                        <div className="showBy mt-3 mb-3 d-flex align-items-center">
+                        <div className="showBy mt-3 mb-3 d-flex align-items-center" style={{ gap: 8, flexWrap: 'wrap' }}>
+                            {isSmallScreen && (
+                            <Button
+                                variant="contained"
+                                color="primary"
+                                size="small"
+                                sx={{
+                                    borderRadius: "24px",
+                                    textTransform: "none",
+                                    boxShadow: 3,
+                                    px: 3,
+                                    "&:hover": {
+                                        backgroundColor: "#2bbef9",
+                                    },
+                                }}
+                                onClick={() => setFiltersOpen(true)}
+                            >
+                                Filters
+                            </Button>
+                            )}
                             <div className="d-flex align-items-center btnWrapper">
                                 <Button onClick={() => setProductView("one")} className={`view-toggle ${productView === "one" && "act"}`}>
                                     <IoIosMenu />

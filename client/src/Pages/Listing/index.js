@@ -1,7 +1,9 @@
 import React, { useEffect, useState, useCallback } from 'react';
 import Sidebar from '../../Components/Sidebar';
 import ProductItem from '../../Components/ProductItem';
-import { Button, FormControl, Select, MenuItem, InputLabel, CircularProgress} from '@mui/material';
+import { Button, FormControl, Select, MenuItem, InputLabel, CircularProgress, Drawer } from '@mui/material';
+import useMediaQuery from '@mui/material/useMediaQuery';
+import { useTheme } from '@mui/material/styles';
 import { IoIosMenu } from 'react-icons/io';
 import { CgMenuGridR } from 'react-icons/cg';
 import { HiViewGrid } from 'react-icons/hi';
@@ -16,6 +18,9 @@ const Listing = () => {
     const [isLoading, setIsLoading] = useState(false);
     const [perPage, setPerPage] = useState(10);
     const { id } = useParams();
+    const theme = useTheme();
+    const isSmallScreen = useMediaQuery(theme.breakpoints.down('md'));
+    const [filtersOpen, setFiltersOpen] = useState(false);
 
     const fetchAndSetData = useCallback(async (url) => {
         setIsLoading(true);
@@ -57,14 +62,50 @@ const Listing = () => {
         <section className="product_Listing_Page">
             <div className="container">
                 <div className="productListing d-flex">
-                    <Sidebar
-                        filterByPrice={filterByPrice}
-                        filterData={filterData}
-                        filterByRating={filterByRating}
-                    />
+                    {isSmallScreen ? (
+                        <>
+                            <Drawer
+                                anchor="left"
+                                open={filtersOpen}
+                                onClose={() => setFiltersOpen(false)}
+                                PaperProps={{ sx: { width: '85vw', maxWidth: 360, padding: 2 } }}
+                            >
+                                <Sidebar
+                                    filterByPrice={filterByPrice}
+                                    filterData={filterData}
+                                    filterByRating={filterByRating}
+                                />
+                            </Drawer>
+                        </>
+                    ) : (
+                        <Sidebar
+                            filterByPrice={filterByPrice}
+                            filterData={filterData}
+                            filterByRating={filterByRating}
+                        />
+                    )}
 
                     <div className="content_right">
-                        <div className="showBy mt-3 mb-3 d-flex align-items-center">
+                        <div className="showBy mt-3 mb-3 d-flex align-items-center" style={{ gap: 8, flexWrap: 'wrap' }}>
+                            {isSmallScreen && (
+                                <Button
+                                    variant="contained"
+                                    color="primary"
+                                    size="small"
+                                    sx={{
+                                        borderRadius: "24px",
+                                        textTransform: "none",
+                                        boxShadow: 3,
+                                        px: 3,
+                                        "&:hover": {
+                                            backgroundColor: "#2bbef9",
+                                        },
+                                    }}
+                                    onClick={() => setFiltersOpen(true)}
+                                >
+                                    Filters
+                                </Button>
+                            )}
                             <div className="d-flex align-items-center btnWrapper">
                                 <Button onClick={() => setProductView("one")} className={`view-toggle ${productView === "one" && "act"}`}><IoIosMenu /></Button>
                                 <Button onClick={() => setProductView("two")} className={`view-toggle ${productView === "two" && "act"}`}><HiViewGrid /></Button>

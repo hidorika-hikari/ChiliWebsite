@@ -3,6 +3,8 @@ import PropTypes from "prop-types";
 import { Tabs, Tab, Box, Button, TextField } from "@mui/material";
 import { MyContext } from "../../App";
 import { RiImageAddLine } from "react-icons/ri";
+import { Visibility, VisibilityOff } from "@mui/icons-material";
+import { IconButton, InputAdornment } from "@mui/material";
 import { editData, fetchDataFromApi } from "../../utils/api";
 
 function CustomTabPanel(props) {
@@ -234,46 +236,99 @@ const MyAccount = () => {
 
                     <CustomTabPanel value={value} index={1}>
                         <form onSubmit={handlePasswordSubmit} style={{ width: "100%" }}>
-                            <div className="row">
-                                <div className="col-12 col-md-3 mb-3 mb-md-0">
+                            <div className="row g-3">
+                                <div className="col-12 col-md-4">
                                     <TextField
                                         label="Old Password"
                                         name="oldPassword"
-                                        type="password"
+                                        type={passwordData.showOld ? "text" : "password"}
                                         value={passwordData.oldPassword}
                                         onChange={handlePasswordChange}
                                         fullWidth
                                         required
+                                        variant="standard"
+                                        InputProps={{
+                                            endAdornment: (
+                                                <InputAdornment position="end">
+                                                    <IconButton
+                                                        onClick={() =>
+                                                            setPasswordData(prev => ({ ...prev, showOld: !prev.showOld }))
+                                                        }
+                                                        edge="end"
+                                                        size="small"
+                                                    >
+                                                        {passwordData.showOld ? <VisibilityOff /> : <Visibility />}
+                                                    </IconButton>
+                                                </InputAdornment>
+                                            ),
+                                        }}
                                     />
                                 </div>
-                                <div className="col-12 col-md-3 mb-3 mb-md-0">
+
+                                <div className="col-12 col-md-4">
                                     <TextField
                                         label="New Password"
                                         name="newPassword"
-                                        type="password"
+                                        type={passwordData.showNew ? "text" : "password"}
                                         value={passwordData.newPassword}
                                         onChange={handlePasswordChange}
                                         fullWidth
                                         required
+                                        variant="standard"
+                                        InputProps={{
+                                            endAdornment: (
+                                                <InputAdornment position="end">
+                                                    <IconButton
+                                                        onClick={() =>
+                                                            setPasswordData(prev => ({ ...prev, showNew: !prev.showNew }))
+                                                        }
+                                                        edge="end"
+                                                        size="small"
+                                                    >
+                                                        {passwordData.showNew ? <VisibilityOff /> : <Visibility />}
+                                                    </IconButton>
+                                                </InputAdornment>
+                                            ),
+                                        }}
                                     />
                                 </div>
-                                <div className="col-12 col-md-3 mb-3 mb-md-0">
+
+                                <div className="col-12 col-md-4">
                                     <TextField
                                         label="Confirm Password"
                                         name="confirmPassword"
-                                        type="password"
+                                        type={passwordData.showConfirm ? "text" : "password"}
                                         value={passwordData.confirmPassword}
                                         onChange={handlePasswordChange}
                                         fullWidth
                                         required
+                                        variant="standard"
+                                        InputProps={{
+                                            endAdornment: (
+                                                <InputAdornment position="end">
+                                                    <IconButton
+                                                        onClick={() =>
+                                                            setPasswordData(prev => ({ ...prev, showConfirm: !prev.showConfirm }))
+                                                        }
+                                                        edge="end"
+                                                        size="small"
+                                                    >
+                                                        {passwordData.showConfirm ? <VisibilityOff /> : <Visibility />}
+                                                    </IconButton>
+                                                </InputAdornment>
+                                            ),
+                                        }}
                                     />
                                 </div>
                             </div>
-                            <Button type="submit" className="btn-red btn-lg btn-big mt-md-3">
-                                Change Password
-                            </Button>
+                            <div className="form-group mt-4">
+                                <Button type="submit" className="btn-red btn-lg btn-big">
+                                    Change Password
+                                </Button>
+                            </div>
                         </form>
                     </CustomTabPanel>
+
                 </Box>
             </div>
         </section>

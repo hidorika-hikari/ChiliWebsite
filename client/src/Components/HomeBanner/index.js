@@ -12,6 +12,12 @@ const HomeBanner = (props) => {
                 <Swiper
                     slidesPerView={1}
                     spaceBetween={15}
+                    breakpoints={{
+                        0: { slidesPerView: 1, spaceBetween: 8 },
+                        576: { slidesPerView: 1, spaceBetween: 10 },
+                        768: { slidesPerView: 1, spaceBetween: 12 },
+                        992: { slidesPerView: 1, spaceBetween: 15 }
+                    }}
                     navigation={true}
                     loop={true}
                     autoplay={{
@@ -25,7 +31,12 @@ const HomeBanner = (props) => {
                         props?.data?.length !== 0 && props?.data?.map((item, index) => {
                             return (
                                 <SwiperSlide key={index}>
-                                    <img src={item?.images[0]} alt={`Slide ${index}`} className="w-100" />
+                                    <img
+                                        src={item?.images[0]}
+                                        alt={`Slide ${index}`}
+                                        className="w-100"
+                                        style={{ display: 'block', width: '100%', height: 'auto', borderRadius: 8 }}
+                                    />
                                 </SwiperSlide>
                             )
                         })

@@ -1,12 +1,11 @@
 import { useContext, useEffect, useState } from "react";
 import { MyContext } from "../../App";
 import { Link } from "react-router-dom";
-import { Button, CircularProgress, TextField  } from '@mui/material';
+import { Button, CircularProgress, TextField, Box } from '@mui/material';
 import { postData } from "../../utils/api";
 import Logo from '../../assets/logo.png'
 
 const SignUp = () => {
-    //const history = useNavigate();
     const context = useContext(MyContext);
     const [isLoading, setIsLoading] = useState(false);
     const [formFields, setFormFields] = useState({
@@ -15,149 +14,168 @@ const SignUp = () => {
         phone: '',
         password: '',
         role: 'customer'
-    })
+    });
+    const [confirmPassword, setConfirmPassword] = useState('');
 
     useEffect(() => {
         context.setIsHeaderFooterShow(false);
     }, [context]);
 
     const onChangeInput = (e) => {
-        setFormFields(() => ({
+        setFormFields({
             ...formFields,
             [e.target.name]: e.target.value
-        }))
-    }
+        });
+    };
 
     const signUp = (e) => {
         e.preventDefault();
         const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-        const phoneRegex = /^[0-9]{10,15}$/;
+        const phoneRegex = /^(0\d{9}|\+66\d{9})$/;
         const passwordRegex = /^(?=.*[!@#$%^&*(),.?":{}|<>]).{8,}$/;
-    
-        if (formFields.name === "") {
-            context.setAlertBox({ open: true, error: true, msg: "Name cannot be blank!" });
-            return false;
-        }
-        if (formFields.email === "") {
-            context.setAlertBox({ open: true, error: true, msg: "Email cannot be blank!" });
-            return false;
-        }
-        if (!emailRegex.test(formFields.email)) {
-            context.setAlertBox({ open: true, error: true, msg: "Please enter a valid email address." });
-            return false;
-        }
-        
-        if (formFields.phone === "") {
-            context.setAlertBox({ open: true, error: true, msg: "Phone cannot be blank!" });
-            return false;
-        }
-        if (!phoneRegex.test(formFields.phone)) {
-            context.setAlertBox({ open: true, error: true, msg: "Phone number must be 10–15 digits"});
-            return false;
-        }
-        if (formFields.password === "") {
-            context.setAlertBox({ open: true, error: true, msg: "Password cannot be blank!" });
-            return false;
-        }
-        if (!passwordRegex.test(formFields.password)) {
-            context.setAlertBox({ open: true, error: true, msg: "Password must be at least 8 characters and include at least 1 symbol" });
-            return false;
-        }
-    
+
+        if (!formFields.name) return context.setAlertBox({ open: true, error: true, msg: "Name cannot be blank!" });
+        if (!formFields.email) return context.setAlertBox({ open: true, error: true, msg: "Email cannot be blank!" });
+        if (!emailRegex.test(formFields.email)) return context.setAlertBox({ open: true, error: true, msg: "Please enter a valid email address." });
+        if (!formFields.phone) return context.setAlertBox({ open: true, error: true, msg: "Phone cannot be blank!" });
+        if (!phoneRegex.test(formFields.phone)) return context.setAlertBox({ open: true, error: true, msg: "Please enter a valid phone number (0XXXXXXXXX or +66XXXXXXXXX)" });
+        if (!formFields.password) return context.setAlertBox({ open: true, error: true, msg: "Password cannot be blank!" });
+        if (!passwordRegex.test(formFields.password)) return context.setAlertBox({ open: true, error: true, msg: "Password must be at least 8 characters and include at least 1 symbol" });
+        if (formFields.password !== confirmPassword) return context.setAlertBox({ open: true, error: true, msg: "Passwords do not match!" });
+
         setIsLoading(true);
         postData('/api/user/signup', formFields)
-            .then((res) => {
-                if (res.status === true) {
+            .then(res => {
+                if (res.status) {
                     context.setAlertBox({ open: true, error: false, msg: "Sign Up Successfully!" });
-                    setTimeout(() => {
-                        setIsLoading(true);
-                        window.location.href = '/signin';
-                    }, 2000);
+                    setTimeout(() => window.location.href = '/signin', 2000);
                 } else {
                     context.setAlertBox({ open: true, error: true, msg: res.msg });
                 }
             })
-            .catch((error) => {
-                console.error('Signup error:', error);
-                context.setAlertBox({ open: true, error: true, msg: "Something went wrong. Please try again" });
-            });
+            .catch(() => context.setAlertBox({ open: true, error: true, msg: "Something went wrong. Please try again" }))
+            .finally(() => setIsLoading(false));
     };
 
     return (
         <section className="section signInPage signUpPage">
-            <div className="shape-bottom"><svg fill="#fff" id="Layer_1" x="0px" y="0px" viewBox="0 0 1921 819.8">
-                <path class="st0" d="M1921,413.1v406.7H0V0.5h0.4l228.1,598.3c30,74.4,80.8,130.6,152.5,168.6c107.6,57,212.1,40.7,245.7,34.4 
-            c22.4-4.2,54.9-13.1,97.5-26.6L1921,400.5V413.1z"></path> </svg>
+            <div className="shape-bottom">
+                <svg fill="#fff" viewBox="0 0 1921 819.8">
+                    <path className="st0" d="M1921,413.1v406.7H0V0.5h0.4l228.1,598.3c30,74.4,80.8,130.6,152.5,168.6c107.6,57,212.1,40.7,245.7,34.4 
+                        c22.4-4.2,54.9-13.1,97.5-26.6L1921,400.5V413.1z"></path>
+                </svg>
             </div>
             <div className="container">
                 <div className="box card p-3 shadow border-0">
                     <div className="text-center">
-                        <img src={Logo} width={100} alt="" />
+                        <img src={Logo} width={100} alt="logo" />
                     </div>
 
                     <form className="mt-2" onSubmit={signUp}>
-                        <h2 className="mb-3">Sign Up</h2>
+                        <h2 className="mb-3 text-center">Sign Up</h2>
+
                         <div className="row">
                             <div className="col-md-6">
-                                <div className="form-group">
-                                    <TextField label="Name"
-                                        name='name'
+                                <div className="form-group mb-3">
+                                    <TextField
+                                        label="Name"
+                                        name="name"
+                                        value={formFields.name}
                                         onChange={onChangeInput}
                                         type="text"
-                                        required variant="standard" className="w-100" />
+                                        required
+                                        variant="standard"
+                                        className="w-100"
+                                    />
                                 </div>
                             </div>
                             <div className="col-md-6">
-                                <div className="form-group">
-                                    <TextField label="Phone No."
-                                        name='phone'
+                                <div className="form-group mb-3">
+                                    <TextField
+                                        label="Phone No."
+                                        name="phone"
+                                        value={formFields.phone}
                                         onChange={onChangeInput}
                                         type="text"
-                                        required variant="standard" className="w-100" />
+                                        required
+                                        variant="standard"
+                                        className="w-100"
+                                    />
                                 </div>
                             </div>
                         </div>
 
-                        <div className="form-group">
-                            <TextField id="standard-basic"
+                        <div className="form-group mb-3">
+                            <TextField
                                 label="Email"
-                                name='email'
+                                name="email"
+                                value={formFields.email}
                                 onChange={onChangeInput}
                                 type="email"
-                                required variant="standard" className="w-100" />
+                                required
+                                variant="standard"
+                                className="w-100"
+                            />
                         </div>
-                        <div className="form-group">
-                            <TextField id="standard-basic"
+
+                        <div className="form-group mb-3">
+                            <TextField
                                 label="Password"
-                                name='password'
-                                onChange={onChangeInput}
                                 type="password"
-                                required variant="standard" className="w-100" />
+                                name="password"
+                                value={formFields.password}
+                                onChange={onChangeInput}
+                                required
+                                variant="standard"
+                                className="w-100"
+                            />
                         </div>
-                        <div className="d-flex align-items-center mt-3 mb-3">
-                            <div className="row w-100">
-                                <div className="col-md-6">
-                                    <Button type='submit'
-                                        className="btn-blue w-100 btn-lg btn-big">
-                                            {
-                                                isLoading === true ? <CircularProgress style={{ width: 30, height: 27 }} />
-                                                : 'Sign Up'
-                                            }
-                                        </Button>
-                                </div>
-                                <div className="col-md-6 pe-0">
-                                    <Link to="/signin" className="d-block w-100">
-                                        <Button className="btn-lg btn-big me-3" variant="outlined"
-                                            onClick={() => context.setIsHeaderFooterShow(true)}>Cancel</Button></Link>
-                                </div>
-                            </div>
+
+                        <div className="form-group mb-3">
+                            <TextField
+                                label="Confirm Password"
+                                type="password"
+                                name="confirmPassword"
+                                value={confirmPassword}
+                                onChange={(e) => setConfirmPassword(e.target.value)}
+                                required
+                                variant="standard"
+                                className="w-100"
+                            />
                         </div>
-                        <p className="txt">have account? <Link to="/signin" className="border-effect"> Sign In</Link></p>
+
+                        <Box sx={{ display: "flex", gap: 2, flexDirection: { xs: "column", md: "row" }, mt: 3, mb: 3 }}>
+                            <Button
+                                type="submit"
+                                variant="contained"
+                                color="primary"
+                                fullWidth
+                                sx={{ borderRadius: 3, py: 1.5, fontWeight: "bold", textTransform: "none" }}
+                            >
+                                {isLoading ? <CircularProgress size={27} color="inherit" /> : "Sign Up"}
+                            </Button>
+
+                            <Link to="/signin" style={{ textDecoration: "none", flex: 1 }}>
+                                <Button
+                                    variant="outlined"
+                                    color="primary"
+                                    fullWidth
+                                    sx={{ borderRadius: 3, py: 1.5, fontWeight: "bold", textTransform: "none" }}
+                                    onClick={() => context.setIsHeaderFooterShow(true)}
+                                >
+                                    Cancel
+                                </Button>
+                            </Link>
+                        </Box>
+
+                        <p className="txt text-center">
+                            Have an account? <Link to="/signin" className="border-effect">Sign In</Link>
+                        </p>
                     </form>
                 </div>
             </div>
         </section>
-    )
-}
+    );
+};
 
 export default SignUp;

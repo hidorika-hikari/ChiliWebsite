@@ -1,4 +1,4 @@
-import { Button, TextField } from '@mui/material';
+import { Button, TextField, Box, Typography, Paper  } from '@mui/material';
 import React, { useContext, useState, useEffect } from 'react';
 import { MyContext } from '../../App';
 import { IoBagCheckOutline } from 'react-icons/io5';
@@ -96,7 +96,7 @@ const Checkout = () => {
             },
             createdAt: new Date().toISOString()
         };
-        postData(`/api/orders/create`,payload).then(res => {
+        postData(`/api/orders/create`, payload).then(res => {
             history('/');
         })
     };
@@ -212,11 +212,20 @@ const Checkout = () => {
                                 </div>
                             </div>
                         </div>
-                        <div className='col-md-4'>
-                            <div className='orderInfo'>
-                                <h4>YOUR ORDER</h4>
-                                <div className='table-responsive mt-3'>
-                                    <table className='table'>
+                        <Box className="col-md-4">
+                            <Paper
+                                elevation={3}
+                                sx={{
+                                    p: 3,
+                                    borderRadius: 3
+                                }}
+                            >
+                                <Typography variant="h5" fontWeight="bold" gutterBottom>
+                                    YOUR ORDER
+                                </Typography>
+
+                                <Box sx={{ overflowX: "auto" }}>
+                                    <table className="table" style={{ width: "100%" }}>
                                         <thead>
                                             <tr>
                                                 <th className="fw-medium">Product</th>
@@ -224,36 +233,77 @@ const Checkout = () => {
                                             </tr>
                                         </thead>
                                         <tbody>
-                                            {cartData?.length > 0 && cartData.map((item, index) => (
-                                                <tr key={index}>
-                                                    <td>
-                                                        {item?.productTitle?.length > 30
-                                                            ? item.productTitle.substr(0, 30) + '...'
-                                                            : item.productTitle
-                                                        }
-                                                        <b> × {item.quantity}</b>
-                                                    </td>
-                                                    <td>{item.price}฿</td>
-                                                </tr>
-                                            ))}
+                                            {cartData?.length > 0 &&
+                                                cartData.map((item, index) => (
+                                                    <tr key={index}>
+                                                        <td>
+                                                            {item?.productTitle?.length > 30
+                                                                ? item.productTitle.substr(0, 30) + "..."
+                                                                : item.productTitle}
+                                                            <b> × {item.quantity}</b>
+                                                        </td>
+                                                        <td>{item.price}฿</td>
+                                                    </tr>
+                                                ))}
                                             <tr>
                                                 <td className="fw-medium">Subtotal</td>
                                                 <td>
-                                                    {cartData.reduce((sum, item) => sum + (item.price * item.quantity), 0)}฿
+                                                    {cartData.reduce(
+                                                        (sum, item) => sum + item.price * item.quantity,
+                                                        0
+                                                    )}
+                                                    ฿
                                                 </td>
                                             </tr>
                                         </tbody>
                                     </table>
-                                </div>
-                                <div className="form-group">
-                                    <h6 className='mb-3 fw-medium'>Credit or debit card:</h6>
-                                    <CardElement options={CARD_ELEMENT_OPTIONS} />
-                                </div>
-                                <Button className='btn-red btn-lg btn-big w-100' type="submit" disabled={!stripe || processing}>
-                                    {processing ? <span className="text-white">Processing...</span> : <><IoBagCheckOutline /> &nbsp; Checkout</>}
-                                </Button>
-                            </div>
-                        </div>
+                                </Box>
+
+                                <Box>
+                                    <Typography variant="subtitle1" fontWeight="medium" gutterBottom>
+                                        Credit or debit card
+                                    </Typography>
+                                    <Paper
+                                        elevation={1}
+                                        sx={{
+                                            p: 2,
+                                            borderRadius: 2,
+                                            border: "1px solid #e0e0e0",
+                                            mb: 3,
+                                            backgroundColor: "#fff",
+                                        }}
+                                    >
+                                        <CardElement options={CARD_ELEMENT_OPTIONS} />
+                                    </Paper>
+
+                                    <Button
+                                        variant="contained"
+                                        color="error"
+                                        size="large"
+                                        fullWidth
+                                        disabled={!stripe || processing}
+                                        sx={{
+                                            borderRadius: 3,
+                                            textTransform: "none",
+                                            fontWeight: "bold",
+                                            px: 2,
+                                            py: 1.5,
+                                            "&:hover": {
+                                                backgroundColor: "#d32f2f",
+                                            },
+                                        }}
+                                    >
+                                        {processing ? (
+                                            <span style={{ color: "#fff" }}>Processing...</span>
+                                        ) : (
+                                            <>
+                                                <IoBagCheckOutline style={{ marginRight: 8 }} /> Checkout
+                                            </>
+                                        )}
+                                    </Button>
+                                </Box>
+                            </Paper>
+                        </Box>
                     </div>
                 </form>
             </div>

@@ -15,6 +15,13 @@ const HomeCat = (props) => {
                     spaceBetween={8}
                     navigation={true}
                     slidesPerGroup={3}
+                    breakpoints={{
+                        0: { slidesPerView: 3, slidesPerGroup: 3, spaceBetween: 8 },
+                        576: { slidesPerView: 4, slidesPerGroup: 4, spaceBetween: 8 },
+                        768: { slidesPerView: 6, slidesPerGroup: 6, spaceBetween: 8 },
+                        992: { slidesPerView: 8, slidesPerGroup: 4, spaceBetween: 8 },
+                        1200: { slidesPerView: 10, slidesPerGroup: 5, spaceBetween: 8 }
+                    }}
                     pagination={{
                         clickable: true,
                     }}

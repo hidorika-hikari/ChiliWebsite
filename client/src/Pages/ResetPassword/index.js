@@ -64,7 +64,7 @@ const ResetPassword = () => {
                     </div>
 
                     <form className="mt-3" onSubmit={handleSubmit}>
-                        <h2 className="mb-4">Set New Password</h2>
+                        <h2 className="mb-3 text-center">Set New Password</h2>
                         <div className="form-group mb-3">
                             <TextField
                                 label="New Password"
@@ -93,16 +93,20 @@ const ResetPassword = () => {
 
                         <Button
                             type="submit"
-                            className="btn-red btn-lg btn-big w-100"
+                            variant="contained"
+                            color="primary"
+                            fullWidth
+                            sx={{
+                                borderRadius: 3,
+                                py: 1.5,
+                                fontWeight: "bold",
+                                textTransform: "none",
+                                mt: 2,
+                            }}
                         >
-                            {isLoading ? (
-                                <CircularProgress
-                                    style={{ width: 30, height: 27 }}
-                                />
-                            ) : (
-                                'Reset Password'
-                            )}
+                            {isLoading ? <CircularProgress size={27} color="inherit" /> : "Reset Password"}
                         </Button>
+
 
                         <p className="txt mt-3 text-center">
                             <Link to="/signin" className="border-effect">

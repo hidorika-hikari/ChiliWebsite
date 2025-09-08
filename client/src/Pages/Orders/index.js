@@ -1,7 +1,9 @@
 import React, { useEffect, useState, useContext } from 'react';
 import { fetchDataFromApi } from '../../utils/api';
 import { MyContext } from '../../App';
-import { Dialog, DialogTitle, DialogContent, DialogActions, Button, Typography, Grid, Divider, Pagination } from '@mui/material';
+import { Dialog, DialogTitle, DialogContent, DialogActions, Button, Typography, Grid, Divider, Pagination, Card, CardContent, Stack, Chip } from '@mui/material';
+import { useTheme } from '@mui/material/styles';
+import useMediaQuery from '@mui/material/useMediaQuery';
 import { FaListCheck } from "react-icons/fa6";
 import { FaHome } from "react-icons/fa";
 import { Link } from "react-router-dom";
@@ -20,6 +22,8 @@ const Orders = () => {
   const [selectedAddress, setSelectedAddress] = useState(null);
   const [openAddressDialog, setOpenAddressDialog] = useState(false);
   const context = useContext(MyContext);
+  const theme = useTheme();
+  const isSmallScreen = useMediaQuery(theme.breakpoints.down('sm'));
 
   const handleOpenDialog = (type, data) => {
     if (type === 'product') {
@@ -53,26 +57,7 @@ const Orders = () => {
       });
     }
   };
-
-  const getStatusBadgeClass = (status) => {
-    switch (status) {
-      case 'pending':
-        return 'bg-secondary';
-      case 'processing':
-        return 'bg-warning text-dark';
-      case 'shipped':
-        return 'bg-info text-dark';
-      case 'delivered':
-        return 'bg-primary';
-      case 'cancelled':
-        return 'bg-danger';
-      case 'succeeded':
-        return 'bg-success';
-      default:
-        return 'bg-dark';
-    }
-  };
-
+  
   useEffect(() => {
     window.scrollTo(0, 0);
     if (userId) {
@@ -90,89 +75,158 @@ const Orders = () => {
         <h2 className="hd mb-3">Orders</h2>
         {orders?.ordersList?.length > 0 ? (
           <>
-            <div className="table-responsive orderTable mt-3">
-              <table className="table table-striped table-borderless">
-                <thead className="table-dark">
-                  <tr>
-                    <th>Order Id</th>
-                    <th>Payment Id</th>
-                    <th>Products</th>
-                    <th>Customer Details</th>
-                    <th>Total Amount</th>
-                    <th>User</th>
-                    <th>Order Status</th>
-                    <th>Date / Time</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {orders.ordersList.map((order) => (
-                    <tr key={order._id}>
-                      <td>
-                        <button
+            {isSmallScreen ? (
+              <Stack spacing={2} className="mt-3">
+                {orders.ordersList.map((order) => (
+                  <Card key={order._id} variant="outlined">
+                    <CardContent>
+                      <Stack spacing={1.25}>
+                        <Stack direction="row" justifyContent="space-between" alignItems="center">
+                          <Typography variant="subtitle2">Order</Typography>
+                          <Chip size="small" label={dayjs.unix(order.paymentDetails.created).tz("Asia/Bangkok").format("DD/MM/YY HH:mm")} />
+                        </Stack>
+                        <Button
                           className="btn btn-sm btn-outline-primary"
-                          onClick={() =>
-                            context.setAlertBox({ open: true, error: false, msg: `Order ID: ${order._id}` })
-                          }
+                          onClick={() => context.setAlertBox({ open: true, error: false, msg: `Order ID: ${order._id}` })}
+                          variant="outlined"
+                          size="small"
                         >
-                          {order._id.slice(0, 8)}...
-                        </button>
-                      </td>
-                      <td>
-                        <button
+                          #{order._id.slice(0, 8)}
+                        </Button>
+                        <Button
                           className="btn btn-sm btn-outline-dark"
-                          style={{ display: "block", width: "100%", textAlign: "left" }}
-                          onClick={() =>
-                            context.setAlertBox({ open: true, error: false, msg: `Payment ID: ${order.paymentDetails.paymentIntentId}` })
-                          }
+                          onClick={() => context.setAlertBox({ open: true, error: false, msg: `Payment ID: ${order.paymentDetails.paymentIntentId}` })}
+                          variant="outlined"
+                          size="small"
                         >
-                          {order.paymentDetails.paymentIntentId.slice(0, 10)}...
-                        </button>
-                      </td>
-                      <td>
-                        <ul className="list-unstyled mb-0">
-                          {order.cartItems.map((item, idx) => (
-                            <li key={idx} style={{ marginBottom: "0.25rem" }}>
-                              <button
-                                type="button"
+                          Payment: {order.paymentDetails.paymentIntentId.slice(0, 10)}
+                        </Button>
+                        <div>
+                          <Typography variant="caption" color="text.secondary">Products</Typography>
+                          <Stack spacing={0.5} mt={0.5}>
+                            {order.cartItems.map((item, idx) => (
+                              <Button
+                                key={idx}
                                 className="btn btn-sm btn-outline-primary"
                                 onClick={() => handleOpenDialog("product", item)}
-                                style={{ display: "block", width: "100%", textAlign: "left" }}
+                                variant="outlined"
+                                size="small"
+                                style={{ justifyContent: 'flex-start' }}
                               >
-                                {item.productTitle.slice(0, 30)}...
-                              </button>
-                            </li>
-                          ))}
-                        </ul>
-                      </td>
-                      <td>
-                        <button
-                          className="btn btn-sm btn-outline-dark"
-                          style={{ display: "block", width: "100%", textAlign: "left" }}
-                          onClick={() => handleOpenDialog("address", order.billingDetails)}
-                        >
-                          {order.billingDetails.streetAddressLine1.slice(0, 30)}...
-                        </button>
-                      </td>
-                      <td>{order.totalAmount} ฿</td>
-                      <td>{order.user.name}</td>
-                      <td>
-                        
-                          <Link to={`/order-status/${order._id}`}>
-                            <button className="btn btn-sm btn-outline-info">View Status</button>
-                          </Link>
-                        
-                      </td>
-                      <td>
-                        {dayjs
-                          .unix(order.paymentDetails.created)
-                          .tz("Asia/Bangkok")
-                          .format("DD/MM/YY HH:mm")}
-                      </td>
+                                {item.productTitle.slice(0, 30)}
+                              </Button>
+                            ))}
+                          </Stack>
+                        </div>
+                        <div>
+                          <Typography variant="caption" color="text.secondary">Customer</Typography><br/>
+                          <Button
+                            className="btn btn-sm btn-outline-dark w-100"
+                            onClick={() => handleOpenDialog("address", order.billingDetails)}
+                            variant="outlined"
+                            size="small"
+                            style={{ justifyContent: 'flex-start', marginTop: 4 }}
+                          >
+                            {order.billingDetails.streetAddressLine1.slice(0, 30)}
+                          </Button>
+                        </div>
+                        <Stack direction="row" spacing={2} alignItems="center" justifyContent="space-between">
+                          <Typography variant="body2"><strong>{order.totalAmount} ฿</strong></Typography>
+                          <Typography variant="body2">@{order.user.name}</Typography>
+                        </Stack>
+                        <Link to={`/order-status/${order._id}`}>
+                          <Button className="btn btn-sm btn-outline-info" variant="outlined" size="small" fullWidth>
+                            View Status
+                          </Button>
+                        </Link>
+                      </Stack>
+                    </CardContent>
+                  </Card>
+                ))}
+              </Stack>
+            ) : (
+              <div className="table-responsive orderTable mt-3">
+                <table className="table table-striped table-borderless">
+                  <thead className="table-dark">
+                    <tr>
+                      <th>Order Id</th>
+                      <th>Payment Id</th>
+                      <th>Products</th>
+                      <th>Customer Details</th>
+                      <th>Total Amount</th>
+                      <th>User</th>
+                      <th>Order Status</th>
+                      <th>Date / Time</th>
                     </tr>
-                  ))}
-                </tbody>
-              </table>
-            </div>
+                  </thead>
+                  <tbody>
+                    {orders.ordersList.map((order) => (
+                      <tr key={order._id}>
+                        <td>
+                          <button
+                            className="btn btn-sm btn-outline-primary"
+                            onClick={() =>
+                              context.setAlertBox({ open: true, error: false, msg: `Order ID: ${order._id}` })
+                            }
+                          >
+                            {order._id.slice(0, 8)}...
+                          </button>
+                        </td>
+                        <td>
+                          <button
+                            className="btn btn-sm btn-outline-dark"
+                            style={{ display: "block", width: "100%", textAlign: "left" }}
+                            onClick={() =>
+                              context.setAlertBox({ open: true, error: false, msg: `Payment ID: ${order.paymentDetails.paymentIntentId}` })
+                            }
+                          >
+                            {order.paymentDetails.paymentIntentId.slice(0, 10)}...
+                          </button>
+                        </td>
+                        <td>
+                          <ul className="list-unstyled mb-0">
+                            {order.cartItems.map((item, idx) => (
+                              <li key={idx} style={{ marginBottom: "0.25rem" }}>
+                                <button
+                                  type="button"
+                                  className="btn btn-sm btn-outline-primary"
+                                  onClick={() => handleOpenDialog("product", item)}
+                                  style={{ display: "block", width: "100%", textAlign: "left" }}
+                                >
+                                  {item.productTitle.slice(0, 30)}...
+                                </button>
+                              </li>
+                            ))}
+                          </ul>
+                        </td>
+                        <td>
+                          <button
+                            className="btn btn-sm btn-outline-dark"
+                            style={{ display: "block", width: "100%", textAlign: "left" }}
+                            onClick={() => handleOpenDialog("address", order.billingDetails)}
+                          >
+                            {order.billingDetails.streetAddressLine1.slice(0, 30)}...
+                          </button>
+                        </td>
+                        <td>{order.totalAmount} ฿</td>
+                        <td>{order.user.name}</td>
+                        <td>
+                            <Link to={`/order-status/${order._id}`}>
+                              <button className="btn btn-sm btn-outline-info">View Status</button>
+                            </Link>
+                        </td>
+                        <td>
+                          {dayjs
+                            .unix(order.paymentDetails.created)
+                            .tz("Asia/Bangkok")
+                            .format("DD/MM/YY HH:mm")}
+                        </td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
+            )}
 
             {orders?.totalPages > 1 && (
               <div className="d-flex tableFooter">
