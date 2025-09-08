@@ -7,20 +7,42 @@ import EmailIcon from "@mui/icons-material/Email";
 const ContactUs = () => {
     const [form, setForm] = useState({ name: "", email: "", message: "" });
     const [infoMessage, setInfoMessage] = useState("");
+    const [errors, setErrors] = useState({});
 
     const handleChange = (e) => {
         setForm((prev) => ({ ...prev, [e.target.name]: e.target.value }));
+        setErrors((prev) => ({ ...prev, [e.target.name]: "" }));
+    };
+
+    const validate = () => {
+        let tempErrors = {};
+        if (!form.name.trim()) tempErrors.name = "Name is required";
+        if (!form.email.trim()) {
+            tempErrors.email = "Email is required";
+        } else if (!/\S+@\S+\.\S+/.test(form.email)) {
+            tempErrors.email = "Email is not valid";
+        }
+        if (!form.message.trim()) tempErrors.message = "Message is required";
+        return tempErrors;
     };
 
     const handleSubmit = (e) => {
         e.preventDefault();
+        const validationErrors = validate();
+        if (Object.keys(validationErrors).length > 0) {
+            setErrors(validationErrors);
+            return;
+        }
+
         setInfoMessage(
             <>
                 Thanks for contacting us, {form.name}!<br />
                 We will get back to you soon.
             </>
         );
+
         setForm({ name: "", email: "", message: "" });
+        setErrors({});
     };
 
     return (
@@ -42,8 +64,7 @@ const ContactUs = () => {
                         flex: "1 1 320px",
                         p: 4,
                         borderRadius: 3,
-                        background:
-                            "linear-gradient(135deg, #ffffff 0%, #f0f4ff 100%)",
+                        background: "linear-gradient(135deg, #ffffff 0%, #f0f4ff 100%)",
                         boxShadow:
                             "0 8px 16px rgba(0,0,0,0.1), 0 4px 8px rgba(0,0,0,0.05)",
                         display: "flex",
@@ -51,11 +72,7 @@ const ContactUs = () => {
                         gap: 3,
                     }}
                 >
-                    <Typography
-                        variant="h5"
-                        gutterBottom
-                        sx={{ fontWeight: 700, letterSpacing: 1 }}
-                    >
+                    <Typography variant="h5" gutterBottom sx={{ fontWeight: 700 }}>
                         Contact Information
                     </Typography>
 
@@ -87,15 +104,11 @@ const ContactUs = () => {
                         flex: "1 1 480px",
                         p: 5,
                         borderRadius: 3,
-                        boxShadow:
-                            "0 8px 16px rgba(0,0,0,0.1), 0 4px 8px rgba(0,0,0,0.05)",
-                        background:
-                            "linear-gradient(135deg, #ffffff 0%, #f0f4ff 100%)",
+                        background: "linear-gradient(135deg, #ffffff 0%, #f0f4ff 100%)",
                     }}
                 >
                     <Typography
                         variant="h4"
-                        component="h1"
                         gutterBottom
                         sx={{ fontWeight: 700, mb: 4, color: "#0a3d62" }}
                     >
@@ -115,16 +128,8 @@ const ContactUs = () => {
                             onChange={handleChange}
                             required
                             fullWidth
-                            variant="outlined"
-                            sx={{
-                                "& .MuiOutlinedInput-root": {
-                                    borderRadius: 2,
-                                    "&.Mui-focused fieldset": {
-                                        borderColor: "#1e88e5",
-                                        boxShadow: "0 0 5px #90caf9",
-                                    },
-                                },
-                            }}
+                            error={Boolean(errors.name)}
+                            helperText={errors.name}
                         />
                         <TextField
                             label="Your Email"
@@ -134,16 +139,8 @@ const ContactUs = () => {
                             onChange={handleChange}
                             required
                             fullWidth
-                            variant="outlined"
-                            sx={{
-                                "& .MuiOutlinedInput-root": {
-                                    borderRadius: 2,
-                                    "&.Mui-focused fieldset": {
-                                        borderColor: "#1e88e5",
-                                        boxShadow: "0 0 5px #90caf9",
-                                    },
-                                },
-                            }}
+                            error={Boolean(errors.email)}
+                            helperText={errors.email}
                         />
                         <TextField
                             label="Your Message"
@@ -154,23 +151,16 @@ const ContactUs = () => {
                             multiline
                             rows={6}
                             fullWidth
-                            variant="outlined"
-                            sx={{
-                                "& .MuiOutlinedInput-root": {
-                                    borderRadius: 2,
-                                    "&.Mui-focused fieldset": {
-                                        borderColor: "#1e88e5",
-                                        boxShadow: "0 0 5px #90caf9",
-                                    },
-                                },
-                            }}
+                            error={Boolean(errors.message)}
+                            helperText={errors.message}
                         />
 
                         <Button
                             className="btn-blue btn-big"
                             type="submit"
                             sx={{
-                                transition: "background-color 0.3s ease, transform 0.2s ease, box-shadow 0.2s ease",
+                                transition:
+                                    "background-color 0.3s ease, transform 0.2s ease, box-shadow 0.2s ease",
                                 "&:hover": {
                                     backgroundColor: "#1565c0",
                                     transform: "scale(1.05)",

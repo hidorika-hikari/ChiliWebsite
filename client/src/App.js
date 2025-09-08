@@ -25,6 +25,7 @@ import SearchPage from "./Pages/Search";
 import MyAccount from "./Pages/MyAccount";
 import ContactUs from "./Pages/ContactUs";
 import ProtectedRoute from "./Components/ProtectedRoute";
+import OrderStatusPage from "./Pages/OrderStatus";
 
 const MyContext = createContext();
 
@@ -233,6 +234,13 @@ function App() {
               element={
                 <ProtectedRoute>
                   <MyAccount />
+                </ProtectedRoute>
+              }
+            />
+            <Route path="/order-status/:orderId" exact={true}
+              element={
+                <ProtectedRoute>
+                  <OrderStatusPage />
                 </ProtectedRoute>
               }
             />

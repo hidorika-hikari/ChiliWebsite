@@ -122,7 +122,7 @@ const Orders = () => {
                           className="btn btn-sm btn-outline-dark"
                           style={{ display: "block", width: "100%", textAlign: "left" }}
                           onClick={() =>
-                            context.setAlertBox({  open: true, error: false, msg: `Payment ID: ${order.paymentDetails.paymentIntentId}` })
+                            context.setAlertBox({ open: true, error: false, msg: `Payment ID: ${order.paymentDetails.paymentIntentId}` })
                           }
                         >
                           {order.paymentDetails.paymentIntentId.slice(0, 10)}...
@@ -156,10 +156,11 @@ const Orders = () => {
                       <td>{order.totalAmount} ฿</td>
                       <td>{order.user.name}</td>
                       <td>
-                        <span className={`badge ${getStatusBadgeClass(order.paymentDetails.status)}`}>
-                          {order.paymentDetails.status.charAt(0).toUpperCase() +
-                            order.paymentDetails.status.slice(1)}
-                        </span>
+                        
+                          <Link to={`/order-status/${order._id}`}>
+                            <button className="btn btn-sm btn-outline-info">View Status</button>
+                          </Link>
+                        
                       </td>
                       <td>
                         {dayjs

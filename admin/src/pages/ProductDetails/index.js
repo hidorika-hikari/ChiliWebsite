@@ -53,7 +53,7 @@ const ProductDetails = () => {
     const { id } = useParams();
 
     useEffect(() => {
-        window.scrollTo(0,0);
+        window.scrollTo(0, 0);
         fetchDataFromApi(`/api/products/${id}`).then((res) => {
             setProductData(res);
         })
@@ -89,7 +89,7 @@ const ProductDetails = () => {
                     <div className="row">
                         <div className="col-md-5">
                             <div className="sliderWrapper pt-3 pb-3 ps-4 pe-4 mt-3">
-                                <ProductZoom images={productData?.images} discount={productData?.discount}/>
+                                <ProductZoom images={productData?.images} discount={productData?.discount} />
                             </div>
                         </div>
 
@@ -130,19 +130,19 @@ const ProductDetails = () => {
                                                 </div>
                                                 <div className="col-sm-9">
                                                     <span>
-                                                            <div className="row">
-                                                                <ul className="list list-inline tags sml">
-                                                                    {
-                                                                        productData?.productRams?.map((item, index) => {
-                                                                            return (
-                                                                                <li className="list-inline-item" key={index}>
-                                                                                    <span>{item.productRams}</span>
-                                                                                </li>
-                                                                            )
-                                                                        })
-                                                                    }
-                                                                </ul>
-                                                            </div>
+                                                        <div className="row">
+                                                            <ul className="list list-inline tags sml">
+                                                                {
+                                                                    productData?.productRams?.map((item, index) => {
+                                                                        return (
+                                                                            <li className="list-inline-item" key={index}>
+                                                                                <span>{item.productRams}</span>
+                                                                            </li>
+                                                                        )
+                                                                    })
+                                                                }
+                                                            </ul>
+                                                        </div>
                                                     </span>
                                                 </div>
                                             </div>
@@ -157,19 +157,19 @@ const ProductDetails = () => {
                                                 </div>
                                                 <div className="col-sm-9">
                                                     <span>
-                                                            <div className="row">
-                                                                <ul className="list list-inline tags sml">
-                                                                    {
-                                                                        productData?.productSize?.map((item, index) => {
-                                                                            return (
-                                                                                <li className="list-inline-item" key={index}>
-                                                                                    <span>{item.productSize}</span>
-                                                                                </li>
-                                                                            )
-                                                                        })
-                                                                    }
-                                                                </ul>
-                                                            </div>
+                                                        <div className="row">
+                                                            <ul className="list list-inline tags sml">
+                                                                {
+                                                                    productData?.productSize?.map((item, index) => {
+                                                                        return (
+                                                                            <li className="list-inline-item" key={index}>
+                                                                                <span>{item.productSize}</span>
+                                                                            </li>
+                                                                        )
+                                                                    })
+                                                                }
+                                                            </ul>
+                                                        </div>
                                                     </span>
                                                 </div>
                                             </div>
@@ -184,19 +184,19 @@ const ProductDetails = () => {
                                                 </div>
                                                 <div className="col-sm-9">
                                                     <span>
-                                                            <div className="row">
-                                                                <ul className="list list-inline tags sml">
-                                                                    {
-                                                                        productData?.productWeight?.map((item, index) => {
-                                                                            return (
-                                                                                <li className="list-inline-item" key={index}>
-                                                                                    <span>{item.productWeight}</span>
-                                                                                </li>
-                                                                            )
-                                                                        })
-                                                                    }
-                                                                </ul>
-                                                            </div>
+                                                        <div className="row">
+                                                            <ul className="list list-inline tags sml">
+                                                                {
+                                                                    productData?.productWeight?.map((item, index) => {
+                                                                        return (
+                                                                            <li className="list-inline-item" key={index}>
+                                                                                <span>{item.productWeight}</span>
+                                                                            </li>
+                                                                        )
+                                                                    })
+                                                                }
+                                                            </ul>
+                                                        </div>
                                                     </span>
                                                 </div>
                                             </div>
@@ -247,18 +247,18 @@ const ProductDetails = () => {
                                         <div className="col-sm-9">
                                             <span>
                                                 {productData?.dateCreated
-                                                ? new Date(productData.dateCreated)
-                                                    .toLocaleString('en-GB', {
-                                                        day: '2-digit',
-                                                        month: '2-digit',
-                                                        year: '2-digit',
-                                                        hour: '2-digit',
-                                                        minute: '2-digit',
-                                                        hour12: false,
-                                                        timeZone: 'Asia/Bangkok'
-                                                    })
-                                                    .replace(',', '')
-                                                : ''}
+                                                    ? new Date(productData.dateCreated)
+                                                        .toLocaleString('en-GB', {
+                                                            day: '2-digit',
+                                                            month: '2-digit',
+                                                            year: '2-digit',
+                                                            hour: '2-digit',
+                                                            minute: '2-digit',
+                                                            hour12: false,
+                                                            timeZone: 'Asia/Bangkok'
+                                                        })
+                                                        .replace(',', '')
+                                                    : ''}
                                             </span>
                                         </div>
                                     </div>
@@ -276,46 +276,48 @@ const ProductDetails = () => {
                         <br />
                         <h6 className="mt-4 mb-4">Customer Reviews</h6>
                         <div className="reviewsSection">
-                            {
-                                reviewsData?.length !== 0 && reviewsData?.map((review, index) => {
-                                    return (
-                                            <div className="reviewsRow">
-                                                <div className="row">
-                                                        <div className="col-sm-7 d-flex">
-                                                            <div className="d-flex flex-column">
-                                                                <div className="userInfo d-flex align-items-center mb-3">
-                                                                    <div className="userInfo lg">
-                                                                        <UserAvatarImgComponent
-                                                                            img="https://i.scdn.co/image/ab67616d00001e026f157409ae8578b9695be2b3"
-                                                                            lg={true}
-                                                                        />
-                                                                    </div>
+                            {reviewsData?.length !== 0 ? (
+                                reviewsData.map((review, index) => (
+                                    <div className="reviewsRow" key={index}>
+                                        <div className="row">
+                                            <div className="col-sm-7 d-flex">
+                                                <div className="d-flex flex-column">
+                                                    <div className="userInfo d-flex align-items-center mb-3">
+                                                        <div className="userInfo lg">
+                                                            <UserAvatarImgComponent
+                                                                img="https://i.scdn.co/image/ab67616d00001e026f157409ae8578b9695be2b3"
+                                                                lg={true}
+                                                            />
+                                                        </div>
 
-                                                                    <div className="info ps-3">
-                                                                        <h6>{review?.customerName}</h6>
-                                                                        <span>{dayjs(review?.dateCreated).tz('Asia/Bangkok').format('DD/MM/YY HH:mm')}</span>
-                                                                    </div>
-                                                                </div>
-                                                                <Rating
-                                                                    name="read-only"
-                                                                    value={review?.customerRating}
-                                                                    readOnly
-                                                                />
-                                                            </div>
+                                                        <div className="info ps-3">
+                                                            <h6>{review?.customerName}</h6>
+                                                            <span>{dayjs(review?.dateCreated)
+                                                                .tz('Asia/Bangkok')
+                                                                .format('DD/MM/YY HH:mm')}</span>
                                                         </div>
-                                                        <div className="col-md-5 d-flex align-items-center">
-                                                            <div className="ms-auto">
-                                                                <Button className="btn-blue btn-lg ms-auto">
-                                                                    <FaReply /> &nbsp; Reply
-                                                                </Button>
-                                                            </div>
-                                                        </div>
-                                                        <p className="mt-3">{review?.review}</p>
+                                                    </div>
+                                                    <Rating
+                                                        name="read-only"
+                                                        value={review?.customerRating}
+                                                        readOnly
+                                                    />
                                                 </div>
                                             </div>
-                                    )
-                                })
-                            }
+                                            <div className="col-md-5 d-flex align-items-center">
+                                                <div className="ms-auto">
+                                                    <Button className="btn-blue btn-lg ms-auto">
+                                                        <FaReply /> &nbsp; Reply
+                                                    </Button>
+                                                </div>
+                                            </div>
+                                            <p className="mt-3">{review?.review}</p>
+                                        </div>
+                                    </div>
+                                ))
+                            ) : (
+                                <p className="text-center mt-3">There are no reviews at this time.</p>
+                            )}
                         </div>
                     </div>
                 </div>

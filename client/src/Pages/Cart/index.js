@@ -42,19 +42,31 @@ const Cart = () => {
   };
 
   const removeItem = (id) => {
-    deleteData(`/api/cart/${id}`).then((res) => {
-      context.setAlertBox({
-        open: true,
-        error: true,
-        msg: "Item remove form cart"
+    deleteData(`/api/cart/${id}`)
+      .then((res) => {
+        context.setAlertBox({
+          open: true,
+          error: false,
+          msg: "Item removed from cart"
+        });
+
+        const user = JSON.parse(localStorage.getItem("user"));
+        return fetchDataFromApi(`/api/cart?userId=${user?.userId}`);
       })
-      const user = JSON.parse(localStorage.getItem("user"));
-      fetchDataFromApi(`/api/cart?userId=${user?.userId}`).then((res) => {
+      .then((res) => {
         setCartData(res);
+        context.getCartData();
       })
-      context.getCartData();
-    })
-  }
+      .catch((err) => {
+        context.setAlertBox({
+          open: true,
+          error: true,
+          msg: "Failed to remove item from cart. Please try again."
+        });
+        console.error("Remove cart item error:", err);
+      });
+  };
+
   return (
     <>
       <section className="section cartPage">

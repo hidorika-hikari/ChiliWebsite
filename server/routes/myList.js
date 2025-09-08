@@ -28,26 +28,29 @@ router.post('/check', async (req, res) => {
 });
 
 router.post('/add', async (req, res) => {
-    const item = await MyList.find({ productId: req.body.productId, userId: req.body.userId });
-    if (item.length === 0){
-        let list = new MyList({
-            productTitle: req.body.productTitle,
-            images: req.body.images,
-            rating: req.body.rating,
-            price: req.body.price,
-            productId: req.body.productId,
-            userId: req.body.userId
-        });
-        if (!list) {
-            res.status(500).json({
-                error: err,
-                success: false
-            })
+    try {
+        const item = await MyList.find({ productId: req.body.productId, userId: req.body.userId });
+        if (item.length === 0) {
+            let list = new MyList({
+                productTitle: req.body.productTitle,
+                images: req.body.images,
+                rating: req.body.rating,
+                price: req.body.price,
+                productId: req.body.productId,
+                userId: req.body.userId
+            });
+
+            list = await list.save();
+            res.status(201).json(list);
+        } else {
+            res.status(401).json({ status: false, msg: 'Product already added in my list' });
         }
-        list = await list.save();
-        res.status(201).json(list);
-    } else {
-        res.status(401).json({ status: false ,msg: 'Product already added in my list' })
+    } catch (err) {
+        res.status(500).json({
+            status: false,
+            msg: 'Database error',
+            error: err.message
+        });
     }
 });
 

@@ -25,13 +25,28 @@ const MyList = () => {
     }, []);
 
     const removeItem = (id) => {
-        deleteData(`/api/my-list/${id}`).then(() => {
-            context.setAlertBox({ open: true, error: true, msg: "Item removed from my list", });
-            const user = JSON.parse(localStorage.getItem("user"));
-            fetchDataFromApi(`/api/my-list?userId=${user?.userId}`).then((res) => {
+        deleteData(`/api/my-list/${id}`)
+            .then(() => {
+                context.setAlertBox({
+                    open: true,
+                    error: false,
+                    msg: "Product removed from my list",
+                });
+
+                const user = JSON.parse(localStorage.getItem("user"));
+                return fetchDataFromApi(`/api/my-list?userId=${user?.userId}`);
+            })
+            .then((res) => {
                 setMyListData(res);
+            })
+            .catch((err) => {
+                context.setAlertBox({
+                    open: true,
+                    error: true,
+                    msg: "Failed to remove product in my list. Please try again.",
+                });
+                console.error("Remove product error:", err);
             });
-        });
     };
 
     return (

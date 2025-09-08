@@ -22,10 +22,17 @@ router.get('/', async (req, res) => {
             item.brand.toLowerCase().includes(query.toLowerCase())
         );
 
+        if (filteredItems.length === 0) {
+            return res.status(404).json({ msg: 'No products found matching your search' });
+        }
+
         res.json(filteredItems);
     } catch (err) {
         console.error('Search error:', err);
-        res.status(500).json({ msg: 'Server error', error: err.message });
+        res.status(500).json({
+            msg: 'Database error',
+            error: err.message
+        });
     }
 });
 

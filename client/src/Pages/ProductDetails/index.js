@@ -163,7 +163,7 @@ const ProductDetails = () => {
     const addToMyList = (productId) => {
         const user = JSON.parse(localStorage.getItem("user"));
         if (!user) {
-            context.setAlertBox({ open: true, error: true, msg: "Please login to continue" });
+            context.setAlertBox({ open: true, error: true, msg: "Please login before added to my list." });
             return;
         }
 

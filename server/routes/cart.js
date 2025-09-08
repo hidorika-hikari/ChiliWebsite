@@ -42,21 +42,34 @@ router.post('/add', async (req, res) => {
 });
 
 router.delete('/:id', async (req, res) => {
-    const cartItem = await Cart.findById(req.params.id);
-    if(!cartItem) {
-        res.status(404).json({ msg: "Cart item given ID wasn't found" })
-    }
-    const deleteItem = await Cart.findByIdAndDelete(req.params.id);
-    if (!deleteItem) {
-        return res.status(404).json({
-            message: 'Cart item not found',
-            success: false
+    try {
+        const cartItem = await Cart.findById(req.params.id);
+        if (!cartItem) {
+            return res.status(404).json({ 
+                success: false,
+                msg: "Cart item given ID wasn't found" 
+            });
+        }
+
+        const deleteItem = await Cart.findByIdAndDelete(req.params.id);
+        if (!deleteItem) {
+            return res.status(404).json({
+                success: false,
+                msg: "Cart item not found or could not be deleted"
+            });
+        }
+
+        res.status(200).json({
+            success: true,
+            msg: "Cart item deleted!"
+        });
+    } catch (err) {
+        res.status(500).json({
+            success: false,
+            msg: "Database error",
+            error: err.message
         });
     }
-    res.status(200).json({
-        success: true,
-        message: 'Cart item deleted!'
-    });
 });
 
 router.get('/:id', async (req, res) => {
