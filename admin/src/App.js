@@ -26,6 +26,7 @@ import AddHomeBanner from './pages/addHomeBanner';
 import HomeBannerList from './pages/homeBannerList';
 import ProtectedRoute from './components/ProtectedRoute';
 import SignIn from './pages/SignIn';
+import ContactMessages from './pages/ContactMessages';
 
 const MyContext = createContext();
 
@@ -322,6 +323,15 @@ function App() {
                                 element={
                                     <ProtectedRoute>
                                         <HomeBannerList/>
+                                    </ProtectedRoute>
+                                }
+                            />
+                            <Route
+                                path="/contact-messages"
+                                exact={true}
+                                element={
+                                    <ProtectedRoute>
+                                        <ContactMessages />
                                     </ProtectedRoute>
                                 }
                             />

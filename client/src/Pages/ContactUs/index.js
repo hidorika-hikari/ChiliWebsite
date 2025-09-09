@@ -3,11 +3,13 @@ import { Box, TextField, Button, Typography, Paper } from "@mui/material";
 import LocationOnIcon from "@mui/icons-material/LocationOn";
 import PhoneIcon from "@mui/icons-material/Phone";
 import EmailIcon from "@mui/icons-material/Email";
+import { postData } from "../../utils/api";
 
 const ContactUs = () => {
     const [form, setForm] = useState({ name: "", email: "", message: "" });
     const [infoMessage, setInfoMessage] = useState("");
     const [errors, setErrors] = useState({});
+    const [isSubmitting, setIsSubmitting] = useState(false);
 
     const handleChange = (e) => {
         setForm((prev) => ({ ...prev, [e.target.name]: e.target.value }));
@@ -26,7 +28,7 @@ const ContactUs = () => {
         return tempErrors;
     };
 
-    const handleSubmit = (e) => {
+    const handleSubmit = async (e) => {
         e.preventDefault();
         const validationErrors = validate();
         if (Object.keys(validationErrors).length > 0) {
@@ -34,15 +36,27 @@ const ContactUs = () => {
             return;
         }
 
-        setInfoMessage(
-            <>
-                Thanks for contacting us, {form.name}!<br />
-                We will get back to you soon.
-            </>
-        );
-
-        setForm({ name: "", email: "", message: "" });
-        setErrors({});
+        setIsSubmitting(true);
+        try {
+            const res = await postData('/api/contact/add', form);
+            if (res && (res.success || res.status)) {
+                setInfoMessage(
+                    <>
+                        Thanks for contacting us, {form.name}!<br />
+                        We will get back to you soon.
+                    </>
+                );
+                setForm({ name: "", email: "", message: "" });
+                setErrors({});
+            } else {
+                const msg = (res && (res.message || res.msg)) || "Something went wrong. Please try again.";
+                setInfoMessage(msg);
+            }
+        } catch (err) {
+            setInfoMessage("Something went wrong. Please try again.");
+        } finally {
+            setIsSubmitting(false);
+        }
     };
 
     return (
@@ -167,8 +181,9 @@ const ContactUs = () => {
                                     boxShadow: "0 6px 12px rgba(21, 101, 192, 0.3)",
                                 },
                             }}
+                        disabled={isSubmitting}
                         >
-                            Send Message
+                            {isSubmitting ? "Sending..." : "Send Message"}
                         </Button>
                     </Box>
 

@@ -2,6 +2,7 @@ import Button from "@mui/material/Button";
 import { FaProductHunt } from "react-icons/fa";
 import { FaAngleRight } from "react-icons/fa6";
 import { IoMdListBox, IoMdLogOut } from "react-icons/io";
+import { MdContactMail } from "react-icons/md";
 import { Link } from "react-router-dom";
 import { MdDashboard } from "react-icons/md";
 import { TbCategoryFilled } from "react-icons/tb";
@@ -108,6 +109,15 @@ const Sidebar = () => {
                                 <li><Link to={'/homeBannerList'}>HomeBanner List</Link></li>
                             </ul>
                         </div>
+                    </li>
+                    <li>
+                        <Link to="/contact-messages">
+                            <Button className={`w-100 ${activeTab === 5 ? 'active' : ''}`} onClick={() => isOpenSubmenu(5)}>
+                                <span className="icon"><MdContactMail /></span>
+                                    Contact Messages
+                                <span className="arrow"><FaAngleRight/></span>
+                            </Button>
+                        </Link>
                     </li>
                 </ul>
                 <br/>

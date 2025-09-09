@@ -40,7 +40,28 @@ export const editData = async (url, updatedData) => {
     }
 };
 
+export const patchData = async (url, updatedData) => {
+    try {
+        const response = await axios.patch(`http://localhost:4000${url}`, updatedData);
+        return response.data;
+    } catch (error) {
+        console.error('patchData error:', error.message);
+        return {
+            success: false,
+            message: error.response?.data?.message || 'Unknown error while updating',
+        };
+    }
+};
+
 export const deleteData = async (url) => {
-    const {res} = await axios.delete(`http://localhost:4000${url}`)
-    return res;
+    try {
+        const response = await axios.delete(`http://localhost:4000${url}`);
+        return response.data;
+    } catch (error) {
+        console.error('deleteData error:', error.message);
+        return {
+            success: false,
+            message: error.response?.data?.message || 'Unknown error while deleting',
+        };
+    }
 }

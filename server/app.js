@@ -34,6 +34,7 @@ const ordersSchema = require('./routes/orders');
 const paymentRoutes = require('./routes/payment');
 const homeBannerSchema = require('./routes/homeBanner');
 const searchRoute = require('./routes/search');
+const contactRoutes = require('./routes/contact');
 
 app.use('/api/search', searchRoute);
 app.use('/api/homeBanner', homeBannerSchema);
@@ -49,6 +50,7 @@ app.use('/api/products', productRoutes);
 app.use('/api/productWeight', productWeightRoutes);
 app.use('/api/productRams', productRamsRoutes);
 app.use('/api/productSize', productSizeRoutes);
+app.use('/api/contact', contactRoutes);
 
 app.get('/', (req, res) => {
     res.json({ message: 'Server is running!' });
