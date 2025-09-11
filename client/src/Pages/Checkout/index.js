@@ -277,21 +277,9 @@ const Checkout = () => {
                                     </Paper>
 
                                     <Button
-                                        variant="contained"
-                                        color="error"
-                                        size="large"
-                                        fullWidth
+                                        type='submit'
                                         disabled={!stripe || processing}
-                                        sx={{
-                                            borderRadius: 3,
-                                            textTransform: "none",
-                                            fontWeight: "bold",
-                                            px: 2,
-                                            py: 1.5,
-                                            "&:hover": {
-                                                backgroundColor: "#d32f2f",
-                                            },
-                                        }}
+                                        className="btn-red btn-lg btn-big w-100"
                                     >
                                         {processing ? (
                                             <span style={{ color: "#fff" }}>Processing...</span>

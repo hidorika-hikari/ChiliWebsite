@@ -1,10 +1,8 @@
-import Button from '@mui/material/Button'
 import { IoIosMenu } from 'react-icons/io';
-import { FaAngleDown } from 'react-icons/fa';
+import { FaAngleDown, FaAngleRight } from 'react-icons/fa';
 import { useContext, useState } from 'react';
-import { FaAngleRight } from "react-icons/fa";
 import { MyContext } from '../../../App';
-import { Tabs, Tab } from '@mui/material';
+import { Tabs, Tab, Button } from '@mui/material';
 import { useNavigate } from 'react-router-dom';
 
 const Navigation = (props) => {

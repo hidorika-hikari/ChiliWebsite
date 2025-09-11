@@ -1,7 +1,8 @@
 import { useContext, useEffect, useState } from "react";
 import { MyContext } from "../../App";
 import { Link } from "react-router-dom";
-import { Button, CircularProgress, TextField, Box } from '@mui/material';
+import { Button, CircularProgress, TextField, Box, IconButton } from '@mui/material';
+import ArrowBackIosNewIcon from "@mui/icons-material/ArrowBackIosNew";
 import { postData } from "../../utils/api";
 import Logo from '../../assets/logo.png'
 
@@ -67,47 +68,48 @@ const SignUp = () => {
             </div>
             <div className="container">
                 <div className="box card p-3 shadow border-0">
-                    <div className="text-center">
+                    <Link to="/signin" className="absolute top-3 left-3">
+                        <IconButton size="large" >
+                            <ArrowBackIosNewIcon fontSize="medium" sx={{ color: "#007bff" }} />
+                        </IconButton>
+                    </Link>
+
+                    <div className="text-center mt-6">
                         <img src={Logo} width={100} alt="logo" />
                     </div>
 
                     <form className="mt-2" onSubmit={signUp}>
                         <h2 className="mb-3 text-center">Sign Up</h2>
-
                         <div className="row">
-                            <div className="col-md-6">
-                                <div className="form-group mb-3">
-                                    <TextField
-                                        label="Name"
-                                        name="name"
-                                        value={formFields.name}
-                                        onChange={onChangeInput}
-                                        type="text"
-                                        required
-                                        variant="standard"
-                                        className="w-100"
-                                    />
-                                </div>
+                            <div className="col-md-6 mb-3">
+                                <TextField
+                                    label="Name"
+                                    name="name"
+                                    value={formFields.name}
+                                    onChange={onChangeInput}
+                                    type="text"
+                                    required
+                                    variant="standard"
+                                    className="w-100"
+                                />
                             </div>
-                            <div className="col-md-6">
-                                <div className="form-group mb-3">
-                                    <TextField
-                                        label="Phone No."
-                                        name="phone"
-                                        value={formFields.phone}
-                                        onChange={onChangeInput}
-                                        type="text"
-                                        required
-                                        variant="standard"
-                                        className="w-100"
-                                    />
-                                </div>
+                            <div className="col-md-6 mb-3">
+                                <TextField
+                                    label="Phone Number"
+                                    name="phone"
+                                    value={formFields.phone}
+                                    onChange={onChangeInput}
+                                    type="text"
+                                    required
+                                    variant="standard"
+                                    className="w-100"
+                                />
                             </div>
                         </div>
 
-                        <div className="form-group mb-3">
+                        <div className="mb-3">
                             <TextField
-                                label="Email"
+                                label="Email Address"
                                 name="email"
                                 value={formFields.email}
                                 onChange={onChangeInput}
@@ -118,58 +120,64 @@ const SignUp = () => {
                             />
                         </div>
 
-                        <div className="form-group mb-3">
-                            <TextField
-                                label="Password"
-                                type="password"
-                                name="password"
-                                value={formFields.password}
-                                onChange={onChangeInput}
-                                required
-                                variant="standard"
-                                className="w-100"
-                            />
+                        <div className="row">
+                            <div className="col-md-6 mb-3">
+                                <TextField
+                                    label="Password"
+                                    type="password"
+                                    name="password"
+                                    value={formFields.password}
+                                    onChange={onChangeInput}
+                                    required
+                                    variant="standard"
+                                    className="w-100"
+                                />
+                            </div>
+                            <div className="col-md-6 mb-3">
+                                <TextField
+                                    label="Confirm Password"
+                                    type="password"
+                                    name="confirmPassword"
+                                    value={confirmPassword}
+                                    onChange={(e) => setConfirmPassword(e.target.value)}
+                                    required
+                                    variant="standard"
+                                    className="w-100"
+                                />
+                            </div>
                         </div>
 
-                        <div className="form-group mb-3">
-                            <TextField
-                                label="Confirm Password"
-                                type="password"
-                                name="confirmPassword"
-                                value={confirmPassword}
-                                onChange={(e) => setConfirmPassword(e.target.value)}
-                                required
-                                variant="standard"
-                                className="w-100"
-                            />
-                        </div>
-
-                        <Box sx={{ display: "flex", gap: 2, flexDirection: { xs: "column", md: "row" }, mt: 3, mb: 3 }}>
+                        <Box
+                            sx={{
+                                display: "flex",
+                                gap: 2,
+                                flexDirection: { xs: "column", md: "row" },
+                                mt: 3,
+                                mb: 3,
+                            }}
+                        >
                             <Button
                                 type="submit"
                                 variant="contained"
-                                color="primary"
                                 fullWidth
-                                sx={{ borderRadius: 3, py: 1.5, fontWeight: "bold", textTransform: "none" }}
+                                sx={{
+                                    borderRadius: 3,
+                                    py: 1.5,
+                                    fontWeight: "bold",
+                                    textTransform: "none",
+                                    background: 'linear-gradient(135deg, #d23f57, #b91c1c)',
+                                    color: '#fff',
+                                }}
                             >
                                 {isLoading ? <CircularProgress size={27} color="inherit" /> : "Sign Up"}
                             </Button>
-
-                            <Link to="/signin" style={{ textDecoration: "none", flex: 1 }}>
-                                <Button
-                                    variant="outlined"
-                                    color="primary"
-                                    fullWidth
-                                    sx={{ borderRadius: 3, py: 1.5, fontWeight: "bold", textTransform: "none" }}
-                                    onClick={() => context.setIsHeaderFooterShow(true)}
-                                >
-                                    Cancel
-                                </Button>
-                            </Link>
                         </Box>
 
                         <p className="txt text-center">
-                            Have an account? <Link to="/signin" className="border-effect">Sign In</Link>
+                            Have an account?{" "}
+                            <Link to="/signin" className="border-effect">
+                                Sign In
+                            </Link>
                         </p>
                     </form>
                 </div>

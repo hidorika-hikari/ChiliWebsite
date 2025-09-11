@@ -243,7 +243,7 @@ const Cart = () => {
 
                     <Link to="/checkout">
                       <Button className="btn-red btn-lg btn-big w-100">
-                        <IoBagCheckOutline /> &nbsp; Checkout
+                        <IoBagCheckOutline style={{ marginRight: 8 }} /> Checkout
                       </Button>
                     </Link>
                   </div>

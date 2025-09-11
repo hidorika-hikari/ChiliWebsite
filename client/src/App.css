@@ -1837,7 +1837,7 @@ a:hover{
   width: 100%;
   top: 0;
   left: 0;
-  background-image: linear-gradient(#1ed381, #2334a3);
+  background-image: linear-gradient(135deg, #ff1e1e, #1db954);
   opacity: 0.9;
   z-index: -1;
 }

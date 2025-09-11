@@ -4,6 +4,8 @@ import { Box, Button, CircularProgress, Dialog, DialogTitle, DialogContent, Dial
 import { useTheme } from '@mui/material/styles';
 import { MyContext } from "../../App";
 import { postData } from "../../utils/api";
+import { IconButton } from "@mui/material";
+import ArrowBackIosNewIcon from "@mui/icons-material/ArrowBackIosNew";
 //import { useNavigate } from 'react-router-dom';
 import Logo from '../../assets/logo.png';
 
@@ -98,7 +100,13 @@ const SignIn = () => {
             </div>
             <div className="container">
                 <div className="box card p-3 shadow border-0">
-                    <div className="text-center">
+                    <Link to="/" className="absolute top-3 left-3">
+                        <IconButton size="large" >
+                            <ArrowBackIosNewIcon fontSize="medium" sx={{ color: "#007bff" }} />
+                        </IconButton>
+                    </Link>
+
+                    <div className="text-center mt-6">
                         <img src={Logo} width={100} alt="" />
                     </div>
 
@@ -106,7 +114,7 @@ const SignIn = () => {
                         <h2 className="mb-3 text-center">Sign In</h2>
                         <div className="form-group">
                             <TextField id="standard-basic"
-                                label="Email"
+                                label="Email Address"
                                 type="email"
                                 name="email"
                                 onChange={onChangeInput}
@@ -146,41 +154,18 @@ const SignIn = () => {
                             <Button
                                 type="submit"
                                 variant="contained"
-                                color="primary"
                                 fullWidth
                                 sx={{
                                     borderRadius: 3,
                                     py: 1.5,
                                     fontWeight: "bold",
                                     textTransform: "none",
+                                    background: 'linear-gradient(135deg, #d23f57, #b91c1c)',
+                                    color: '#fff',
                                 }}
                             >
                                 {isLoading ? <CircularProgress size={27} color="inherit" /> : "Sign In"}
                             </Button>
-
-                            {/* Cancel Button */}
-                            <Link to="/" style={{ textDecoration: "none", flex: 1 }}>
-                                <Button
-                                    variant="outlined"
-                                    color="primary"
-                                    fullWidth
-                                    sx={{
-                                        borderRadius: 3,
-                                        py: 1.5,
-                                        fontWeight: "bold",
-                                        textTransform: "none",
-                                        borderColor: "#1976d2",
-                                        color: "#1976d2",
-                                        "&:hover": {
-                                            borderColor: "#1565c0",
-                                            backgroundColor: "rgba(25, 118, 210, 0.08)",
-                                        },
-                                    }}
-                                    onClick={() => context.setIsHeaderFooterShow(true)}
-                                >
-                                    Cancel
-                                </Button>
-                            </Link>
                         </Box>
                         <p className="txt text-center">Not Registered?<Link to="/signUp" className="border-effect"> Sign Up</Link></p>
                     </form>
@@ -193,9 +178,23 @@ const SignIn = () => {
                                 padding: "20px",
                                 minWidth: isSmallScreen ? "90vw" : "400px",
                                 maxWidth: isSmallScreen ? "90vw" : "480px",
+                                position: "relative",
                             },
                         }}
                     >
+
+                        <IconButton
+                            size="large"
+                            onClick={() => setForgotOpen(false)}
+                            sx={{
+                                position: "absolute",
+                                top: 12,
+                                left: 12,
+                            }}
+                        >
+                            <ArrowBackIosNewIcon fontSize="medium" sx={{ color: "#007bff" }} />
+                        </IconButton>
+
                         <DialogTitle className="text-center font-bold text-xl text-gray-800">
                             Forgot Password
                         </DialogTitle>
@@ -213,7 +212,7 @@ const SignIn = () => {
                                     fullWidth
                                     variant="outlined"
                                     value={forgotEmail}
-                                    onChange={e => setForgotEmail(e.target.value)}
+                                    onChange={(e) => setForgotEmail(e.target.value)}
                                     required
                                     className="rounded-md"
                                 />
@@ -221,17 +220,24 @@ const SignIn = () => {
 
                             <DialogActions className="flex justify-between px-6 pb-4">
                                 <Button
-                                    onClick={() => setForgotOpen(false)}
-                                    className="!text-gray-600 hover:!bg-gray-100"
-                                >
-                                    Cancel
-                                </Button>
-                                <Button
                                     type="submit"
                                     disabled={forgotLoading}
-                                    className="btn-red !text-white rounded-lg px-4"
+                                    className="!text-white"
+                                    sx={{
+                                        borderRadius: 2,
+                                        py: 0.5,
+                                        px: 2,
+                                        fontWeight: "bold",
+                                        textTransform: "none",
+                                        background: 'linear-gradient(135deg, #d23f57, #b91c1c)',
+                                        color: '#fff',
+                                    }}
                                 >
-                                    {forgotLoading ? <CircularProgress size={20} color="inherit" /> : "Send Link"}
+                                    {forgotLoading ? (
+                                        <CircularProgress size={20} color="inherit" />
+                                    ) : (
+                                        "Send Link"
+                                    )}
                                 </Button>
                             </DialogActions>
                         </form>

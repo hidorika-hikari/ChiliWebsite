@@ -1,9 +1,7 @@
 import Logo from '../../assets/logo.png'
 import SearchBox from './SearchBox';
 import Navigation from './Navigation';
-import Button from '@mui/material/Button'
-import MenuItem from '@mui/material/MenuItem';
-import Menu from '@mui/material/Menu';
+import { Button, Menu, MenuItem, Box } from '@mui/material';
 import { TbChecklist } from "react-icons/tb";
 import { MdAccountCircle } from "react-icons/md";
 import { FiUser } from 'react-icons/fi';
@@ -63,9 +61,31 @@ const Header = () => {
 
                             <div className="d-flex align-items-center mt-3 mt-sm-0">
                                 {context.isLogin !== true ? (
-                                    <Link to="/signIn">
-                                        <Button className="btn-blue btn-big btn-sml btn-round me-2">Sign In</Button>
-                                    </Link>
+                                    <Box
+                                        sx={{
+                                            display: "flex",
+                                            justifyContent: "center",
+                                            mt: 2,
+                                            mb: 2,
+                                        }}
+                                    >
+                                        <Link to="/signIn" style={{ textDecoration: "none" }}>
+                                            <Button
+                                                variant="contained"
+                                                sx={{
+                                                    borderRadius: 30,
+                                                    py: 0.7,
+                                                    px: 4,
+                                                    fontWeight: "bold",
+                                                    textTransform: "none",
+                                                    background: 'linear-gradient(135deg, #d23f57, #b91c1c)',
+                                                    color: '#fff',
+                                                }}
+                                            >
+                                                Sign In
+                                            </Button>
+                                        </Link>
+                                    </Box>
                                 ) : (
                                     <>
                                         <Button className="circle me-2" onClick={handleClick}><FiUser /></Button>
@@ -92,7 +112,7 @@ const Header = () => {
                                             </Link>
                                             <Link to="/orders" >
                                                 <MenuItem onClick={handleClose} sx={{ borderRadius: 1, gap: 1 }}>
-                                                    <TbChecklist/> My Orders
+                                                    <TbChecklist /> My Orders
                                                 </MenuItem>
                                             </Link>
                                             <Link to="/my-list">
