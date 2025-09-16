@@ -1,19 +1,10 @@
-import { FaEye, FaPencilAlt } from 'react-icons/fa';
+import { FaEye, FaPencilAlt, FaHome } from 'react-icons/fa';
 import { MdDelete } from 'react-icons/md';
 import { useContext, useEffect, useState } from 'react';
 import { MyContext } from '../../App';
-import { Breadcrumbs, Chip, emphasize, styled } from '@mui/material';
-import { FaHome } from 'react-icons/fa';
+import { Breadcrumbs, Chip, emphasize, styled, Button, Pagination, Rating, Dialog, DialogTitle, DialogContent, DialogActions, CircularProgress } from '@mui/material';
 import { Link } from 'react-router-dom';
 import { deleteData, fetchDataFromApi } from '../../utils/api';
-import Button from '@mui/material/Button';
-import Pagination from '@mui/material/Pagination';
-import Rating from '@mui/material/Rating';
-import Dialog from '@mui/material/Dialog';
-import DialogTitle from '@mui/material/DialogTitle';
-import DialogContent from '@mui/material/DialogContent';
-import DialogActions from '@mui/material/DialogActions';
-import CircularProgress from '@mui/material/CircularProgress';
 
 const StyleBreadcrumb = styled(Chip)(({ theme }) => {
     const backgroundColor =
@@ -37,7 +28,12 @@ const StyleBreadcrumb = styled(Chip)(({ theme }) => {
 
 const Products = () => {
 
-    const [productList, setProductList] = useState([]);
+    const [productList, setProductList] = useState({
+        products: [],
+        totalPages: 1,
+        page: 1
+    });
+
     const context = useContext(MyContext);
 
     const [deleteId, setDeleteId] = useState(null);
@@ -54,14 +50,6 @@ const Products = () => {
         setOpenDelete(false);
     };
 
-    useEffect(() => {
-        context.setIsHideSidebarAndHeader(false);
-        fetchDataFromApi("/api/products").then((res) => {
-            setProductList(res);
-        })
-        window.scrollTo(0, 0);
-    }, [context]);
-
     const deleteProduct = () => {
         setIsDeleting(true);
         context.setProgress(40);
@@ -70,7 +58,7 @@ const Products = () => {
                 fetchDataFromApi("/api/products")
                     .then((res) => setProductList(res))
                     .catch((err) => console.error("Fetch products error:", err));
-                context.setAlertBox({ open: true, error: false, msg: 'Product deleted successfully!'});
+                context.setAlertBox({ open: true, error: false, msg: 'Product deleted successfully!' });
                 setIsDeleting(false);
                 handleCloseDelete();
                 context.setProgress(100);
@@ -85,12 +73,20 @@ const Products = () => {
     };
 
     const handleChange = (event, value) => {
-        context.setProgress(40);
-        fetchDataFromApi(`/api/products?page=${value}`).then((res) => {
-            setProductList(res);
-            context.setProgress(100);
-        })
+        fetchDataFromApi(`/api/products?page=${value}`)
+            .then((res) => {
+                setProductList({ ...res });
+            })
     };
+
+    useEffect(() => {
+        context.setIsHideSidebarAndHeader(false);
+        fetchDataFromApi("/api/products").then((res) => {
+            setProductList(res);
+        })
+        window.scrollTo(0, 0);
+    }, [context]);
+
 
     return (
         <>
@@ -218,7 +214,8 @@ const Products = () => {
                             productList?.totalPages > 1 &&
                             <div className="d-flex tableFooter">
                                 <Pagination
-                                    count={productList?.totalPages}
+                                    count={productList?.totalPages || 1}
+                                    page={productList?.page || 1}
                                     color="primary"
                                     className="pagination"
                                     showFirstButton

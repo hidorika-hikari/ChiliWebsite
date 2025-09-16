@@ -1,25 +1,17 @@
-import { Breadcrumbs, Chip, CircularProgress, emphasize, styled } from '@mui/material';
-import { FaCloudUploadAlt, FaHome } from 'react-icons/fa';
+import { Breadcrumbs, Chip, CircularProgress, emphasize, styled, Button, Rating, Select, MenuItem } from '@mui/material';
+import { FaCloudUploadAlt, FaHome, FaImages } from 'react-icons/fa';
 import React, { useContext, useEffect, useState } from 'react';
 import { IoCloseSharp } from "react-icons/io5";
 import { LazyLoadImage } from 'react-lazy-load-image-component';
-import { FaImages } from "react-icons/fa";
 import { editData, fetchDataFromApi } from '../../utils/api';
 import { useNavigate, useParams } from 'react-router-dom';
 import { MyContext } from '../../App';
-import MenuItem from '@mui/material/MenuItem';
-import Select from '@mui/material/Select';
-import Rating from '@mui/material/Rating';
-import Button from '@mui/material/Button';
-
-const ITEM_HEIGHT = 48;
-const ITEM_PADDING_TOP = 8;
 
 const menuProps = {
     PaperProps: {
         style: {
-            maxHeight: ITEM_HEIGHT * 6.5 + ITEM_PADDING_TOP, // Shows ~6 items
-            width: 250,
+            maxHeight: 200,
+            overflowY: "auto",
         },
     },
 };
@@ -52,7 +44,7 @@ const ProductEdit = () => {
 
     const [imagePreviews, setImagePreviews] = useState([]);
     const [newImageUrl, setNewImageUrl] = useState('');
-    
+
     const history = useNavigate();
     const { id } = useParams();
 
@@ -182,6 +174,12 @@ const ProductEdit = () => {
             setCatData(res);
         })
     }, [context]);
+
+    useEffect(() => {
+        fetchDataFromApi("/api/subCat/all").then((res) => {
+            context.setSubCatData({ subCategoryList: res });
+        });
+    }, []);
 
     const handleChangeCategory = (event) => {
         setCategoryVal(event.target.value);
@@ -367,22 +365,17 @@ const ProductEdit = () => {
                                                 value={subCategoryVal}
                                                 displayEmpty
                                                 onChange={handleChangeSubCategory}
+                                                MenuProps={menuProps}
                                             >
                                                 <MenuItem value="">
                                                     <em>None</em>
                                                 </MenuItem>
-                                                {
-                                                    context.subCatData?.subCategoryList?.length !==
-                                                    0 && context.subCatData?.subCategoryList?.map
-                                                        ((subCat, index) => {
-                                                            return (
-                                                                <MenuItem className='text-capitalize'
-                                                                    value={subCat.id} key={index}>{subCat.subCat}
-                                                                </MenuItem>
-
-                                                            )
-                                                        })
-                                                }
+                                                {context.subCatData?.subCategoryList?.length > 0 &&
+                                                    context.subCatData.subCategoryList.map((subCat, index) => (
+                                                        <MenuItem className="text-capitalize" value={subCat.id} key={index}>
+                                                            {subCat.subCat}
+                                                        </MenuItem>
+                                                    ))}
                                             </Select>
                                         </div>
                                     </div>

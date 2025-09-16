@@ -6,14 +6,14 @@ router.get('/', async (req, res) => {
     const page = parseInt(req.query.page) || 1;
     const perPage = 20;
     const totalPosts = await SubCategory.countDocuments();
-    const totalPages = Math.ceil(totalPosts/perPage);
+    const totalPages = Math.ceil(totalPosts / perPage);
 
-    if(page > totalPages) {
+    if (page > totalPages) {
         return res.status(404).json({ message: "Page not found" })
     }
 
     const SubCategoryList = await SubCategory.find().populate("category")
-        .skip((page-1) * perPage)
+        .skip((page - 1) * perPage)
         .limit(perPage)
         .exec();
 
@@ -26,6 +26,15 @@ router.get('/', async (req, res) => {
         "totalPages": totalPages,
         "page": page
     })
+});
+
+router.get('/all', async (req, res) => {
+    try {
+        const subCategoryList = await SubCategory.find().populate("category").exec();
+        res.status(200).json(subCategoryList);
+    } catch (error) {
+        res.status(500).json({ message: "Failed to fetch subcategories" });
+    }
 });
 
 router.get('/:id', async (req, res) => {
@@ -43,7 +52,7 @@ router.post('/create', async (req, res) => {
         category: req.body.category,
         subCat: req.body.subCat
     });
-    if(!subCat){
+    if (!subCat) {
         res.status(500).json({
             error: err,
             success: false
@@ -67,17 +76,17 @@ router.delete('/:id', async (req, res) => {
     });
 });
 
-router.put('/:id', async (req, res) =>{
+router.put('/:id', async (req, res) => {
     const subCat = await SubCategory.findByIdAndUpdate(
         req.params.id,
         {
             category: req.body.category,
             subCat: req.body.subCat,
         },
-        {new:true}
+        { new: true }
     )
 
-    if(!subCat){
+    if (!subCat) {
         return res.status(500).json({
             message: "Subcategory can't be updated",
             success: false

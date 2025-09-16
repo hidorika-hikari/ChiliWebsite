@@ -6,20 +6,18 @@ import { useContext, useEffect, useState } from 'react'
 import { Link } from "react-router-dom";
 import { MyContext } from "../../App";
 import { deleteData, fetchDataFromApi } from '../../utils/api';
-import Button from "@mui/material/Button";
 import DashboardBox from "./components/dashboardBox";
-import Pagination from "@mui/material/Pagination";
-import Rating from "@mui/material/Rating";
-import Dialog from '@mui/material/Dialog';
-import DialogTitle from '@mui/material/DialogTitle';
-import DialogContent from '@mui/material/DialogContent';
-import DialogActions from '@mui/material/DialogActions';
-import CircularProgress from '@mui/material/CircularProgress';
+import { DialogActions, DialogContent, CircularProgress, DialogTitle, Dialog, Button, Rating, Pagination } from '@mui/material';
 
 const Dashboard = () => {
   const context = useContext(MyContext);
 
-  const [productList, setProductList] = useState([]);
+  const [productList, setProductList] = useState({
+    products: [],
+    totalPages: 1,
+    page: 1
+  });
+
   const [productCount, setProductCount] = useState(0);
   const [categoryCount, setCategoryCount] = useState(0);
   const [subCategoryCount, setSubCategoryCount] = useState(0);
@@ -32,7 +30,7 @@ const Dashboard = () => {
   useEffect(() => {
     context.setIsHideSidebarAndHeader(false);
 
-    fetchDataFromApi("/api/products").then((res) => {
+    fetchDataFromApi("/api/products?page=1").then((res) => {
       setProductList(res);
     }).catch((err) => {
       context.setAlertBox({ open: true, error: true, msg: "Failed to fetch products." });
@@ -105,11 +103,9 @@ const Dashboard = () => {
   };
 
   const handleChange = (event, value) => {
-    context.setProgress(40);
     fetchDataFromApi(`/api/products?page=${value}`).then((res) => {
-      setProductList(res);
-      context.setProgress(100);
-    })
+      setProductList({ ...res });
+    });
   };
 
   return (
@@ -215,7 +211,8 @@ const Dashboard = () => {
 
             <div className="d-flex tableFooter">
               <Pagination
-                count={productList?.totalPages}
+                count={productList?.totalPages || 1}
+                page={productList?.page || 1}
                 color="primary"
                 className="pagination"
                 showFirstButton

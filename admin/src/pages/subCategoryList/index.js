@@ -1,7 +1,7 @@
 import { FaPencilAlt } from 'react-icons/fa';
 import { MdDelete } from 'react-icons/md';
 import { useContext, useEffect, useState } from 'react';
-import { Breadcrumbs, Chip, CircularProgress, emphasize, styled ,Button, TextField, Dialog, DialogActions, DialogContent, DialogTitle, Pagination} from '@mui/material';
+import { Breadcrumbs, Chip, CircularProgress, emphasize, styled, Button, TextField, Dialog, DialogActions, DialogContent, DialogTitle, Pagination } from '@mui/material';
 import { FaHome } from 'react-icons/fa';
 import { deleteData, editData, fetchDataFromApi } from '../../utils/api';
 import { Link } from 'react-router-dom';
@@ -37,6 +37,14 @@ const SubCategoryList = () => {
 
     const [deleteId, setDeleteId] = useState(null);
     const [openDelete, setOpenDelete] = useState(false);
+    const [page, setPage] = useState(1);
+
+    const handleChange = (event, value) => {
+        setPage(value);
+        fetchDataFromApi(`/api/subCat?page=${value}`).then((res) => {
+            setSubCatData(res);
+        })
+    };
 
     const handleOpenDelete = (id) => {
         setDeleteId(id);
@@ -130,14 +138,6 @@ const SubCategoryList = () => {
             });
     };
 
-    const handleChange = (event, value) => {
-        context.setProgress(40);
-        fetchDataFromApi(`/api/subCat?page=${value}`).then((res) => {
-            setSubCatData(res);
-            context.setProgress(100);
-        })
-    };
-
     return (
         <>
             <div className="right-content w-100">
@@ -224,7 +224,8 @@ const SubCategoryList = () => {
                             subCatData?.totalPages > 1 &&
                             <div className="d-flex tableFooter">
                                 <Pagination
-                                    count={subCatData?.totalPages}
+                                    count={subCatData?.totalPages || 1}
+                                    page={page}
                                     color="primary"
                                     className="pagination"
                                     showFirstButton

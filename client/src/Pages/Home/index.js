@@ -35,9 +35,9 @@ const Home = () => {
     useEffect(() => {
         window.scrollTo(0, 0);
         if (context.categoryData?.length > 0) {
-            const hutaoCat = context.categoryData.find(cat => cat.name === 'Hutao');
-            if (hutaoCat) {
-                setSelectedCat(hutaoCat._id);
+            const currentCat = context.categoryData.find(cat => cat.name === 'Growing Chillies');
+            if (currentCat) {
+                setSelectedCat(currentCat._id);
             }
         }
 
@@ -186,24 +186,24 @@ const Home = () => {
                             </div>
                             <div className="d-flex bannerSec">
                                 <div className="banner mt-3">
-                                    <img src="https://pbs.twimg.com/media/GwH6ExUaQAA64Pr?format=jpg&name=4096x4096"
+                                    <img src="https://img.freepik.com/free-vector/pepper-cooking-realistic-composition_1284-71901.jpg?semt=ais_hybrid&w=740&q=80"
                                         className="cursor w-100" alt='' />
                                 </div>
                                 <div className="banner mt-3">
-                                    <img src="https://upload-os-bbs.hoyolab.com/upload/2024/02/08/17138284/adbec135e8e1ff907990690cbb111b1a_5240529329033004651.jpg"
+                                    <img src="https://d1csarkz8obe9u.cloudfront.net/posterpreviews/chili-fast-food-design-template-04ef514df0c66d174d294fd0bb9ed58c_screen.jpg?ts=1600257113"
                                         className="cursor w-100" alt='' />
                                 </div>
                                 <div className="banner mt-3">
-                                    <img src="https://upload-os-bbs.hoyolab.com/upload/2021/05/22/21867498/19fb8c0ff0e27428841a05ddbfc0851d_3933469727756591456.jpg?x-oss-process=image%2Fresize%2Cs_1000%2Fauto-orient%2C0%2Finterlace%2C1%2Fformat%2Cwebp%2Fquality%2Cq_70"
+                                    <img src="https://www.shutterstock.com/image-vector/red-chili-pepper-on-fire-600nw-2226962111.jpg"
                                         className="cursor w-100" alt='' />
                                 </div>
                             </div>
                             {/* BANNER */}
                         </div>
-                        {/* //FEATURED PRODUCTS */}
+                        {/* ORGANIC PRODUCTS */}
                         <div className="d-flex align-items-center mt-4 mb-0">
                             <div className="info w-75">
-                                <h3 className="mb-0 hd">FEATURED PRODUCTS</h3>
+                                <h3 className="mb-0 hd">ORGANIC PRODUCTS</h3>
                                 <p className="text-light text-sml mb-0">Do not miss the current offers until the end of March.</p>
                             </div>
                         </div>
@@ -237,15 +237,15 @@ const Home = () => {
                         </div>
                         <div className="d-flex bannerSec">
                             <div className="banner mt-3">
-                                <img src="https://pbs.twimg.com/media/GwH6ExUaQAA64Pr?format=jpg&name=4096x4096"
+                                <img src="https://png.pngtree.com/thumb_back/fh260/background/20230519/pngtree-red-chilli-powder-in-a-wooden-bowl-image_2572459.jpg"
                                     className="cursor w-100" alt='' />
                             </div>
                             <div className="banner mt-3">
-                                <img src="https://upload-os-bbs.hoyolab.com/upload/2024/02/08/17138284/adbec135e8e1ff907990690cbb111b1a_5240529329033004651.jpg"
+                                <img src="https://readfieldmeats.com/wp-content/uploads/2016/01/banner-texas-style-chili.jpg"
                                     className="cursor w-100" alt='' />
                             </div>
                             <div className="banner mt-3">
-                                <img src="https://upload-os-bbs.hoyolab.com/upload/2021/05/22/21867498/19fb8c0ff0e27428841a05ddbfc0851d_3933469727756591456.jpg?x-oss-process=image%2Fresize%2Cs_1000%2Fauto-orient%2C0%2Finterlace%2C1%2Fformat%2Cwebp%2Fquality%2Cq_70"
+                                <img src="https://5.imimg.com/data5/ANDROID/Default/2024/1/378418449/GQ/SN/UL/19256287/product-jpeg.jpg"
                                     className="cursor w-100" alt='' />
                             </div>
                         </div>

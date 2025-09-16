@@ -136,8 +136,8 @@ const SignIn = () => {
 
                         <button
                             type="button"
-                            className="border-effect cursor"
-                            style={{ background: "none", border: "none", padding: 0, color: "#007bff" }}
+                            className="cursor"
+                            style={{ background: "none", border: "none", padding: 0, color: "#007bff", fontWeight: "bold", textDecoration: "none" }}
                             onClick={() => setForgotOpen(true)}
                         >
                             Forgot Password?
@@ -167,7 +167,8 @@ const SignIn = () => {
                                 {isLoading ? <CircularProgress size={27} color="inherit" /> : "Sign In"}
                             </Button>
                         </Box>
-                        <p className="txt text-center">Not Registered?<Link to="/signUp" className="border-effect"> Sign Up</Link></p>
+                        <p className="txt text-center">Not Registered?
+                            <Link to="/signUp" style={{ color: "#007bff", fontWeight: "bold", textDecoration: "none" }}> Sign Up</Link></p>
                     </form>
                     <Dialog
                         open={forgotOpen}

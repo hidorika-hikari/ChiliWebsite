@@ -175,7 +175,7 @@ const SignUp = () => {
 
                         <p className="txt text-center">
                             Have an account?{" "}
-                            <Link to="/signin" className="border-effect">
+                            <Link to="/signin" style={{ color: "#007bff", fontWeight: "bold", textDecoration: "none" }}>
                                 Sign In
                             </Link>
                         </p>

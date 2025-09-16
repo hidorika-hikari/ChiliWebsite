@@ -134,6 +134,7 @@ function App() {
         setProgress,
         catData,
         fetchCategory,
+        setSubCatData,
         subCatData,
         fetchSubCategory,
         setUser,
