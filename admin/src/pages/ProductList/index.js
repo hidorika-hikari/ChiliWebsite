@@ -212,7 +212,7 @@ const Products = () => {
                         </Dialog>
                         {
                             productList?.totalPages > 1 &&
-                            <div className="d-flex tableFooter">
+                            <div className="d-flex justify-content-end mt-3">
                                 <Pagination
                                     count={productList?.totalPages || 1}
                                     page={productList?.page || 1}

@@ -243,7 +243,7 @@ const CategoryList = () => {
                         </table>
                         {
                             catData?.totalPages > 1 &&
-                            <div className="d-flex tableFooter">
+                            <div className="d-flex justify-content-end mt-3">
                                 <Pagination
                                     count={catData?.totalPages}
                                     color="primary"

@@ -86,7 +86,7 @@ const ProductEdit = () => {
 
     const [productRams, setProductRams] = useState([]);
     const [productWeight, setProductWeight] = useState([]);
-    const [productSize, setProductSize] = useState([]); // Size -> Spicy(Mild/Medium/Hot/Hell)
+    const [productSize, setProductSize] = useState([]);
 
     const [productRamsData, setProductRamsData] = useState([]);
     const [productWeightData, setProductWeightData] = useState([]);
@@ -116,12 +116,8 @@ const ProductEdit = () => {
         setCatData(context.catData);
         if (id) {
             if (!/^[0-9a-fA-F]{24}$/.test(id)) {
-                context.setAlertBox({
-                    open: true,
-                    msg: 'Invalid Product ID format',
-                    error: true
-                });
-                window.location.href = '/products';
+                context.setAlertBox({ open: true, msg: 'Invalid Product ID format', error: true });
+                history('/products')
                 return;
             }
 

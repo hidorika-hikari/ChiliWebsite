@@ -1,8 +1,6 @@
-import Button from '@mui/material/Button';
-import Dialog from '@mui/material/Dialog';
-import Rating from "@mui/material/Rating";
 import ProductZoom from '../ProductZoom';
-import QuantityBox from '../QuantityDrop';
+import { Button, Rating, Dialog } from '@mui/material';
+//import QuantityBox from '../QuantityDrop';
 import { IoIosHeartEmpty } from "react-icons/io";
 import { useContext, useEffect, useState } from 'react';
 import { MdClose } from "react-icons/md";
@@ -20,20 +18,12 @@ const ProductModel = (props) => {
     const addToMyList = async () => {
         const user = JSON.parse(localStorage.getItem("user"));
         if (!user) {
-            context.setAlertBox({
-                open: true,
-                error: true,
-                msg: "Please login to continue"
-            });
+            context.setAlertBox({ open: true, error: true, msg: "Please login to continue" });
             return;
         }
 
         if (isAddedtoMyList) {
-            context.setAlertBox({
-                open: true,
-                error: false,
-                msg: "Already in wishlist"
-            });
+            context.setAlertBox({ open: true, error: false, msg: "Already in wishlist" });
             return;
         }
         setAddedToMyList(true);
@@ -49,26 +39,14 @@ const ProductModel = (props) => {
             });
 
             if (res.status) {
-                context.setAlertBox({
-                    open: true,
-                    error: false,
-                    msg: "The product was added to your wishlist"
-                });
+                context.setAlertBox({ open: true, error: false, msg: "The product was added to your wishlist"});
             } else {
                 setAddedToMyList(false);
-                context.setAlertBox({
-                    open: true,
-                    error: true,
-                    msg: res.msg || "Something went wrong"
-                });
+                context.setAlertBox({ open: true, error: true, msg: res.msg || "Something went wrong"});
             }
         } catch (err) {
             setAddedToMyList(false);
-            context.setAlertBox({
-                open: true,
-                error: true,
-                msg: "Network error, please try again"
-            });
+            context.setAlertBox({ open: true, error: true, msg: "Network error, please try again" });
         }
     };
 
@@ -116,7 +94,7 @@ const ProductModel = (props) => {
                         <p className='mt-2'>{props?.data?.description}</p>
                         <div className='d-flex align-items-center'>
                             {/* <QuantityBox /> */}
-                            <Button className='btn-blue btn-lg btn-big bth-round me-3'>
+                            <Button className='btn-red btn-lg btn-big bth-round me-3'>
                                 <IoCartSharp />Add to Cart</Button>
                         </div>
                         <div className='d-flex align-items-center mt-3 actions'>

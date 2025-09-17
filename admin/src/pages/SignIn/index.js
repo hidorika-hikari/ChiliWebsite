@@ -33,19 +33,11 @@ const SignIn = () => {
     const handleSignIn = async (e) => {
         e.preventDefault();
         if (!formFields.email) {
-            context.setAlertBox({
-                open: true,
-                error: true,
-                msg: "Email can not be blank!",
-            });
+            context.setAlertBox({ open: true, error: true, msg: "Email can not be blank!" });
             return;
         }
         if (!formFields.password) {
-            context.setAlertBox({
-                open: true,
-                error: true,
-                msg: "Password can not be blank!",
-            });
+            context.setAlertBox({ open: true, error: true, msg: "Password can not be blank!" });
             return;
         }
 
@@ -66,11 +58,7 @@ const SignIn = () => {
                 };
                 localStorage.setItem("token", res.token);
                 localStorage.setItem("user", JSON.stringify(user));
-                context.setAlertBox({
-                    open: true,
-                    error: false,
-                    msg: "Login successfully!",
-                });
+                context.setAlertBox({ open: true, error: false, msg: "Login successfully!" });
                 setTimeout(() => {
                     setIsLoading(false);
                     navigate("/");
@@ -81,11 +69,7 @@ const SignIn = () => {
             }
         } catch (error) {
             setIsLoading(false);
-            context.setAlertBox({
-                open: true,
-                error: true,
-                msg: "Something went wrong. Please try again.",
-            });
+            context.setAlertBox({ open: true, error: true, msg: "Something went wrong. Please try again." });
         }
     };
 

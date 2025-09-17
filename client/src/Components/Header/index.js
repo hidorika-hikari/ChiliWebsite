@@ -29,11 +29,7 @@ const Header = () => {
     const logout = () => {
         localStorage.clear();
         setAnchorEl(null);
-        context.setAlertBox({
-            open: true,
-            error: false,
-            msg: "Logout Successfully"
-        })
+        context.setAlertBox({ open: true, error: false, msg: "Logout Successfully" })
         setTimeout(() => {
             window.location.href = '/signIn';
         }, 1500);

@@ -1,20 +1,15 @@
-import { Breadcrumbs, Chip, emphasize, styled } from '@mui/material';
+import { Breadcrumbs, Chip, emphasize, styled, Button, Rating} from '@mui/material';
 import { FaHome, FaReply } from 'react-icons/fa';
-import { MdBrandingWatermark, MdContentCopy } from 'react-icons/md';
+import { MdBrandingWatermark, MdContentCopy, MdRateReview, MdOutlineStorage, MdOutlinePublishedWithChanges } from 'react-icons/md';
 import { BiSolidCategoryAlt } from 'react-icons/bi';
 import { AiFillDollarCircle } from 'react-icons/ai';
-import { MdRateReview } from 'react-icons/md';
-import { MdOutlineStorage } from 'react-icons/md';
-import { MdOutlinePublishedWithChanges } from 'react-icons/md';
+import { GiChiliPepper } from "react-icons/gi";
 import { useParams } from "react-router-dom";
-import UserAvatarImgComponent from '../../components/userAvatarImg';
-import Rating from '@mui/material/Rating';
-import Button from '@mui/material/Button';
 import React, { useEffect, useState } from 'react';
 import { fetchDataFromApi } from '../../utils/api';
 import { RiWeightLine } from 'react-icons/ri';
-import { SlSizeFullscreen } from "react-icons/sl";
 import ProductZoom from '../../../../admin/src/components/ProductZoomAdmin';
+import UserAvatarImgComponent from '../../components/userAvatarImg';
 import dayjs from 'dayjs'
 import utc from 'dayjs/plugin/utc'
 import timezone from 'dayjs/plugin/timezone'
@@ -152,7 +147,7 @@ const ProductDetails = () => {
                                         productData?.productSize?.length !== 0 && (
                                             <div className="row">
                                                 <div className="col-sm-3 d-flex align-items-center">
-                                                    <span className="icon"><SlSizeFullscreen /></span>
+                                                    <span className="icon">< GiChiliPepper  /></span>
                                                     <span className="name">Spicy Level</span>
                                                 </div>
                                                 <div className="col-sm-9">

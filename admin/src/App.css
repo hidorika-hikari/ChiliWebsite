@@ -912,23 +912,9 @@ table td .info h6, table td .info p {
   white-space: nowrap;
 }
 
-.tableFooter {
-  padding-bottom: 20px;
-}
-
-.tableFooter .pagination {
-  margin-left: auto;
-}
-
 .css-1bug3cd-MuiButtonBase-root-MuiPaginationItem-root.Mui-selected {
   color: #fff;
-  background-color: #0858f7 !important;
-}
-
-.tableFooter p {
-  font-size: 14px;
-  font-weight: 500;
-  margin-bottom: 0;
+  background-color: #1976d2 !important;
 }
 
 .table-responsive::-webkit-scrollbar-thumb{

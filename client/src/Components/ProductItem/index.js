@@ -1,5 +1,4 @@
-import Rating from "@mui/material/Rating";
-import Button from '@mui/material/Button'
+import { Button, Rating } from '@mui/material';
 import { TfiFullscreen } from "react-icons/tfi";
 import { CiHeart } from "react-icons/ci";
 import { Link } from "react-router-dom";
@@ -34,25 +33,13 @@ const ProductItem = (props) => {
             postData(`/api/my-list/add/`, data).then((res) => {
                 setAddedToMyList(true);
                 if (res.status !== false) {
-                    context.setAlertBox({
-                        open: true,
-                        error: false,
-                        msg: "The product added in my list"
-                    })
+                    context.setAlertBox({ open: true, error: false, msg: "The product added in my list" })
                 } else {
-                    context.setAlertBox({
-                        open: true,
-                        error: true,
-                        msg: res.msg
-                    })
+                    context.setAlertBox({ open: true, error: true, msg: res.msg })
                 }
             })
         } else {
-            context.setAlertBox({
-                open: true,
-                error: true,
-                msg: "Please Login to Continue"
-            })
+            context.setAlertBox({ open: true, error: true, msg: "Please Login to Continue" })
         }
     }
 

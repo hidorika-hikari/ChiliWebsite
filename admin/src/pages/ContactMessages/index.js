@@ -1,5 +1,5 @@
 import React, { useEffect, useState, useContext } from 'react';
-import { Breadcrumbs, Chip, emphasize, styled, CircularProgress, Button, Select, MenuItem, FormControl, Typography, Dialog, DialogTitle, DialogContent, DialogActions } from '@mui/material';
+import { Breadcrumbs, Chip, emphasize, styled, CircularProgress, Button, Select, MenuItem, FormControl, Typography, Dialog, DialogTitle, DialogContent, DialogActions, Pagination } from '@mui/material';
 import { FaHome } from 'react-icons/fa';
 import { MdDelete } from "react-icons/md";
 import { fetchDataFromApi, patchData, deleteData } from '../../utils/api';
@@ -109,7 +109,10 @@ const ContactMessages = () => {
                 {isLoading ? (
                     <div className="text-center py-5"><CircularProgress /></div>
                 ) : error ? (
-                    <div className="text-center py-5 text-danger">{error} <Button onClick={() => fetchMessages(page)}>Retry</Button></div>
+                    <div className="text-center py-5 text-danger">
+                        {error}
+                        <Button onClick={() => fetchMessages(page)}>Retry</Button>
+                    </div>
                 ) : data.messages.length === 0 ? (
                     <div className="text-center py-5">No messages found.</div>
                 ) : (
@@ -151,7 +154,11 @@ const ContactMessages = () => {
                                         </td>
                                         <td style={{ minWidth: 160 }}>
                                             <FormControl size="small" fullWidth>
-                                                <Select value={m.status} onChange={(e) => updateStatus(m._id, e.target.value)} disabled={updatingId === m._id}>
+                                                <Select
+                                                    value={m.status}
+                                                    onChange={(e) => updateStatus(m._id, e.target.value)}
+                                                    disabled={updatingId === m._id}
+                                                >
                                                     <MenuItem value="new">New</MenuItem>
                                                     <MenuItem value="read">Read</MenuItem>
                                                     <MenuItem value="archived">Archived</MenuItem>
@@ -175,12 +182,17 @@ const ContactMessages = () => {
                                 ))}
                             </tbody>
                         </table>
-                        <div className='d-flex tableFooter'>
-                            <div className='ms-auto'>Page {data.page} of {data.totalPages}</div>
-                            <div className='ms-3'>
-                                <Button size="small" disabled={page <= 1} onClick={() => setPage(p => Math.max(1, p - 1))}>Prev</Button>
-                                <Button size="small" disabled={page >= data.totalPages} onClick={() => setPage(p => Math.min(data.totalPages, p + 1))}>Next</Button>
-                            </div>
+
+                        <div className='d-flex justify-content-end mt-3'>
+                            <Pagination
+                                count={data.totalPages}
+                                page={page}
+                                onChange={(e, value) => setPage(value)}
+                                color="primary"
+                                className="pagination"
+                                showFirstButton
+                                showLastButton
+                            />
                         </div>
                     </div>
                 )}

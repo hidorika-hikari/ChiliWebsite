@@ -2,11 +2,9 @@ import Button from "@mui/material/Button";
 import { FaProductHunt } from "react-icons/fa";
 import { FaAngleRight } from "react-icons/fa6";
 import { IoMdListBox, IoMdLogOut } from "react-icons/io";
-import { MdContactMail } from "react-icons/md";
-import { Link } from "react-router-dom";
-import { MdDashboard } from "react-icons/md";
+import { MdContactMail, MdDashboard} from "react-icons/md";
+import { Link, useNavigate} from "react-router-dom";
 import { TbCategoryFilled } from "react-icons/tb";
-import { useNavigate } from 'react-router-dom';
 import { useEffect, useState, useContext } from 'react';
 import { AiFillPicture } from "react-icons/ai";
 import { MyContext } from "../../App";
@@ -26,13 +24,9 @@ const Sidebar = () => {
 
     const logout = () => {
         localStorage.clear();
-        context.setAlertBox({
-            open: true,
-            error: false,
-            msg: "Logout Successfully"
-        })
+        context.setAlertBox({ open: true, error: false, msg: "Logout Successfully" })
         setTimeout(() => {
-            window.location.href = '/signIn';
+            history('/signIn');
         },1500);
     }
 

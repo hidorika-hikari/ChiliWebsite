@@ -223,7 +223,7 @@ const Orders = () => {
                             </tbody>
                         </table>
                         {orders?.orderList?.totalPages > 1 && (
-                            <div className='d-flex tableFooter'>
+                            <div className='d-flex justify-content-end mt-3'>
                                 <Pagination
                                     count={orders.orderList.totalPages}
                                     color='primary'

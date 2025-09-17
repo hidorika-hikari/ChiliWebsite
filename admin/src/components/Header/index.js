@@ -1,20 +1,17 @@
 import { MdMenuOpen, MdOutlineLightMode, MdOutlineMenu } from "react-icons/md";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { useContext, useState } from "react";
-import logo from "../../assets/images/logo.png";
-import Button from '@mui/material/Button';
-import React from "react";
-import Menu from '@mui/material/Menu';
-import MenuItem from '@mui/material/MenuItem';
-import ListItemIcon from '@mui/material/ListItemIcon';
-import Logout from '@mui/icons-material/Logout';
+import {ListItemIcon, MenuItem, Menu, Button } from '@mui/material';
 import { MyContext } from "../../App";
+import Logout from '@mui/icons-material/Logout';
+import logo from "../../assets/images/logo.png";
+import React from "react";
 
 const Header = () => {
 
     const [anchorEl, setAnchorEl] = useState(null);
     const openMyAcc = Boolean(anchorEl);
-    //const history = useNavigate();
+    const history = useNavigate();
     const context = useContext(MyContext);
 
     const handleOpenMyAccDrop = (event) => {
@@ -27,13 +24,9 @@ const Header = () => {
     const logout = () => {
         localStorage.clear();
         setAnchorEl(null);
-        context.setAlertBox({
-            open: true,
-            error: false,
-            msg: "Logout Successfully"
-        })
+        context.setAlertBox({ open: true, error: false, msg: "Logout Successfully" })
         setTimeout(() => {
-            window.location.href = '/signIn';
+            history('/signIn');
         }, 1500);
     }
 

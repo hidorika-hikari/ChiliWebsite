@@ -149,7 +149,7 @@ const Dashboard = () => {
         </div>
 
         <div className="card shadow border-0 p-3 mt-4">
-          <h3 className="hd">Best Selling Products</h3>
+          <h3 className="hd">All Products</h3>
           <div className="table-responsive mt-3">
             <table className="table table-bordered table-striped v-align">
               <thead className="table-dark">
@@ -209,7 +209,7 @@ const Dashboard = () => {
               </tbody>
             </table>
 
-            <div className="d-flex tableFooter">
+            <div className="d-flex justify-content-end mt-3">
               <Pagination
                 count={productList?.totalPages || 1}
                 page={productList?.page || 1}
