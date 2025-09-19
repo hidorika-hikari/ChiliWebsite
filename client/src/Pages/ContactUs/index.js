@@ -170,16 +170,11 @@ const ContactUs = () => {
                         />
 
                         <Button
-                            className="btn-blue btn-big"
+                            className="btn-red btn-big"
                             type="submit"
                             sx={{
                                 transition:
-                                    "background-color 0.3s ease, transform 0.2s ease, box-shadow 0.2s ease",
-                                "&:hover": {
-                                    backgroundColor: "#1565c0",
-                                    transform: "scale(1.05)",
-                                    boxShadow: "0 6px 12px rgba(21, 101, 192, 0.3)",
-                                },
+                                    "background-color 0.3s ease, transform 0.2s ease, box-shadow 0.2s ease"
                             }}
                         disabled={isSubmitting}
                         >

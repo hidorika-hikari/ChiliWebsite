@@ -4,7 +4,7 @@ const router = express.Router();
 
 router.get('/', async (req, res) => {
     const page = parseInt(req.query.page) || 1;
-    const perPage = 20;
+    const perPage = 8;
     const userId = req.query.userId;
 
     const filter = userId ? { "user.userId": userId } : {};

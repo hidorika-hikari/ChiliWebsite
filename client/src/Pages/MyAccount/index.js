@@ -120,11 +120,7 @@ const MyAccount = () => {
     const handleSubmit = async (e) => {
         e.preventDefault();
         if (!userId) {
-            context.setAlertBox({
-                open: true,
-                error: true,
-                msg: "User not logged in",
-            });
+            context.setAlertBox({ open: true, error: true, msg: "User not logged in" });
             return;
         }
         try {

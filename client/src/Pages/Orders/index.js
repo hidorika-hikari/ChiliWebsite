@@ -1,9 +1,8 @@
 import React, { useEffect, useState, useContext } from 'react';
 import { fetchDataFromApi } from '../../utils/api';
 import { MyContext } from '../../App';
-import { Dialog, DialogTitle, DialogContent, DialogActions, Button, Typography, Grid, Divider, Pagination, Card, CardContent, Stack, Chip } from '@mui/material';
+import { Dialog, DialogTitle, DialogContent, DialogActions, Button, Typography, Grid, Divider, Pagination, Card, CardContent, Stack, Chip, useMediaQuery } from '@mui/material';
 import { useTheme } from '@mui/material/styles';
-import useMediaQuery from '@mui/material/useMediaQuery';
 import { FaListCheck } from "react-icons/fa6";
 import { FaHome } from "react-icons/fa";
 import { Link } from "react-router-dom";
@@ -21,6 +20,7 @@ const Orders = () => {
   const [page, setPage] = useState(1);
   const [selectedAddress, setSelectedAddress] = useState(null);
   const [openAddressDialog, setOpenAddressDialog] = useState(false);
+  const [loading, setLoading] = useState(false);
   const context = useContext(MyContext);
   const theme = useTheme();
   const isSmallScreen = useMediaQuery(theme.breakpoints.down('sm'));
@@ -48,32 +48,52 @@ const Orders = () => {
   const user = JSON.parse(localStorage.getItem("user"));
   const userId = user?.userId;
 
-  const handleChange = (event, value) => {
-    setPage(value);
-    if (userId) {
-      fetchDataFromApi(`/api/orders?page=${value}&perPage=8&userId=${userId}`).then((res) => {
-        setOrders(res);
-        context.setProgress(100);
+  const fetchOrders = async (pageNum) => {
+    if (!userId) {
+      setOrders({ ordersList: [], totalPages: 0 });
+      return;
+    }
+
+    setLoading(true);
+
+    try {
+      const res = await fetchDataFromApi(`/api/orders?page=${pageNum}&perPage=8&userId=${userId}`);
+      setOrders(res);
+    } catch (error) {
+      console.error('Failed to fetch orders:', error);
+      context.setAlertBox({
+        open: true,
+        error: true,
+        msg: 'Failed to load orders. Please try again.'
       });
+    } finally {
+      setLoading(false);
     }
   };
-  
+
+  const handleChange = (event, value) => {
+    setPage(value);
+    window.scrollTo(0, 0);
+    fetchOrders(value);
+  };
+
   useEffect(() => {
     window.scrollTo(0, 0);
-    if (userId) {
-      fetchDataFromApi(`/api/orders?page=${page}&perPage=8&userId=${userId}`).then(res => {
-        setOrders(res);
-      });
-    } else {
-      setOrders({ ordersList: [], totalPages: 0 });
-    }
-  }, [userId, page]);
+    fetchOrders(page);
+  }, [userId]);
 
   return (
     <section className="section">
       <div className="container">
         <h2 className="hd mb-3">Orders</h2>
-        {orders?.ordersList?.length > 0 ? (
+
+        {loading ? (
+          <div className="text-center py-5">
+            <div className="spinner-border text-primary" role="status">
+              <span className="visually-hidden">Loading...</span>
+            </div>
+          </div>
+        ) : orders?.ordersList?.length > 0 ? (
           <>
             {isSmallScreen ? (
               <Stack spacing={2} className="mt-3">
@@ -119,7 +139,7 @@ const Orders = () => {
                           </Stack>
                         </div>
                         <div>
-                          <Typography variant="caption" color="text.secondary">Customer</Typography><br/>
+                          <Typography variant="caption" color="text.secondary">Customer</Typography><br />
                           <Button
                             className="btn btn-sm btn-outline-dark w-100"
                             onClick={() => handleOpenDialog("address", order.billingDetails)}
@@ -149,12 +169,11 @@ const Orders = () => {
                 <table className="table table-striped table-borderless">
                   <thead className="table-dark">
                     <tr>
-                      <th>Order Id</th>
-                      <th>Payment Id</th>
+                      <th>Order ID</th>
+                      <th>Payment ID</th>
                       <th>Products</th>
-                      <th>Customer Details</th>
+                      <th>Delivery Information</th>
                       <th>Total Amount</th>
-                      <th>User</th>
                       <th>Order Status</th>
                       <th>Date / Time</th>
                     </tr>
@@ -209,11 +228,10 @@ const Orders = () => {
                           </button>
                         </td>
                         <td>{order.totalAmount} ฿</td>
-                        <td>{order.user.name}</td>
                         <td>
-                            <Link to={`/order-status/${order._id}`}>
-                              <button className="btn btn-sm btn-outline-info">View Status</button>
-                            </Link>
+                          <Link to={`/order-status/${order._id}`}>
+                            <button className="btn btn-sm btn-outline-danger">View Status</button>
+                          </Link>
                         </td>
                         <td>
                           {dayjs
@@ -229,15 +247,21 @@ const Orders = () => {
             )}
 
             {orders?.totalPages > 1 && (
-              <div className="d-flex justify-content-end mt-3">
+              <div className="d-flex justify-content-center mt-4">
                 <Pagination
-                  count={orders?.totalPages}
+                  count={orders.totalPages}
                   page={page}
+                  onChange={handleChange}
                   color="primary"
-                  className="pagination"
+                  size="large"
                   showFirstButton
                   showLastButton
-                  onChange={handleChange}
+                  disabled={loading}
+                  sx={{
+                    '& .MuiPaginationItem-root': {
+                      fontSize: '0.875rem',
+                    },
+                  }}
                 />
               </div>
             )}
@@ -270,7 +294,7 @@ const Orders = () => {
         >
           <DialogTitle>
             <Typography variant="h6" fontWeight="bold" gutterBottom>
-              🛒 Product Details
+              Product Details
             </Typography>
           </DialogTitle>
           <Divider />
@@ -298,17 +322,10 @@ const Orders = () => {
                 </Grid>
                 <Grid item xs={12} className="product-info">
                   <Typography variant="subtitle1" fontWeight="medium" gutterBottom>
-                    {selectedProduct.productTitle}
+                    <strong>{selectedProduct.productTitle}</strong>
                   </Typography>
                   <Typography variant="body2" mb={1}>
-                    <strong>Product ID:</strong>{" "}
-                    <span className="text-monospace">{selectedProduct.productId}</span>
-                  </Typography>
-                  <Typography variant="body2" mb={1}>
-                    <strong>Quantity:</strong> {selectedProduct.quantity}
-                  </Typography>
-                  <Typography variant="body2" mb={1}>
-                    <strong>Price:</strong> {selectedProduct.price} ฿
+                    <strong>Price:</strong> {`${selectedProduct.price}฿, x${selectedProduct.quantity}`}
                   </Typography>
                 </Grid>
               </Grid>
@@ -317,7 +334,7 @@ const Orders = () => {
           <DialogActions>
             <Button
               onClick={() => handleCloseDialog("product")}
-              className="btn-blue btn-sml btn-lg w-100"
+              className="btn-red btn-sml btn-lg w-100"
             >
               Close
             </Button>
@@ -340,7 +357,7 @@ const Orders = () => {
         >
           <DialogTitle>
             <Typography variant="h6" fontWeight="bold" gutterBottom>
-              👤 Customer Details
+              Delivery Information
             </Typography>
           </DialogTitle>
           <Divider />
@@ -349,13 +366,10 @@ const Orders = () => {
               <Grid container spacing={2}>
                 <Grid item xs={12}>
                   <Typography variant="body2" mb={1}>
-                    <strong>Full Name:</strong> {selectedAddress.fullName}
+                    <strong>Name:</strong> {`${selectedAddress.fullName}, ${selectedAddress.phoneNumber}`}
                   </Typography>
                   <Typography variant="body2" mb={1}>
-                    <strong>Phone Number:</strong> {selectedAddress.phoneNumber}
-                  </Typography>
-                  <Typography variant="body2" mb={1}>
-                    <strong>Street Address:</strong> {selectedAddress.streetAddressLine1}
+                    <strong>Address:</strong> {`${selectedAddress.streetAddressLine1}, ${selectedAddress.city}, ${selectedAddress.state}, ${selectedAddress.zipCode}, ${selectedAddress.country}`}
                   </Typography>
                   <Typography variant="body2" mb={1}>
                     <strong>Email:</strong> {selectedAddress.email}
@@ -367,7 +381,7 @@ const Orders = () => {
           <DialogActions>
             <Button
               onClick={() => handleCloseDialog("address")}
-              className="btn-blue btn-sml btn-lg w-100"
+              className="btn-red btn-sml btn-lg w-100"
             >
               Close
             </Button>

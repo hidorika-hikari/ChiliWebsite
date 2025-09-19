@@ -10,6 +10,8 @@ const Checkout = () => {
     const stripe = useStripe();
     const elements = useElements();
     const history = useNavigate();
+    const context = useContext(MyContext);
+
     const CARD_ELEMENT_OPTIONS = {
         style: {
             base: {
@@ -28,8 +30,11 @@ const Checkout = () => {
         },
         hidePostalCode: true,
     };
+
     const [processing, setProcessing] = useState(false);
     const [cartData, setCartData] = useState([]);
+    const [cardError, setCardError] = useState('');
+    const [cardComplete, setCardComplete] = useState(false);
     const [formFields, setFormFields] = useState({
         fullName: '',
         country: '',
@@ -40,7 +45,7 @@ const Checkout = () => {
         zipCode: '',
         phoneNumber: '',
         email: ''
-    })
+    });
 
     const onChangeInput = (e) => {
         const { name, value } = e.target;
@@ -48,7 +53,16 @@ const Checkout = () => {
             ...prev,
             [name]: value
         }));
-    }
+    };
+
+    const handleCardChange = (event) => {
+        if (event.error) {
+            setCardError(event.error.message);
+        } else {
+            setCardError('');
+        }
+        setCardComplete(event.complete);
+    };
 
     useEffect(() => {
         const user = JSON.parse(localStorage.getItem("user"));
@@ -57,48 +71,119 @@ const Checkout = () => {
         });
     }, []);
 
-    const context = useContext(MyContext);
+    const validateForm = () => {
+        const requiredFields = ['fullName', 'country', 'streetAddressLine1', 'city', 'state', 'zipCode', 'phoneNumber', 'email'];
+        const missingFields = requiredFields.filter(field => !formFields[field].trim());
+        
+        if (missingFields.length > 0) {
+            context.setAlertBox({ open: true, error: true, msg: `Please fill in all required fields: ${missingFields.join(', ')}` });
+            return false;
+        }
+
+        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        if (!emailRegex.test(formFields.email)) {
+            context.setAlertBox({ open: true, error: true, msg: 'Please enter a valid email address' });
+            return false;
+        }
+        return true;
+    };
+
     const handlePayment = async (e) => {
         e.preventDefault();
-        setProcessing(true);
-        const amount = cartData.reduce((sum, item) => sum + (item.price * item.quantity), 0) * 100;
-        const res = await fetch('http://localhost:4000/api/payment/create-payment-intent', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ amount, currency: 'thb' }),
-        });
-        const { clientSecret } = await res.json();
-        const cardElement = elements.getElement(CardElement);
-        const paymentResult = await stripe.confirmCardPayment(clientSecret, {
-            payment_method: { card: cardElement },
-        });
-        setProcessing(false);
-        if (paymentResult.error) {
-            context.setAlertBox({ open: true, error: true, msg: paymentResult.error.message });
-        } else if (paymentResult.paymentIntent.status === 'succeeded') {
-            context.setAlertBox({ open: true, error: false, msg: 'Payment successfully!' });
+        if (!validateForm()) {
+            return;
         }
-        const payload = {
-            user: JSON.parse(localStorage.getItem("user")),
-            billingDetails: formFields,
-            cartItems: cartData.map((item) => ({
-                productId: item.productId,
-                productTitle: item.productTitle,
-                price: item.price,
-                quantity: item.quantity,
-                images: item.images?.[0]
-            })),
-            totalAmount: amount / 100,
-            paymentDetails: {
-                paymentIntentId: paymentResult.paymentIntent.id,
-                status: paymentResult.paymentIntent.status,
-                created: paymentResult.paymentIntent.created,
-            },
-            createdAt: new Date().toISOString()
-        };
-        postData(`/api/orders/create`, payload).then(res => {
-            history('/');
-        })
+
+        if (!stripe || !elements) {
+            context.setAlertBox({ open: true, error: true,  msg: 'Stripe is not loaded. Please refresh the page and try again.' });
+            return;
+        }
+
+        const cardElement = elements.getElement(CardElement);
+        
+        if (!cardElement) {
+            context.setAlertBox({ open: true, error: true, msg: 'Card element not found. Please refresh the page.' });
+            return;
+        }
+
+        if (!cardComplete) {
+            context.setAlertBox({ open: true, error: true, msg: 'Please enter your complete card details.' });
+            return;
+        }
+
+        if (cardError) {
+            context.setAlertBox({ open: true, error: true, msg: cardError });
+            return;
+        }
+
+        setProcessing(true);
+        try {
+            const amount = cartData.reduce((sum, item) => sum + (item.price * item.quantity), 0) * 100;
+            
+            const res = await fetch('http://localhost:4000/api/payment/create-payment-intent', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ amount, currency: 'thb' }),
+            });
+
+            if (!res.ok) {
+                throw new Error('Failed to create payment intent');
+            }
+
+            const { clientSecret } = await res.json();
+            
+            const paymentResult = await stripe.confirmCardPayment(clientSecret, {
+                payment_method: {
+                    card: cardElement,
+                    billing_details: {
+                        name: formFields.fullName,
+                        email: formFields.email,
+                        phone: formFields.phoneNumber,
+                        address: {
+                            line1: formFields.streetAddressLine1,
+                            line2: formFields.streetAddressLine2,
+                            city: formFields.city,
+                            state: formFields.state,
+                            postal_code: formFields.zipCode,
+                        },
+                    },
+                },
+            });
+
+            setProcessing(false);
+
+            if (paymentResult.error) {
+                context.setAlertBox({ open: true, error: true, msg: paymentResult.error.message });
+            } else if (paymentResult.paymentIntent.status === 'succeeded') {
+                context.setAlertBox({ open: true, error: false, msg: 'Payment successful!' });
+
+                const payload = {
+                    user: JSON.parse(localStorage.getItem("user")),
+                    billingDetails: formFields,
+                    cartItems: cartData.map((item) => ({
+                        productId: item.productId,
+                        productTitle: item.productTitle,
+                        price: item.price,
+                        quantity: item.quantity,
+                        images: item.images?.[0]
+                    })),
+                    totalAmount: amount / 100,
+                    paymentDetails: {
+                        paymentIntentId: paymentResult.paymentIntent.id,
+                        status: paymentResult.paymentIntent.status,
+                        created: paymentResult.paymentIntent.created,
+                    },
+                    createdAt: new Date().toISOString()
+                };
+
+                await postData(`/api/orders/create`, payload);
+                history('/');
+            }
+        } catch (error) {
+            setProcessing(false);
+            context.setAlertBox({ open: true, error: true, msg: 'An error occurred during payment processing. Please try again.' });
+            console.error('Payment error:', error);
+        }
     };
 
     return (
@@ -111,21 +196,29 @@ const Checkout = () => {
                             <div className='row mt-3'>
                                 <div className='col-md-6'>
                                     <div className='form-group'>
-                                        <TextField label='Full name' variant='outlined'
+                                        <TextField
+                                            label='Full name'
+                                            variant='outlined'
                                             className='w-100'
                                             size='small'
                                             name='fullName'
+                                            value={formFields.fullName}
                                             onChange={onChangeInput}
+                                            required
                                         />
                                     </div>
                                 </div>
                                 <div className='col-md-6'>
                                     <div className='form-group'>
-                                        <TextField label='Country *' variant='outlined'
+                                        <TextField
+                                            label='Country'
+                                            variant='outlined'
                                             className='w-100'
                                             size='small'
                                             name='country'
+                                            value={formFields.country}
                                             onChange={onChangeInput}
+                                            required
                                         />
                                     </div>
                                 </div>
@@ -135,18 +228,27 @@ const Checkout = () => {
                             <div className='row'>
                                 <div className='col-md-12'>
                                     <div className='form-group'>
-                                        <TextField label='House number and street name' variant='outlined'
+                                        <TextField
+                                            label='House number and street name'
+                                            variant='outlined'
                                             className='w-100'
                                             size='small'
                                             name='streetAddressLine1'
-                                            onChange={onChangeInput} />
+                                            value={formFields.streetAddressLine1}
+                                            onChange={onChangeInput}
+                                            required
+                                        />
                                     </div>
                                     <div className='form-group'>
-                                        <TextField label='Apartment, suite, unit , etc. (optional)' variant='outlined'
+                                        <TextField
+                                            label='Apartment, suite, unit, etc. (optional)'
+                                            variant='outlined'
                                             className='w-100'
                                             size='small'
                                             name='streetAddressLine2'
-                                            onChange={onChangeInput} />
+                                            value={formFields.streetAddressLine2}
+                                            onChange={onChangeInput}
+                                        />
                                     </div>
                                 </div>
                             </div>
@@ -155,11 +257,16 @@ const Checkout = () => {
                             <div className='row'>
                                 <div className='col-md-12'>
                                     <div className='form-group'>
-                                        <TextField label='City' variant='outlined'
+                                        <TextField
+                                            label='City'
+                                            variant='outlined'
                                             className='w-100'
                                             size='small'
                                             name='city'
-                                            onChange={onChangeInput} />
+                                            value={formFields.city}
+                                            onChange={onChangeInput}
+                                            required
+                                        />
                                     </div>
                                 </div>
                             </div>
@@ -168,11 +275,16 @@ const Checkout = () => {
                             <div className='row'>
                                 <div className='col-md-12'>
                                     <div className='form-group'>
-                                        <TextField label='State' variant='outlined'
+                                        <TextField
+                                            label='State'
+                                            variant='outlined'
                                             className='w-100'
                                             size='small'
                                             name='state'
-                                            onChange={onChangeInput} />
+                                            value={formFields.state}
+                                            onChange={onChangeInput}
+                                            required
+                                        />
                                     </div>
                                 </div>
                             </div>
@@ -181,11 +293,16 @@ const Checkout = () => {
                             <div className='row'>
                                 <div className='col-md-12'>
                                     <div className='form-group'>
-                                        <TextField label='Zip Code' variant='outlined'
+                                        <TextField
+                                            label='Zip Code'
+                                            variant='outlined'
                                             className='w-100'
                                             size='small'
                                             name='zipCode'
-                                            onChange={onChangeInput} />
+                                            value={formFields.zipCode}
+                                            onChange={onChangeInput}
+                                            required
+                                        />
                                     </div>
                                 </div>
                             </div>
@@ -193,21 +310,31 @@ const Checkout = () => {
                             <div className='row'>
                                 <div className='col-md-6'>
                                     <div className='form-group'>
-                                        <TextField label='Phone Number' variant='outlined'
+                                        <TextField
+                                            label='Phone Number'
+                                            variant='outlined'
                                             className='w-100'
                                             size='small'
                                             name='phoneNumber'
-                                            onChange={onChangeInput} />
+                                            value={formFields.phoneNumber}
+                                            onChange={onChangeInput}
+                                            required
+                                        />
                                     </div>
                                 </div>
                                 <div className='col-md-6'>
                                     <div className='form-group'>
-                                        <TextField label='Email Address' variant='outlined'
+                                        <TextField
+                                            label='Email Address'
+                                            variant='outlined'
                                             className='w-100'
                                             size='small'
                                             name='email'
-                                            onChange={onChangeInput} />
-
+                                            type='email'
+                                            value={formFields.email}
+                                            onChange={onChangeInput}
+                                            required
+                                        />
                                     </div>
                                 </div>
                             </div>
@@ -261,34 +388,61 @@ const Checkout = () => {
 
                                 <Box>
                                     <Typography variant="subtitle1" fontWeight="medium" gutterBottom>
-                                        Credit or debit card
+                                        Credit or debit card *
                                     </Typography>
                                     <Paper
                                         elevation={1}
                                         sx={{
                                             p: 2,
                                             borderRadius: 2,
-                                            border: "1px solid #e0e0e0",
-                                            mb: 3,
+                                            border: cardError ? "1px solid #fa755a" : "1px solid #e0e0e0",
+                                            mb: cardError ? 1 : 3,
                                             backgroundColor: "#fff",
                                         }}
                                     >
-                                        <CardElement options={CARD_ELEMENT_OPTIONS} />
+                                        <CardElement
+                                            options={CARD_ELEMENT_OPTIONS}
+                                            onChange={handleCardChange}
+                                        />
                                     </Paper>
+                                    
+                                    {cardError && (
+                                        <Typography
+                                            variant="caption"
+                                            color="error"
+                                            sx={{ mb: 2, display: 'block' }}
+                                        >
+                                            {cardError}
+                                        </Typography>
+                                    )}
 
                                     <Button
                                         type='submit'
-                                        disabled={!stripe || processing}
+                                        disabled={!stripe || processing || !cardComplete}
                                         className="btn-red btn-lg btn-big w-100"
+                                        sx={{
+                                            opacity: (!stripe || processing || !cardComplete) ? 0.6 : 1
+                                        }}
                                     >
                                         {processing ? (
                                             <span style={{ color: "#fff" }}>Processing...</span>
                                         ) : (
                                             <>
-                                                <IoBagCheckOutline style={{ marginRight: 8 }} /> Checkout
+                                                <IoBagCheckOutline style={{ marginRight: 8 }} />
+                                                Check Out
                                             </>
                                         )}
                                     </Button>
+                                    
+                                    {!cardComplete && !processing && (
+                                        <Typography
+                                            variant="caption"
+                                            color="textSecondary"
+                                            sx={{ mt: 1, display: 'block', textAlign: 'center' }}
+                                        >
+                                            Please enter your complete card details to continue
+                                        </Typography>
+                                    )}
                                 </Box>
                             </Paper>
                         </Box>

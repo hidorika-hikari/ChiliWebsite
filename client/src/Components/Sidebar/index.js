@@ -1,18 +1,17 @@
 import 'range-slider-input/dist/style.css';
-import Slider from '@mui/material/Slider';
-import ProductItem from "../../Components/ProductItem";
 import 'swiper/css';
 import 'swiper/css/navigation';
+import ProductItem from "../../Components/ProductItem";
 import { Navigation, Autoplay } from 'swiper/modules';
 import { Swiper, SwiperSlide } from 'swiper/react';
 import { useContext, useEffect, useState } from "react";
 import { Link, useParams } from "react-router-dom";
 import { MyContext } from "../../App";
-import { Rating, FormControlLabel, RadioGroup, Radio  } from "@mui/material";
+import { Rating, FormControlLabel, RadioGroup, Radio, Slider } from "@mui/material";
 import { fetchDataFromApi } from "../../utils/api";
 
 const Sidebar = (props) => {
-    const [value, setValue] = useState([1, 10000]);
+    const [value, setValue] = useState([1, 1000]);
     const { id } = useParams();
     const context = useContext(MyContext);
 
@@ -91,7 +90,7 @@ const Sidebar = (props) => {
                     onChange={(e, newValue) => setValue(newValue)}
                     valueLabelDisplay="auto"
                     min={1}
-                    max={10000}
+                    max={1000}
                     step={5}
                 />
                 <div className="d-flex justify-content-between mt-2">

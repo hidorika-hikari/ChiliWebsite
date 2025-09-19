@@ -33,13 +33,18 @@ const SearchPage = () => {
         setPage(1);
     };
 
-    const fetchProducts = (url) => {
-        setIsLoading(true);
-        fetchDataFromApi(url).then((res) => {
+    const fetchProducts = async (url) => {
+        try {
+            setIsLoading(true);
+            const res = await fetchDataFromApi(url);
             setProductData(res.products || []);
             setTotalPages(res.totalPages || 1);
+        } catch (error) {
+            console.error(error);
+            context.setAlertBox({ open: true, error: true, msg: "Failed to fetch products." });
+        } finally {
             setIsLoading(false);
-        });
+        }
     };
 
     const filterData = (subCatId) => {
@@ -96,23 +101,23 @@ const SearchPage = () => {
                     <div className="content_right">
                         <div className="showBy mt-3 mb-3 d-flex align-items-center" style={{ gap: 8, flexWrap: 'wrap' }}>
                             {isSmallScreen && (
-                            <Button
-                                variant="contained"
-                                color="primary"
-                                size="small"
-                                sx={{
-                                    borderRadius: "24px",
-                                    textTransform: "none",
-                                    boxShadow: 3,
-                                    px: 3,
-                                    "&:hover": {
-                                        backgroundColor: "#2bbef9",
-                                    },
-                                }}
-                                onClick={() => setFiltersOpen(true)}
-                            >
-                                Filters
-                            </Button>
+                                <Button
+                                    variant="contained"
+                                    color="primary"
+                                    size="small"
+                                    sx={{
+                                        borderRadius: "24px",
+                                        textTransform: "none",
+                                        boxShadow: 3,
+                                        px: 3,
+                                        "&:hover": {
+                                            backgroundColor: "#2bbef9",
+                                        },
+                                    }}
+                                    onClick={() => setFiltersOpen(true)}
+                                >
+                                    Filters
+                                </Button>
                             )}
                             <div className="d-flex align-items-center btnWrapper">
                                 <Button onClick={() => setProductView("one")} className={`view-toggle ${productView === "one" && "act"}`}>
@@ -157,6 +162,10 @@ const SearchPage = () => {
                             </div>
                         ) : (
                             <div className="productListing">
+                                {productData?.length === 0 && !isLoading && (
+                                    <p className="text-center py-3">No products found</p>
+                                )}
+
                                 {productData?.map((item, index) => (
                                     <ProductItem key={index} itemView={productView} item={item} />
                                 ))}

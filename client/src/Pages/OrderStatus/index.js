@@ -147,13 +147,10 @@ const OrderStatusPage = () => {
                 </Typography>
                 <Divider sx={{ mb: 2 }} />
                 <Typography variant="body2" mb={1}>
-                    <strong>Name:</strong> {order.billingDetails.fullName}
-                </Typography>
-                <Typography variant="body2" mb={1}>
-                    <strong>Phone:</strong> {order.billingDetails.phoneNumber}
+                    <strong>Name:</strong> {`${order.billingDetails.fullName}, ${order.billingDetails.phoneNumber}`}
                 </Typography>
                 <Typography variant="body2" mb={2}>
-                    <strong>Address:</strong> {order.billingDetails.streetAddressLine1}
+                <strong>Address:</strong> {`${order.billingDetails.streetAddressLine1}, ${order.billingDetails.city}, ${order.billingDetails.state}, ${order.billingDetails.zipCode}, ${order.billingDetails.country}`}
                 </Typography>
 
                 <Box mt={2}>

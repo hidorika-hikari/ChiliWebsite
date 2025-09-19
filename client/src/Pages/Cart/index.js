@@ -1,8 +1,5 @@
-import Rating from "@mui/material/Rating";
 import QuantityBox from "../../Components/QuantityDrop";
-import Button from "@mui/material/Button";
-import { Card, CardContent, Stack, Typography } from "@mui/material";
-import useMediaQuery from "@mui/material/useMediaQuery";
+import { Card, CardContent, Stack, Typography, Button, Rating, useMediaQuery } from "@mui/material";
 import { useTheme } from "@mui/material/styles";
 import { Link } from "react-router-dom";
 import { IoIosClose } from "react-icons/io";
@@ -28,13 +25,14 @@ const Cart = () => {
   const handleQuantityChange = (itemId, newQty) => {
     setCartData(prevCartData =>
       prevCartData.map(item =>
-        item.id === itemId
+        item._id === itemId
           ? { ...item, quantity: newQty, subTotal: item.price * newQty }
           : item
       )
     );
+
     const user = JSON.parse(localStorage.getItem("user"));
-    const item = cartData.find(item => item.id === itemId);
+    const item = cartData.find(item => item._id === itemId);
 
     if (!item) return;
     const updatedFields = {
@@ -90,10 +88,10 @@ const Cart = () => {
                   {isSmallScreen ? (
                     <Stack spacing={2}>
                       {cartData.map((item) => (
-                        <Card key={item.id} variant="outlined">
+                        <Card key={item._id} variant="outlined">
                           <CardContent>
                             <Stack spacing={1.25}>
-                              <Link to={`/product/${item.id}`}>
+                              <Link to={`/product/${item.productId || item.id}`}>
                                 <div className="d-flex align-items-center cartItemImgWrapper">
                                   <div className="imgWrapper" style={{ width: 80 }}>
                                     <img
@@ -120,7 +118,7 @@ const Cart = () => {
                                 <Typography variant="body2">{item.price} ฿</Typography>
                                 <QuantityBox
                                   quantity={item.quantity}
-                                  onQuantityChange={(qty) => handleQuantityChange(item.id, qty)}
+                                  onQuantityChange={(qty) => handleQuantityChange(item._id, qty)}
                                 />
                               </Stack>
                               <Stack direction="row" alignItems="center" justifyContent="space-between">
@@ -151,9 +149,10 @@ const Cart = () => {
                         </thead>
                         <tbody>
                           {cartData.map((item) => (
-                            <tr key={item.id}>
+                            <tr key={item._id}>
                               <td width="35%">
-                                <Link to={`/product/${item.id}`}>
+                                {/* Fixed: Use productId instead of _id */}
+                                <Link to={`/product/${item.productId || item.id}`}>
                                   <div className="d-flex align-items-center cartItemImgWrapper">
                                     <div className="imgWrapper">
                                       <img
@@ -182,7 +181,7 @@ const Cart = () => {
                                 <QuantityBox
                                   quantity={item.quantity}
                                   onQuantityChange={(qty) =>
-                                    handleQuantityChange(item.id, qty)
+                                    handleQuantityChange(item._id, qty)
                                   }
                                 />
                               </td>
