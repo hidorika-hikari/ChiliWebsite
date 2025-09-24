@@ -2,15 +2,16 @@ import { useContext, useEffect, useState } from 'react';
 import { MyContext } from '../../App';
 import { MdEmail } from 'react-icons/md';
 import { RiLockPasswordFill } from 'react-icons/ri';
-import ArrowBackIosNewIcon from "@mui/icons-material/ArrowBackIosNew";
 import { Box, Paper, TextField, Button, CircularProgress, IconButton, Typography } from "@mui/material";
 import { Link, useNavigate } from "react-router-dom";
 import { FaUserCircle, FaPhoneAlt } from 'react-icons/fa';
 import { IoShieldCheckmarkSharp } from 'react-icons/io5';
 import { postData } from '../../utils/api';
+import ArrowBackIosNewIcon from "@mui/icons-material/ArrowBackIosNew";
 import Logo from '../../assets/images/logo.png';
 
 const SignUp = () => {
+    
     const context = useContext(MyContext);
     const navigate = useNavigate();
     const [isLoading, setIsLoading] = useState(false);
@@ -27,7 +28,6 @@ const SignUp = () => {
     useEffect(() => {
         context.setIsHideSidebarAndHeader(true);
     }, [context]);
-
 
     const onChangeInput = (e) => {
         setFormFields((prev) => ({

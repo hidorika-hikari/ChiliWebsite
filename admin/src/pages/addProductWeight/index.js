@@ -1,9 +1,8 @@
 import { Breadcrumbs, Chip, CircularProgress, emphasize, styled } from '@mui/material';
 import { Button, Dialog, DialogTitle, DialogContent, DialogActions } from '@mui/material';
-import { FaCloudUploadAlt, FaHome } from 'react-icons/fa';
+import { FaCloudUploadAlt, FaHome, FaPencilAlt } from 'react-icons/fa';
 import { MyContext } from '../../App';
 import { fetchDataFromApi, postData, deleteData, editData } from '../../utils/api';
-import { FaPencilAlt } from 'react-icons/fa';
 import { MdDelete } from 'react-icons/md';
 import React, { useContext, useEffect, useState } from 'react';
 
@@ -28,6 +27,7 @@ const StyleBreadcrumb = styled(Chip)(({ theme }) => {
 });
 
 const AddProductWeight = () => {
+
     const [editId, setEditId] = useState(null);
     const [isLoading, setIsLoading] = useState(false);
     const [productWeightData, setProductWeightData] = useState([]);

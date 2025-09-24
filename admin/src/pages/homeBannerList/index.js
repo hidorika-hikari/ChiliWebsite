@@ -168,7 +168,7 @@ const HomeBannerList = () => {
                     <DialogActions>
                         <Button onClick={handleEditClose} className='btn-red btn-lg'>Cancel</Button>
                         <Button type="button" onClick={handleUpdateBanner} className='btn-blue btn-lg'>
-                            {isLoading ? <CircularProgress color='inherit' className='ms-3 loader' /> : 'Submit'}
+                            {isLoading ? <CircularProgress color='inherit' className='ms-3 loader' /> : '๊Update'}
                         </Button>
                     </DialogActions>
                 </form>

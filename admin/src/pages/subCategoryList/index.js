@@ -1,8 +1,7 @@
-import { FaPencilAlt } from 'react-icons/fa';
+import { FaPencilAlt, FaHome} from 'react-icons/fa';
 import { MdDelete } from 'react-icons/md';
 import { useContext, useEffect, useState } from 'react';
 import { Breadcrumbs, Chip, CircularProgress, emphasize, styled, Button, TextField, Dialog, DialogActions, DialogContent, DialogTitle, Pagination } from '@mui/material';
-import { FaHome } from 'react-icons/fa';
 import { deleteData, editData, fetchDataFromApi } from '../../utils/api';
 import { Link } from 'react-router-dom';
 import { MyContext } from '../../App';
@@ -264,7 +263,7 @@ const SubCategoryList = () => {
                         <Button type="button" onClick={SubcategoryEditFunc}
                             variant='contained'>
                             {isLoading === true ? <CircularProgress color='inherit'
-                                className='ms-3 loader' /> : 'Submit'}
+                                className='ms-3 loader' /> : 'Update'}
                         </Button>
                     </DialogActions>
                 </form>

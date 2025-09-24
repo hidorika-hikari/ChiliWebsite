@@ -2,8 +2,10 @@ import { FaHome } from 'react-icons/fa';
 import React, { useEffect, useState, useContext } from 'react';
 import { editData, fetchDataFromApi } from '../../utils/api';
 import { MyContext } from '../../App';
-import { Breadcrumbs, Chip, emphasize, styled, Dialog, DialogTitle, DialogContent, DialogActions, Button, Typography, Grid, Divider
-    , FormControl, Select, MenuItem, Pagination, CircularProgress } from '@mui/material';
+import {
+    Breadcrumbs, Chip, emphasize, styled, Dialog, DialogTitle, DialogContent, DialogActions, Button, Typography, Grid, Divider
+    , FormControl, Select, MenuItem, Pagination, CircularProgress
+} from '@mui/material';
 import dayjs from 'dayjs';
 import utc from 'dayjs/plugin/utc';
 import timezone from 'dayjs/plugin/timezone';
@@ -146,9 +148,8 @@ const Orders = () => {
                                     <th>Order Id</th>
                                     <th>Payment Id</th>
                                     <th>Products</th>
-                                    <th>Customer Details</th>
+                                    <th>Customer Delivery Information</th>
                                     <th>Total Amount</th>
-                                    <th>User</th>
                                     <th>Order Status</th>
                                     <th>Date / Time</th>
                                 </tr>
@@ -199,7 +200,6 @@ const Orders = () => {
                                             </button>
                                         </td>
                                         <td>{order.totalAmount} ฿</td>
-                                        <td>{order.user.name}</td>
                                         <td>
                                             <FormControl size="small" fullWidth>
                                                 <Select
@@ -237,7 +237,7 @@ const Orders = () => {
                 )}
 
                 <Dialog open={openDialog} disableEnforceFocus onClose={() => handleCloseDialog('product')} maxWidth="sm" fullWidth>
-                    <DialogTitle>🛒 Product Details</DialogTitle>
+                    <DialogTitle>Product Details</DialogTitle>
                     <Divider />
                     <DialogContent dividers sx={{ overflowY: 'auto' }}>
                         {selectedProduct ? (
@@ -253,9 +253,7 @@ const Orders = () => {
                                 </Grid>
                                 <Grid item xs={12}>
                                     <Typography variant="subtitle1" fontWeight="medium">{selectedProduct.productTitle}</Typography>
-                                    <Typography><strong>Product ID:</strong> {selectedProduct.productId}</Typography>
-                                    <Typography><strong>Quantity:</strong> {selectedProduct.quantity}</Typography>
-                                    <Typography><strong>Price:</strong> {selectedProduct.price} ฿</Typography>
+                                    <Typography><strong>Price:</strong> {`${selectedProduct.price}฿, x${selectedProduct.quantity}`}</Typography>
                                 </Grid>
                             </Grid>
                         ) : null}
@@ -266,16 +264,21 @@ const Orders = () => {
                 </Dialog>
 
                 <Dialog open={openAddressDialog} disableEnforceFocus maxWidth="sm" fullWidth onClose={() => handleCloseDialog('address')}>
-                    <DialogTitle>👤 Customer Details</DialogTitle>
+                    <DialogTitle>Customer Delivery Information</DialogTitle>
                     <Divider />
                     <DialogContent dividers sx={{ overflowY: 'auto' }}>
                         {selectedAddress && (
                             <Grid container spacing={2}>
                                 <Grid item xs={12}>
-                                    <Typography><strong>Full Name:</strong> {selectedAddress.fullName}</Typography>
-                                    <Typography><strong>Phone Number:</strong> {selectedAddress.phoneNumber}</Typography>
-                                    <Typography><strong>Street Address:</strong> {selectedAddress.streetAddressLine1}</Typography>
-                                    <Typography><strong>Email:</strong> {selectedAddress.email}</Typography>
+                                    <Typography variant="body2" mb={1}>
+                                        <strong>Name:</strong> {`${selectedAddress.fullName}, ${selectedAddress.phoneNumber}`}
+                                    </Typography>
+                                    <Typography variant="body2" mb={1}>
+                                        <strong>Address:</strong> {`${selectedAddress.streetAddressLine1}, ${selectedAddress.city}, ${selectedAddress.state}, ${selectedAddress.zipCode}, ${selectedAddress.country}`}
+                                    </Typography>
+                                    <Typography variant="body2" mb={1}>
+                                        <strong>Email:</strong> {selectedAddress.email}
+                                    </Typography>
                                 </Grid>
                             </Grid>
                         )}

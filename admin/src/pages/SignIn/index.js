@@ -3,12 +3,13 @@ import { MyContext } from '../../App';
 import { MdEmail } from 'react-icons/md';
 import { RiLockPasswordFill } from "react-icons/ri";
 import { Box, Paper, TextField, Button, CircularProgress, IconButton, Typography } from "@mui/material";
-import ArrowBackIosNewIcon from "@mui/icons-material/ArrowBackIosNew";
 import { useNavigate, Link } from "react-router-dom";
 import { postData } from '../../utils/api';
+import ArrowBackIosNewIcon from "@mui/icons-material/ArrowBackIosNew";
 import Logo from '../../assets/images/logo.png';
 
 const SignIn = () => {
+    
     const [isLoading, setIsLoading] = useState(false);
     const [formFields, setFormFields] = useState({
         email: "",
@@ -45,7 +46,6 @@ const SignIn = () => {
         try {
             const res = await postData("/api/user/admin/signin", formFields);
             if (res.status) {
-                const role = res.user?.role || res.user?._doc?.role;
                 const user = {
                     name: res.user?.name || res.user?._doc?.name,
                     email: res.user?.email || res.user?._doc?.email,
@@ -54,7 +54,7 @@ const SignIn = () => {
                         res.user?._doc?.id ||
                         res.user?._id ||
                         res.user?._doc?._id,
-                    role,
+                    role: res.user?.role || res.user?._doc?.role || "admin",
                 };
                 localStorage.setItem("token", res.token);
                 localStorage.setItem("user", JSON.stringify(user));
@@ -101,7 +101,7 @@ const SignIn = () => {
                     onClick={() => navigate(-1)}
                     sx={{ position: "absolute", top: 16, left: 16 }}
                 >
-                    <ArrowBackIosNewIcon  />
+                    <ArrowBackIosNewIcon />
                 </IconButton>
 
                 <Box sx={{ textAlign: "center", mb: 2 }}>

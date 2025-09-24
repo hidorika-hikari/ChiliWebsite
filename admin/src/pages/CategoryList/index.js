@@ -1,17 +1,9 @@
-import { FaPencilAlt } from 'react-icons/fa';
+import { FaPencilAlt, FaHome } from 'react-icons/fa';
 import { MdDelete } from 'react-icons/md';
 import { useContext, useEffect, useState } from 'react';
-import { Breadcrumbs, Chip, CircularProgress, emphasize, styled } from '@mui/material';
-import { FaHome } from 'react-icons/fa';
+import { Breadcrumbs, Chip, CircularProgress, emphasize, styled, Button, TextField, Dialog, DialogActions, DialogContent, DialogTitle, Pagination } from '@mui/material';
 import { deleteData, editData, fetchDataFromApi } from '../../utils/api';
 import { Link } from 'react-router-dom';
-import Button from '@mui/material/Button';
-import TextField from '@mui/material/TextField';
-import Dialog from '@mui/material/Dialog';
-import DialogActions from '@mui/material/DialogActions';
-import DialogContent from '@mui/material/DialogContent';
-import DialogTitle from '@mui/material/DialogTitle';
-import Pagination from '@mui/material/Pagination';
 import { MyContext } from '../../App';
 
 const StyleBreadcrumb = styled(Chip)(({ theme }) => {
@@ -310,7 +302,7 @@ const CategoryList = () => {
                         <Button type="button" onClick={categoryEditFunc}
                             variant='contained'>
                             {isLoading === true ? <CircularProgress color='inherit'
-                                className='ms-3 loader' /> : 'Submit'}
+                                className='ms-3 loader' /> : 'Update'}
                         </Button>
                     </DialogActions>
                 </form>
