@@ -205,7 +205,7 @@ const AddProduct = () => {
         }
 
         if (formFields.brand === "") {
-            context.setAlertBox({ open: true, msg: 'Please add product brand', error: true });
+            context.setAlertBox({ open: true, msg: 'Please add product brand / type', error: true });
             return false;
         }
 

@@ -138,9 +138,14 @@ body.dark h4,
 body.dark h5,
 body.dark h6,
 body.dark p,
+body.dark .css-btxnvc-MuiPaginationItem-root,
 body.dark .css-lohd6h-MuiSvgIcon-root-MuiSelect-icon
 body.dark .css-1toxriw-MuiList-root-MuiMenu-list{
   color: rgba(255, 255, 255, 0.9) !important;
+}
+
+body.dark table td .info h6, body.dark table td .info p{
+  color: rgba(255, 255, 255, 0.6) !important;
 }
 
 body.dark .MuiOutlinedInput-notchedOutline {

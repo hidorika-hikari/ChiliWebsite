@@ -176,8 +176,18 @@ const Checkout = () => {
                     createdAt: new Date().toISOString()
                 };
 
-                await postData(`/api/orders/create`, payload);
-                history('/');
+                try {
+                    const res = await postData(`/api/orders/create`, payload);
+                    if (!res?.success) {
+                        context.setAlertBox({ open: true, error: true, msg: res?.message || 'Unable to place order. Please review your cart.' });
+                        return;
+                    }
+                    history('/');
+                } catch (err) {
+                    const msg = err?.response?.data?.message || 'Insufficient stock or order could not be created.';
+                    context.setAlertBox({ open: true, error: true, msg });
+                    return;
+                }
             }
         } catch (error) {
             setProcessing(false);

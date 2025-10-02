@@ -1,7 +1,6 @@
-import { FaPencilAlt, FaHome} from 'react-icons/fa';
-import { MdDelete } from 'react-icons/md';
+import { FaHome} from 'react-icons/fa';
 import { useContext, useEffect, useState } from 'react';
-import { Breadcrumbs, Chip, CircularProgress, emphasize, styled, Button, TextField, Dialog, DialogActions, DialogContent, DialogTitle, Pagination } from '@mui/material';
+import { Breadcrumbs, Chip, CircularProgress, emphasize, styled, Button, TextField, Dialog, DialogActions, DialogContent, DialogTitle, Pagination, useMediaQuery, useTheme } from '@mui/material';
 import { deleteData, editData, fetchDataFromApi } from '../../utils/api';
 import { Link } from 'react-router-dom';
 import { MyContext } from '../../App';
@@ -29,10 +28,13 @@ const StyleBreadcrumb = styled(Chip)(({ theme }) => {
 const SubCategoryList = () => {
 
     const context = useContext(MyContext);
+    const theme = useTheme();
+    const fullScreen = useMediaQuery(theme.breakpoints.down('md'));
     const [open, setOpen] = useState(false);
     const [editId, setEditId] = useState(null);
     const [isLoading, setIsLoading] = useState(false);
     const [subCatData, setSubCatData] = useState([]);
+    const [grouped, setGrouped] = useState([]);
 
     const [deleteId, setDeleteId] = useState(null);
     const [openDelete, setOpenDelete] = useState(false);
@@ -61,6 +63,22 @@ const SubCategoryList = () => {
             setSubCatData(res);
         })
     }, [context]);
+
+    useEffect(() => {
+        const list = subCatData?.subCategoryList || [];
+        const map = new Map();
+        list.forEach((item) => {
+            const catId = item.category?.id || item.category?._id || item.category;
+            if (!map.has(catId)) {
+                map.set(catId, {
+                    category: item.category,
+                    subCats: []
+                });
+            }
+            map.get(catId).subCats.push({ id: item.id, name: item.subCat });
+        });
+        setGrouped(Array.from(map.values()));
+    }, [subCatData]);
 
     const handleClose = () => {
         setOpen(false);
@@ -168,23 +186,22 @@ const SubCategoryList = () => {
                         <table className="table table-bordered table-striped v-align">
                             <thead className="table-dark">
                                 <tr>
-                                    <th>IMAGE</th>
+                                    <th>CATEGORY IMAGE</th>
                                     <th>CATEGORY</th>
                                     <th>SUB CATEGORY</th>
-                                    <th>ACTION</th>
                                 </tr>
                             </thead>
                             <tbody>
                                 {
-                                    subCatData?.subCategoryList?.length > 0 && subCatData.subCategoryList.map((item, index) => {
+                                    grouped?.length > 0 && grouped.map((row, index) => {
                                         return (
-                                            <tr>
+                                            <tr key={index}>
                                                 <td>
                                                     <div className="d-flex align-items-center productBox">
                                                         <div className="imgWrapper">
                                                             <div className="img card shadow m-0" style={{ width: '100px', height: '100px', overflow: 'auto' }}>
                                                                 <img
-                                                                    src={item.category.images[0]}
+                                                                    src={row.category?.images?.[0]}
                                                                     alt=""
                                                                     className="w-full h-full"
                                                                     style={{ width: 'auto', height: 'auto', display: 'block', objectFit: 'cover' }}
@@ -193,25 +210,20 @@ const SubCategoryList = () => {
                                                         </div>
                                                     </div>
                                                 </td>
-                                                <td>{item.category.name}</td>
-                                                <td>{item.subCat}</td>
+                                                <td>{row.category?.name}</td>
                                                 <td>
-                                                    <div className="actions d-flex align-items-center">
-                                                        <Button
-                                                            className="success"
-                                                            color="success"
-                                                            onClick={() => editSubCategory(item.id)}
-                                                        >
-                                                            <FaPencilAlt />
-                                                        </Button>
-                                                        <Button
-                                                            className="error"
-                                                            color="error"
-                                                            onClick={() => handleOpenDelete(item.id)}
-                                                        >
-                                                            <MdDelete />
-                                                        </Button>
-                                                    </div>
+                                                    {
+                                                        row.subCats?.map((sc) => (
+                                                            <Chip
+                                                                key={sc.id}
+                                                                label={sc.name}
+                                                                color="primary"
+                                                                onClick={() => editSubCategory(sc.id)}
+                                                                onDelete={() => handleOpenDelete(sc.id)}
+                                                                className="me-2 mb-2"
+                                                            />
+                                                        ))
+                                                    }
                                                 </td>
                                             </tr>
                                         )
@@ -240,6 +252,7 @@ const SubCategoryList = () => {
                 open={open}
                 onClose={handleClose}
                 className='editModel'
+                fullScreen={fullScreen}
             >
                 <DialogTitle>Edit Subcategory</DialogTitle>
                 <form>
@@ -272,6 +285,7 @@ const SubCategoryList = () => {
             <Dialog
                 open={openDelete}
                 onClose={handleCloseDelete}
+                fullScreen={fullScreen}
             >
                 <DialogTitle>Confirm Delete</DialogTitle>
                 <DialogContent>

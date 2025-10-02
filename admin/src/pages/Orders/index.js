@@ -4,7 +4,7 @@ import { editData, fetchDataFromApi } from '../../utils/api';
 import { MyContext } from '../../App';
 import {
     Breadcrumbs, Chip, emphasize, styled, Dialog, DialogTitle, DialogContent, DialogActions, Button, Typography, Grid, Divider
-    , FormControl, Select, MenuItem, Pagination, CircularProgress
+    , FormControl, Select, MenuItem, Pagination, CircularProgress, useMediaQuery, useTheme
 } from '@mui/material';
 import dayjs from 'dayjs';
 import utc from 'dayjs/plugin/utc';
@@ -33,39 +33,38 @@ const StyleBreadcrumb = styled(Chip)(({ theme }) => {
     };
 });
 
-const menuProps = {
-    disableAutoFocusItem: true,
-    disableEnforceFocus: true,
-};
-
 const Orders = () => {
     const context = useContext(MyContext);
+    const theme = useTheme();
+    const fullScreen = useMediaQuery(theme.breakpoints.down('md'));
+
     const [selectedProduct, setSelectedProduct] = useState(null);
     const [selectedAddress, setSelectedAddress] = useState(null);
     const [updatingOrderId, setUpdatingOrderId] = useState(null);
 
     const [openAddressDialog, setOpenAddressDialog] = useState(false);
     const [openDialog, setOpenDialog] = useState(false);
-    const [orders, setOrders] = useState([]);
+
+    const [orders, setOrders] = useState({ ordersList: [], totalPages: 1, currentPage: 1 });
     const [page, setPage] = useState(1);
     const [error, setError] = useState(null);
     const [isLoading, setIsLoading] = useState(true);
 
     const handleOpenDialog = (type, data) => {
-        if (type === 'product') {
+        if (type === "product") {
             setSelectedProduct(data);
             setOpenDialog(true);
-        } else if (type === 'address') {
+        } else if (type === "address") {
             setSelectedAddress(data);
             setOpenAddressDialog(true);
         }
     };
 
     const handleCloseDialog = (type) => {
-        if (type === 'product') {
+        if (type === "product") {
             setSelectedProduct(null);
             setOpenDialog(false);
-        } else if (type === 'address') {
+        } else if (type === "address") {
             setSelectedAddress(null);
             setOpenAddressDialog(false);
         }
@@ -79,12 +78,13 @@ const Orders = () => {
     const fetchOrders = (pageNumber = 1) => {
         setIsLoading(true);
         fetchDataFromApi(`/api/orders?page=${pageNumber}&perPage=8`)
-            .then(res => {
-                setOrders(res);
+            .then((res) => {
+                setOrders(res); // res must include { ordersList, totalPages, currentPage }
+                setPage(res.currentPage || pageNumber);
                 setError(null);
             })
             .catch(() => {
-                setOrders([]);
+                setOrders({ ordersList: [], totalPages: 1, currentPage: 1 });
                 setError("Failed to load orders.");
             })
             .finally(() => setIsLoading(false));
@@ -95,20 +95,20 @@ const Orders = () => {
         try {
             const res = await editData(`/api/orders/${id}`, { status: newStatus });
             if (res.success) {
-                setOrders(prevOrders => {
-                    const updatedList = prevOrders.ordersList.map(order =>
+                setOrders((prevOrders) => {
+                    const updatedList = prevOrders.ordersList.map((order) =>
                         order._id === id
                             ? { ...order, paymentDetails: { ...order.paymentDetails, status: newStatus } }
                             : order
                     );
                     return { ...prevOrders, ordersList: updatedList };
                 });
-                context.setAlertBox({ open: true, error: false, msg: 'Order status updated successfully!' });
+                context.setAlertBox({ open: true, error: false, msg: "Order status updated successfully!" });
             } else {
-                context.setAlertBox({ open: true, error: true, msg: 'Failed to update status.' });
+                context.setAlertBox({ open: true, error: true, msg: "Failed to update status." });
             }
         } catch {
-            context.setAlertBox({ open: true, error: true, msg: 'Error while updating status.' });
+            context.setAlertBox({ open: true, error: true, msg: "Error while updating status." });
         } finally {
             setUpdatingOrderId(null);
         }
@@ -124,7 +124,7 @@ const Orders = () => {
             <div className="card shadow border-0 w-100 flex-row p-4 res-col">
                 <h5 className="mb-0">Orders</h5>
                 <Breadcrumbs aria-label="breadcrumb" className="ms-auto breadcrumb_">
-                    <StyleBreadcrumb component="a" href={'/'} label="Dashboard" icon={<FaHome fontSize="small" />} />
+                    <StyleBreadcrumb component="a" href="/" label="Dashboard" icon={<FaHome fontSize="small" />} />
                     <StyleBreadcrumb label="Orders" component="a" href="/orders" />
                 </Breadcrumbs>
             </div>
@@ -138,12 +138,12 @@ const Orders = () => {
                     <div className="text-center py-5 text-danger">
                         {error} <Button onClick={() => fetchOrders(page)}>Retry</Button>
                     </div>
-                ) : orders?.ordersList?.length === 0 ? (
+                ) : orders.ordersList.length === 0 ? (
                     <div className="text-center py-5">No orders found.</div>
                 ) : (
-                    <div className='table-responsive mt-3'>
-                        <table className='table table-bordered table-striped v-align' style={{ whiteSpace: 'nowrap' }}>
-                            <thead className='table-dark'>
+                    <div className="table-responsive mt-3">
+                        <table className="table table-bordered table-striped v-align" style={{ whiteSpace: "nowrap" }}>
+                            <thead className="table-dark">
                                 <tr>
                                     <th>Order Id</th>
                                     <th>Payment Id</th>
@@ -160,7 +160,9 @@ const Orders = () => {
                                         <td>
                                             <button
                                                 className="btn btn-sm btn-outline-primary"
-                                                onClick={() => context.setAlertBox({ open: true, error: false, msg: `Order ID: ${order._id}` })}
+                                                onClick={() =>
+                                                    context.setAlertBox({ open: true, error: false, msg: `Order ID: ${order._id}` })
+                                                }
                                             >
                                                 {order._id.slice(0, 8)}...
                                             </button>
@@ -168,8 +170,14 @@ const Orders = () => {
                                         <td>
                                             <button
                                                 className="btn btn-sm btn-outline-dark"
-                                                style={{ display: 'block', width: '100%', textAlign: 'left' }}
-                                                onClick={() => context.setAlertBox({ open: true, error: false, msg: `Payment ID: ${order.paymentDetails.paymentIntentId}` })}
+                                                style={{ display: "block", width: "100%", textAlign: "left" }}
+                                                onClick={() =>
+                                                    context.setAlertBox({
+                                                        open: true,
+                                                        error: false,
+                                                        msg: `Payment ID: ${order.paymentDetails.paymentIntentId}`,
+                                                    })
+                                                }
                                             >
                                                 {order.paymentDetails.paymentIntentId.slice(0, 10)}...
                                             </button>
@@ -177,12 +185,12 @@ const Orders = () => {
                                         <td>
                                             <ul className="list-unstyled mb-0">
                                                 {order.cartItems.map((item, idx) => (
-                                                    <li key={idx} style={{ marginBottom: '0.25rem' }}>
+                                                    <li key={idx} style={{ marginBottom: "0.25rem" }}>
                                                         <button
                                                             type="button"
                                                             className="btn btn-sm btn-outline-primary"
-                                                            onClick={() => handleOpenDialog('product', item)}
-                                                            style={{ display: 'block', width: '100%', textAlign: 'left' }}
+                                                            onClick={() => handleOpenDialog("product", item)}
+                                                            style={{ display: "block", width: "100%", textAlign: "left" }}
                                                         >
                                                             {item.productTitle.slice(0, 30)}...
                                                         </button>
@@ -193,8 +201,8 @@ const Orders = () => {
                                         <td>
                                             <button
                                                 className="btn btn-sm btn-outline-dark"
-                                                style={{ display: 'block', width: '100%', textAlign: 'left' }}
-                                                onClick={() => handleOpenDialog('address', order.billingDetails)}
+                                                style={{ display: "block", width: "100%", textAlign: "left" }}
+                                                onClick={() => handleOpenDialog("address", order.billingDetails)}
                                             >
                                                 {order.billingDetails.streetAddressLine1.slice(0, 30)}...
                                             </button>
@@ -206,7 +214,6 @@ const Orders = () => {
                                                     value={order.paymentDetails.status}
                                                     onChange={(e) => updateOrderStatus(order._id, e.target.value)}
                                                     disabled={updatingOrderId === order._id}
-                                                    MenuProps={menuProps}
                                                 >
                                                     <MenuItem value="pending">Pending</MenuItem>
                                                     <MenuItem value="processing">Processing</MenuItem>
@@ -217,18 +224,23 @@ const Orders = () => {
                                                 </Select>
                                             </FormControl>
                                         </td>
-                                        <td>{dayjs.unix(order.paymentDetails.created).tz('Asia/Bangkok').format('DD/MM/YY HH:mm')}</td>
+                                        <td>
+                                            {dayjs.unix(order.paymentDetails.created).tz("Asia/Bangkok").format("DD/MM/YY HH:mm")}
+                                        </td>
                                     </tr>
                                 ))}
                             </tbody>
                         </table>
-                        {orders?.orderList?.totalPages > 1 && (
-                            <div className='d-flex justify-content-end mt-3'>
+
+                        {orders.totalPages > 1 && (
+                            <div className="d-flex justify-content-end mt-3">
                                 <Pagination
-                                    count={orders.orderList.totalPages}
-                                    color='primary'
-                                    className='pagination'
-                                    showFirstButton showLastButton
+                                    page={page}
+                                    count={orders.totalPages}
+                                    color="primary"
+                                    className="pagination"
+                                    showFirstButton
+                                    showLastButton
                                     onChange={handleChange}
                                 />
                             </div>
@@ -236,37 +248,53 @@ const Orders = () => {
                     </div>
                 )}
 
-                <Dialog open={openDialog} disableEnforceFocus onClose={() => handleCloseDialog('product')} maxWidth="sm" fullWidth>
+                {/* Product Details Dialog */}
+                <Dialog open={openDialog} disableEnforceFocus onClose={() => handleCloseDialog("product")} maxWidth="sm" fullWidth fullScreen={fullScreen}>
                     <DialogTitle>Product Details</DialogTitle>
                     <Divider />
-                    <DialogContent dividers sx={{ overflowY: 'auto' }}>
+                    <DialogContent dividers sx={{ overflowY: "auto" }}>
                         {selectedProduct ? (
                             <Grid container spacing={3} justifyContent="center">
-                                <Grid item xs={12} sx={{ textAlign: 'center' }}>
+                                <Grid item xs={12} sx={{ textAlign: "center" }}>
                                     {selectedProduct.images ? (
                                         <img
                                             src={selectedProduct.images}
                                             alt={selectedProduct.productTitle}
-                                            style={{ maxWidth: '100%', maxHeight: '250px', objectFit: 'contain', borderRadius: 6, boxShadow: '0 2px 8px rgba(0,0,0,0.1)' }}
+                                            style={{
+                                                maxWidth: "100%",
+                                                maxHeight: "250px",
+                                                objectFit: "contain",
+                                                borderRadius: 6,
+                                                boxShadow: "0 2px 8px rgba(0,0,0,0.1)",
+                                            }}
                                         />
-                                    ) : <Typography>No image available</Typography>}
+                                    ) : (
+                                        <Typography>No image available</Typography>
+                                    )}
                                 </Grid>
                                 <Grid item xs={12}>
-                                    <Typography variant="subtitle1" fontWeight="medium">{selectedProduct.productTitle}</Typography>
-                                    <Typography><strong>Price:</strong> {`${selectedProduct.price}฿, x${selectedProduct.quantity}`}</Typography>
+                                    <Typography variant="subtitle1" fontWeight="medium">
+                                        {selectedProduct.productTitle}
+                                    </Typography>
+                                    <Typography>
+                                        <strong>Price:</strong> {`${selectedProduct.price}฿, x${selectedProduct.quantity}`}
+                                    </Typography>
                                 </Grid>
                             </Grid>
                         ) : null}
                     </DialogContent>
                     <DialogActions>
-                        <Button onClick={() => handleCloseDialog('product')} className="btn-blue w-100">Close</Button>
+                        <Button onClick={() => handleCloseDialog("product")} className="btn-blue w-100">
+                            Close
+                        </Button>
                     </DialogActions>
                 </Dialog>
 
-                <Dialog open={openAddressDialog} disableEnforceFocus maxWidth="sm" fullWidth onClose={() => handleCloseDialog('address')}>
+                {/* Address Dialog */}
+                <Dialog open={openAddressDialog} disableEnforceFocus maxWidth="sm" fullWidth fullScreen={fullScreen} onClose={() => handleCloseDialog("address")}>
                     <DialogTitle>Customer Delivery Information</DialogTitle>
                     <Divider />
-                    <DialogContent dividers sx={{ overflowY: 'auto' }}>
+                    <DialogContent dividers sx={{ overflowY: "auto" }}>
                         {selectedAddress && (
                             <Grid container spacing={2}>
                                 <Grid item xs={12}>
@@ -274,7 +302,8 @@ const Orders = () => {
                                         <strong>Name:</strong> {`${selectedAddress.fullName}, ${selectedAddress.phoneNumber}`}
                                     </Typography>
                                     <Typography variant="body2" mb={1}>
-                                        <strong>Address:</strong> {`${selectedAddress.streetAddressLine1}, ${selectedAddress.city}, ${selectedAddress.state}, ${selectedAddress.zipCode}, ${selectedAddress.country}`}
+                                        <strong>Address:</strong>{" "}
+                                        {`${selectedAddress.streetAddressLine1}, ${selectedAddress.city}, ${selectedAddress.state}, ${selectedAddress.zipCode}, ${selectedAddress.country}`}
                                     </Typography>
                                     <Typography variant="body2" mb={1}>
                                         <strong>Email:</strong> {selectedAddress.email}
@@ -284,7 +313,9 @@ const Orders = () => {
                         )}
                     </DialogContent>
                     <DialogActions>
-                        <Button onClick={() => handleCloseDialog('address')} className="btn-blue w-100">Close</Button>
+                        <Button onClick={() => handleCloseDialog("address")} className="btn-blue w-100">
+                            Close
+                        </Button>
                     </DialogActions>
                 </Dialog>
             </div>

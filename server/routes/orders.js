@@ -1,4 +1,6 @@
 const { Orders } = require('../models/orders')
+const { Product } = require('../models/products')
+const mongoose = require('mongoose');
 const express = require('express');
 const router = express.Router();
 
@@ -34,6 +36,8 @@ router.get('/', async (req, res) => {
 });
 
 router.post('/create', async (req, res) => {
+    const session = await mongoose.startSession();
+    session.startTransaction();
     try {
         const {
             user,
@@ -44,9 +48,33 @@ router.post('/create', async (req, res) => {
             createdAt
         } = req.body;
 
-        if (!user || !billingDetails || !cartItems || cartItems.length === 0 || !paymentDetails) {
+        if (!user || !billingDetails || !Array.isArray(cartItems) || cartItems.length === 0 || !paymentDetails) {
+            await session.abortTransaction();
             return res.status(400).json({ success: false, message: 'Missing required fields' });
         }
+
+        // Decrement stock atomically for each cart item
+        for (const item of cartItems) {
+            const productId = item.productId;
+            const quantityPurchased = Number(item.quantity) || 0;
+
+            if (!productId || quantityPurchased <= 0) {
+                await session.abortTransaction();
+                return res.status(400).json({ success: false, message: 'Invalid cart item data' });
+            }
+
+            const updated = await Product.findOneAndUpdate(
+                { _id: productId, countInStock: { $gte: quantityPurchased } },
+                { $inc: { countInStock: -quantityPurchased } },
+                { new: true, session }
+            );
+
+            if (!updated) {
+                await session.abortTransaction();
+                return res.status(400).json({ success: false, message: 'Insufficient stock for one or more items' });
+            }
+        }
+
         const order = new Orders({
             user,
             billingDetails,
@@ -55,7 +83,11 @@ router.post('/create', async (req, res) => {
             paymentDetails,
             createdAt
         });
-        const savedOrder = await order.save();
+
+        const savedOrder = await order.save({ session });
+
+        await session.commitTransaction();
+
         return res.status(201).json({
             success: true,
             message: 'Order created successfully',
@@ -64,10 +96,13 @@ router.post('/create', async (req, res) => {
 
     } catch (error) {
         console.error('Order create error:', error.message);
+        try { await session.abortTransaction(); } catch {}
         return res.status(500).json({
             success: false,
             message: 'Server error while creating order'
         });
+    } finally {
+        session.endSession();
     }
 });
 

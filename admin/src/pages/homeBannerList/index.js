@@ -160,7 +160,7 @@ const HomeBannerList = () => {
                             <img
                                 src={formFields.images[0]}
                                 alt="Preview"
-                                style={{ maxHeight: '300px', marginTop: '10px', borderRadius: '8px', border: '1px solid #ccc' }}
+                                style={{ maxHeight: '250px', marginTop: '10px', borderRadius: '8px', border: '1px solid #ccc' }}
                                 onError={(e) => (e.target.style.display = 'none')}
                             />
                         )}
@@ -168,7 +168,7 @@ const HomeBannerList = () => {
                     <DialogActions>
                         <Button onClick={handleEditClose} className='btn-red btn-lg'>Cancel</Button>
                         <Button type="button" onClick={handleUpdateBanner} className='btn-blue btn-lg'>
-                            {isLoading ? <CircularProgress color='inherit' className='ms-3 loader' /> : '๊Update'}
+                            {isLoading ? <CircularProgress color='inherit' className='ms-3 loader' /> : 'Update'}
                         </Button>
                     </DialogActions>
                 </form>
