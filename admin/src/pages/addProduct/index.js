@@ -43,6 +43,8 @@ const AddProduct = () => {
     const context = useContext(MyContext);
     const history = useNavigate();
     const [isLoading, setIsLoading] = useState(false);
+    const [isCheckingName, setIsCheckingName] = useState(false);
+    const [nameValidation, setNameValidation] = useState({ isValid: true, message: '' });
 
     const [imagePreviews, setImagePreviews] = useState([]);
     const [newImageUrl, setNewImageUrl] = useState('');
@@ -160,17 +162,51 @@ const AddProduct = () => {
         }));
     };
 
+    const checkProductName = async (name) => {
+        if (!name || name.trim() === '') {
+            setNameValidation({ isValid: true, message: '' });
+            return;
+        }
+
+        setIsCheckingName(true);
+        try {
+            const response = await fetchDataFromApi(`/api/products/check-name/${encodeURIComponent(name)}`);
+            setNameValidation({
+                isValid: !response.exists,
+                message: response.message
+            });
+        } catch (error) {
+            console.error('Error checking product name:', error);
+            setNameValidation({ isValid: true, message: '' });
+        } finally {
+            setIsCheckingName(false);
+        }
+    };
+
     const inputChange = (e) => {
         setFormFields(() => ({
             ...formFields,
             [e.target.name]: e.target.value
-        }))
+        }));
+
+        if (e.target.name === 'name') {
+            const timeoutId = setTimeout(() => {
+                checkProductName(e.target.value);
+            }, 500);
+
+            return () => clearTimeout(timeoutId);
+        }
     }
 
     const addProduct = (e) => {
         e.preventDefault();
         if (formFields.name === "") {
             context.setAlertBox({ open: true, msg: 'Please add product name', error: true });
+            return false;
+        }
+
+        if (!nameValidation.isValid) {
+            context.setAlertBox({ open: true, msg: 'Product already exists. Please choose a different product.', error: true });
             return false;
         }
 
@@ -205,7 +241,7 @@ const AddProduct = () => {
         }
 
         if (formFields.brand === "") {
-            context.setAlertBox({ open: true, msg: 'Please add product brand / type', error: true });
+            context.setAlertBox({ open: true, msg: 'Please add product brand / species', error: true });
             return false;
         }
 
@@ -241,12 +277,27 @@ const AddProduct = () => {
                     productSize: '',
                     productWeight: ''
                 });
+                setNameValidation({ isValid: true, message: '' });
+                setImagePreviews([]);
+                setNewImageUrl('');
+                setCategoryVal('');
+                setSubCategoryVal('');
+                setIsFeaturedVal('');
+                setRatingValue(null);
+                setProductRams([]);
+                setProductWeight([]);
+                setProductSize([]);
                 history('/products');
             })
             .catch((err) => {
                 setIsLoading(false);
                 console.error("Create product error:", err);
-                context.setAlertBox({ open: true, msg: 'Failed to create product. Please try again later.', error: true });
+                
+                if (err.response && err.response.data && err.response.data.error) {
+                    context.setAlertBox({ open: true, msg: err.response.data.error, error: true });
+                } else {
+                    context.setAlertBox({ open: true, msg: 'Failed to create product. Please try again later.', error: true });
+                }
             });
     }
 
@@ -280,7 +331,41 @@ const AddProduct = () => {
                                 <h5 className="mb-4">Basic Information</h5>
                                 <div className="form-group">
                                     <h6>Product Name</h6>
-                                    <input type="text" name="name" value={formFields.name} onChange={inputChange} />
+                                    <div style={{ position: 'relative' }}>
+                                        <input 
+                                            type="text" 
+                                            name="name" 
+                                            value={formFields.name} 
+                                            onChange={inputChange}
+                                            style={{
+                                                borderColor: nameValidation.isValid ? '' : '#dc3545',
+                                                borderWidth: nameValidation.isValid ? '' : '2px'
+                                            }}
+                                        />
+                                        {isCheckingName && (
+                                            <div style={{
+                                                position: 'absolute',
+                                                right: '10px',
+                                                top: '50%',
+                                                transform: 'translateY(-50%)',
+                                                fontSize: '16px'
+                                            }}>
+                                                <CircularProgress size={20} />
+                                            </div>
+                                        )}
+                                    </div>
+                                    {nameValidation.message && (
+                                        <div style={{
+                                            color: nameValidation.isValid ? '#28a745' : '#dc3545',
+                                            fontSize: '12px',
+                                            marginTop: '5px',
+                                            display: 'flex',
+                                            alignItems: 'center',
+                                            gap: '5px'
+                                        }}>
+                                            {nameValidation.isValid ? '✓' : '✗'} {nameValidation.message}
+                                        </div>
+                                    )}
                                 </div>
                                 <div className="form-group">
                                     <h6>Description</h6>
@@ -403,7 +488,7 @@ const AddProduct = () => {
                                 <div className="row">
                                     <div className="col">
                                         <div className="form-group">
-                                            <h6>Brand / Type</h6>
+                                            <h6>Brand / Species</h6>
                                             <input
                                                 type="text"
                                                 name="brand"

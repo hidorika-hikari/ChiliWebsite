@@ -36,16 +36,35 @@ const Listing = () => {
     }, [perPage]);
 
     const filterData = (subCatId) => {
-        fetchAndSetData(`/api/products?subCat=${subCatId}`);
+        if (subCatId === null || subCatId === '') {
+            if (id) {
+                fetchAndSetData(`/api/products?category=${id}`);
+            } else {
+                fetchAndSetData(`/api/products`);
+            }
+        } else {
+            fetchAndSetData(`/api/products?subCat=${subCatId}`);
+        }
     };
 
     const filterByPrice = (price, subCatId) => {
-        fetchAndSetData(`/api/products?minPrice=${price[0]}&maxPrice=${price[1]}&subCat=${subCatId}`);
-        if (id) fetchAndSetData(`/api/products?minPrice=${price[0]}&maxPrice=${price[1]}&category=${id}`);
+        let url = `/api/products?minPrice=${price[0]}&maxPrice=${price[1]}`;
+        
+        if (subCatId && subCatId !== '') {
+            url += `&subCat=${subCatId}`;
+        } else if (id) {
+            url += `&category=${id}`;
+        }
+        
+        fetchAndSetData(url);
     };
 
     const filterByRating = (rating) => {
-        const url = `/api/products?rating=${rating}${id ? `&category=${id}` : ""}`;
+        let url = `/api/products?rating=${rating}`;
+        if (id) {
+            url += `&category=${id}`;
+        }
+        
         fetchAndSetData(url);
     };
 

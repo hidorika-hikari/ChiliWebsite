@@ -10,6 +10,21 @@ import { MyContext } from "../../App";
 import { Rating, FormControlLabel, RadioGroup, Radio, Slider } from "@mui/material";
 import { fetchDataFromApi } from "../../utils/api";
 
+// Add CSS animation for loading spinner
+const spinnerStyle = `
+    @keyframes spin {
+        0% { transform: rotate(0deg); }
+        100% { transform: rotate(360deg); }
+    }
+`;
+
+// Inject the CSS
+if (typeof document !== 'undefined') {
+    const style = document.createElement('style');
+    style.textContent = spinnerStyle;
+    document.head.appendChild(style);
+}
+
 const Sidebar = (props) => {
     const [value, setValue] = useState([1, 1000]);
     const { id } = useParams();
@@ -48,6 +63,19 @@ const Sidebar = (props) => {
         }
     };
 
+    const clearSubCategoryFilter = () => {
+        setFilterSubCat(null);
+        setSubCatId('');
+        // Reset to show all products in current category
+        if (id) {
+            // Show all products in current category without subcategory filter
+            props.filterData(null);
+        } else {
+            // Show all products without any filters
+            props.filterData(null);
+        }
+    };
+
     const filterByRating = (rating) => {
         props.filterByRating(rating);
     };
@@ -63,22 +91,116 @@ const Sidebar = (props) => {
         <div className="sidebar">
             {/* SUBCATEGORY */}
             <div className="filterBox">
-                <h6>PRODUCT SUBCATEGORIES</h6>
+                <div className="d-flex justify-content-between align-items-center mb-2">
+                    <h6 className="mb-0">PRODUCT SUBCATEGORIES</h6>
+                    {filterSubCat && (
+                        <button 
+                            onClick={clearSubCategoryFilter}
+                            style={{ 
+                                background: 'linear-gradient(135deg, #ff6b6b, #ee5a52)',
+                                border: 'none', 
+                                color: 'white', 
+                                fontSize: '11px',
+                                fontWeight: '600',
+                                cursor: 'pointer',
+                                borderRadius: '12px',
+                                padding: '4px 10px',
+                                boxShadow: '0 2px 4px rgba(255, 107, 107, 0.3)',
+                                transition: 'all 0.2s ease',
+                                textTransform: 'uppercase',
+                                letterSpacing: '0.5px',
+                                display: 'flex',
+                                alignItems: 'center',
+                                gap: '4px'
+                            }}
+                            onMouseEnter={(e) => {
+                                e.target.style.transform = 'translateY(-1px)';
+                                e.target.style.boxShadow = '0 4px 8px rgba(255, 107, 107, 0.4)';
+                            }}
+                            onMouseLeave={(e) => {
+                                e.target.style.transform = 'translateY(0)';
+                                e.target.style.boxShadow = '0 2px 4px rgba(255, 107, 107, 0.3)';
+                            }}
+                        >
+                            Clear
+                        </button>
+                    )}
+                </div>
                 <div className="scroll">
-                    <RadioGroup
-                        name="controlled-radio-buttons-group"
-                        value={filterSubCat}
-                        onChange={handleChange}
-                    >
-                        {context.subCategoryData?.map((item) => (
-                            <FormControlLabel
-                                key={item?.id}
-                                value={item?.id}
-                                control={<Radio />}
-                                label={item?.subCat}
-                            />
-                        ))}
-                    </RadioGroup>
+                    {!context.subCategoryData ? (
+                        <div style={{
+                            display: 'flex',
+                            flexDirection: 'column',
+                            alignItems: 'center',
+                            padding: '20px 10px',
+                            color: '#666'
+                        }}>
+                            <div style={{
+                                width: '40px',
+                                height: '40px',
+                                border: '3px solid #f3f3f3',
+                                borderTop: '3px solid #007bff',
+                                borderRadius: '50%',
+                                animation: 'spin 1s linear infinite',
+                                marginBottom: '10px'
+                            }}></div>
+                            <p style={{ fontSize: '14px', margin: 0 }}>Loading subcategories...</p>
+                        </div>
+                    ) : context.subCategoryData.length === 0 ? (
+                        <div style={{ 
+                            display: 'flex', 
+                            flexDirection: 'column', 
+                            alignItems: 'center', 
+                            padding: '20px 10px',
+                            textAlign: 'center'
+                        }}>
+                            <div style={{
+                                width: '50px',
+                                height: '50px',
+                                backgroundColor: '#f8f9fa',
+                                borderRadius: '50%',
+                                display: 'flex',
+                                alignItems: 'center',
+                                justifyContent: 'center',
+                                marginBottom: '12px',
+                                fontSize: '24px'
+                            }}>
+                                📂
+                            </div>
+                            <p style={{ 
+                                color: '#6c757d', 
+                                fontSize: '14px', 
+                                margin: '0 0 8px 0',
+                                fontWeight: '500'
+                            }}>
+                                No subcategories available
+                            </p>
+                            <p style={{ 
+                                color: '#adb5bd', 
+                                fontSize: '12px', 
+                                margin: 0,
+                                lineHeight: '1.4'
+                            }}>
+                                Subcategories will appear here when available
+                            </p>
+                        </div>
+                    ) : (
+                        <RadioGroup
+                            name="controlled-radio-buttons-group"
+                            value={filterSubCat}
+                            onChange={handleChange}
+                            aria-label="product subcategories"
+                        >
+                            {context.subCategoryData.map((item) => (
+                                <FormControlLabel
+                                    key={item?.id}
+                                    value={item?.id}
+                                    control={<Radio />}
+                                    label={item?.subCat}
+                                />
+                            ))}
+                        </RadioGroup>
+                    )}
                 </div>
             </div>
 

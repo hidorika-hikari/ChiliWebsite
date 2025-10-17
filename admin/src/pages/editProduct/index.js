@@ -258,7 +258,7 @@ const ProductEdit = () => {
         }
 
         if (formFields.brand === "") {
-            context.setAlertBox({ open: true, msg: 'Please add product brand / type', error: true });
+            context.setAlertBox({ open: true, msg: 'Please add product brand / species', error: true });
         }
 
         if (!formFields.rating || formFields.rating === 0) {
@@ -437,7 +437,7 @@ const ProductEdit = () => {
                                 <div className="row">
                                     <div className="col">
                                         <div className="form-group">
-                                            <h6>Brand / Type</h6>
+                                            <h6>Brand / Species</h6>
                                             <input
                                                 type="text"
                                                 name="brand"

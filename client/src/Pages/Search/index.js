@@ -48,7 +48,17 @@ const SearchPage = () => {
     };
 
     const filterData = (subCatId) => {
-        fetchProducts(`/api/products?subCat=${subCatId}&limit=${perPage}&page=${page}`);
+        if (subCatId === null || subCatId === '') {
+            if (id) {
+                fetchProducts(`/api/products?category=${id}&limit=${perPage}&page=${page}`);
+            } else if (query) {
+                fetchProducts(`/api/search?q=${query}&limit=${perPage}&page=${page}`);
+            } else {
+                fetchProducts(`/api/products?limit=${perPage}&page=${page}`);
+            }
+        } else {
+            fetchProducts(`/api/products?subCat=${subCatId}&limit=${perPage}&page=${page}`);
+        }
     };
 
     const filterByPrice = (price, subCatId) => {

@@ -162,6 +162,14 @@ router.post('/create', async (req, res) => {
         });
     }
 
+    const existingProduct = await Product.findOne({ name: req.body.name });
+    if (existingProduct) {
+        return res.status(400).json({
+            error: "Product with this name already exists",
+            status: false
+        });
+    }
+
     const category = await Category.findById(req.body.category);
     if (!category) {
         return res.status(404).send("Invalid category");
@@ -211,6 +219,19 @@ router.post('/create', async (req, res) => {
     res.status(201).json(product);
 });
 
+router.get('/check-name/:name', async (req, res) => {
+    try {
+        const product = await Product.findOne({ name: req.params.name });
+        return res.status(200).json({
+            exists: !!product,
+            message: product ? "Product already exists" : "Product is available"
+        });
+    } catch (error) {
+        console.error('Error checking product:', error);
+        return res.status(500).json({ message: "Failed to check product name" });
+    }
+});
+
 router.get('/:id', async (req, res) => {
     try {
         const product = await Product.findById(req.params.id)
@@ -231,6 +252,17 @@ router.get('/:id', async (req, res) => {
 });
 
 router.put('/:id', async (req, res) => {
+    const existingProduct = await Product.findOne({
+        name: req.body.name,
+        _id: { $ne: req.params.id }
+    });
+    if (existingProduct) {
+        return res.status(400).json({
+            error: "Product with this name already exists",
+            status: false
+        });
+    }
+
     const limit = pLimit(2);
     const imagesToUpload = req.body.images.map((image) => {
         return limit(async () => {
