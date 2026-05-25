@@ -3,6 +3,7 @@ import React, { useContext, useState, useEffect } from 'react';
 import { MyContext } from '../../App';
 import { IoBagCheckOutline } from 'react-icons/io5';
 import { fetchDataFromApi, postData } from '../../utils/api';
+import { API_BASE } from '../../config';
 import { CardElement, useStripe, useElements } from '@stripe/react-stripe-js';
 import { useNavigate } from 'react-router-dom';
 
@@ -120,7 +121,7 @@ const Checkout = () => {
         try {
             const amount = cartData.reduce((sum, item) => sum + (item.price * item.quantity), 0) * 100;
             
-            const res = await fetch('http://localhost:4000/api/payment/create-payment-intent', {
+            const res = await fetch(`${API_BASE}/api/payment/create-payment-intent`, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({ amount, currency: 'thb' }),

@@ -3,11 +3,14 @@ const express = require('express');
 const mongoose = require('mongoose');
 const app = express();
 const cors = require('cors');
-const Stripe = require('stripe');
-const stripe = new Stripe(process.env.REACT_APP_STRIPE_SECRET_KEY);
+const allowedOrigins = (process.env.CORS_ORIGINS ||
+    'http://localhost:3000,http://localhost:3001,https://darling-daffodil-678558.netlify.app')
+    .split(',')
+    .map((origin) => origin.trim())
+    .filter(Boolean);
 
 app.use(cors({
-    origin: ['http://localhost:3000', 'http://localhost:3001'],
+    origin: allowedOrigins,
     credentials: true
 }));
 console.log('CORS middleware loaded');
@@ -57,17 +60,24 @@ app.get('/', (req, res) => {
 });
 console.log('Basic Route Registered');
 
-mongoose.connect(process.env.CONNECTION_STRING, {
-    useNewUrlParser: true,
-    useUnifiedTopology: true
-})
-    .then(() => {
-        console.log('Database connected');
-        const PORT = process.env.PORT || 3000;
-        app.listen(PORT, () => {
-            console.log(`Server is running on http://localhost:${PORT}`);
+const PORT = process.env.PORT || 4000;
+
+app.listen(PORT, '0.0.0.0', () => {
+    console.log(`Server is running on port ${PORT}`);
+});
+
+if (!process.env.CONNECTION_STRING) {
+    console.error(
+        'CONNECTION_STRING is not set. Add your MongoDB Atlas URL in Render environment variables.'
+    );
+} else {
+    mongoose
+        .connect(process.env.CONNECTION_STRING)
+        .then(() => console.log('Database connected'))
+        .catch((err) => {
+            console.error('Database error:', err.message);
+            console.error(
+                'Check CONNECTION_STRING and MongoDB Atlas Network Access (allow 0.0.0.0/0).'
+            );
         });
-    })
-    .catch((err) => {
-        console.error('Database error:', err);
-    });
+}

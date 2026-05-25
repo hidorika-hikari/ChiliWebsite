@@ -1,0 +1,31 @@
+# Deploy the API on Render: https://render.com/docs/blueprint-spec
+services:
+  - type: web
+    name: chili-api
+    runtime: node
+    rootDir: server
+    buildCommand: npm install
+    startCommand: npm start
+    envVars:
+      - key: NODE_VERSION
+        value: "20"
+      - key: CONNECTION_STRING
+        sync: false
+      - key: STRIPE_SECRET_KEY
+        sync: false
+      - key: JSON_WEB_TOKEN_SECRET_KEY
+        sync: false
+      - key: cloudinary_Config_Cloud_Name
+        sync: false
+      - key: cloudinary_Config_api_key
+        sync: false
+      - key: cloudinary_Config_api_secret
+        sync: false
+      - key: EMAIL_USER
+        sync: false
+      - key: EMAIL_PASS
+        sync: false
+      - key: CORS_ORIGINS
+        value: http://localhost:3000,http://localhost:3001,https://darling-daffodil-678558.netlify.app
+      - key: FRONTEND_URL
+        value: https://darling-daffodil-678558.netlify.app
