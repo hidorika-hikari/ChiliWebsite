@@ -47,7 +47,7 @@ You created a **Static Site** or put `npm start` in **Publish directory**. Delet
 **Render env vars** (see `server/.env.example`):
 
 - `CONNECTION_STRING` — MongoDB Atlas connection string
-- `STRIPE_SECRET_KEY` — Stripe secret key (server only)
+- `STRIPE_SECRET_KEY` — Stripe secret key (server only; `sk_test_...` or `sk_live_...`). Required for checkout. (`REACT_APP_STRIPE_SECRET_KEY` also works.)
 - `CORS_ORIGINS` — include your Netlify URL
 - `FRONTEND_URL` — Netlify URL (password-reset links)
 
