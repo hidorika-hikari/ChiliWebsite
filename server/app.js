@@ -4,7 +4,7 @@ const mongoose = require('mongoose');
 const app = express();
 const cors = require('cors');
 const allowedOrigins = (process.env.CORS_ORIGINS ||
-    'http://localhost:3000,http://localhost:3001,https://darling-daffodil-678558.netlify.app')
+    'http://localhost:3000,http://localhost:3001,https://chili-website.netlify.app')
     .split(',')
     .map((origin) => origin.trim())
     .filter(Boolean);

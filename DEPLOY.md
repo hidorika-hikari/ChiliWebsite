@@ -13,7 +13,7 @@ Already configured in `netlify.toml`. Push to GitHub and Netlify will build `cli
 
 Redeploy after setting variables.
 
-Site: https://darling-daffodil-678558.netlify.app/
+Site: https://chili-website.netlify.app/
 
 ## 2. Backend (Render)
 

@@ -26,6 +26,6 @@ services:
       - key: EMAIL_PASS
         sync: false
       - key: CORS_ORIGINS
-        value: http://localhost:3000,http://localhost:3001,https://darling-daffodil-678558.netlify.app
+        value: http://localhost:3000,http://localhost:3001,https://chili-website.netlify.app
       - key: FRONTEND_URL
-        value: https://darling-daffodil-678558.netlify.app
+        value: https://chili-website.netlify.app
