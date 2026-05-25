@@ -1,0 +1,9 @@
+.env
+.env.*
+!.env.example
+server/.env
+client/.env
+admin/.env
+node_modules/
+client/build/
+admin/build/
