@@ -1,4 +1,6 @@
 {
+  "name": "chili-website",
+  "private": true,
   "scripts": {
     "start": "node server/app.js"
   },

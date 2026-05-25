@@ -1,11 +1,12 @@
-# Deploy the API on Render: https://render.com/docs/blueprint-spec
+# Optional Blueprint deploy (see DEPLOY.md §3.1 for manual Web Service — recommended)
+# https://render.com/docs/blueprint-spec
 services:
   - type: web
     name: chili-api
     runtime: node
     rootDir: server
     buildCommand: npm install
-    startCommand: npm start
+    startCommand: node app.js
     envVars:
       - key: NODE_VERSION
         value: "20"
@@ -26,6 +27,6 @@ services:
       - key: EMAIL_PASS
         sync: false
       - key: CORS_ORIGINS
-        value: http://localhost:3000,http://localhost:3001,https://chili-website.netlify.app
+        value: http://localhost:3000,http://localhost:3001,https://darling-daffodil-678558.netlify.app
       - key: FRONTEND_URL
-        value: https://chili-website.netlify.app
+        value: https://darling-daffodil-678558.netlify.app

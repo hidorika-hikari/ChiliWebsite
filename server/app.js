@@ -4,7 +4,7 @@ const mongoose = require('mongoose');
 const app = express();
 const cors = require('cors');
 const allowedOrigins = (process.env.CORS_ORIGINS ||
-    'http://localhost:3000,http://localhost:3001,https://chili-website.netlify.app')
+    'http://localhost:3000,http://localhost:3001,https://darling-daffodil-678558.netlify.app')
     .split(',')
     .map((origin) => origin.trim())
     .filter(Boolean);
@@ -68,7 +68,7 @@ app.listen(PORT, '0.0.0.0', () => {
 
 if (!process.env.CONNECTION_STRING) {
     console.error(
-        'CONNECTION_STRING is not set. Add your MongoDB Atlas URL in Render environment variables.'
+        'CONNECTION_STRING is not set. See DEPLOY.md §3.1 (Render environment variables).'
     );
 } else {
     mongoose

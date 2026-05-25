@@ -1,57 +1,108 @@
 # Deployment guide
 
-## 1. Frontend (Netlify)
+Production URLs:
 
-Already configured in `netlify.toml`. Push to GitHub and Netlify will build `client/`.
+- **Store:** https://darling-daffodil-678558.netlify.app/
+- **API:** set after Render deploy (e.g. `https://YOUR-SERVICE.onrender.com`)
 
-**Netlify → Site configuration → Environment variables:**
+---
 
-| Variable | Example |
-|----------|---------|
-| `REACT_APP_API_URL` | `https://chili-api.onrender.com` (your live API URL, no trailing slash) |
-| `REACT_APP_STRIPE_PUBLISHABLE_KEY` | `pk_test_...` |
+## 1. MongoDB Atlas
 
-Redeploy after setting variables.
+1. Create a cluster and copy the connection string.
+2. **Network Access** → allow `0.0.0.0/0` (or Render IP ranges) so the API can connect.
+3. You will use this as `CONNECTION_STRING` on Render.
 
-Site: https://chili-website.netlify.app/
+---
 
-## 2. Backend (Render)
+## 2. Prerequisites
 
-Use a **Web Service**, not a **Static Site**. Static sites have a “Publish directory” and will fail if you put `npm start` there.
+- Code pushed to GitHub.
+- Stripe keys (publishable for Netlify, secret for Render).
+- Cloudinary + email credentials if you use those features.
 
-### Option A — Blueprint (recommended)
+Copy env templates:
 
-1. Push this repo to GitHub.
-2. Render → **New** → **Blueprint** → connect the repo (uses `render.yaml`).
-3. Fill in secret env vars when prompted.
+```bash
+cp server/.env.example server/.env
+cp client/.env.example client/.env
+cp admin/.env.example admin/.env
+```
 
-### Option B — Manual Web Service
+---
 
-Render → **New** → **Web Service** → connect repo, then:
+## 3. Production deploy (Netlify + Render)
+
+Follow these steps in order.
+
+### 3.1 API on Render (Web Service)
+
+**New → Web Service** (not Static Site) → connect this repo:
 
 | Field | Value |
 |--------|--------|
 | **Root Directory** | `server` |
 | **Build Command** | `npm install` |
-| **Start Command** | `npm start` (or `node app.js` if deploy fails before you push) |
-| **Publish Directory** | *(leave blank — only for static sites)* |
+| **Start Command** | `node app.js` |
+| **Publish Directory** | *(leave empty)* |
 
-**Important:** Push the latest code to GitHub first. Older commits have no `start` script in `server/package.json`. If you cannot push yet, set **Start Command** to `node app.js` with **Root Directory** `server`.
+**Environment variables** (see `server/.env.example`):
 
-Do **not** use **New → Static Site** for the API.
+| Variable | Value |
+|----------|--------|
+| `CONNECTION_STRING` | MongoDB Atlas URL |
+| `STRIPE_SECRET_KEY` | `sk_test_...` or `sk_live_...` |
+| `JSON_WEB_TOKEN_SECRET_KEY` | your JWT secret |
+| `cloudinary_Config_Cloud_Name` | Cloudinary |
+| `cloudinary_Config_api_key` | Cloudinary |
+| `cloudinary_Config_api_secret` | Cloudinary |
+| `EMAIL_USER` / `EMAIL_PASS` | Gmail or SMTP |
+| `CORS_ORIGINS` | `http://localhost:3000,http://localhost:3001,https://darling-daffodil-678558.netlify.app` |
+| `FRONTEND_URL` | `https://darling-daffodil-678558.netlify.app` |
 
-### Troubleshooting: `Publish directory npm start does not exist`
+Deploy, then open `https://YOUR-SERVICE.onrender.com/` — expect:
 
-You created a **Static Site** or put `npm start` in **Publish directory**. Delete that service, create a **Web Service** instead, and use the table above.
+```json
+{"message":"Server is running!"}
+```
 
-**Render env vars** (see `server/.env.example`):
+Logs should include `Database connected`. If not, fix `CONNECTION_STRING` or Atlas network access.
 
-- `CONNECTION_STRING` — MongoDB Atlas connection string
-- `STRIPE_SECRET_KEY` — Stripe secret key (server only; `sk_test_...` or `sk_live_...`). Required for checkout. (`REACT_APP_STRIPE_SECRET_KEY` also works.)
-- `CORS_ORIGINS` — include your Netlify URL
-- `FRONTEND_URL` — Netlify URL (password-reset links)
+### 3.2 Store on Netlify
 
-## 3. Local development
+Configured in `netlify.toml` (builds `client/`).
+
+**Site configuration → Environment variables:**
+
+| Variable | Value |
+|----------|--------|
+| `REACT_APP_API_URL` | Your Render URL from step 3.1 (no trailing slash) |
+| `REACT_APP_STRIPE_PUBLISHABLE_KEY` | `pk_test_...` |
+
+**Deploys → Trigger deploy → Clear cache and deploy site.**
+
+Live site: https://darling-daffodil-678558.netlify.app/
+
+### 3.3 Verify
+
+1. Open https://darling-daffodil-678558.netlify.app/ — homepage loads with products.
+2. Browser devtools → Network — API calls go to your Render URL, not `localhost:4000`.
+3. Test sign-in, cart, and checkout.
+
+### Troubleshooting
+
+| Problem | Fix |
+|---------|-----|
+| `Publish directory npm start does not exist` | You created a **Static Site** on Render. Use **Web Service** (§3.1). |
+| `Missing script: "start"` | Root Directory must be `server`, or use Start Command `node app.js`. |
+| `Application exited early` | Set `CONNECTION_STRING` on Render; allow Atlas IPs. |
+| Stripe crash on start | Set `STRIPE_SECRET_KEY` on Render. |
+| `chili-api.onrender.com` Not Found | That URL only exists if you named the service `chili-api`. Use the URL from your Render dashboard. |
+| Site loads but no products | Set `REACT_APP_API_URL` on Netlify and redeploy with cache clear. |
+
+---
+
+## 4. Local development
 
 ```bash
 # Terminal 1 – API
@@ -64,13 +115,10 @@ cd client && npm install && npm start
 cd admin && npm install && npm start
 ```
 
-Copy `.env.example` → `.env` in each folder and fill in values.
+Local defaults:
 
-## 4. MongoDB Atlas
+- API: http://localhost:4000
+- Store: http://localhost:3000
+- Admin: http://localhost:3001
 
-- Allow network access: `0.0.0.0/0` (or Render’s IP ranges) so the hosted API can connect.
-- In Render, env var must be named exactly **`CONNECTION_STRING`** (same value as in local `server/.env`).
-
-### Troubleshooting: `Application exited early` after `Basic Route Registered`
-
-The API used to exit if MongoDB failed to connect. Ensure **`CONNECTION_STRING`** is set on Render and Atlas allows external connections. After pushing the latest `server/app.js`, the server stays up even while DB connects; check logs for `Database connected` or `Database error`.
+Use `.env` files from the examples in each folder.
