@@ -26,11 +26,12 @@ const SignIn = () => {
     })
 
     const onChangeInput = (e) => {
-        setFormFields(() => ({
-            ...formFields,
-            [e.target.name]: e.target.value
-        }))
-    }
+        const { name, value } = e.target;
+        setFormFields((prev) => ({
+            ...prev,
+            [name]: value,
+        }));
+    };
 
     useEffect(() => {
         context.setIsHeaderFooterShow(false);
@@ -47,32 +48,50 @@ const SignIn = () => {
             return false;
         }
         setIsLoading(true);
-        postData("/api/user/signin", formFields).then((res) => {
-            try {
-                if (res.status === true) {
-                    localStorage.setItem("token", res.token);
-                    const user = {
-                        name: res.user?.name,
-                        email: res.user?.email,
-                        userId: res.user?.id,
-                        role: res.user?.role
-                    }
-                    localStorage.setItem("user", JSON.stringify(user));
-                    context.setAlertBox({ open: true, error: false, msg: "Login Successfully!" });
-                    setTimeout(() => {
-                        setIsLoading(false);
-                        window.location.href = '/';
-                        //history('/');
-                    }, 1000);
-                } else {
-                    context.setAlertBox({ open: true, error: true, msg: res.msg });
-                    setIsLoading(false);
-                }
-            } catch (error) {
+        const payload = {
+            email: formFields.email.trim().toLowerCase(),
+            password: formFields.password,
+        };
+
+        postData("/api/user/signin", payload).then((res) => {
+            if (!res) {
                 setIsLoading(false);
-                context.setAlertBox({ open: true, error: true, msg: "Something went wrong. Please try again." });
+                context.setAlertBox({
+                    open: true,
+                    error: true,
+                    msg: "Unable to reach the server. Try again later.",
+                });
+                return;
             }
-        })
+
+            if (res.status === true && res.token) {
+                const userId = res.user?.id || res.user?._id;
+                const user = {
+                    name: res.user?.name,
+                    email: res.user?.email,
+                    userId,
+                    role: res.user?.role || "customer",
+                };
+
+                localStorage.setItem("token", res.token);
+                localStorage.setItem("user", JSON.stringify(user));
+                context.setUser(user);
+                context.setIsLogin(true);
+                context.setAlertBox({ open: true, error: false, msg: "Login Successfully!" });
+                setTimeout(() => {
+                    setIsLoading(false);
+                    window.location.href = "/";
+                }, 1000);
+                return;
+            }
+
+            setIsLoading(false);
+            context.setAlertBox({
+                open: true,
+                error: true,
+                msg: res.msg || "Sign in failed. Check your email and password.",
+            });
+        });
     }
 
     const handleForgotPassword = (e) => {
@@ -117,6 +136,7 @@ const SignIn = () => {
                                 label="Email Address"
                                 type="email"
                                 name="email"
+                                value={formFields.email}
                                 onChange={onChangeInput}
                                 required variant="standard"
                                 className="w-100" />

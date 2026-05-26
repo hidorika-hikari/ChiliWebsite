@@ -5,10 +5,11 @@ const ProtectedRoute = ({ children }) => {
     const userData = JSON.parse(localStorage.getItem("user") || "{}");
     const token = localStorage.getItem("token");
 
-    if (!token || userData.role !== 'customer') {
+    const role = userData.role || 'customer';
+    if (!token || !userData.userId || role !== 'customer') {
         localStorage.removeItem("token");
         localStorage.removeItem("user");
-        return <Navigate to="/signIn" replace />;
+        return <Navigate to="/signin" replace />;
     }
     return children;
 };

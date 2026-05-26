@@ -31,7 +31,7 @@ const Header = () => {
         setAnchorEl(null);
         context.setAlertBox({ open: true, error: false, msg: "Logout Successfully" })
         setTimeout(() => {
-            window.location.href = '/signIn';
+            window.location.href = '/signin';
         }, 1500);
     }
 
@@ -65,7 +65,7 @@ const Header = () => {
                                             mb: 2,
                                         }}
                                     >
-                                        <Link to="/signIn" style={{ textDecoration: "none" }}>
+                                        <Link to="/signin" style={{ textDecoration: "none" }}>
                                             <Button
                                                 variant="contained"
                                                 sx={{
