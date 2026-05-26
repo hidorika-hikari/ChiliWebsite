@@ -3,7 +3,7 @@
 Production URLs:
 
 - **Store:** https://darling-daffodil-678558.netlify.app/
-- **API:** set after Render deploy (e.g. `https://YOUR-SERVICE.onrender.com`)
+- **API:** https://chiliwebsite.onrender.com
 
 ---
 
@@ -60,7 +60,7 @@ Follow these steps in order.
 | `CORS_ORIGINS` | `http://localhost:3000,http://localhost:3001,https://darling-daffodil-678558.netlify.app` |
 | `FRONTEND_URL` | `https://darling-daffodil-678558.netlify.app` |
 
-Deploy, then open `https://YOUR-SERVICE.onrender.com/` — expect:
+Deploy, then open https://chiliwebsite.onrender.com/ — expect:
 
 ```json
 {"message":"Server is running!"}
@@ -76,7 +76,7 @@ Configured in `netlify.toml` (builds `client/`).
 
 | Variable | Value |
 |----------|--------|
-| `REACT_APP_API_URL` | Your Render URL from step 3.1 (no trailing slash) |
+| `REACT_APP_API_URL` | `https://chiliwebsite.onrender.com` (also in `netlify.toml`) |
 | `REACT_APP_STRIPE_PUBLISHABLE_KEY` | `pk_test_...` |
 
 **Deploys → Trigger deploy → Clear cache and deploy site.**
@@ -86,8 +86,10 @@ Live site: https://darling-daffodil-678558.netlify.app/
 ### 3.3 Verify
 
 1. Open https://darling-daffodil-678558.netlify.app/ — homepage loads with products.
-2. Browser devtools → Network — API calls go to your Render URL, not `localhost:4000`.
-3. Test sign-in, cart, and checkout.
+2. API health: https://chiliwebsite.onrender.com/api/bootstrap/status
+3. Home data: https://chiliwebsite.onrender.com/api/bootstrap/home
+4. Browser devtools → Network — calls go to your Render URL, not `localhost:4000`.
+5. Test sign-in, cart, and checkout.
 
 ### Troubleshooting
 
@@ -97,7 +99,7 @@ Live site: https://darling-daffodil-678558.netlify.app/
 | `Missing script: "start"` | Root Directory must be `server`, or use Start Command `node app.js`. |
 | `Application exited early` | Set `CONNECTION_STRING` on Render; allow Atlas IPs. |
 | Stripe crash on start | Set `STRIPE_SECRET_KEY` on Render. |
-| `chili-api.onrender.com` Not Found | That URL only exists if you named the service `chili-api`. Use the URL from your Render dashboard. |
+| API timeout / empty data | Set `CONNECTION_STRING` on Render; allow MongoDB Atlas `0.0.0.0/0`. Push latest server code and redeploy. |
 | Site loads but no products | Set `REACT_APP_API_URL` on Netlify and redeploy with cache clear. |
 
 ---
@@ -115,9 +117,9 @@ cd client && npm install && npm start
 cd admin && npm install && npm start
 ```
 
-Local defaults:
+Local defaults (override in `client/.env` / `admin/.env`):
 
-- API: http://localhost:4000
+- API: `http://localhost:4000` for local server, or `https://chiliwebsite.onrender.com` for remote API
 - Store: http://localhost:3000
 - Admin: http://localhost:3001
 
