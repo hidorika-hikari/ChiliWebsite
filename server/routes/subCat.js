@@ -11,9 +11,13 @@ router.get('/', async (req, res) => {
         const totalPages = Math.ceil(totalPosts / perPage);
 
         const subCategoryList = await SubCategory.find()
-            .populate("category")
-            .skip((page - 1) * perPage)
-            .limit(perPage);
+        .populate({
+            path: "category",
+            strictPopulate: false
+        })
+        .skip((page - 1) * perPage)
+        .limit(perPage)
+        .exec();
 
         res.status(200).json({
             subCategoryList,
