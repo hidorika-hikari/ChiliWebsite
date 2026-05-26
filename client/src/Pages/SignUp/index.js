@@ -45,12 +45,7 @@ const SignUp = () => {
         if (formFields.password !== confirmPassword) return context.setAlertBox({ open: true, error: true, msg: "Passwords do not match!" });
 
         setIsLoading(true);
-        postData('/api/user/signup', {
-            ...formFields,
-            email: formFields.email.trim().toLowerCase(),
-            name: formFields.name.trim(),
-            phone: formFields.phone.trim(),
-        })
+        postData('/api/user/signup', formFields)
             .then(res => {
                 if (res.status) {
                     context.setAlertBox({ open: true, error: false, msg: "Sign Up Successfully!" });

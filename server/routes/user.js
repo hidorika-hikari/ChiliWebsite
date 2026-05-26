@@ -6,21 +6,6 @@ const crypto = require('crypto');
 const nodemailer = require('nodemailer');
 const { User } = require('../models/user');
 
-function formatUserResponse(user) {
-    return {
-        id: user._id.toString(),
-        name: user.name,
-        email: user.email,
-        phone: user.phone,
-        role: user.role || 'customer',
-    };
-}
-
-function getJwtSecret() {
-    const secret = process.env.JSON_WEB_TOKEN_SECRET_KEY;
-    return secret ? String(secret).trim() : '';
-}
-
 const cloudinary = require('cloudinary').v2;
 const pLimit = require('p-limit');
 
@@ -31,18 +16,8 @@ cloudinary.config({
 });
 
 router.post('/signup', async (req, res) => {
-    const name = (req.body.name || '').trim();
-    const phone = (req.body.phone || '').trim();
-    const email = (req.body.email || '').trim().toLowerCase();
-    const password = req.body.password || '';
-    const role = req.body.role || 'customer';
-
+    const { name, phone, email, password, role = 'customer' } = req.body;
     try {
-        const jwtSecret = getJwtSecret();
-        if (!jwtSecret) {
-            return res.status(500).json({ status: false, msg: 'Server auth is not configured' });
-        }
-
         const existingUser = await User.findOne({ email });
         const existingByPhone = await User.findOne({ phone });
         if (existingUser) {
@@ -63,12 +38,12 @@ router.post('/signup', async (req, res) => {
 
         const token = jwt.sign(
             { email: result.email, id: result._id, role: result.role },
-            jwtSecret
+            process.env.JSON_WEB_TOKEN_SECRET_KEY
         );
 
         res.status(200).json({
             status: true,
-            user: formatUserResponse(result),
+            user: result,
             token: token
         });
     } catch (error) {
@@ -78,62 +53,38 @@ router.post('/signup', async (req, res) => {
 });
 
 router.post('/signin', async (req, res) => {
-    const email = (req.body.email || '').trim().toLowerCase();
-    const password = req.body.password || '';
-
+    const { email, password } = req.body;
     try {
-        const jwtSecret = getJwtSecret();
-        if (!jwtSecret) {
-            return res.status(500).json({ status: false, msg: 'Server auth is not configured' });
-        }
-
-        if (!email || !password) {
-            return res.status(400).json({ status: false, msg: 'Email and password are required' });
-        }
-
-        const existingUser = await User.findOne({
-            email: { $regex: new RegExp(`^${email.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')}$`, 'i') },
-        });
+        const existingUser = await User.findOne({ email });
         if (!existingUser) {
-            return res.status(400).json({ status: false, msg: 'User not found!' });
-        }
-
-        if (!existingUser.password) {
-            return res.status(400).json({ status: false, msg: 'Invalid account password' });
+            return res.status(400).json({ status: false, msg: "User not found!" });
         }
 
         const matchPassword = await bcrypt.compare(password, existingUser.password);
         if (!matchPassword) {
-            return res.status(400).json({ status: false, msg: 'Invalid password' });
+            return res.status(400).json({ status: false, msg: "invalid password" });
         }
 
         const token = jwt.sign(
             { email: existingUser.email, id: existingUser._id, role: existingUser.role },
-            jwtSecret
+            process.env.JSON_WEB_TOKEN_SECRET_KEY
         );
 
         res.status(200).json({
             status: true,
-            user: formatUserResponse(existingUser),
+            user: existingUser,
             token: token,
-            msg: 'User authenticated'
+            msg: "User authenticated"
         });
     } catch (error) {
         console.error('Signin error:', error);
-        res.status(500).json({ status: false, msg: 'Something went wrong' });
+        res.status(500).json({ status: false, msg: "Something went wrong" });
     }
 });
 
 router.post('/admin/signin', async (req, res) => {
-    const email = (req.body.email || '').trim().toLowerCase();
-    const password = req.body.password || '';
-
+    const { email, password } = req.body;
     try {
-        const jwtSecret = getJwtSecret();
-        if (!jwtSecret) {
-            return res.status(500).json({ status: false, msg: 'Server auth is not configured' });
-        }
-
         const existingUser = await User.findOne({ email });
         if (!existingUser) {
             return res.status(400).json({ status: false, msg: "User not found!" });
@@ -151,12 +102,12 @@ router.post('/admin/signin', async (req, res) => {
 
         const token = jwt.sign(
             { email: existingUser.email, id: existingUser._id, role: existingUser.role },
-            jwtSecret
+            process.env.JSON_WEB_TOKEN_SECRET_KEY
         );
 
         res.status(200).json({
             status: true,
-            user: formatUserResponse(existingUser),
+            user: existingUser,
             token: token,
             msg: "Admin authenticated successfully"
         });
