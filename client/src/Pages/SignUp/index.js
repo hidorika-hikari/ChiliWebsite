@@ -46,17 +46,30 @@ const SignUp = () => {
 
         setIsLoading(true);
         postData('/api/user/signup', formFields)
-            .then(res => {
-                if (res.status) {
-                    context.setAlertBox({ open: true, error: false, msg: "Sign Up Successfully!" });
-                    setTimeout(() => window.location.href = '/signin', 2000);
-                } else {
-                    context.setAlertBox({ open: true, error: true, msg: res.msg });
-                }
-            })
-            .catch(() => context.setAlertBox({ open: true, error: true, msg: "Something went wrong. Please try again" }))
-            .finally(() => setIsLoading(false));
-    };
+        .then(res => {
+            console.log("Signup response:", res);
+
+            if (res?.status === true) {
+                context.setAlertBox({
+                    open: true,
+                    error: false,
+                    msg: "Sign Up Successfully!"
+                });
+
+                setTimeout(() => {
+                    window.location.href = '/signin';
+                }, 2000);
+
+            } else {
+                context.setAlertBox({
+                    open: true,
+                    error: true,
+                    msg: res?.msg || "Signup failed"
+                });
+            }
+        })
+        .finally(() => setIsLoading(false));
+        };
 
     return (
         <section className="section signInPage signUpPage">
