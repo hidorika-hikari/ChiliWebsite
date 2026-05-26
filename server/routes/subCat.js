@@ -3,29 +3,31 @@ const express = require('express');
 const router = express.Router();
 
 router.get('/', async (req, res) => {
-    const page = parseInt(req.query.page) || 1;
-    const perPage = 20;
-    const totalPosts = await SubCategory.countDocuments();
-    const totalPages = Math.ceil(totalPosts / perPage);
+    try {
+        const page = parseInt(req.query.page) || 1;
+        const perPage = 20;
 
-    if (page > totalPages) {
-        return res.status(404).json({ message: "Page not found" })
+        const totalPosts = await SubCategory.countDocuments();
+        const totalPages = Math.ceil(totalPosts / perPage);
+
+        const subCategoryList = await SubCategory.find()
+            .populate("category")
+            .skip((page - 1) * perPage)
+            .limit(perPage);
+
+        res.status(200).json({
+            subCategoryList,
+            totalPages,
+            page
+        });
+
+    } catch (error) {
+        console.log(error);
+        res.status(500).json({
+            success: false,
+            message: "Server Error"
+        });
     }
-
-    const SubCategoryList = await SubCategory.find().populate("category")
-        .skip((page - 1) * perPage)
-        .limit(perPage)
-        .exec();
-
-    if (!SubCategoryList) {
-        return res.status(500).json({ success: false });
-    }
-
-    return res.status(200).json({
-        "subCategoryList": SubCategoryList,
-        "totalPages": totalPages,
-        "page": page
-    })
 });
 
 router.get('/all', async (req, res) => {
