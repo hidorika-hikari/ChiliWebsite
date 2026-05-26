@@ -157,23 +157,30 @@ const MyAccount = () => {
                         <form onSubmit={handleSubmit}>
                             <div className="row align-items-center">
                                 <div className="col-12 col-md-4 d-flex justify-content-center mb-3 mb-md-0">
-                                    <div className="userImage">
-                                        {userData.profileImage ? (
-                                            <img
-                                                src={userData.profileImage}
-                                                alt="profile"
-                                                className="img-fluid rounded-circle"
-                                                style={{ maxWidth: '200px', width: '100%' }}
-                                            />
-                                        ) : (
-                                            <div
-                                                className="d-flex justify-content-center align-items-center rounded-circle bg-light"
-                                                style={{ width: '100%', aspectRatio: '1/1' }}
-                                            >
-                                                <RiImageAddLine size={48} color="#888" />
-                                            </div>
-                                        )}
-                                    </div>
+                                <div className="userImage">
+                                    {userData?.images?.[0] ? (
+                                        <img
+                                            src={userData.images[0]}
+                                            alt="profile"
+                                            className="img-fluid rounded-circle"
+                                            style={{
+                                                width: '200px',
+                                                height: '200px',
+                                                objectFit: 'cover'
+                                            }}
+                                        />
+                                    ) : (
+                                        <div
+                                            className="d-flex justify-content-center align-items-center rounded-circle bg-light"
+                                            style={{
+                                                width: '200px',
+                                                height: '200px'
+                                            }}
+                                        >
+                                            <RiImageAddLine size={48} color="#888" />
+                                        </div>
+                                    )}
+                                </div>
                                 </div>
 
                                 <div className="col-md-8">
@@ -226,7 +233,7 @@ const MyAccount = () => {
                                         </Button>
                                     </div>
                                 </div>
-                            </div>
+                        </div>
                         </form>
                     </CustomTabPanel>
 
