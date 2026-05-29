@@ -29,9 +29,12 @@ import OrderStatusPage from "./Pages/OrderStatus";
 
 const MyContext = createContext();
 
-const stripePromise = loadStripe('pk_test_51RqrM6E8TB46iepBZDHJ5lDzW863H6xzVR2FCfYojdiN2GYVy4YLCTqalEfr3iYMxXHiADzlRYYqIEypDEM6LHoo002nAJGi2I', {
-  locale: 'en'
-});
+const stripePromise = loadStripe(
+  process.env.REACT_APP_STRIPE_PUBLISHABLE_KEY,
+  {
+    locale: 'en'
+  }
+);
 
 function App() {
 
