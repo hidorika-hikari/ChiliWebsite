@@ -29,6 +29,7 @@ import OrderStatusPage from "./Pages/OrderStatus";
 
 const MyContext = createContext();
 
+console.log("STRIPE KEY =", process.env.REACT_APP_STRIPE_PUBLISHABLE_KEY);
 const stripePromise = loadStripe(
   process.env.REACT_APP_STRIPE_PUBLISHABLE_KEY,
   {
