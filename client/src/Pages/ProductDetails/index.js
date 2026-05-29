@@ -200,16 +200,31 @@ const ProductDetails = () => {
                     <div className={`col-md-7 ${isSmallScreen ? 'ps-3 pe-3 mt-4' : 'ps-5 pe-5'}`}>
                         <h2 className="hd text-capitalize">{productData?.name}</h2>
 
-                        <ul className="list list-inline d-flex align-items-center">
-                            <li className="list-inline-item">
-                                <div className="d-flex align-items-center">
-                                    <span className="text-light me-2">Brands :</span>
-                                    <span>{productData?.brand}</span>
+                        <ul className="list list-inline d-flex flex-wrap align-items-center gap-2 gap-md-3 mb-2">
+                            {/* Brand */}
+                            <li className="list-inline-item mb-0">
+                                <div className="d-flex align-items-center flex-wrap">
+                                    <span className="text-light me-2">
+                                        Brands :
+                                    </span>
+
+                                    <span className="brandText">
+                                        {productData?.brand}
+                                    </span>
                                 </div>
                             </li>
-                            <li className="list-inline-item d-flex align-items-center">
-                                <Rating name="read-only" value={parseInt(productData?.rating)} readOnly size="small" />
-                                <span className="text-light cursor ms-2">{reviewsData.length} Review</span>
+
+                            {/* Rating */}
+                            <li className="list-inline-item d-flex align-items-center flex-wrap mb-0">
+                                <Rating
+                                    name="read-only"
+                                    value={parseInt(productData?.rating)}
+                                    readOnly
+                                    size="small"
+                                />
+                                <span className="text-light cursor ms-2 reviewText">
+                                    {reviewsData.length} Review
+                                </span>
                             </li>
                         </ul>
 

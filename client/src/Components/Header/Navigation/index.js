@@ -34,16 +34,20 @@ const Navigation = (props) => {
                 <div className="row align-items-center">
                     <div className="col-12 col-sm-3 col-md-2 navPart1 mb-2 mb-sm-0">
                         <div className="catWrapper">
-                            <Button
-                                className="btn-red allCartTab d-flex align-items-center w-100 justify-content-between mt-0 mt-sm-0 mt-md-0 mt-3"
-                                onClick={() => setIsOpenSidebarVal(!isOpenSidebarVal)}
-                            >
-                                <span className="d-flex align-items-center">
-                                    <IoIosMenu className="me-2" />
-                                    <span className="d-none d-md-inline">ALL CATEGORIES</span>
+                        <Button
+                            className="btn-red allCartTab d-flex align-items-center justify-content-between w-100 mt-3"
+                            onClick={() => setIsOpenSidebarVal(!isOpenSidebarVal)}
+                        >
+                            <span className="d-flex align-items-center">
+                                <IoIosMenu className="hamburgerIcon me-2" />
+
+                                <span className="categoryText d-none d-md-inline">
+                                    CATEGORIES
                                 </span>
-                                <FaAngleDown />
-                            </Button>
+                            </span>
+
+                            <FaAngleDown className="angleIcon" />
+                        </Button>
 
                             <div className={`sidebarNav position-absolute bg-white shadow ${isOpenSidebarVal ? 'open' : ''}`}
                                 style={{ zIndex: 1000, minWidth: '200px' }}

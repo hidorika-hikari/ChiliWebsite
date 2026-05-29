@@ -224,13 +224,6 @@ const Cart = () => {
                     </div>
 
                     <div className="d-flex align-items-center mb-3">
-                      <span>Estimate For</span>
-                      <span className="ms-auto">
-                        <b>UK</b>
-                      </span>
-                    </div>
-
-                    <div className="d-flex align-items-center mb-3">
                       <span>Total</span>
                       <span className="ms-auto text-red fw-bold">
                         {cartData

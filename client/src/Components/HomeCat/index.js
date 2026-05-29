@@ -8,50 +8,96 @@ import { Link } from 'react-router-dom';
 const HomeCat = (props) => {
     return (
         <section className="homeCat">
-            <div className="container">
-                <h3 className="mb-3 hd">Featured Categories</h3>
+            <div className="container featuredCategories">
+                <h3 className="mb-3 hd text-center text-md-start">
+                    Featured Categories
+                </h3>
+
                 <Swiper
                     slidesPerView={10}
-                    spaceBetween={8}
+                    spaceBetween={12}
                     navigation={true}
-                    slidesPerGroup={3}
+                    slidesPerGroup={2}
                     breakpoints={{
-                        0: { slidesPerView: 3, slidesPerGroup: 3, spaceBetween: 8 },
-                        576: { slidesPerView: 4, slidesPerGroup: 4, spaceBetween: 8 },
-                        768: { slidesPerView: 6, slidesPerGroup: 6, spaceBetween: 8 },
-                        992: { slidesPerView: 8, slidesPerGroup: 4, spaceBetween: 8 },
-                        1200: { slidesPerView: 10, slidesPerGroup: 5, spaceBetween: 8 }
+                        0: {
+                            slidesPerView: 2,
+                            slidesPerGroup: 2,
+                            spaceBetween: 10
+                        },
+
+                        480: {
+                            slidesPerView: 3,
+                            slidesPerGroup: 3,
+                            spaceBetween: 10
+                        },
+
+                        576: {
+                            slidesPerView: 4,
+                            slidesPerGroup: 4,
+                            spaceBetween: 12
+                        },
+
+                        768: {
+                            slidesPerView: 5,
+                            slidesPerGroup: 5,
+                            spaceBetween: 12
+                        },
+
+                        992: {
+                            slidesPerView: 7,
+                            slidesPerGroup: 4,
+                            spaceBetween: 14
+                        },
+
+                        1200: {
+                            slidesPerView: 9,
+                            slidesPerGroup: 5,
+                            spaceBetween: 16
+                        }
                     }}
                     pagination={{
                         clickable: true,
                     }}
                     modules={[Navigation]}
-                    className="mySwiper"
+                    className="mySwiper featuredSwiper"
                 >
                     {
-                        props.catData?.length !== 0 && props.catData?.map((cat, index) => {
+                        props.catData?.length !== 0 &&
+                        props.catData?.map((cat, index) => {
                             return (
                                 <SwiperSlide key={index}>
-                                    <Link to={`/products/category/${cat.id}`}>
+
+                                    <Link
+                                        to={`/products/category/${cat.id}`}
+                                        className="categoryCard"
+                                    >
+
                                         <div
-                                            className="item text-center cursor"
+                                            className="item text-center cursor categoryImage"
                                             style={{ background: cat.color }}
                                         >
-                                            <img src={cat.images[0]} alt='' className='w-100 h-100 mb-1' />
+                                            <img
+                                                src={cat.images[0]}
+                                                alt={cat.name}
+                                                className='w-100 h-100 object-fit-contain'
+                                            />
                                         </div>
+
                                         <h6
                                             className="cat-title"
-                                            style={{ color: cat.color, textAlign: "center" }}
+                                            style={{ color: cat.color }}
                                         >
                                             {cat.name}
                                         </h6>
+
                                     </Link>
+
                                 </SwiperSlide>
                             )
                         })
                     }
                 </Swiper>
-            </div>
+                </div>
         </section>
     )
 }

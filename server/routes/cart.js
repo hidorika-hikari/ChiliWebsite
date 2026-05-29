@@ -72,6 +72,23 @@ router.delete('/:id', async (req, res) => {
     }
 });
 
+router.delete('/clear/:userId', async (req, res) => {
+    try {
+        await Cart.deleteMany({ userId: req.params.userId });
+
+        res.status(200).json({
+            success: true,
+            msg: "Cart cleared successfully"
+        });
+    } catch (error) {
+        res.status(500).json({
+            success: false,
+            msg: "Failed to clear cart",
+            error: error.message
+        });
+    }
+});
+
 router.get('/:id', async (req, res) => {
     const cartItem = await Cart.findById(req.params.id);
     if (!cartItem) {

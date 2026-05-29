@@ -40,7 +40,8 @@ const Header = () => {
             <div className="headerWrapper">
                 <div className="top-strip bg-blue">
                     <div className="container">
-                        <p className="mb-0 mt-0 text-center">Due to the COVID-19 epidemic, orders may be processed with a slight delay</p>
+                        <p className="mb-0 mt-0 text-center">E-Commerce Web for Chili Products Using the MERN Stack
+                        Cooperative Education Course, First Semester of 2025</p>
                     </div>
                 </div>
 

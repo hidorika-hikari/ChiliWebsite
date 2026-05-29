@@ -180,14 +180,30 @@ const Checkout = () => {
                 try {
                     const res = await postData(`/api/orders/create`, payload);
                     if (!res?.success) {
-                        context.setAlertBox({ open: true, error: true, msg: res?.message || 'Unable to place order. Please review your cart.' });
+                        context.setAlertBox({
+                            open: true,
+                            error: true,
+                            msg: res?.message || 'Unable to place order. Please review your cart.'
+                        });
                         return;
                     }
+                
+                    const user = JSON.parse(localStorage.getItem("user"));
+                    await fetch(`${API_BASE}/api/cart/clear/${user.userId}`, {
+                        method: 'DELETE'
+                    });
+                    context.getCartData();
                     history('/');
+                
                 } catch (err) {
-                    const msg = err?.response?.data?.message || 'Insufficient stock or order could not be created.';
-                    context.setAlertBox({ open: true, error: true, msg });
-                    return;
+                    const msg =
+                        err?.response?.data?.message ||
+                        'Insufficient stock or order could not be created.';
+                    context.setAlertBox({
+                        open: true,
+                        error: true,
+                        msg
+                    });
                 }
             }
         } catch (error) {

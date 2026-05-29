@@ -2,7 +2,7 @@ import { GiSkirt } from "react-icons/gi";
 import { TbTruckDelivery } from "react-icons/tb";
 import { BiSolidDiscount } from "react-icons/bi";
 import { CiBadgeDollar } from "react-icons/ci";
-import { FaFacebookF, FaTwitter, FaInstagram } from "react-icons/fa";
+import { FaFacebookF, FaGithub , FaLinkedinIn } from "react-icons/fa";
 import { Link } from "react-router-dom";
 import { IoLocationOutline, IoTimeOutline, IoCallOutline, IoMailOutline } from "react-icons/io5";
 import { fetchDataFromApi } from "../../utils/api";
@@ -106,9 +106,7 @@ const Footer = () => {
                                     <div>
                                         <strong>Business Hours</strong>
                                         <p className="mb-0 text-white">
-                                            Mon - Fri: 9:00 AM - 6:00 PM
-                                            <br />
-                                            Sat - Sun: Closed
+                                            Open Daily: 10:00 AM - 10:00 PM
                                         </p>
                                     </div>
                                 </div>
@@ -121,14 +119,14 @@ const Footer = () => {
                                 <ul className="list-unstyled">
                                     <li className="d-flex align-items-center mb-3">
                                         <IoCallOutline size={20} className="me-3" />
-                                        <a href="tel:+1234567890" className="text-decoration-none text-white">
-                                            (123) 456-7890
+                                        <a className="text-decoration-none text-white">
+                                            0801459970
                                         </a>
                                     </li>
                                     <li className="d-flex align-items-center mb-3">
                                         <IoMailOutline size={20} className="me-3" />
-                                        <a href="mailto:contact@yourcompany.com" className="text-decoration-none text-white">
-                                            contact@yourcompany.com
+                                        <a href="mailto:meen_otwo@hotmail.com" className="text-decoration-none text-white">
+                                            meen_otwo@hotmail.com
                                         </a>
                                     </li>
                                     <li>
@@ -151,17 +149,37 @@ const Footer = () => {
                         </div>
                     </div>
 
-                    <div className="copyright mt-3 pt-3 pb-3 d-flex border-top">
-                        <p className="mb-0 text-white">copyright 2025. All rights reserved</p>
-                        <ul className="list list-inline ms-auto mb-0">
+                    <div className="copyright mt-3 pt-3 pb-3 d-flex flex-column flex-md-row align-items-center border-top text-center text-md-start">
+                        <p className="mb-2 mb-md-0 text-white">
+                            © 2025 Promvet Khiawsa. All rights reserved.
+                        </p>
+
+                        <ul className="list list-inline ms-md-auto mb-0 d-flex justify-content-center">
                             <li className="list-inline-item">
-                                <Link to="#" className="social-icon"><FaFacebookF /></Link>
+                                <Link
+                                    to="https://www.facebook.com/taohu.thawrence"
+                                    className="social-icon"
+                                >
+                                    <FaFacebookF />
+                                </Link>
                             </li>
+
                             <li className="list-inline-item">
-                                <Link to="#" className="social-icon"><FaTwitter /></Link>
+                                <Link
+                                    to="https://github.com/hidorika-hikari"
+                                    className="social-icon"
+                                >
+                                    <FaGithub />
+                                </Link>
                             </li>
+
                             <li className="list-inline-item">
-                                <Link to="#" className="social-icon"><FaInstagram /></Link>
+                                <Link
+                                    to="https://www.linkedin.com/in/ayazaka-shine/"
+                                    className="social-icon"
+                                >
+                                    <FaLinkedinIn />
+                                </Link>
                             </li>
                         </ul>
                     </div>
