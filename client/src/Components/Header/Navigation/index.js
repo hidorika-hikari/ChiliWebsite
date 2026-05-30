@@ -42,7 +42,7 @@ const Navigation = (props) => {
                                 <IoIosMenu className="hamburgerIcon me-2" />
 
                                 <span className="categoryText d-none d-md-inline">
-                                    CATEGORIES
+                                    PRODUCTS
                                 </span>
                             </span>
 

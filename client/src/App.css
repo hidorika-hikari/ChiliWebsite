@@ -2505,6 +2505,11 @@ a:visited {
     width: 100%;
     height: auto;
   }
+
+  .hamburgerIcon,
+  .angleIcon {
+    font-size: 14px;
+  }
 }
 
 /* =========================================================
@@ -2616,7 +2621,6 @@ a:visited {
   }
 }
 
-
 /* =========================================================
    iPad / Tablet Portrait
 ========================================================= */
@@ -2686,5 +2690,14 @@ a:visited {
 
   .searchWrapper {
     max-width: 100%;
+  }
+}
+
+@media only screen 
+  and (min-width: 1024px) 
+  and (height: 1366px) {
+
+  .btn-red svg {
+    font-size: 14px !important;
   }
 }
