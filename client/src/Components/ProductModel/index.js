@@ -94,8 +94,6 @@ const ProductModel = (props) => {
                         <p className='mt-2'>{props?.data?.description}</p>
                         <div className='d-flex align-items-center'>
                             {/* <QuantityBox /> */}
-                            <Button className='btn-red btn-lg btn-big bth-round me-3'>
-                                <IoCartSharp />Add to Cart</Button>
                         </div>
                         <div className='d-flex align-items-center mt-3 actions'>
                             <Button

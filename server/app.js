@@ -68,7 +68,7 @@ app.listen(PORT, '0.0.0.0', () => {
 
 if (!process.env.CONNECTION_STRING) {
     console.error(
-        'CONNECTION_STRING is not set. See DEPLOY.md (Render environment variables).'
+        'CONNECTION_STRING is not set. See DEPLOY.md'
     );
 } else {
     mongoose

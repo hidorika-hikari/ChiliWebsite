@@ -127,7 +127,7 @@ const Home = () => {
                                         spaceBetween={10}
                                         slidesPerGroup={3}
                                         breakpoints={{
-                                            0: { slidesPerView: 1, slidesPerGroup: 1, spaceBetween: 10 },
+                                            0: { slidesPerView: 2, slidesPerGroup: 2, spaceBetween: 10 },
                                             576: { slidesPerView: 2, slidesPerGroup: 2, spaceBetween: 10 },
                                             768: { slidesPerView: 3, slidesPerGroup: 3, spaceBetween: 10 },
                                             992: { slidesPerView: 4, slidesPerGroup: 3, spaceBetween: 10 }
@@ -168,15 +168,11 @@ const Home = () => {
                                     <p className="text-light text-sml mb-0">New products with updated stocks.</p>
                                 </div>
                             </div>
-                            <div className="product_row productRow2 w-100 mt-4 d-flex ms-0">
-                                {
-                                    productsData?.products?.length !== 0 && productsData?.products?.map((item, index) => {
-                                        return (
-                                            <ProductItem key={index} item={item} />
-                                        )
-                                    })
-                                }
-                            </div>
+                            <div className="product_row productRow2 w-100 mt-4 d-flex ms-0"> 
+                                { productsData?.products?.length !== 0 && productsData?.products?.map((item, index) => { 
+                                return ( <ProductItem key={index} item={item} /> ) }) 
+                                } 
+                                </div>
                             <div className="d-flex bannerSec">
                                 <div className="banner mt-3">
                                     <img src="https://img.freepik.com/free-vector/pepper-cooking-realistic-composition_1284-71901.jpg?semt=ais_hybrid&w=740&q=80"
@@ -206,7 +202,7 @@ const Home = () => {
                                 spaceBetween={10}
                                 slidesPerGroup={3}
                                 breakpoints={{
-                                    0: { slidesPerView: 1, slidesPerGroup: 1, spaceBetween: 10 },
+                                    0: { slidesPerView: 2, slidesPerGroup: 2, spaceBetween: 10 },
                                     576: { slidesPerView: 2, slidesPerGroup: 2, spaceBetween: 10 },
                                     768: { slidesPerView: 3, slidesPerGroup: 3, spaceBetween: 10 },
                                     992: { slidesPerView: 4, slidesPerGroup: 3, spaceBetween: 10 }
@@ -234,7 +230,7 @@ const Home = () => {
                                     className="cursor w-100" alt='' />
                             </div>
                             <div className="banner mt-3">
-                                <img src="https://readfieldmeats.com/wp-content/uploads/2016/01/banner-texas-style-chili.jpg"
+                                <img src="https://5.imimg.com/data5/ANDROID/Default/2024/1/378418449/GQ/SN/UL/19256287/product-jpeg.jpg"
                                     className="cursor w-100" alt='' />
                             </div>
                             <div className="banner mt-3">

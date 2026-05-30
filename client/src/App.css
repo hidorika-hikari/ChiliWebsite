@@ -77,41 +77,6 @@ button{
   background: linear-gradient(135deg, #d23f57, #b91c1c) !important;
 }
 
-@media (min-width: 1300px) {
-  .container, .container-lg, .container-md, .container-sm, .container-xl{
-    max-width: 1280px;
-  }
-}
-
-@media (max-width: 576px) {
-  .headerWrapper .header .d-flex.flex-wrap {
-      flex-direction: column;
-      align-items: stretch;
-  }
-  .navPart1 {
-    width: 100%;
-  }
-  .navPart2 {
-      overflow-x: auto;
-      -webkit-overflow-scrolling: touch;
-  }
-}
-
-@media (max-width: 768px) {
-  .headerWrapper .header .flex-grow-1 {
-      flex-basis: 100%;
-      margin-bottom: 8px;
-  }
-
-  .headerWrapper .cartTab .price {
-      display: none;
-  }
-
-  .searchWrapper {
-    max-width: 100%;
-  }
-}
-
 .cursor{
   cursor: pointer;
 }
@@ -396,13 +361,10 @@ nav .navPart2{
   flex: 0 0 83%;
 }
 
-.row {
-  display: flex;
-  flex-wrap: wrap;
-  margin-left: -15px;
-  margin-right: -15px;
+.row{
+  margin-left: 0;
+  margin-right: 0;
 }
-
 
 nav .navPart1 .catWrapper{
   position: relative;
@@ -508,13 +470,13 @@ nav .allCartTab .icon2 svg{
 }
 
 nav .navPart2 ul{
-  margin-bottom: 0px;
+  display: flex;
+  gap: 20px;
+  flex-wrap: wrap;
 }
 
 nav .navPart2 ul li{
-  margin-right: 0px !important;
-  padding-bottom: 20px;
-  margin-left: 10%;
+  margin-left: 0;
 }
 
 nav .navPart2 ul li a{
@@ -586,9 +548,9 @@ nav .navPart2 ul li .submenu a button:hover{
   position: relative;
 }
 
-.homeBannerSection .swiper{
+/* .homeBannerSection .swiper{
   overflow: inherit !important;
-}
+} */
 
 .homeBannerSection .swiper .item{
   overflow: hidden;
@@ -846,9 +808,9 @@ nav .navPart2 ul li .submenu a button:hover{
   width: 120px;
 }
 
-.homeCat .swiper{
+/*.homeCat .swiper{
   overflow: inherit !important;
-}
+} */
 
 .homeCat .swiper .item img {
   width: 100%;
@@ -911,7 +873,7 @@ nav .navPart2 ul li .submenu a button:hover{
 }
 
 .productRow2 .productItem{
-  width: 24%;
+  width: 22%;
   overflow: hidden;
   border-right: 1px solid rgba(0, 0, 0, 0.1) !important;
   margin-bottom: 8px;
@@ -2689,5 +2651,40 @@ a:visited {
 
   .sidebarNav {
     width: 280px;
+  }
+}
+
+@media (min-width: 1300px) {
+  .container, .container-lg, .container-md, .container-sm, .container-xl{
+    max-width: 1280px;
+  }
+}
+
+@media (max-width: 576px) {
+  .headerWrapper .header .d-flex.flex-wrap {
+      flex-direction: column;
+      align-items: stretch;
+  }
+  .navPart1 {
+    width: 100%;
+  }
+  .navPart2 {
+      overflow-x: auto;
+      -webkit-overflow-scrolling: touch;
+  }
+}
+
+@media (max-width: 768px) {
+  .headerWrapper .header .flex-grow-1 {
+      flex-basis: 100%;
+      margin-bottom: 8px;
+  }
+
+  .headerWrapper .cartTab .price {
+      display: none;
+  }
+
+  .searchWrapper {
+    max-width: 100%;
   }
 }
